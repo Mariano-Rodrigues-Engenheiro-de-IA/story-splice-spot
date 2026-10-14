@@ -104,6 +104,19 @@ const scripts = [
   ['Nesse vídeo eu vou mostrar umas dicas de anúncio pra vocês.', 'Seu anúncio morre nos 3 primeiros segundos. Olha o que muda quando o gancho vem antes.'],
   ['Se gostou, compra meu curso, o link tá na bio.', 'Se isso te ajudou, o passo a passo completo está no link. Começa hoje.'],
 ];
+function BonusCountdown() {
+  const [left, setLeft] = useState<number | null>(null);
+  useEffect(() => {
+    if (!siteConfig.bonusEndsAt) return;
+    const end = new Date(siteConfig.bonusEndsAt).getTime();
+    const tick = () => setLeft(Math.max(0, end - Date.now()));
+    tick(); const timer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  if (left === null || left === 0) return null;
+  const d = Math.floor(left / 864e5), h = Math.floor(left / 36e5) % 24, m = Math.floor(left / 6e4) % 60, sec = Math.floor(left / 1000) % 60;
+  return <span className="bonus-countdown">Bônus acaba em {d}d {h}h {m}m {sec}s</span>;
+}
 function BonusBox() {
   const [example, setExample] = useState(0);
   const [shown, setShown] = useState(0);
@@ -116,7 +129,7 @@ function BonusBox() {
     const next = window.setTimeout(() => setExample(current => (current + 1) % scripts.length), 7000);
     return () => { window.clearInterval(reveal); window.clearTimeout(next); };
   }, [example, words.length]);
-  return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
+  return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
     <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{scripts[example][0]}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={scripts[example][1]}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
 }
 function Calculator() {
@@ -223,7 +236,7 @@ function Index() {
         </section>
         <section className="section container" id="o-que-faz">
           <div className="section-heading"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href="#preco">Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
