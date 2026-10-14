@@ -18,20 +18,22 @@ export const Route = createFileRoute('/')({
   component: Index,
 });
 
-// Supply the actual demo video and payment destination before launch.
-const configuration: { heroVideo: string; checkoutUrl: string } = { heroVideo: '', checkoutUrl: '' };
 const words = ['treinar.', 'almoçar.', 'passear.', 'dormir.', 'viver.'];
 const brl = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value);
+const brlCents = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+const purchaseHref = siteConfig.checkoutUrl || '#oferta';
 
 function Brand() {
   return <a href="#" className="brand" aria-label="Modo Editor, início"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</a>;
 }
-function PurchaseButton({ offer = false, onClick }: { offer?: boolean; onClick?: () => void }) {
-  if (offer) return <Button variant="purchase" onClick={onClick}>Quero o Modo Editor <ArrowRight /></Button>;
-  return <Button asChild variant="purchase"><a href="#preco">Quero o Modo Editor · R$ 67 <ArrowRight /></a></Button>;
+function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className }: { label?: string; className?: string }) {
+  return <Button asChild variant="purchase" className={className}><a href={purchaseHref}>{label} <ArrowRight /></a></Button>;
 }
 function Portrait({ className = '' }: { className?: string }) {
   return <img src={creatorImage} alt="Ilustração de um criador de conteúdo em um estúdio" width={768} height={1376} loading="lazy" className={className} />;
+}
+function Media({ src, className = '' }: { src: string; className?: string }) {
+  return src ? <video src={src} autoPlay muted loop playsInline className={className} /> : <Portrait className={className} />;
 }
 function Comparison() {
   const [position, setPosition] = useState(50);
@@ -44,8 +46,8 @@ function Comparison() {
   }, [touched]);
   return <div className="comparison-wrap">
     <div className="comparison">
-      <div className="compare-raw"><Portrait /></div>
-      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Portrait /><div className="compare-caption">o vídeo <mark>cortado,</mark></div></div>
+      <div className="compare-raw"><Media src={siteConfig.videos.raw} /></div>
+      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Media src={siteConfig.videos.edited} /><div className="compare-caption">o vídeo <mark>cortado,</mark></div></div>
       <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>
       <div className="compare-line" style={{ left: `${position}%` }}><span className="compare-handle"><GripVertical size={13} /></span></div>
       <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
@@ -90,11 +92,11 @@ const features = [
   { title: 'Troca o fundo sem pano verde', copy: 'Você no cenário que pedir, recortado com capricho.', icon: ImageIcon, type: 'background', wide: true },
   { title: 'Trilha e efeitos no tempo certo', copy: 'Trilha baixinha por baixo da voz e um efeito em cada corte.', icon: Music2, type: 'music' },
 ];
-// Fill the third value with each real video URL once uploaded.
-const gallery: [string, string, string][] = [
-  ['Legenda que acompanha', 'legenda palavra por palavra', ''], ['Frase em destaque', 'põe a ideia principal no topo', ''], ['Cidade à noite', 'troca meu fundo, sem pano verde', ''],
-  ['Cor de cinema', 'cor quente e faixas pretas', ''], ['Ritmo de anúncio', 'zoom em cada ênfase', ''], ['Com trilha', 'trilha baixinha por baixo', ''],
+const galleryCopy: [string, string][] = [
+  ['Legenda que acompanha', 'legenda palavra por palavra'], ['Frase em destaque', 'põe a ideia principal no topo'], ['Cidade à noite', 'troca meu fundo, sem pano verde'],
+  ['Cor de cinema', 'cor quente e faixas pretas'], ['Ritmo de anúncio', 'zoom em cada ênfase'], ['Com trilha', 'trilha baixinha por baixo'],
 ];
+const gallery: [string, string, string][] = galleryCopy.map(([title, request], i) => [title, request, siteConfig.videos.gallery[i] ?? '']);
 const scripts = [
   ['Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeo.', 'Você grava em 2 minutos e passa 2 horas editando? Dá pra inverter isso.'],
   ['Nesse vídeo eu vou mostrar umas dicas de anúncio pra vocês.', 'Seu anúncio morre nos 3 primeiros segundos. Olha o que muda quando o gancho vem antes.'],
