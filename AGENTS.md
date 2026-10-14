@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep this single-page sales experience in the index route and reusable styling in the global design system; this preserves the requested one-page structure.
+- Purchase destinations and media must be explicitly configured before enabling real checkout or video playback; never fabricate transactions or product demonstrations.
