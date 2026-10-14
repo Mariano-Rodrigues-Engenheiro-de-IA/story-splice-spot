@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import creatorImage from '@/assets/creator-demo.jpg';
+import { NumberTicker } from '@/components/number-ticker';
+import { siteConfig } from '@/lib/site-config';
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
@@ -18,20 +20,22 @@ export const Route = createFileRoute('/')({
   component: Index,
 });
 
-// Supply the actual demo video and payment destination before launch.
-const configuration: { heroVideo: string; checkoutUrl: string } = { heroVideo: '', checkoutUrl: '' };
 const words = ['treinar.', 'almoçar.', 'passear.', 'dormir.', 'viver.'];
 const brl = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value);
+const brlCents = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+const purchaseHref = siteConfig.checkoutUrl || '#oferta';
 
 function Brand() {
   return <a href="#" className="brand" aria-label="Modo Editor, início"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</a>;
 }
-function PurchaseButton({ offer = false, onClick }: { offer?: boolean; onClick?: () => void }) {
-  if (offer) return <Button variant="purchase" onClick={onClick}>Quero o Modo Editor <ArrowRight /></Button>;
-  return <Button asChild variant="purchase"><a href="#preco">Quero o Modo Editor · R$ 67 <ArrowRight /></a></Button>;
+function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className }: { label?: string; className?: string }) {
+  return <Button asChild variant="purchase" className={className}><a href={purchaseHref}>{label} <ArrowRight /></a></Button>;
 }
 function Portrait({ className = '' }: { className?: string }) {
   return <img src={creatorImage} alt="Ilustração de um criador de conteúdo em um estúdio" width={768} height={1376} loading="lazy" className={className} />;
+}
+function Media({ src, className = '' }: { src: string; className?: string }) {
+  return src ? <video src={src} autoPlay muted loop playsInline className={className} /> : <Portrait className={className} />;
 }
 function Comparison() {
   const [position, setPosition] = useState(50);
@@ -44,8 +48,8 @@ function Comparison() {
   }, [touched]);
   return <div className="comparison-wrap">
     <div className="comparison">
-      <div className="compare-raw"><Portrait /></div>
-      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Portrait /><div className="compare-caption">o vídeo <mark>cortado,</mark></div></div>
+      <div className="compare-raw"><Media src={siteConfig.videos.raw} /></div>
+      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Media src={siteConfig.videos.edited} /><div className="compare-caption">o vídeo <mark>cortado,</mark></div></div>
       <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>
       <div className="compare-line" style={{ left: `${position}%` }}><span className="compare-handle"><GripVertical size={13} /></span></div>
       <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
@@ -58,11 +62,11 @@ const requests = ['Corta as pausas e coloca legenda', 'Troca meu fundo por uma c
 function useTyping(lines: string[]) {
   const [state, setState] = useState({ line: 0, chars: 0 });
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setState({ line: 0, chars: lines[0].length }); return; }
-    const timer = window.setInterval(() => setState(({ line, chars }) => chars < lines[line].length + 25 ? { line, chars: chars + 1 } : { line: (line + 1) % lines.length, chars: 0 }), 60);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setState({ line: 0, chars: lines[0]?.length ?? 0 }); return; }
+    const timer = window.setInterval(() => setState(({ line, chars }) => chars < (lines[line]?.length ?? 0) + 25 ? { line, chars: chars + 1 } : { line: (line + 1) % lines.length, chars: 0 }), 60);
     return () => window.clearInterval(timer);
   }, [lines]);
-  return lines[state.line].slice(0, state.chars);
+  return (lines[state.line] ?? "").slice(0, state.chars);
 }
 function ChatHeader() {
   return <div className="chat-header"><i className="chat-dot" /><i className="chat-dot" /><i className="chat-dot" /><span>Sua IA · ChatGPT ou Claude</span></div>;
@@ -90,20 +94,34 @@ const features = [
   { title: 'Troca o fundo sem pano verde', copy: 'Você no cenário que pedir, recortado com capricho.', icon: ImageIcon, type: 'background', wide: true },
   { title: 'Trilha e efeitos no tempo certo', copy: 'Trilha baixinha por baixo da voz e um efeito em cada corte.', icon: Music2, type: 'music' },
 ];
-// Fill the third value with each real video URL once uploaded.
-const gallery: [string, string, string][] = [
-  ['Legenda que acompanha', 'legenda palavra por palavra', ''], ['Frase em destaque', 'põe a ideia principal no topo', ''], ['Cidade à noite', 'troca meu fundo, sem pano verde', ''],
-  ['Cor de cinema', 'cor quente e faixas pretas', ''], ['Ritmo de anúncio', 'zoom em cada ênfase', ''], ['Com trilha', 'trilha baixinha por baixo', ''],
+const galleryCopy: [string, string][] = [
+  ['Legenda que acompanha', 'legenda palavra por palavra'], ['Frase em destaque', 'põe a ideia principal no topo'], ['Cidade à noite', 'troca meu fundo, sem pano verde'],
+  ['Cor de cinema', 'cor quente e faixas pretas'], ['Ritmo de anúncio', 'zoom em cada ênfase'], ['Com trilha', 'trilha baixinha por baixo'],
 ];
+const gallery: [string, string, string][] = galleryCopy.map(([title, request], i) => [title, request, siteConfig.videos.gallery[i] ?? '']);
 const scripts = [
   ['Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeo.', 'Você grava em 2 minutos e passa 2 horas editando? Dá pra inverter isso.'],
   ['Nesse vídeo eu vou mostrar umas dicas de anúncio pra vocês.', 'Seu anúncio morre nos 3 primeiros segundos. Olha o que muda quando o gancho vem antes.'],
   ['Se gostou, compra meu curso, o link tá na bio.', 'Se isso te ajudou, o passo a passo completo está no link. Começa hoje.'],
 ];
+function BonusCountdown() {
+  const [left, setLeft] = useState<number | null>(null);
+  useEffect(() => {
+    if (!siteConfig.bonusEndsAt) return;
+    const end = new Date(siteConfig.bonusEndsAt).getTime();
+    const tick = () => setLeft(Math.max(0, end - Date.now()));
+    tick(); const timer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+  if (left === null || left === 0) return null;
+  const d = Math.floor(left / 864e5), h = Math.floor(left / 36e5) % 24, m = Math.floor(left / 6e4) % 60, sec = Math.floor(left / 1000) % 60;
+  return <span className="bonus-countdown">Bônus acaba em {d}d {h}h {m}m {sec}s</span>;
+}
 function BonusBox() {
   const [example, setExample] = useState(0);
   const [shown, setShown] = useState(0);
-  const words = scripts[example][1].split(' ');
+  const [before = '', after = ''] = scripts[example] ?? [];
+  const words = (after ?? '').split(' ');
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setShown(reduced ? words.length : 0);
@@ -112,25 +130,72 @@ function BonusBox() {
     const next = window.setTimeout(() => setExample(current => (current + 1) % scripts.length), 7000);
     return () => { window.clearInterval(reveal); window.clearTimeout(next); };
   }, [example, words.length]);
-  return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
-    <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{scripts[example][0]}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={scripts[example][1]}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
+  return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
+    <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{before}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={after}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
 }
-const faqItems = [
-  ['Preciso saber editar vídeo?', 'Não. Você envia o arquivo Modo Editor, a gravação e o pedido em português. Não precisa aprender um programa de edição.'],
-  ['Posso mesmo sair enquanto a IA edita?', 'Depois de enviar os arquivos e o pedido, você pode fazer outra coisa enquanto a IA processa. O tempo depende do vídeo, da ferramenta e do plano que você usa.'],
-  ['Funciona no ChatGPT e no Claude?', 'O Modo Editor foi pensado para o ChatGPT e o Claude. É necessário usar uma versão com suporte a arquivos e execução de código. Os recursos disponíveis podem variar conforme seu plano.'],
-  ['Quanto custa a assinatura da IA?', 'O pagamento de R$ 67 é pelo Modo Editor, não por uma assinatura de IA. Se o seu uso exigir um plano pago do ChatGPT ou Claude, ele é contratado separadamente. Consulte os preços atuais de cada plataforma.'],
-  ['Preciso de computador?', 'Você pode conversar com a IA pelo celular. O envio, o processamento e o download dos arquivos dependem dos recursos disponíveis no aplicativo ou navegador que você utiliza.'],
-  ['Como recebo o acesso?', 'O acesso é liberado após a aprovação do pagamento. Você recebe o arquivo Modo Editor e as orientações para começar.'],
-  ['E se eu não gostar?', 'Você tem 7 dias para solicitar o reembolso. O canal e as instruções de atendimento serão informados junto com o acesso.'],
-];
-function Index() {
-  const [word, setWord] = useState(0);
-  const [progress, setProgress] = useState(0);
+function Calculator() {
   const [videos, setVideos] = useState(12);
   const [minutes, setMinutes] = useState(90);
   const [cost, setCost] = useState(60);
-    const [checkoutNotice, setCheckoutNotice] = useState(false);
+  const hours = videos * Math.max(0, minutes - 10) / 60;
+  const payback = cost > 0 ? Math.ceil(siteConfig.price / cost) : 0;
+  const duration = `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}`.replace(/^0h/, '').replace(/h00$/, 'h');
+  const controls = [
+    { label: 'Vídeos por mês', value: videos, min: 1, max: 60, step: 1, display: String(videos), set: setVideos },
+    { label: 'Tempo editando cada um', value: minutes, min: 10, max: 240, step: 5, display: minutes < 60 ? `${minutes} min` : duration, set: setMinutes },
+    { label: 'Quanto paga a um editor por vídeo', value: cost, min: 0, max: 300, step: 5, display: brl(cost), set: setCost },
+  ];
+  return <div className="calculator"><div>{controls.map(control => <div className="calc-control" key={control.label}><div className="calc-label"><label>{control.label}</label><strong>{control.display}</strong></div><Slider aria-label={control.label} value={[control.value]} onValueChange={value => control.set(value[0] ?? control.min)} min={control.min} max={control.max} step={control.step} /></div>)}<p className="fine-print">Estimativa com os seus números, considerando cerca de 10 minutos por vídeo com a IA. O tempo real muda com o tipo de vídeo.</p></div>
+    <div className="calc-result" aria-live="polite"><strong className="hours"><NumberTicker value={hours} format={v => `${v.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} h`} /></strong><p>por mês de volta pra você</p><strong><NumberTicker value={videos * cost} format={brl} /></strong><p>por mês que deixam de ir pro editor</p>
+      <p>{cost > 0 ? <>R$ {siteConfig.price} uma vez. Se paga com <b>{payback} {payback === 1 ? 'vídeo' : 'vídeos'}</b> que você deixa de mandar pro editor.</> : <>São <b>{Math.round(hours * 12).toLocaleString('pt-BR')} horas por ano</b> de volta na sua agenda.</>}</p></div></div>;
+}
+function Testimonials() {
+  const list = siteConfig.testimonials;
+  if (list.length === 0) return null;
+  return <section className="section container" id="depoimentos"><div className="section-heading"><span className="eyebrow">Quem já usa</span><h2>Gente que parou<br /><em>de esperar o editor.</em></h2></div>
+    <div className="marquee" tabIndex={0} aria-label="Depoimentos de clientes"><div className="marquee-track">{[...list, ...list].map((item, i) => <figure className="testimonial-card" key={i} aria-hidden={i >= list.length}><strong>{item.result}</strong><blockquote>“{item.quote}”</blockquote><figcaption>{item.name} <span>{item.handle}</span></figcaption></figure>)}</div></div></section>;
+}
+function SpinningSeal() {
+  const text = '7 DIAS DE GARANTIA • REEMBOLSO TOTAL • ';
+  return <div className="spin-seal" aria-label="7 dias de garantia"><svg viewBox="0 0 100 100" className="spin-ring" aria-hidden="true"><defs><path id="seal-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs><text><textPath href="#seal-circle" textLength="238">{text}</textPath></text></svg><span>7</span></div>;
+}
+const offerItems = [
+  ['Arquivo Modo Editor', 'Você solta na conversa e a sua IA passa a cortar, legendar e animar sozinha.'],
+  ['Bônus: O Arquivo Secreto do Roteiro', 'Revisa o seu roteiro antes de gravar: gancho, clareza e chamada final.'],
+  ['Acesso na hora', 'Chega no seu e-mail assim que o pagamento é aprovado.'],
+  ['Funciona no ChatGPT e no Claude', 'No plano pago, contratado à parte direto com eles.'],
+];
+function Offer() {
+  return <section className="section container" id="oferta"><div className="section-heading"><span className="eyebrow">A oferta</span><h2>Comece hoje <em>por R$ {siteConfig.price}.</em></h2><p>Pagamento único. Sem mensalidade do nosso lado.</p></div>
+    <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3>Modo Editor</h3><p>Arquivo de edição para ChatGPT e Claude</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
+      <div className="offer-price"><p>Pagamento único</p><div className="price"><sup>R$</sup><NumberTicker value={siteConfig.price} duration={1400} /></div><p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span></div></div>
+      <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div></section>;
+}
+const faqItems = [
+  ['Preciso saber editar vídeo?', 'Não. Você descreve o que quer em português e a IA faz a edição. Quem nunca abriu um editor consegue usar.'],
+  ['Posso mesmo sair enquanto a IA edita?', 'Pode. Depois que você manda a gravação e o pedido, a edição segue sozinha. Na volta, o vídeo está pronto pra revisar.'],
+  ['Funciona no ChatGPT e no Claude?', 'Sim, nos dois, no plano pago. Você usa a IA que já tem.'],
+  ['Quanto custa a assinatura da IA?', 'A partir de US$ 20 por mês, pagos direto à OpenAI ou à Anthropic. Não está incluída no valor do Modo Editor.'],
+  ['Preciso de computador?', 'Para editar, sim: Mac ou Windows. O celular serve para gravar.'],
+  ['Como recebo o acesso?', 'Por e-mail, assim que o pagamento é aprovado. No PIX e no cartão é na hora.'],
+  ['E se eu não gostar?', 'Você tem 7 dias de garantia. Pede o reembolso e recebe 100% do valor de volta.'],
+];
+function StickyBar() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    let offerVisible = false;
+    const offer = document.getElementById('oferta');
+    const update = () => setShow(window.scrollY > 700 && !offerVisible);
+    const observer = new IntersectionObserver(([entry]) => { offerVisible = !!entry?.isIntersecting; update(); });
+    if (offer) observer.observe(offer);
+    window.addEventListener('scroll', update, { passive: true }); update();
+    return () => { observer.disconnect(); window.removeEventListener('scroll', update); };
+  }, []);
+  return <div className={`sticky-bar ${show ? 'on' : ''}`} aria-hidden={!show}><div><strong>R$ {siteConfig.price}</strong><p>Pagamento único · 7 dias de garantia</p></div><PurchaseButton label="Quero" className="sticky-button" /></div>;
+}
+function Index() {
+  const [word, setWord] = useState(0);
+  const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
@@ -145,20 +210,16 @@ function Index() {
     if (!video) return;
     video.muted = false; video.currentTime = 0; setSound(true); void video.play().catch(() => setSound(false));
   }
-  function openCheckout() {
-    if (configuration.checkoutUrl) { window.location.assign(configuration.checkoutUrl); return; }
-    setCheckoutNotice(true);
-  }
   return <div className="page">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#antes-depois">Antes e depois</a><a href="#como-funciona">Como funciona</a><a href="#bonus">Bônus</a><a href="#preco">Preço</a></nav></header>
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#antes-depois">Antes e depois</a><a href="#como-funciona">Como funciona</a><a href="#bonus">Bônus</a><a href="#oferta">Preço</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT e no Claude</div>
           <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
           <div className="hero-video">
-            {configuration.heroVideo ? <><video ref={videoRef} src={configuration.heroVideo} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}
+            {siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}
           </div>
           <div className="hero-cta"><PurchaseButton /></div>
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
@@ -176,23 +237,23 @@ function Index() {
         </section>
         <section className="section container" id="o-que-faz">
           <div className="section-heading"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href="#preco">Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
           <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor"><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}>{src ? <video src={src} autoPlay muted loop playsInline /> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}<div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
         </section>
-        <section className="section container" id="bonus"><BonusBox /></section>
-        <section className="section container">
+        <section className="section container" id="conta">
           <div className="section-heading"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
-          <div className="calculator"><div>{[{ label: 'Vídeos por mês', value: videos, max: 60, min: 1, step: 1, display: String(videos), set: setVideos }, { label: 'Tempo editando cada um', value: minutes, max: 240, min: 15, step: 15, display: `${Math.floor(minutes / 60)}h${minutes % 60 ? String(minutes % 60).padStart(2, '0') : ''}`, set: setMinutes }, { label: 'Quanto paga a um editor por vídeo', value: cost, max: 500, min: 0, step: 10, display: brl(cost), set: setCost }].map(control => <div className="calc-control" key={control.label}><div className="calc-label"><label>{control.label}</label><strong>{control.display}</strong></div><Slider aria-label={control.label} value={[control.value]} onValueChange={value => control.set(value[0] ?? control.min)} min={control.min} max={control.max} step={control.step} /></div>)}<p className="fine-print">Estimativa com os seus números, considerando o tempo total informado. O tempo real varia com o vídeo e a IA.</p></div><div className="calc-result" aria-live="polite"><strong className="hours">{Number((videos * minutes / 60).toFixed(1)).toLocaleString('pt-BR')} h</strong><p>por mês da sua vida editando</p><strong>{brl(videos * cost)}</strong><p>por mês que deixam de ir pro editor</p><p>R$ 67 uma vez. {cost > 0 ? <>O equivalente a <b>{Math.ceil(67 / cost)} {Math.ceil(67 / cost) === 1 ? 'vídeo' : 'vídeos'}</b> no valor informado.</> : 'Sem mensalidade do Modo Editor.'}</p></div></div>
+          <Calculator />
         </section>
-        <section className="section container"><div className="section-heading"><span className="eyebrow">Quem já usa</span><h2>Gente que parou<br /><em>de esperar o editor.</em></h2></div><div className="testimonial-empty">Depoimentos reais serão adicionados aqui.</div></section>
-        <section className="section container" id="preco"><div className="section-heading"><span className="eyebrow">A oferta</span><h2>Comece hoje <em>por R$ 67.</em></h2><p>Pagamento único. Sem mensalidade do nosso lado.</p></div><div className="offer"><div className="offer-main"><div className="offer-details"><h3>Modo Editor</h3><p>Arquivo de edição para ChatGPT e Claude</p><ul className="offer-list">{[['Arquivo Modo Editor', 'Você solta na conversa e a sua IA passa a cortar, legendar e animar sozinha.'], ['Bônus: O Arquivo Secreto do Roteiro', 'Revise o seu roteiro antes de gravar: gancho, clareza e chamada final.'], ['Acesso na hora', 'Após a aprovação do pagamento, receba o acesso ao arquivo.'], ['Funciona no ChatGPT e no Claude', 'No plano pago, contratado à parte direto com eles.']].map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div><div className="offer-price"><p>Pagamento único</p><div className="price"><sup>R$</sup>67</div><p>Sem assinatura do Modo Editor.</p><PurchaseButton offer onClick={openCheckout} /><span className="fine-print">7 dias de garantia · Compra única</span>{checkoutNotice && <p className="checkout-note" role="status">A compra estará disponível assim que o link de pagamento for configurado.</p>}</div></div><div className="guarantee"><div className="guarantee-seal">7</div><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div></section>
-        <section className="section container faq"><div className="faq-intro"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
-        <section className="final-cta"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></section>
+        <Testimonials />
+        <Offer />
+        <section className="section container faq" id="duvidas"><div className="faq-intro"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
+        <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
       </main>
     </div>
-    <footer className="footer"><div className="container"><Brand /><p>ChatGPT é uma marca da OpenAI e Claude, da Anthropic. Este produto é independente e não tem vínculo com nenhuma delas.</p><p className="copyright">© {new Date().getFullYear()} Modo Editor. Todos os direitos reservados.</p></div></footer>
+    <footer className="footer"><div className="container"><Brand /><p>{siteConfig.legal.companyName} · CNPJ {siteConfig.legal.cnpj} · {siteConfig.legal.city}</p><p>ChatGPT é uma marca da OpenAI e Claude, da Anthropic. Este produto é independente e não tem vínculo com nenhuma das duas.</p><nav className="footer-links" aria-label="Links legais"><a href={siteConfig.legal.termsUrl}>Termos de uso</a>·<a href={siteConfig.legal.privacyUrl}>Política de privacidade</a>·<a href={siteConfig.legal.supportUrl}>Suporte</a></nav><p className="copyright">© 2026 Modo Editor</p></div></footer>
+    <StickyBar />
   </div>;
 }

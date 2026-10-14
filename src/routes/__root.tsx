@@ -95,6 +95,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
+    // META PIXEL: add the Meta Pixel script here, e.g. scripts: [{ children: "...fbq('init', 'PIXEL_ID')..." }]
+    scripts: [],
   }),
   shellComponent: RootShell,
   component: RootComponent,
