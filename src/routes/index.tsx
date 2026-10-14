@@ -62,11 +62,11 @@ const requests = ['Corta as pausas e coloca legenda', 'Troca meu fundo por uma c
 function useTyping(lines: string[]) {
   const [state, setState] = useState({ line: 0, chars: 0 });
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setState({ line: 0, chars: lines[0].length }); return; }
-    const timer = window.setInterval(() => setState(({ line, chars }) => chars < lines[line].length + 25 ? { line, chars: chars + 1 } : { line: (line + 1) % lines.length, chars: 0 }), 60);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setState({ line: 0, chars: lines[0]?.length ?? 0 }); return; }
+    const timer = window.setInterval(() => setState(({ line, chars }) => chars < (lines[line]?.length ?? 0) + 25 ? { line, chars: chars + 1 } : { line: (line + 1) % lines.length, chars: 0 }), 60);
     return () => window.clearInterval(timer);
   }, [lines]);
-  return lines[state.line].slice(0, state.chars);
+  return (lines[state.line] ?? "").slice(0, state.chars);
 }
 function ChatHeader() {
   return <div className="chat-header"><i className="chat-dot" /><i className="chat-dot" /><i className="chat-dot" /><span>Sua IA · ChatGPT ou Claude</span></div>;
@@ -120,7 +120,8 @@ function BonusCountdown() {
 function BonusBox() {
   const [example, setExample] = useState(0);
   const [shown, setShown] = useState(0);
-  const words = scripts[example][1].split(' ');
+  const [before, after] = scripts[example] ?? ['', ''];
+  const words = after.split(' ');
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setShown(reduced ? words.length : 0);
@@ -130,7 +131,7 @@ function BonusBox() {
     return () => { window.clearInterval(reveal); window.clearTimeout(next); };
   }, [example, words.length]);
   return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
-    <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{scripts[example][0]}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={scripts[example][1]}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
+    <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{before}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={after}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
 }
 function Calculator() {
   const [videos, setVideos] = useState(12);
