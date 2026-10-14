@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, FileArchive, Gift, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Video, Volume2, ZoomIn } from 'lucide-react';
+import { ArrowRight, CheckCircle2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Video, Volume2, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -54,10 +54,30 @@ function Comparison() {
     <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>
   </div>;
 }
-function ChatWindow({ upload }: { upload?: boolean }) {
-  return <div className="chat-window"><div className="chat-header"><i className="chat-dot" /><i className="chat-dot" /><i className="chat-dot" /><span>Sua IA · ChatGPT ou Claude</span></div><div className="chat-body">
-    <div className="file-bubble">{upload ? <Play /> : <FileArchive />}<div><strong>{upload ? 'gravacao.mp4' : 'modo-editor.zip'}</strong><small>{upload ? 'vídeo · 1:31' : 'arquivo'}</small></div></div>
-    {upload ? <div className="chat-prompt">Troca meu fundo por uma cidade!</div> : <div className="chat-success"><CheckCircle2 size={12} />Pronto! O Modo Editor está ativo.</div>}
+const requests = ['Corta as pausas e coloca legenda', 'Troca meu fundo por uma cidade', 'Dá zoom quando eu enfatizar'];
+function useTyping(lines: string[]) {
+  const [state, setState] = useState({ line: 0, chars: 0 });
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setState({ line: 0, chars: lines[0].length }); return; }
+    const timer = window.setInterval(() => setState(({ line, chars }) => chars < lines[line].length + 25 ? { line, chars: chars + 1 } : { line: (line + 1) % lines.length, chars: 0 }), 60);
+    return () => window.clearInterval(timer);
+  }, [lines]);
+  return lines[state.line].slice(0, state.chars);
+}
+function ChatHeader() {
+  return <div className="chat-header"><i className="chat-dot" /><i className="chat-dot" /><i className="chat-dot" /><span>Sua IA · ChatGPT ou Claude</span></div>;
+}
+function DropChat() {
+  return <div className="chat-window"><ChatHeader /><div className="chat-body">
+    <div className="file-bubble file-drop"><FileArchive className="file-icon" /><div><strong>modo-editor.zip</strong><small>arquivo</small></div><MousePointer2 className="drop-cursor" size={14} /></div>
+    <div className="chat-success chat-reply"><CheckCircle2 size={12} />Pronto! O Modo Editor está ativo.</div>
+  </div></div>;
+}
+function RequestChat() {
+  const text = useTyping(requests);
+  return <div className="chat-window"><ChatHeader /><div className="chat-body">
+    <div className="file-bubble"><Play className="file-icon" /><div><strong>gravacao.mp4</strong><small>vídeo · 1:11</small></div></div>
+    <div className="chat-prompt" aria-label={requests.join(' / ')}>{text}<span className="caret" /></div>
   </div></div>;
 }
 function Waveform({ music = false }: { music?: boolean }) {
@@ -70,6 +90,31 @@ const features = [
   { title: 'Troca o fundo sem pano verde', copy: 'Você no cenário que pedir, recortado com capricho.', icon: ImageIcon, type: 'background', wide: true },
   { title: 'Trilha e efeitos no tempo certo', copy: 'Trilha baixinha por baixo da voz e um efeito em cada corte.', icon: Music2, type: 'music' },
 ];
+// Fill the third value with each real video URL once uploaded.
+const gallery: [string, string, string][] = [
+  ['Legenda que acompanha', 'legenda palavra por palavra', ''], ['Frase em destaque', 'põe a ideia principal no topo', ''], ['Cidade à noite', 'troca meu fundo, sem pano verde', ''],
+  ['Cor de cinema', 'cor quente e faixas pretas', ''], ['Ritmo de anúncio', 'zoom em cada ênfase', ''], ['Com trilha', 'trilha baixinha por baixo', ''],
+];
+const scripts = [
+  ['Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeo.', 'Você grava em 2 minutos e passa 2 horas editando? Dá pra inverter isso.'],
+  ['Nesse vídeo eu vou mostrar umas dicas de anúncio pra vocês.', 'Seu anúncio morre nos 3 primeiros segundos. Olha o que muda quando o gancho vem antes.'],
+  ['Se gostou, compra meu curso, o link tá na bio.', 'Se isso te ajudou, o passo a passo completo está no link. Começa hoje.'],
+];
+function BonusBox() {
+  const [example, setExample] = useState(0);
+  const [shown, setShown] = useState(0);
+  const words = scripts[example][1].split(' ');
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setShown(reduced ? words.length : 0);
+    if (reduced) return;
+    const reveal = window.setInterval(() => setShown(current => current + 1), 110);
+    const next = window.setTimeout(() => setExample(current => (current + 1) % scripts.length), 7000);
+    return () => { window.clearInterval(reveal); window.clearTimeout(next); };
+  }, [example, words.length]);
+  return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
+    <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{scripts[example][0]}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={scripts[example][1]}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
+}
 const faqItems = [
   ['Preciso saber editar vídeo?', 'Não. Você envia o arquivo Modo Editor, a gravação e o pedido em português. Não precisa aprender um programa de edição.'],
   ['Posso mesmo sair enquanto a IA edita?', 'Depois de enviar os arquivos e o pedido, você pode fazer outra coisa enquanto a IA processa. O tempo depende do vídeo, da ferramenta e do plano que você usa.'],
@@ -85,8 +130,7 @@ function Index() {
   const [videos, setVideos] = useState(12);
   const [minutes, setMinutes] = useState(90);
   const [cost, setCost] = useState(60);
-  const [example, setExample] = useState(false);
-  const [checkoutNotice, setCheckoutNotice] = useState(false);
+    const [checkoutNotice, setCheckoutNotice] = useState(false);
   const [sound, setSound] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
@@ -128,18 +172,17 @@ function Index() {
         </section>
         <section className="section container" id="como-funciona">
           <div className="section-heading"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O último é sair.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
-          <div className="steps"><div className="step"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><ChatWindow /></div><div className="step"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><ChatWindow upload /></div><div className="step"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><Portrait /><span className="ready-tag"><CheckCircle2 size={10} />Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
+          <div className="steps"><div className="step"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><Portrait /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
         </section>
-        <section className="section container">
+        <section className="section container" id="o-que-faz">
           <div className="section-heading"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
           <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href="#preco">Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
-        <section className="section container">
-          <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi e <em>fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo sai de um pedido de uma frase.</p></div>
-          <div className="gallery">{['Frase em destaque', 'Cidade à noite', 'Cor de cinema', 'Ritmo de anúncio', 'Com trilha'].map((title, i) => <div className="gallery-card" key={title}><Portrait /><div className="gallery-caption"><strong>{title}</strong><p>{['“Grifa a ideia principal.”', '“Troca meu fundo por uma cidade.”', '“Dá uma cor de cinema.”', '“Corta os silêncios.”', '“Põe uma trilha leve.”'][i]}</p></div></div>)}</div>
-          <p className="illustration-note">Imagens ilustrativas · espaço reservado para seus vídeos reais</p>
+        <section className="section container" id="galeria">
+          <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
+          <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor"><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}>{src ? <video src={src} autoPlay muted loop playsInline /> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}<div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
         </section>
-        <section className="section container" id="bonus"><div className="bonus-box"><div><span className="bonus-badge"><Gift size={11} /> BÔNUS</span><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div><div className="script-demo"><span className="eyebrow">Seu roteiro</span><p>{example ? 'Hoje eu quero te mostrar uma dica para gravar vídeos melhores.' : 'Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeos.'}</p><div className="after-label">↙ DEPOIS DO ARQUIVO SECRETO</div><strong>{example ? 'Seu vídeo perde atenção nos primeiros 3 segundos. Vamos mudar isso?' : 'Você grava em 2 minutos e passa 2 horas editando?'}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => !current)}><RefreshCw size={10} />Outro exemplo</Button></div></div></section>
+        <section className="section container" id="bonus"><BonusBox /></section>
         <section className="section container">
           <div className="section-heading"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
           <div className="calculator"><div>{[{ label: 'Vídeos por mês', value: videos, max: 60, min: 1, step: 1, display: String(videos), set: setVideos }, { label: 'Tempo editando cada um', value: minutes, max: 240, min: 15, step: 15, display: `${Math.floor(minutes / 60)}h${minutes % 60 ? String(minutes % 60).padStart(2, '0') : ''}`, set: setMinutes }, { label: 'Quanto paga a um editor por vídeo', value: cost, max: 500, min: 0, step: 10, display: brl(cost), set: setCost }].map(control => <div className="calc-control" key={control.label}><div className="calc-label"><label>{control.label}</label><strong>{control.display}</strong></div><Slider aria-label={control.label} value={[control.value]} onValueChange={value => control.set(value[0] ?? control.min)} min={control.min} max={control.max} step={control.step} /></div>)}<p className="fine-print">Estimativa com os seus números, considerando o tempo total informado. O tempo real varia com o vídeo e a IA.</p></div><div className="calc-result" aria-live="polite"><strong className="hours">{Number((videos * minutes / 60).toFixed(1)).toLocaleString('pt-BR')} h</strong><p>por mês da sua vida editando</p><strong>{brl(videos * cost)}</strong><p>por mês que deixam de ir pro editor</p><p>R$ 67 uma vez. {cost > 0 ? <>O equivalente a <b>{Math.ceil(67 / cost)} {Math.ceil(67 / cost) === 1 ? 'vídeo' : 'vídeos'}</b> no valor informado.</> : 'Sem mensalidade do Modo Editor.'}</p></div></div>
