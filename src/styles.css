@@ -224,3 +224,36 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .border-beam::after { border-radius: 19px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation:none !important; transition:none !important; } }
+/* Final sections */
+.bonus-countdown { display: inline-block; margin: 0 0 20px 10px; font-family: var(--font-mono); font-size: 9px; color: var(--bonus); }
+.offer.border-beam { position: relative; }
+.beam-teal::before { background: conic-gradient(from 0deg, transparent 0 70%, var(--primary) 82%, var(--ready) 92%, transparent 100%); }
+.offer-price .offer-button { margin: 24px 0 12px; width: 100%; }
+.offer-price > p { max-width: 260px; line-height: 1.6; }
+.guarantee { grid-template-columns: 76px minmax(0,1fr); }
+.spin-seal { position: relative; width: 76px; height: 76px; display: grid; place-items: center; }
+.spin-seal > span { font-family: var(--font-editorial); font-size: 30px; color: var(--foreground); }
+.spin-ring { position: absolute; inset: 0; animation: beam-spin 14s linear infinite; }
+.spin-ring text { fill: var(--ready); font-family: var(--font-mono); font-size: 8.4px; }
+.testimonial-card { flex: 0 0 280px; margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
+.testimonial-card strong { color: var(--ready); font-size: 18px; display: block; }
+.testimonial-card blockquote { margin: 12px 0 16px; color: var(--muted-foreground); font-size: 12px; line-height: 1.7; }
+.testimonial-card figcaption { color: var(--foreground); font-size: 11px; } .testimonial-card figcaption span { color: var(--muted-foreground); margin-left: 6px; }
+.lamp { position: relative; min-height: 38rem; margin-top: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; background: var(--background); isolation: isolate; text-align: center; padding: 0 20px; }
+.lamp-light { position: absolute; top: 0; left: 50%; width: 60rem; height: 22rem; transform: translateX(-50%); z-index: -1; }
+.lamp-cone { position: absolute; top: 0; width: 30rem; height: 16rem; opacity: .55; }
+.lamp-cone.left { right: 50%; background: conic-gradient(from 70deg at 100% 0%, var(--ready), transparent 25%); mask-image: linear-gradient(to bottom, var(--background), transparent); }
+.lamp-cone.right { left: 50%; background: conic-gradient(from 290deg at 0% 0%, transparent 75%, var(--ready)); mask-image: linear-gradient(to bottom, var(--background), transparent); }
+.lamp-glow { position: absolute; top: -4rem; left: 50%; transform: translateX(-50%); width: 28rem; height: 9rem; border-radius: 50%; background: var(--ready); opacity: .35; filter: blur(60px); }
+.lamp-line { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 30rem; height: 3px; background: var(--ready); box-shadow: 0 0 40px 6px oklch(.828 .149 176 / .4); }
+.lamp-content h2 { font-size: 44px; line-height: 1.1; margin-bottom: 30px; } .lamp-content h2 em { color: var(--ready); } .lamp-content .purchase-note { margin-top: 12px; }
+.footer-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; font-size: 10px; color: var(--muted-foreground); } .footer-links a:hover { color: var(--foreground); }
+.sticky-bar { display: none; }
+@media (max-width: 767px) {
+  .lamp { min-height: 34rem; margin-top: 80px; } .lamp-light { width: 36rem; } .lamp-cone { width: 18rem; } .lamp-line { width: 18rem; } .lamp-glow { width: 17rem; }
+  .lamp-content h2 { font-size: 29px; max-width: 340px; margin-inline: auto; }
+  .guarantee { grid-template-columns: 70px minmax(0,1fr); } .spin-seal { width: 70px; height: 70px; }
+  .sticky-bar { display: flex; position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 40; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 10px 10px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--red-glow); transform: translateY(140%); transition: transform .3s ease; }
+  .sticky-bar.on { transform: none; } .sticky-bar strong { font-size: 18px; color: var(--foreground); } .sticky-bar p { font-size: 9px; } .sticky-bar .sticky-button { height: 42px; padding-inline: 20px; }
+  .footer { padding-bottom: 100px; }
+}
