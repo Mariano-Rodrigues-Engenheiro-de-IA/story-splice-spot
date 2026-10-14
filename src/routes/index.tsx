@@ -1,24 +1,155 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { ArrowRight, Check, CheckCircle2, ChevronsLeftRight, FileArchive, Gift, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Video, Volume2, ZoomIn } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Slider } from '@/components/ui/slider';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import creatorImage from '@/assets/creator-demo.jpg';
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
+  head: () => ({ meta: [
+    { title: 'Modo Editor — Deixe a IA editando. Vá viver.' },
+    { name: 'description', content: 'Solte o Modo Editor no ChatGPT ou Claude e transforme sua gravação em um vídeo pronto para postar. R$ 67, pagamento único e 7 dias de garantia.' },
+    { property: 'og:title', content: 'Modo Editor — Deixe a IA editando. Vá viver.' },
+    { property: 'og:description', content: 'Seu próximo vídeo pronto enquanto você vive. Conheça o Modo Editor: R$ 67, pagamento único.' },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+  ] }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+// Supply the actual demo video and payment destination before launch.
+const configuration: { heroVideo: string; checkoutUrl: string } = { heroVideo: '', checkoutUrl: '' };
+const words = ['treinar.', 'almoçar.', 'passear.', 'dormir.', 'viver.'];
+const brl = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value);
+
+function Brand() {
+  return <a href="#" className="brand" aria-label="Modo Editor, início"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</a>;
+}
+function PurchaseButton({ offer = false, onClick }: { offer?: boolean; onClick?: () => void }) {
+  if (offer) return <Button variant="purchase" onClick={onClick}>Quero o Modo Editor <ArrowRight /></Button>;
+  return <Button asChild variant="purchase"><a href="#preco">Quero o Modo Editor · R$ 67 <ArrowRight /></a></Button>;
+}
+function Portrait({ className = '' }: { className?: string }) {
+  return <img src={creatorImage} alt="Ilustração de um criador de conteúdo em um estúdio" width={768} height={1376} loading="lazy" className={className} />;
+}
+function Comparison() {
+  const [position, setPosition] = useState(50);
+  const [touched, setTouched] = useState(false);
+  useEffect(() => {
+    if (touched || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const start = Date.now();
+    const timer = window.setInterval(() => setPosition(50 + Math.sin((Date.now() - start) / 1600) * 25), 40);
+    return () => window.clearInterval(timer);
+  }, [touched]);
+  return <div className="comparison-wrap">
+    <div className="comparison">
+      <div className="compare-raw"><Portrait /></div>
+      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Portrait /><div className="compare-caption">o vídeo <mark>cortado,</mark></div></div>
+      <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>
+      <div className="compare-line" style={{ left: `${position}%` }}><span className="compare-handle"><GripVertical size={13} /></span></div>
+      <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
     </div>
-  );
+    <p className="compare-help">Arraste a linha para os lados</p>
+    <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>
+  </div>;
+}
+function ChatWindow({ upload }: { upload?: boolean }) {
+  return <div className="chat-window"><div className="chat-header"><i className="chat-dot" /><i className="chat-dot" /><i className="chat-dot" /><span>Sua IA · ChatGPT ou Claude</span></div><div className="chat-body">
+    <div className="file-bubble">{upload ? <Play /> : <FileArchive />}<div><strong>{upload ? 'gravacao.mp4' : 'modo-editor.zip'}</strong><small>{upload ? 'vídeo · 1:31' : 'arquivo'}</small></div></div>
+    {upload ? <div className="chat-prompt">Troca meu fundo por uma cidade!</div> : <div className="chat-success"><CheckCircle2 size={12} />Pronto! O Modo Editor está ativo.</div>}
+  </div></div>;
+}
+function Waveform({ music = false }: { music?: boolean }) {
+  return <div className={`waveform ${music ? 'music' : ''}`} aria-hidden="true">{Array.from({ length: music ? 38 : 58 }, (_, i) => <span key={i} className={!music && ((i > 13 && i < 19) || (i > 36 && i < 41)) ? 'cut' : ''} style={{ height: `${14 + Math.abs(Math.sin(i * 1.3) * Math.cos(i * .2)) * 65}%` }} />)}</div>;
+}
+const features = [
+  { title: 'Corta pausas e erros', copy: 'Silêncio, gaguejada e tomada repetida saem. A fala fica corrida.', icon: Scissors, type: 'cut', wide: true },
+  { title: 'Legenda palavra por palavra', copy: 'Cada palavra acende no momento em que você fala.', icon: Subtitles, type: 'caption' },
+  { title: 'Zoom nas partes fortes', copy: 'A câmera aproxima na ênfase e volta sozinha.', icon: ZoomIn, type: 'zoom' },
+  { title: 'Troca o fundo sem pano verde', copy: 'Você no cenário que pedir, recortado com capricho.', icon: ImageIcon, type: 'background', wide: true },
+  { title: 'Trilha e efeitos no tempo certo', copy: 'Trilha baixinha por baixo da voz e um efeito em cada corte.', icon: Music2, type: 'music' },
+];
+const faqItems = [
+  ['Preciso saber editar vídeo?', 'Não. Você envia o arquivo Modo Editor, a gravação e o pedido em português. Não precisa aprender um programa de edição.'],
+  ['Posso mesmo sair enquanto a IA edita?', 'Depois de enviar os arquivos e o pedido, você pode fazer outra coisa enquanto a IA processa. O tempo depende do vídeo, da ferramenta e do plano que você usa.'],
+  ['Funciona no ChatGPT e no Claude?', 'O Modo Editor foi pensado para o ChatGPT e o Claude. É necessário usar uma versão com suporte a arquivos e execução de código. Os recursos disponíveis podem variar conforme seu plano.'],
+  ['Quanto custa a assinatura da IA?', 'O pagamento de R$ 67 é pelo Modo Editor, não por uma assinatura de IA. Se o seu uso exigir um plano pago do ChatGPT ou Claude, ele é contratado separadamente. Consulte os preços atuais de cada plataforma.'],
+  ['Preciso de computador?', 'Você pode conversar com a IA pelo celular. O envio, o processamento e o download dos arquivos dependem dos recursos disponíveis no aplicativo ou navegador que você utiliza.'],
+  ['Como recebo o acesso?', 'O acesso é liberado após a aprovação do pagamento. Você recebe o arquivo Modo Editor e as orientações para começar.'],
+  ['E se eu não gostar?', 'Você tem 7 dias para solicitar o reembolso. O canal e as instruções de atendimento serão informados junto com o acesso.'],
+];
+function Index() {
+  const [word, setWord] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [videos, setVideos] = useState(12);
+  const [minutes, setMinutes] = useState(90);
+  const [cost, setCost] = useState(60);
+  const [example, setExample] = useState(false);
+  const [checkoutNotice, setCheckoutNotice] = useState(false);
+  const [sound, setSound] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timer = reduced ? undefined : window.setInterval(() => setWord(current => (current + 1) % words.length), 2200);
+    const scroll = () => { const height = document.documentElement.scrollHeight - window.innerHeight; setProgress(height > 0 ? window.scrollY / height : 0); };
+    window.addEventListener('scroll', scroll, { passive: true }); scroll();
+    return () => { if (timer) window.clearInterval(timer); window.removeEventListener('scroll', scroll); };
+  }, []);
+  function enableSound() {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = false; video.currentTime = 0; setSound(true); void video.play().catch(() => setSound(false));
+  }
+  function openCheckout() {
+    if (configuration.checkoutUrl) { window.location.assign(configuration.checkoutUrl); return; }
+    setCheckoutNotice(true);
+  }
+  return <div className="page">
+    <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
+    <div className="hero-wrap">
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#antes-depois">Antes e depois</a><a href="#como-funciona">Como funciona</a><a href="#bonus">Bônus</a><a href="#preco">Preço</a></nav></header>
+      <main>
+        <section className="hero" aria-labelledby="hero-title">
+          <div className="badge"><span className="record-dot" />Funciona no ChatGPT e no Claude</div>
+          <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
+          <div className="hero-video">
+            {configuration.heroVideo ? <><video ref={videoRef} src={configuration.heroVideo} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}
+          </div>
+          <div className="hero-cta"><PurchaseButton /></div>
+          <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
+          <p className="hero-copy">Solte o arquivo Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado e pronto pra postar.</p>
+        </section>
+        <section className="section container comparison-section" id="antes-depois">
+          <div className="comparison-copy"><span className="eyebrow">Antes e depois</span><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu do celular. À direita, o que a IA devolveu enquanto você estava fora.</p>
+            <div className="stats"><div className="stat"><strong>6</strong><p>pausas e repetições cortadas</p></div><div className="stat"><strong>30s</strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+            <p className="fine-print">Valores ilustrativos até a inclusão da demonstração real. Variam com cada gravação.</p>
+          </div><Comparison />
+        </section>
+        <section className="section container" id="como-funciona">
+          <div className="section-heading"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O último é sair.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
+          <div className="steps"><div className="step"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><ChatWindow /></div><div className="step"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><ChatWindow upload /></div><div className="step"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><Portrait /><span className="ready-tag"><CheckCircle2 size={10} />Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
+        </section>
+        <section className="section container">
+          <div className="section-heading"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href="#preco">Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+        </section>
+        <section className="section container">
+          <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi e <em>fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo sai de um pedido de uma frase.</p></div>
+          <div className="gallery">{['Frase em destaque', 'Cidade à noite', 'Cor de cinema', 'Ritmo de anúncio', 'Com trilha'].map((title, i) => <div className="gallery-card" key={title}><Portrait /><div className="gallery-caption"><strong>{title}</strong><p>{['“Grifa a ideia principal.”', '“Troca meu fundo por uma cidade.”', '“Dá uma cor de cinema.”', '“Corta os silêncios.”', '“Põe uma trilha leve.”'][i]}</p></div></div>)}</div>
+          <p className="illustration-note">Imagens ilustrativas · espaço reservado para seus vídeos reais</p>
+        </section>
+        <section className="section container" id="bonus"><div className="bonus-box"><div><span className="bonus-badge"><Gift size={11} /> BÔNUS</span><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div><div className="script-demo"><span className="eyebrow">Seu roteiro</span><p>{example ? 'Hoje eu quero te mostrar uma dica para gravar vídeos melhores.' : 'Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeos.'}</p><div className="after-label">↙ DEPOIS DO ARQUIVO SECRETO</div><strong>{example ? 'Seu vídeo perde atenção nos primeiros 3 segundos. Vamos mudar isso?' : 'Você grava em 2 minutos e passa 2 horas editando?'}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => !current)}><RefreshCw size={10} />Outro exemplo</Button></div></div></section>
+        <section className="section container">
+          <div className="section-heading"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
+          <div className="calculator"><div>{[{ label: 'Vídeos por mês', value: videos, max: 60, min: 1, step: 1, display: String(videos), set: setVideos }, { label: 'Tempo editando cada um', value: minutes, max: 240, min: 15, step: 15, display: `${Math.floor(minutes / 60)}h${minutes % 60 ? String(minutes % 60).padStart(2, '0') : ''}`, set: setMinutes }, { label: 'Quanto paga a um editor por vídeo', value: cost, max: 500, min: 0, step: 10, display: brl(cost), set: setCost }].map(control => <div className="calc-control" key={control.label}><div className="calc-label"><label>{control.label}</label><strong>{control.display}</strong></div><Slider aria-label={control.label} value={[control.value]} onValueChange={value => control.set(value[0] ?? control.min)} min={control.min} max={control.max} step={control.step} /></div>)}<p className="fine-print">Estimativa com os seus números, considerando o tempo total informado. O tempo real varia com o vídeo e a IA.</p></div><div className="calc-result" aria-live="polite"><strong className="hours">{Number((videos * minutes / 60).toFixed(1)).toLocaleString('pt-BR')} h</strong><p>por mês da sua vida editando</p><strong>{brl(videos * cost)}</strong><p>por mês que deixam de ir pro editor</p><p>R$ 67 uma vez. {cost > 0 ? <>O equivalente a <b>{Math.ceil(67 / cost)} {Math.ceil(67 / cost) === 1 ? 'vídeo' : 'vídeos'}</b> no valor informado.</> : 'Sem mensalidade do Modo Editor.'}</p></div></div>
+        </section>
+        <section className="section container"><div className="section-heading"><span className="eyebrow">Quem já usa</span><h2>Gente que parou<br /><em>de esperar o editor.</em></h2></div><div className="testimonial-empty">Depoimentos reais serão adicionados aqui.</div></section>
+        <section className="section container" id="preco"><div className="section-heading"><span className="eyebrow">A oferta</span><h2>Comece hoje <em>por R$ 67.</em></h2><p>Pagamento único. Sem mensalidade do nosso lado.</p></div><div className="offer"><div className="offer-main"><div className="offer-details"><h3>Modo Editor</h3><p>Arquivo de edição para ChatGPT e Claude</p><ul className="offer-list">{[['Arquivo Modo Editor', 'Você solta na conversa e a sua IA passa a cortar, legendar e animar sozinha.'], ['Bônus: O Arquivo Secreto do Roteiro', 'Revise o seu roteiro antes de gravar: gancho, clareza e chamada final.'], ['Acesso na hora', 'Após a aprovação do pagamento, receba o acesso ao arquivo.'], ['Funciona no ChatGPT e no Claude', 'No plano pago, contratado à parte direto com eles.']].map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div><div className="offer-price"><p>Pagamento único</p><div className="price"><sup>R$</sup>67</div><p>Sem assinatura do Modo Editor.</p><PurchaseButton offer onClick={openCheckout} /><span className="fine-print">7 dias de garantia · Compra única</span>{checkoutNotice && <p className="checkout-note" role="status">A compra estará disponível assim que o link de pagamento for configurado.</p>}</div></div><div className="guarantee"><div className="guarantee-seal">7</div><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div></section>
+        <section className="section container faq"><div className="faq-intro"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
+        <section className="final-cta"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></section>
+      </main>
+    </div>
+    <footer className="footer"><div className="container"><Brand /><p>ChatGPT é uma marca da OpenAI e Claude, da Anthropic. Este produto é independente e não tem vínculo com nenhuma delas.</p><p className="copyright">© {new Date().getFullYear()} Modo Editor. Todos os direitos reservados.</p></div></footer>
+  </div>;
 }
