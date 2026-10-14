@@ -120,8 +120,8 @@ function BonusCountdown() {
 function BonusBox() {
   const [example, setExample] = useState(0);
   const [shown, setShown] = useState(0);
-  const [before, after] = scripts[example] ?? ['', ''];
-  const words = after.split(' ');
+  const [before = '', after = ''] = scripts[example] ?? [];
+  const words = (after ?? '').split(' ');
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setShown(reduced ? words.length : 0);
