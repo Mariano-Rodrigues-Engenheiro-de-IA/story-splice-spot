@@ -1,10 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Video, Volume2, ZoomIn } from 'lucide-react';
+import { ArrowRight, CheckCircle2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Volume2, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import creatorImage from '@/assets/creator-demo.jpg';
+import { Clip } from '@/components/clip';
+import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { siteConfig } from '@/lib/site-config';
 
@@ -31,11 +32,9 @@ function Brand() {
 function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className }: { label?: string; className?: string }) {
   return <Button asChild variant="purchase" className={className}><a href={purchaseHref}>{label} <ArrowRight /></a></Button>;
 }
-function Portrait({ className = '' }: { className?: string }) {
-  return <img src={creatorImage} alt="Ilustração de um criador de conteúdo em um estúdio" width={768} height={1376} loading="lazy" className={className} />;
-}
-function Media({ src, className = '' }: { src: string; className?: string }) {
-  return src ? <video src={src} autoPlay muted loop playsInline className={className} /> : <Portrait className={className} />;
+/** Small vertical preview used in the cards. Animated canvas until real videos are configured. */
+function MiniClip({ className = '', preset = 'pronto', opts }: { className?: string; preset?: 'bruto' | 'pronto'; opts?: ClipOpts }) {
+  return <div className={`mini-clip ${className}`}><Clip preset={preset} opts={opts} /></div>;
 }
 function Comparison() {
   const [position, setPosition] = useState(50);
@@ -48,8 +47,8 @@ function Comparison() {
   }, [touched]);
   return <div className="comparison-wrap">
     <div className="comparison">
-      <div className="compare-raw"><Media src={siteConfig.videos.raw} /></div>
-      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Media src={siteConfig.videos.edited} /><div className="compare-caption">o vídeo <mark>cortado,</mark></div></div>
+      <div className="compare-raw"><Clip src={siteConfig.videos.raw} preset="bruto" opts={{ scene: 'green', offset: 1 }} label="Gravação bruta" /></div>
+      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Clip src={siteConfig.videos.edited} preset="pronto" opts={{ scene: 'green', offset: 1 }} label="Vídeo editado" /></div>
       <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>
       <div className="compare-line" style={{ left: `${position}%` }}><span className="compare-handle"><GripVertical size={13} /></span></div>
       <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
@@ -85,7 +84,7 @@ function RequestChat() {
   </div></div>;
 }
 function Waveform({ music = false }: { music?: boolean }) {
-  return <div className={`waveform ${music ? 'music' : ''}`} aria-hidden="true">{Array.from({ length: music ? 38 : 58 }, (_, i) => <span key={i} className={!music && ((i > 13 && i < 19) || (i > 36 && i < 41)) ? 'cut' : ''} style={{ height: `${14 + Math.abs(Math.sin(i * 1.3) * Math.cos(i * .2)) * 65}%` }} />)}</div>;
+  return <div className={`waveform ${music ? 'music' : ''}`} aria-hidden="true">{Array.from({ length: music ? 38 : 58 }, (_, i) => <span key={i} className={!music && ((i > 13 && i < 19) || (i > 36 && i < 41)) ? 'cut' : ''} style={{ height: `${(14 + Math.abs(Math.sin(i * 1.3) * Math.cos(i * .2)) * 65).toFixed(2)}%` }} />)}</div>;
 }
 const features = [
   { title: 'Corta pausas e erros', copy: 'Silêncio, gaguejada e tomada repetida saem. A fala fica corrida.', icon: Scissors, type: 'cut', wide: true },
@@ -97,6 +96,11 @@ const features = [
 const galleryCopy: [string, string][] = [
   ['Legenda que acompanha', 'legenda palavra por palavra'], ['Frase em destaque', 'põe a ideia principal no topo'], ['Cidade à noite', 'troca meu fundo, sem pano verde'],
   ['Cor de cinema', 'cor quente e faixas pretas'], ['Ritmo de anúncio', 'zoom em cada ênfase'], ['Com trilha', 'trilha baixinha por baixo'],
+];
+/** Look of each animated preview, matching the style named on the card. */
+const galleryLooks: ClipOpts[] = [
+  { scene: 'studio' }, { impact: 'A IDEIA VEM PRIMEIRO', captions: false, scene: 'blue' }, { bgSwap: true },
+  { letterbox: true, scene: 'warm', captions: false }, { scene: 'blue', captions: false }, { music: true, scene: 'green' },
 ];
 const gallery: [string, string, string][] = galleryCopy.map(([title, request], i) => [title, request, siteConfig.videos.gallery[i] ?? '']);
 const scripts = [
@@ -219,7 +223,7 @@ function Index() {
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT e no Claude</div>
           <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
           <div className="hero-video">
-            {siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}
+            {siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
           </div>
           <div className="hero-cta"><PurchaseButton /></div>
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
@@ -233,15 +237,15 @@ function Index() {
         </section>
         <section className="section container" id="como-funciona">
           <div className="section-heading"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O último é sair.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
-          <div className="steps"><div className="step"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><Portrait /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
+          <div className="steps"><div className="step"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><MiniClip className="ready-clip" opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
         </section>
         <section className="section container" id="o-que-faz">
           <div className="section-heading"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><Portrait /><Portrait /></div> : <Portrait className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" opts={{ scene: 'studio', offset: 3 }} /><MiniClip opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
-          <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor"><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}>{src ? <video src={src} autoPlay muted loop playsInline /> : <div className="video-empty"><Video /><span>seu vídeo aqui</span></div>}<div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
+          <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor"><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
         </section>
         <section className="section container" id="conta">
           <div className="section-heading"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
