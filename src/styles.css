@@ -183,4 +183,44 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .offer-main { grid-template-columns:minmax(0,1fr); }.offer-details { padding:25px; border:0; border-bottom:1px solid var(--border); }.offer-price { padding:28px 25px; }.price { font-size:78px; }.offer-price .purchase-button { width:100%; }.guarantee { padding:25px; gap:15px; }.guarantee p { font-size:9px; }.faq { grid-template-columns:minmax(0,1fr); gap:30px; }.faq-intro { text-align:center; }.faq-intro p { font-size:11px; }.faq-list { font-size:11px; }
   .final-cta { margin-top:95px; padding:90px 20px 85px; }.final-cta h2 { font-size:29px; max-width:340px; }.final-cta::before { width:200px; left:calc(50% - 100px); }.footer { padding-block:28px; }.footer .brand { font-size:11px; }.footer p { font-size:9px; }.testimonial-empty { font-size:11px; }
 }
+
+/* Sections D–G refinements */
+.step-number { width: 56px; height: 56px; font-size: 20px; }
+.chat-window, .ready-preview, .ready-preview img { height: 260px; }
+.ready-preview img { width: 146px; } .ready-preview { width: 146px; }
+.ready-pulse { animation: ready-pulse 1.8s ease-in-out infinite; }
+.away-tag { color: var(--background); background: var(--foreground); }
+.file-drop { position: relative; animation: file-drop 4s ease-in-out infinite; }
+.drop-cursor { position: absolute; right: -6px; bottom: -8px; width: 14px !important; height: 14px !important; color: var(--background) !important; fill: var(--foreground); }
+.chat-reply { animation: reply-in 4s ease-in-out infinite; }
+.chat-prompt { background: oklch(.567 .21 26); color: var(--foreground); min-height: 36px; max-width: 85%; }
+.caret { display: inline-block; width: 1px; height: 1em; background: var(--foreground); margin-left: 2px; vertical-align: -2px; animation: pulse .8s steps(1) infinite; }
+.waveform .cut { animation: cut-blink 3s ease-in-out infinite; }
+.marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, var(--background) 8%, var(--background) 92%, transparent); }
+.marquee-track { display: flex; gap: 14px; width: max-content; animation: marquee 40s linear infinite; }
+.marquee:hover .marquee-track, .marquee:active .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
+.marquee .gallery-card { flex: 0 0 210px; }
+.gallery-card video { width: 100%; height: 100%; object-fit: cover; }
+.gallery-caption strong { color: var(--foreground); }
+.gallery-request { font-family: var(--font-editorial); font-style: italic; font-size: 14px !important; color: var(--foreground); }
+.border-beam { overflow: hidden; isolation: isolate; border-color: transparent; }
+.border-beam::before { content: ""; position: absolute; inset: -60%; right: auto; left: -60%; top: -60%; width: 220%; height: 220%; z-index: -2; background: conic-gradient(from 0deg, transparent 0 70%, var(--bonus) 82%, var(--primary) 92%, transparent 100%); animation: beam-spin 6s linear infinite; }
+.border-beam::after { content: ""; position: absolute; inset: 1px; border-radius: 23px; background: var(--card); z-index: -1; }
+.script-old { text-decoration: line-through; color: var(--muted-foreground); }
+.gen-word { opacity: 0; filter: blur(4px); transition: opacity .35s, filter .35s; color: var(--foreground); }
+.gen-word.on { opacity: 1; filter: blur(0); }
+.bonus-badge { color: var(--background); }
+@keyframes ready-pulse { 50% { transform: scale(1.08); box-shadow: 0 0 0 6px oklch(.828 .149 176 / .2); } }
+@keyframes file-drop { 0% { opacity: 0; transform: translateY(-40px); } 20%,85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes reply-in { 0%,35% { opacity: 0; transform: translateY(6px); } 45%,85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes cut-blink { 0%,30% { opacity: .8; height: auto; } 50%,80% { opacity: 0; } }
+@keyframes marquee { to { transform: translateX(calc(-50% - 7px)); } }
+@keyframes beam-spin { to { transform: rotate(360deg); } }
+@media (max-width: 767px) {
+  .step-number { width: 52px; height: 52px; }
+  .chat-window, .ready-preview, .ready-preview img { height: 260px; }
+  .marquee .gallery-card { flex-basis: 170px; }
+  .waveform.music { gap: 2px; } .waveform.music span { width: 3px; }
+  .border-beam::after { border-radius: 19px; }
+}
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } *,*::before,*::after { animation:none !important; transition:none !important; } }
