@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
-import { ArrowRight, Check, CheckCircle2, ChevronsLeftRight, FileArchive, Gift, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Video, Volume2, ZoomIn } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, CheckCircle2, FileArchive, Gift, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Video, Volume2, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
