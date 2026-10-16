@@ -15,6 +15,8 @@ export const siteConfig = {
     edited: '',
     gallery: ['', '', '', '', '', ''] as string[],
   },
+  /** Owner section. Shown only when a real video of the owner is set. */
+  creator: { name: 'Mariano Rodrigues', video: '' },
   /** Only real, authorized testimonials. Empty list hides the section. */
   testimonials: [] as Testimonial[],
   legal: {

@@ -3,11 +3,11 @@ import { mountClip, PRESETS, type ClipOpts } from "@/lib/clip-renderer";
 
 type Props = {
   /** Path of the real video (site-config). Empty = animated preview drawn on canvas. */
-  src?: string;
+  src?: string | undefined;
   preset?: "bruto" | "pronto";
-  opts?: ClipOpts;
+  opts?: ClipOpts | undefined;
   className?: string;
-  label?: string;
+  label?: string | undefined;
 };
 
 export function Clip({ src, preset = "pronto", opts, className = "", label }: Props) {

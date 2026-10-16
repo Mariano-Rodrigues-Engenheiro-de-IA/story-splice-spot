@@ -7,6 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Clip } from '@/components/clip';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
+import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
 
 export const Route = createFileRoute('/')({
@@ -156,7 +157,7 @@ function Calculator() {
 function Testimonials() {
   const list = siteConfig.testimonials;
   if (list.length === 0) return null;
-  return <section className="section container" id="depoimentos"><div className="section-heading"><span className="eyebrow">Quem já usa</span><h2>Gente que parou<br /><em>de esperar o editor.</em></h2></div>
+  return <section className="section container" id="depoimentos"><div className="section-heading reveal"><span className="eyebrow">Quem já usa</span><h2>Gente que parou<br /><em>de esperar o editor.</em></h2></div>
     <div className="marquee" tabIndex={0} aria-label="Depoimentos de clientes"><div className="marquee-track">{[...list, ...list].map((item, i) => <figure className="testimonial-card" key={i} aria-hidden={i >= list.length}><strong>{item.result}</strong><blockquote>“{item.quote}”</blockquote><figcaption>{item.name} <span>{item.handle}</span></figcaption></figure>)}</div></div></section>;
 }
 function SpinningSeal() {
@@ -170,7 +171,7 @@ const offerItems = [
   ['Funciona no ChatGPT e no Claude', 'No plano pago, contratado à parte direto com eles.'],
 ];
 function Offer() {
-  return <section className="section container" id="oferta"><div className="section-heading"><span className="eyebrow">A oferta</span><h2>Comece hoje <em>por R$ {siteConfig.price}.</em></h2><p>Pagamento único. Sem mensalidade do nosso lado.</p></div>
+  return <section className="section container" id="oferta"><div className="section-heading reveal"><span className="eyebrow">A oferta</span><h2>Comece hoje <em>por R$ {siteConfig.price}.</em></h2><p>Pagamento único. Sem mensalidade do nosso lado.</p></div>
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3>Modo Editor</h3><p>Arquivo de edição para ChatGPT e Claude</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
       <div className="offer-price"><p>Pagamento único</p><div className="price"><sup>R$</sup><NumberTicker value={siteConfig.price} duration={1400} /></div><p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div></section>;
@@ -180,6 +181,8 @@ const faqItems = [
   ['Posso mesmo sair enquanto a IA edita?', 'Pode. Depois que você manda a gravação e o pedido, a edição segue sozinha. Na volta, o vídeo está pronto pra revisar.'],
   ['Funciona no ChatGPT e no Claude?', 'Sim, nos dois, no plano pago. Você usa a IA que já tem.'],
   ['Quanto custa a assinatura da IA?', 'A partir de US$ 20 por mês, pagos direto à OpenAI ou à Anthropic. Não está incluída no valor do Modo Editor.'],
+  ['É um curso de edição?', 'Não. É um arquivo que você solta no ChatGPT ou no Claude, e a IA passa a editar. Você não precisa aprender a editar.'],
+  ['Serve pra anúncio e pra conteúdo?', 'Serve. Reels, anúncio, aula, depoimento: se é um vídeo falado, você manda a gravação e pede a edição.'],
   ['Preciso de computador?', 'Para editar, sim: Mac ou Windows. O celular serve para gravar.'],
   ['Como recebo o acesso?', 'Por e-mail, assim que o pagamento é aprovado. No PIX e no cartão é na hora.'],
   ['E se eu não gostar?', 'Você tem 7 dias de garantia. Pede o reembolso e recebe 100% do valor de volta.'],
@@ -198,6 +201,7 @@ function StickyBar() {
   return <div className={`sticky-bar ${show ? 'on' : ''}`} aria-hidden={!show}><div><strong>R$ {siteConfig.price}</strong><p>Pagamento único · 7 dias de garantia</p></div><PurchaseButton label="Quero" className="sticky-button" /></div>;
 }
 function Index() {
+  useReveal();
   const [word, setWord] = useState(0);
   const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(false);
@@ -217,7 +221,7 @@ function Index() {
   return <div className="page">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#antes-depois">Antes e depois</a><a href="#como-funciona">Como funciona</a><a href="#bonus">Bônus</a><a href="#oferta">Preço</a></nav></header>
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#ao-vivo">Ao vivo</a><a href="#como-funciona">Como funciona</a><a href="#pedidos">Pedidos</a><a href="#bonus">Bônus</a><a href="#oferta">Preço</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT e no Claude</div>
@@ -229,31 +233,38 @@ function Index() {
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
           <p className="hero-copy">Solte o arquivo Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado e pronto pra postar.</p>
         </section>
+        <LiveDemo />
         <section className="section container comparison-section" id="antes-depois">
-          <div className="comparison-copy"><span className="eyebrow">Antes e depois</span><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu do celular. À direita, o que a IA devolveu enquanto você estava fora.</p>
-            <div className="stats"><div className="stat"><strong>6</strong><p>pausas e repetições cortadas</p></div><div className="stat"><strong>30s</strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+          <div className="comparison-copy reveal"><span className="eyebrow">Antes e depois</span><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu do celular. À direita, o que a IA devolveu enquanto você estava fora.</p>
+            <div className="stats"><div className="stat"><strong><NumberTicker value={6} /></strong><p>pausas e repetições cortadas</p></div><div className="stat"><strong><NumberTicker value={30} format={v => `${Math.round(v)}s`} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
             <p className="fine-print">Valores ilustrativos até a inclusão da demonstração real. Variam com cada gravação.</p>
           </div><Comparison />
         </section>
         <section className="section container" id="como-funciona">
-          <div className="section-heading"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O último é sair.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
-          <div className="steps"><div className="step"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><MiniClip className="ready-clip" opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
+          <div className="section-heading reveal"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O último é sair.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
+          <div className="steps"><div className="step reveal"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step reveal"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step reveal"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><MiniClip className="ready-clip" opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
         </section>
+        <ModeSwitch />
         <section className="section container" id="o-que-faz">
-          <div className="section-heading"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" opts={{ scene: 'studio', offset: 3 }} /><MiniClip opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="section-heading reveal"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" opts={{ scene: 'studio', offset: 3 }} /><MiniClip opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
           <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor"><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
         </section>
+        <ForWho />
+        <RequestLibrary />
+        <section className="section container" id="bonus"><BonusBox /></section>
         <section className="section container" id="conta">
-          <div className="section-heading"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
           <Calculator />
         </section>
         <Testimonials />
+        <WhatYouGet />
+        <Creator name={siteConfig.creator.name} video={siteConfig.creator.video} />
         <Offer />
-        <section className="section container faq" id="duvidas"><div className="faq-intro"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
+        <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
         <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
       </main>
     </div>
