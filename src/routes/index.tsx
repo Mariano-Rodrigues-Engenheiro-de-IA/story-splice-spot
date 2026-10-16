@@ -55,7 +55,7 @@ function Comparison() {
       <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
     </div>
     <p className="compare-help">Arraste a linha para os lados</p>
-    <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>
+    {!siteConfig.videos.raw && <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>}
   </div>;
 }
 const requests = ['Corta as pausas e coloca legenda', 'Troca meu fundo por uma cidade', 'Dá zoom quando eu enfatizar'];
@@ -236,8 +236,8 @@ function Index() {
         <LiveDemo />
         <section className="section container comparison-section" id="antes-depois">
           <div className="comparison-copy reveal"><span className="eyebrow">Antes e depois</span><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu do celular. À direita, o que a IA devolveu enquanto você estava fora.</p>
-            <div className="stats"><div className="stat"><strong><NumberTicker value={6} /></strong><p>pausas e repetições cortadas</p></div><div className="stat"><strong><NumberTicker value={30} format={v => `${Math.round(v)}s`} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
-            <p className="fine-print">Valores ilustrativos até a inclusão da demonstração real. Variam com cada gravação.</p>
+            <div className="stats"><div className="stat"><strong><NumberTicker value={siteConfig.demo.cuts} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={siteConfig.demo.secondsSaved} format={v => `${Math.round(v)}s`} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+            <p className="fine-print">Números reais deste vídeo: {siteConfig.demo.rawLength} de gravação viraram {siteConfig.demo.editedLength}. Variam com cada gravação.</p>
           </div><Comparison />
         </section>
         <section className="section container" id="como-funciona">

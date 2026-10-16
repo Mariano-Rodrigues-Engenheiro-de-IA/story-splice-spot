@@ -11,10 +11,12 @@ export const siteConfig = {
   bonusEndsAt: '',
   videos: {
     hero: '',
-    raw: '',
-    edited: '',
+    raw: '/videos/antes.mp4',
+    edited: '/videos/depois.mp4',
     gallery: ['', '', '', '', '', ''] as string[],
   },
+  /** Real numbers of the raw/edited pair above (shown in the stats and the live demo). Update when the videos change. */
+  demo: { cuts: 14, rawLength: '1:13', editedLength: '0:55', secondsSaved: 18 },
   /** Owner section. Shown only when a real video of the owner is set. */
   creator: { name: 'Mariano Rodrigues', video: '' },
   /** Only real, authorized testimonials. Empty list hides the section. */

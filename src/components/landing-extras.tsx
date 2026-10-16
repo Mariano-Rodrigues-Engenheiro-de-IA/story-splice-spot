@@ -37,8 +37,8 @@ function useStepper(count: number, ms: number, active: boolean) {
 
 const liveSteps = [
   { title: 'Ouvindo a sua gravação.', note: 'A IA lê a fala inteira, palavra por palavra.' },
-  { title: 'Achei 3 pausas e 1 frase repetida.', note: 'Silêncio, "ééé" e a tomada que você refez.' },
-  { title: 'Cortei. 1:12 virou 0:47.', note: 'A fala fica corrida, sem buraco.' },
+  { title: `Achei ${siteConfig.demo.cuts} pausas e erros.`, note: 'Silêncio, "ééé" e a frase que travou.' },
+  { title: `Cortei. ${siteConfig.demo.rawLength} virou ${siteConfig.demo.editedLength}.`, note: 'A fala fica corrida, sem buraco.' },
   { title: 'Legenda no tempo da sua fala.', note: 'Cada palavra acende quando você fala.' },
   { title: 'Pronto pra postar.', note: 'E você nem estava olhando.' },
 ];
@@ -73,7 +73,7 @@ export function LiveDemo() {
         <div className="live-panel">
           <div className="live-top">
             <span><i className="rec" />{step >= 4 ? 'Edição concluída' : 'Editando'}</span>
-            <span className="live-time" key={step >= 2 ? 'b' : 'a'}>{step >= 2 ? '0:47' : '1:12'}</span>
+            <span className="live-time" key={step >= 2 ? 'b' : 'a'}>{step >= 2 ? siteConfig.demo.editedLength : siteConfig.demo.rawLength}</span>
           </div>
           <ol className="live-steps">
             {liveSteps.map((item, i) => (
@@ -110,7 +110,7 @@ export function LiveDemo() {
           </div>
         </div>
       </div>
-      <p className="illustration-note">Demonstração ilustrativa. Os números mudam com cada gravação.</p>
+      <p className="illustration-note">{siteConfig.videos.raw ? `Gravação real: ${siteConfig.demo.rawLength} viraram ${siteConfig.demo.editedLength}. Os números mudam com cada gravação.` : 'Demonstração ilustrativa. Os números mudam com cada gravação.'}</p>
     </section>
   );
 }
