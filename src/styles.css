@@ -411,3 +411,17 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .creator { grid-template-columns: minmax(0,1fr); gap: 26px; text-align: center; }
   .creator-video { width: 220px; margin: auto; }
 }
+
+/* Personas: self-explaining visuals */
+.pa-list { display: grid; gap: 5px; }
+.pa-list small { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted-foreground); margin-bottom: 2px; }
+.pa-list > span { position: relative; display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 7px; padding: 5px 7px; }
+.pa-list > span em { margin-left: auto; font-style: normal; color: var(--muted-foreground); animation: pa-wait 3.6s ease-in-out infinite; animation-delay: inherit; }
+.pa-list > span em.bad { color: var(--primary); animation: none; }
+.pa-list > span b { position: absolute; right: 7px; color: var(--ready); font-weight: 500; opacity: 0; animation: pa-ok 3.6s ease-in-out infinite; animation-delay: inherit; }
+.pa-list > span:not(.worn) { animation: pa-file 3.6s ease-in-out infinite; }
+.pa-list > span.worn { opacity: .5; }
+.pa-tags { display: flex; flex-wrap: wrap; gap: 6px; background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px 10px; }
+.pa-tags span { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: var(--surface); color: var(--muted-foreground); animation: pa-tag 3s ease-in-out infinite; }
+@keyframes pa-wait { 0%, 30% { opacity: 1; } 45%, 85% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes pa-tag { 0%, 25% { background: var(--surface); color: var(--muted-foreground); } 40%, 85% { background: var(--ready); color: var(--background); } 100% { background: var(--surface); color: var(--muted-foreground); } }

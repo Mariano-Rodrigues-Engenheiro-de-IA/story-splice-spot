@@ -3,6 +3,7 @@ import {
   Check, Clapperboard, Copy, FileArchive, FileText, GraduationCap, Mail, Megaphone, Play, Power, Sparkles, Timer, Wallet,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
+import { siteConfig } from '@/lib/site-config';
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -66,7 +67,7 @@ export function LiveDemo() {
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
         <div className="live-phone">
-          <Clip preset={step >= 3 ? 'pronto' : 'bruto'} opts={{ scene: 'studio', captions: step >= 3, zoom: step >= 4, offset: 0.5 }} />
+          <Clip src={step >= 3 ? siteConfig.videos.edited : siteConfig.videos.raw} preset={step >= 3 ? 'pronto' : 'bruto'} opts={{ scene: 'studio', captions: step >= 3, zoom: step >= 4, offset: 0.5 }} />
           <span className={`live-badge ${step >= 4 ? 'done' : ''}`}>{step >= 4 ? '✓ Pronto' : '● Bruto'}</span>
         </div>
         <div className="live-panel">
@@ -140,7 +141,7 @@ export function ModeSwitch() {
         <h2>Mesma IA. <em>Outro resultado.</em></h2>
         <p>Sem instrução, a IA chuta como você quer o vídeo. Com o Modo Editor, ela já começa sabendo.</p>
       </div>
-      <div ref={ref} className={`mode reveal ${on ? 'is-on' : ''}`}>
+      <div className="reveal"><div ref={ref} className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
           <div className="mode-request"><small>Seu pedido</small>“Edita esse vídeo e deixa bonito.”</div>
           <button type="button" className="mode-toggle" role="switch" aria-checked={on} onClick={() => { setTouched(true); setOn(v => !v); }}>
@@ -148,7 +149,7 @@ export function ModeSwitch() {
           </button>
         </div>
         <div className="mode-body">
-          <div className="mode-phone"><Clip preset={on ? 'pronto' : 'bruto'} opts={{ scene: 'blue', offset: 3 }} /></div>
+          <div className="mode-phone"><Clip src={on ? siteConfig.videos.edited : siteConfig.videos.raw} preset={on ? 'pronto' : 'bruto'} opts={{ scene: 'blue', offset: 3 }} /></div>
           <ul className="mode-list">
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
@@ -159,7 +160,7 @@ export function ModeSwitch() {
           </ul>
         </div>
         <div className="mode-foot"><span>{on ? 5 : 0}/5</span> critérios de edição {on ? 'definidos' : 'no chute'}</div>
-      </div>
+      </div></div>
     </section>
   );
 }
@@ -174,10 +175,24 @@ const personas = [
 ] as const;
 
 function PersonaArt({ type }: { type: string }) {
-  if (type === 'files') return <div className="pa-files">{['gravacao_07.mov', 'gravacao_06.mov', 'gravacao_05.mov'].map((f, i) => <span key={f} style={{ animationDelay: `${i * 0.9}s` }}><FileText size={11} />{f}<b>✓ editado</b></span>)}</div>;
-  if (type === 'ads') return <div className="pa-ads">{['A', 'B', 'C', 'D'].map((l, i) => <span key={l} style={{ animationDelay: `${i * 0.35}s` }}>Versão {l}</span>)}</div>;
-  if (type === 'class') return <div className="pa-class"><span className="pa-word">explica</span><span className="pa-word hl">mostra</span></div>;
-  return <div className="pa-wait"><Timer size={16} /><span>aguardando o editor<i>…</i></span><b>✓ pronto com a IA</b></div>;
+  if (type === 'files') return (
+    <div className="pa-list"><small>Sua pasta de gravações</small>
+      {['gravacao_07.mov', 'gravacao_06.mov', 'gravacao_05.mov'].map((f, i) => <span key={f} style={{ animationDelay: `${i * 0.9}s` }}><FileText size={11} />{f}<em>esperando</em><b>✓ editado</b></span>)}
+    </div>
+  );
+  if (type === 'ads') return (
+    <div className="pa-list"><small>Seus anúncios</small>
+      <span className="worn"><Megaphone size={11} />Anúncio 1<em className="bad">cansou</em></span>
+      <span className="worn"><Megaphone size={11} />Anúncio 2<em className="bad">cansou</em></span>
+      <span style={{ animationDelay: '0s' }}><Megaphone size={11} />Anúncio novo<em>esperando edição</em><b>✓ no ar</b></span>
+    </div>
+  );
+  if (type === 'class') return (
+    <div className="pa-list"><small>Sua aula gravada</small>
+      <div className="pa-tags">{['legenda', 'zoom', 'destaque'].map((t, i) => <span key={t} style={{ animationDelay: `${i * 0.5}s` }}>✓ {t}</span>)}</div>
+    </div>
+  );
+  return <div className="pa-wait"><Timer size={16} /><span>esperando o editor<i>…</i></span><b>✓ pronto com a IA</b></div>;
 }
 
 export function ForWho() {
@@ -269,14 +284,14 @@ export function WhatYouGet() {
         <h2>Chega no seu e-mail. <em>Você usa hoje.</em></h2>
         <p>Dois arquivos. Você solta na conversa da sua IA e começa a pedir.</p>
       </div>
-      <div ref={ref} className={`unbox reveal ${inView ? 'open' : ''}`}>
+      <div className="reveal"><div ref={ref} className={`unbox ${inView ? 'open' : ''}`}>
         <div className="unbox-mail"><Mail size={18} /><div><strong>Seu acesso ao Modo Editor</strong><small>chega assim que o pagamento é aprovado</small></div></div>
         <div className="unbox-files">
           <div className="unbox-file"><span className="unbox-icon"><FileArchive size={20} /></span><div><strong>Modo Editor</strong><p>O arquivo que faz a sua IA cortar, legendar e animar seus vídeos.</p></div></div>
           <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>O Arquivo Secreto do Roteiro <em>bônus</em></strong><p>Revisa o roteiro antes de gravar: gancho, clareza e chamada final.</p></div></div>
         </div>
         <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>plano pago, contratado à parte</small></div>
-      </div>
+      </div></div>
     </section>
   );
 }
@@ -304,7 +319,7 @@ export function useReveal() {
     const nodes = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
     if (typeof IntersectionObserver === 'undefined' || reduced()) { nodes.forEach(n => n.classList.add('in')); return; }
     document.documentElement.classList.add('js-reveal');
-    const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px 12% 0px' });
     nodes.forEach(n => io.observe(n));
     return () => io.disconnect();
   }, []);

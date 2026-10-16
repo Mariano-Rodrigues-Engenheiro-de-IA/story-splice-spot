@@ -15,6 +15,19 @@ export function Clip({ src, preset = "pronto", opts, className = "", label }: Pr
   const merged = { ...PRESETS[preset], ...opts };
   const key = JSON.stringify(merged);
   const ctl = useRef<ReturnType<typeof mountClip> | null>(null);
+  const video = useRef<HTMLVideoElement>(null);
+
+  // Real videos only play while on screen (saves data and battery on phones).
+  useEffect(() => {
+    const node = video.current;
+    if (!src || !node || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) void node.play().catch(() => undefined);
+      else node.pause();
+    });
+    io.observe(node);
+    return () => io.disconnect();
+  }, [src]);
 
   useEffect(() => {
     if (src || !ref.current) return;
@@ -31,6 +44,7 @@ export function Clip({ src, preset = "pronto", opts, className = "", label }: Pr
   if (src)
     return (
       <video
+        ref={video}
         src={src}
         autoPlay
         muted
