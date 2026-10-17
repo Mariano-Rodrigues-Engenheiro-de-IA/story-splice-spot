@@ -10,13 +10,13 @@ export const siteConfig = {
   /** ISO date when the bonus ends, e.g. '2026-11-01T23:59:00-03:00'. Empty = no countdown. */
   bonusEndsAt: '',
   videos: {
-    hero: '',
+    hero: '/videos/criativo06.mp4',
     raw: '/videos/antes.mp4',
     edited: '/videos/depois.mp4',
     gallery: ['', '', '', '', '', ''] as string[],
   },
   /** Real numbers of the raw/edited pair above (shown in the stats and the live demo). Update when the videos change. */
-  demo: { cuts: 14, rawLength: '1:13', editedLength: '0:55', secondsSaved: 18 },
+  demo: { cuts: 68, rawLength: '5:09', editedLength: '1:50', secondsSaved: 199 },
   /** Owner section. Shown only when a real video of the owner is set. */
   creator: { name: 'Mariano Rodrigues', video: '' },
   /** Only real, authorized testimonials. Empty list hides the section. */
