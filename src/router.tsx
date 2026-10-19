@@ -8,7 +8,7 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     context: { queryClient },
-    scrollRestoration: true,
+    scrollRestoration: false, // página única: ao recarregar, sempre volta ao topo (vídeo de vendas)
     defaultPreloadStaleTime: 0,
   });
 

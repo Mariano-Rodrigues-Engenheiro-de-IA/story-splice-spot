@@ -305,9 +305,29 @@ function usePausaForaDaTela() {
     return () => io.disconnect();
   }, []);
 }
+/** A página sempre abre no topo (no vídeo de vendas), inclusive ao recarregar; os links internos (#oferta, #bonus…)
+ *  descem até a seção sem gravar o "#" no endereço, senão recarregar levaria a pessoa direto para lá. */
+function useSempreNoTopo() {
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    if (location.hash) { history.replaceState(null, '', location.pathname + location.search); window.scrollTo(0, 0); }
+    const aoClicar = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const link = (e.target as Element | null)?.closest?.('a[href^="#"]');
+      const href = link?.getAttribute('href');
+      if (!href) return;
+      e.preventDefault();
+      if (href === '#') return window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById(href.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    document.addEventListener('click', aoClicar);
+    return () => document.removeEventListener('click', aoClicar);
+  }, []);
+}
 function Index() {
   useReveal();
   usePausaForaDaTela();
+  useSempreNoTopo();
   const [word, setWord] = useState(0);
   const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(false);
