@@ -34,7 +34,9 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
-    if (lerPosicao() > 8) setFase('retomar');
+    // só oferece retomar se a posição salva cabe no vídeo atual (uma versão antiga do vídeo podia ser mais longa)
+    const confere = () => { const p = lerPosicao(); if (p > 8 && (!v.duration || p < v.duration - 5)) setFase(f => (f === 'mudo' ? 'retomar' : f)); else if (p > 8) gravarPosicao(0); };
+    if (v.readyState >= 1) confere(); else v.addEventListener('loadedmetadata', confere, { once: true });
     const tempo = () => {
       if (!v.duration) return;
       if (!v.muted) {

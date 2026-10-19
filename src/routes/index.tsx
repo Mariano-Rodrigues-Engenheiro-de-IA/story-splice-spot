@@ -233,12 +233,12 @@ function Calculator() {
   const duration = `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}`.replace(/^0h/, '').replace(/h00$/, 'h');
   const controls = [
     { label: 'Vídeos por mês', value: videos, min: 1, max: 60, step: 1, display: String(videos), set: setVideos },
-    { label: 'Tempo editando cada um', value: minutes, min: 10, max: 240, step: 5, display: minutes < 60 ? `${minutes} min` : duration, set: setMinutes },
+    { label: 'Tempo editando cada um', value: minutes, min: 15, max: 240, step: 5, display: minutes < 60 ? `${minutes} min` : duration, set: setMinutes },
     { label: 'Quanto paga a um editor por vídeo', value: cost, min: 0, max: 300, step: 5, display: brl(cost), set: setCost },
   ];
   return <div className="calculator"><div>{controls.map(control => <div className="calc-control" key={control.label}><div className="calc-label"><label>{control.label}</label><strong>{control.display}</strong></div><Slider aria-label={control.label} value={[control.value]} onValueChange={value => control.set(value[0] ?? control.min)} min={control.min} max={control.max} step={control.step} /></div>)}<p className="fine-print">Estimativa com os seus números, considerando cerca de 10 minutos por vídeo com a IA. O tempo real muda com o tipo de vídeo.</p></div>
     <div className="calc-result" aria-live="polite"><strong className="hours"><NumberTicker value={hours} format={v => `${v.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} h`} /></strong><p>por mês de volta pra você</p><strong><NumberTicker value={videos * cost} format={brl} /></strong><p>por mês que deixam de ir pro editor</p>
-      <p>{cost > 0 ? <>R$ {siteConfig.price} uma vez. Se paga com <b>{payback} {payback === 1 ? 'vídeo' : 'vídeos'}</b> que você deixa de mandar pro editor.</> : <>São <b>{Math.round(hours * 12).toLocaleString('pt-BR')} horas por ano</b> de volta na sua agenda.</>}</p></div></div>;
+      <p>{cost > 0 ? <>R$ {siteConfig.price} uma vez. Se paga com <b>{payback} {payback === 1 ? 'vídeo' : 'vídeos'}</b> que você deixa de mandar pro editor.</> : <>São <b>{Math.round(hours * 12).toLocaleString('pt-BR')} {Math.round(hours * 12) === 1 ? 'hora' : 'horas'} por ano</b> de volta na sua agenda.</>}</p></div></div>;
 }
 function Testimonials() {
   const list = siteConfig.testimonials;
@@ -287,9 +287,16 @@ function StickyBar() {
 }
 /** Botão flutuante do WhatsApp, igual ao do checkout: logo redondo no canto, para quem ficou com dúvida. */
 function WhatsAppButton() {
+  // no topo ele ficaria em cima do botão de compra e da linha de garantia: só aparece depois que a pessoa rola um pouco
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const ver = () => setOn(window.scrollY > 450);
+    ver(); window.addEventListener('scroll', ver, { passive: true });
+    return () => window.removeEventListener('scroll', ver);
+  }, []);
   if (!siteConfig.whatsapp) return null;
   const href = `https://api.whatsapp.com/send?phone=${siteConfig.whatsapp}&text=${encodeURIComponent('Oi! Tenho uma dúvida sobre o Modo Editor.')}`;
-  return <a className="whats" href={href} target="_blank" rel="noopener noreferrer" aria-label="Tirar dúvidas no WhatsApp" onClick={() => evento('Contact', { content_name: 'Modo Editor' })}>
+  return <a className={`whats ${on ? 'on' : ''}`} aria-hidden={!on} tabIndex={on ? 0 : -1} href={href} target="_blank" rel="noopener noreferrer" aria-label="Tirar dúvidas no WhatsApp" onClick={() => evento('Contact', { content_name: 'Modo Editor' })}>
     <svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="whats-verde" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stopColor="#20b038" /><stop offset="1" stopColor="#60d66a" /></linearGradient></defs>
       <path fill="url(#whats-verde)" d="M12.051 21.785h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884Z" />
       <path fill="#fff" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
