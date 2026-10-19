@@ -7,7 +7,7 @@ export const siteConfig = {
   price: 67,
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
   pixel: {
-    id: '' as string,
+    id: '1455677936481047' as string,
     /** true = dispara InitiateCheckout no clique do botão (aí desligue esse evento na Kiwify para não contar duas vezes). */
     initiateCheckoutNoBotao: false as boolean,
   },
