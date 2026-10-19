@@ -548,7 +548,9 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .odometro-fita > span { display: block; height: 1em; text-align: center; }
 .odometro.girando .odometro-fita { animation: odometro-borrao 2.2s ease-out both; }
 @keyframes odometro-borrao { 0% { filter: blur(0); } 10% { filter: blur(6px); } 55% { filter: blur(2.5px); } 100% { filter: blur(0); } }
-.odometro-coluna.odometro-some { transition: width .4s ease 2.1s, opacity .3s ease 2.1s; width: .6em; }
+/* o "1" do 197: sobe e some enquanto a coluna se fecha, junto com o giro dos outros dígitos */
+.odometro-coluna.odometro-some { width: .56em; transition: width .9s cubic-bezier(.4,0,.2,1) .25s, opacity .45s ease .2s; }
+.odometro-coluna.odometro-some .odometro-fita { transition: transform .55s cubic-bezier(.5,0,.75,0); animation: none; }
 .odometro.girando .odometro-some { width: 0; opacity: 0; }
 .offer-price .preco-rotulo { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--bonus); }
 .offer-price .preco-depois { margin-top: -4px; margin-bottom: 4px; font-size: 12px; color: var(--muted-foreground); }
