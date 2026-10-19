@@ -526,3 +526,6 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 /* ---------- última seção: a frase fica logo abaixo do raio de luz, dentro do cone ---------- */
 .lamp { min-height: 0; justify-content: flex-start; padding-top: 6.5rem; padding-bottom: 7rem; }
 @media (max-width: 767px) { .lamp { min-height: 0; padding-top: 5rem; padding-bottom: 6rem; } }
+
+/* ---------- logos do ChatGPT e do Claude no selo do topo: do tamanho da letra ---------- */
+.marca-ia { width: 1.35em; height: 1.35em; flex: none; display: inline-block; vertical-align: -0.28em; margin: 0 -2px 0 -3px; color: var(--foreground); }

@@ -10,6 +10,7 @@ import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
+import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { cliqueComprar, evento, eventoProprio, linkCheckout } from '@/lib/pixel';
 
 export const Route = createFileRoute('/')({
@@ -297,7 +298,7 @@ function Index() {
       <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#ao-vivo">Ao vivo</a><a href="#como-funciona">Como funciona</a><a href="#pedidos">Pedidos</a><a href="#bonus">Bônus</a><a href="#oferta">Preço</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          <div className="badge"><span className="record-dot" />Funciona no ChatGPT e no Claude</div>
+          <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
           <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
           <div className="hero-video">
             {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
