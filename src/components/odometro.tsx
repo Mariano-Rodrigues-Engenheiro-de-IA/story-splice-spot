@@ -1,17 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 
-// Preço que gira como um caça-níquel: cada dígito parte do próprio valor, roda para trás algumas voltas (borrado no
-// começo) e desacelera até parar no mesmo valor. Sem JavaScript, ou antes de aparecer na tela, mostra o valor parado.
-const VOLTAS = 3;
+// Preço que gira como um caça-níquel: parte de `de` (o preço depois do lançamento), roda para trás algumas voltas
+// (borrado no começo) e desacelera até parar em `valor`. Dígitos que sobram à esquerda (o 1 do 197) somem no fim.
+const VOLTAS = 2;
 
-export function Odometro({ valor, className = '' }: { valor: number; className?: string }) {
+export function Odometro({ valor, de = valor, className = '' }: { valor: number; de?: number; className?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [girar, setGirar] = useState(false);
-  const digitos = String(valor).split('').map(Number);
+  const casas = Math.max(String(valor).length, String(de).length);
+  const ini = String(de).padStart(casas, '0').split('').map(Number);
+  const fim = String(valor).padStart(casas, '0').split('').map(Number);
+  const sobra = casas - String(valor).length; // colunas que somem no fim
 
   useEffect(() => {
     const node = ref.current;
-    if (!node || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!node) return;
+    // movimento reduzido: vai direto ao preço final (as transições estão desligadas no CSS)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return setGirar(true);
     const io = new IntersectionObserver(([entry]) => {
       if (entry?.isIntersecting) { setGirar(true); io.disconnect(); }
     }, { threshold: 0.6 });
@@ -21,13 +26,14 @@ export function Odometro({ valor, className = '' }: { valor: number; className?:
 
   return (
     <span ref={ref} className={`odometro ${girar ? 'girando' : ''} ${className}`} aria-label={String(valor)}>
-      {digitos.map((d, i) => {
-        // fita que começa e termina no dígito certo, contando para trás; cada coluna gira uma volta a mais
-        const fita = Array.from({ length: (VOLTAS + i) * 10 + 1 }, (_, k) => (d - k + 1000) % 10);
-        const fim = fita.length - 1;
+      {ini.map((a, i) => {
+        // fita contando para trás, do dígito inicial ao final; cada coluna à direita gira uma volta a mais
+        const passos = (VOLTAS + i) * 10 + ((a - fim[i]! + 10) % 10);
+        const fita = Array.from({ length: passos + 1 }, (_, k) => (a - k + 1000) % 10);
+        const some = i < sobra;
         return (
-          <span key={i} className="odometro-coluna" aria-hidden="true">
-            <span className="odometro-fita" style={{ transform: `translateY(-${girar ? fim : 0}em)`, transitionDelay: `${i * 0.15}s`, animationDelay: `${i * 0.15}s` }}>
+          <span key={i} className={`odometro-coluna ${some ? 'odometro-some' : ''}`} aria-hidden="true">
+            <span className="odometro-fita" style={{ transform: `translateY(-${girar ? passos : 0}em)`, transitionDelay: `${i * 0.12}s`, animationDelay: `${i * 0.12}s` }}>
               {fita.map((n, k) => <span key={k}>{n}</span>)}
             </span>
           </span>

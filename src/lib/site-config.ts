@@ -5,6 +5,8 @@ export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
   checkoutUrl: 'https://pay.kiwify.com.br/hFsZJIo',
   price: 67,
+  /** Preço depois do lançamento (o preço da oferta gira dele até `price`). 0 = sem preço de depois. */
+  priceAfterLaunch: 197,
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
   pixel: {
     id: '1455677936481047' as string,
