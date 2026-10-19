@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, Loader2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Volume2, ZoomIn } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Loader2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Sparkles, Subtitles, Volume2, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -110,15 +110,36 @@ function RequestChat() {
     <div className="chat-prompt" aria-label={requests.join(' / ')}>{text}<span className="caret" /></div>
   </div></div>;
 }
-function Waveform({ music = false }: { music?: boolean }) {
-  return <div className={`waveform ${music ? 'music' : ''}`} aria-hidden="true">{Array.from({ length: music ? 38 : 58 }, (_, i) => <span key={i} className={!music && ((i > 13 && i < 19) || (i > 36 && i < 41)) ? 'cut' : ''} style={{ height: `${(14 + Math.abs(Math.sin(i * 1.3) * Math.cos(i * .2)) * 65).toFixed(2)}%` }} />)}</div>;
+/** Altura de barra fixa (mesma no servidor e no navegador). */
+const barra = (i: number, min = 14, amp = 65) => `${(min + Math.abs(Math.sin(i * 1.3) * Math.cos(i * .2)) * amp).toFixed(2)}%`;
+/** Corte de pausas e erros: a IA acha os trechos ruins, a agulha passa e eles somem, a fala fica corrida. */
+function CutTimeline() {
+  const trechos: (number | string)[] = [9, 'pausa', 11, 'ééé', 8, 'erro', 9];
+  let n = 0;
+  return <div className="corte" aria-hidden="true">
+    <div className="corte-trilha">{trechos.map((t, k) => typeof t === 'number'
+      ? <span key={k} className="corte-fala">{Array.from({ length: t }, () => { const i = n++; return <span key={i} style={{ height: barra(i, 22) }} />; })}</span>
+      : <span key={k} className="corte-tira"><i>{t}</i></span>)}</div>
+    <span className="corte-agulha"><Scissors size={12} /></span>
+    <span className="corte-ok"><CheckCircle2 size={12} /> Fala corrida, sem pausa</span>
+  </div>;
+}
+/** Trilha e efeitos: voz na frente, trilha baixinha por baixo e um efeito em cada corte, na hora em que a agulha passa. */
+function MusicTimeline() {
+  const efeitos = [0.2, 0.47, 0.76];
+  return <div className="mix" aria-hidden="true">
+    <div className="mix-linha"><b>Voz</b><div className="mix-ondas mix-voz">{Array.from({ length: 34 }, (_, i) => <span key={i} style={{ height: barra(i, 30, 70), animationDelay: `${-((i * 0.37) % 1.2).toFixed(2)}s` }} />)}</div></div>
+    <div className="mix-linha"><b>Trilha</b><div className="mix-ondas mix-trilha">{Array.from({ length: 34 }, (_, i) => <span key={i} style={{ animationDelay: `${-(i * 0.12).toFixed(2)}s` }} />)}</div></div>
+    <div className="mix-linha"><b>Efeitos</b><div className="mix-efeitos">{efeitos.map(x => <i key={x} style={{ left: `${x * 100}%`, animationDelay: `${(x * 4).toFixed(2)}s` }}><Sparkles size={11} /></i>)}</div></div>
+    <span className="mix-agulha" />
+  </div>;
 }
 const features = [
-  { title: 'Corta pausas e erros', copy: 'Silêncio, gaguejada e tomada repetida saem. A fala fica corrida.', icon: Scissors, type: 'cut', wide: true },
+  { title: 'Corta pausas e erros', copy: 'Silêncio, “ééé” e a frase que travou saem sozinhos. A fala fica corrida.', icon: Scissors, type: 'cut', wide: true },
   { title: 'Legenda palavra por palavra', copy: 'Cada palavra acende no momento em que você fala.', icon: Subtitles, type: 'caption' },
   { title: 'Zoom nas partes fortes', copy: 'A câmera aproxima na ênfase e volta sozinha.', icon: ZoomIn, type: 'zoom' },
   { title: 'Troca o fundo sem pano verde', copy: 'Você no cenário que pedir, recortado com capricho.', icon: ImageIcon, type: 'background', wide: true },
-  { title: 'Trilha e efeitos no tempo certo', copy: 'Trilha baixinha por baixo da voz e um efeito em cada corte.', icon: Music2, type: 'music' },
+  { title: 'Trilha e efeitos no tempo certo', copy: 'A trilha entra baixinha por baixo da sua voz e cada corte ganha um efeito, sem você posicionar nada.', icon: Music2, type: 'music' },
 ];
 const galleryCopy: [string, string, string][] = [
   ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/cenas/titulo.mp4'],
@@ -278,8 +299,8 @@ function Index() {
         </section>
         <ModeSwitch />
         <section className="section container" id="o-que-faz">
-          <div className="section-heading reveal"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'zoom' ? siteConfig.videos.cenas.zoom : siteConfig.videos.cenas.legendaTroca} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="section-heading reveal"><span className="eyebrow">O que a IA faz no seu vídeo</span><h2>O que você fazia na mão, <em>a IA faz sozinha.</em></h2><p>Do primeiro corte à trilha: você grava, diz o que quer e recebe o vídeo editado.</p></div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' ? <CutTimeline /> : feature.type === 'music' ? <MusicTimeline /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'zoom' ? siteConfig.videos.cenas.zoom : siteConfig.videos.cenas.legendaTroca} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading reveal"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>

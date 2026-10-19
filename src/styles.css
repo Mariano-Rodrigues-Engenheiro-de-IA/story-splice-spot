@@ -466,3 +466,41 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .aula-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .aula-chips span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 13px; }
 .aula-chips svg { color: var(--ready); }
+
+/* ---------- cartão "corta pausas e erros": a agulha passa e os trechos ruins somem ---------- */
+.corte { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; }
+.corte-trilha { display: flex; align-items: center; height: 62%; padding: 0 4px; border-radius: 10px; background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+.corte-fala { flex: 1; display: flex; align-items: center; justify-content: space-around; height: 78%; min-width: 0; }
+.corte-fala span { width: 3px; border-radius: 3px; background: var(--muted-foreground); opacity: .7; }
+.corte-tira { position: relative; flex: 0 0 auto; width: 46px; height: 78%; margin: 0 2px; border-radius: 6px; border: 1px dashed var(--primary); background: color-mix(in oklch, var(--primary) 22%, transparent); display: grid; place-items: center; overflow: hidden; animation: corte-some 5s ease-in-out infinite; }
+.corte-tira::after { content: ""; position: absolute; left: 6px; right: 6px; top: 50%; height: 2px; background: var(--primary); opacity: .8; }
+.corte-tira i { position: relative; z-index: 1; font-style: normal; font-family: var(--font-mono); font-size: 9px; color: var(--foreground); background: var(--primary); padding: 1px 5px; border-radius: 4px; white-space: nowrap; }
+.corte-agulha { position: absolute; top: 12%; bottom: 12%; left: 0; width: 2px; background: var(--foreground); box-shadow: 0 0 10px var(--foreground); animation: corte-agulha 5s linear infinite; }
+.corte-agulha svg { position: absolute; top: -14px; left: 50%; transform: translateX(-50%) rotate(-90deg); color: var(--foreground); }
+.corte-ok { position: absolute; left: 0; bottom: -2px; display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-mono); font-size: 10px; color: var(--ready); opacity: 0; animation: corte-ok 5s ease-in-out infinite; }
+@keyframes corte-agulha { 0% { left: 0; opacity: 1; } 45% { left: calc(100% - 2px); opacity: 1; } 50%, 100% { left: calc(100% - 2px); opacity: 0; } }
+@keyframes corte-some { 0%, 48% { width: 46px; margin: 0 2px; opacity: 1; border-width: 1px; } 60%, 90% { width: 0; margin: 0; opacity: 0; border-width: 0; } 100% { width: 46px; margin: 0 2px; opacity: 1; border-width: 1px; } }
+@keyframes corte-ok { 0%, 58% { opacity: 0; transform: translateY(4px); } 64%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; } }
+
+/* ---------- cartão "trilha e efeitos": voz, trilha baixinha e efeito em cada corte ---------- */
+.mix { position: relative; height: 100%; display: grid; grid-template-rows: 1.3fr .8fr .7fr; gap: 6px; padding-left: 58px; }
+.mix-linha { position: relative; display: flex; align-items: center; min-width: 0; }
+.mix-linha b { position: absolute; left: -58px; width: 50px; font-family: var(--font-mono); font-size: 9px; font-weight: 500; color: var(--muted-foreground); text-transform: uppercase; letter-spacing: .06em; }
+.mix-ondas { flex: 1; height: 100%; display: flex; align-items: center; justify-content: space-between; border-radius: 8px; background: var(--surface); padding: 0 6px; min-width: 0; }
+.mix-ondas span { width: 3px; border-radius: 3px; }
+.mix-voz span { background: var(--foreground); opacity: .85; transform-origin: center; animation: mix-voz 1.2s ease-in-out infinite; }
+.mix-trilha span { height: 34%; background: var(--bonus); opacity: .75; animation: mix-trilha 2.4s ease-in-out infinite; }
+.mix-efeitos { position: relative; flex: 1; height: 100%; border-radius: 8px; border: 1px dashed var(--border); }
+.mix-efeitos i { position: absolute; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--ready); border: 1px solid var(--ready); animation: mix-efeito 4s ease-out infinite; }
+.mix-agulha { position: absolute; top: -4px; bottom: -4px; left: 58px; width: 2px; background: var(--ready); box-shadow: 0 0 10px var(--ready); animation: mix-agulha 4s linear infinite; }
+@keyframes mix-voz { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
+@keyframes mix-trilha { 0%, 100% { height: 22%; } 50% { height: 42%; } }
+@keyframes mix-efeito { 0% { transform: scale(1.5); background: var(--ready); color: var(--background); box-shadow: 0 0 0 0 color-mix(in oklch, var(--ready) 60%, transparent); } 14% { box-shadow: 0 0 0 10px transparent; } 22%, 100% { transform: scale(1); background: var(--surface); color: var(--ready); } }
+@keyframes mix-agulha { from { left: 58px; } to { left: calc(100% - 2px); } }
+@media (max-width: 767px) {
+  .corte-tira { width: 42px; } .corte-tira i { font-size: 8.5px; padding: 1px 3px; } .corte-fala span { width: 2px; }
+  @keyframes corte-some { 0%, 48% { width: 42px; margin: 0 2px; opacity: 1; border-width: 1px; } 60%, 90% { width: 0; margin: 0; opacity: 0; border-width: 0; } 100% { width: 42px; margin: 0 2px; opacity: 1; border-width: 1px; } }
+  .mix { padding-left: 50px; } .mix-linha b { left: -50px; width: 46px; font-size: 8px; } .mix-agulha { left: 50px; }
+  @keyframes mix-agulha { from { left: 50px; } to { left: calc(100% - 2px); } }
+  .mix-ondas span { width: 2px; }
+}
