@@ -20,8 +20,8 @@ export const siteConfig = {
     /** Vídeo de vendas (player com aviso de som e barra sem duração). Preenchido, ele substitui o vídeo do topo. */
     vsl: '/videos/vsl.mp4' as string,
     vslPoster: '/videos/vsl_capa.jpg' as string,
-    raw: '/videos/antes.mp4',
-    edited: '/videos/depois.mp4',
+    raw: '/videos/antes_mapa.mp4',
+    edited: '/videos/depois_mapa.mp4',
     gallery: [] as string[],
     /** Cenas do vídeo de vendas espalhadas pela página (cada lugar com uma cena diferente). */
     cenas: {

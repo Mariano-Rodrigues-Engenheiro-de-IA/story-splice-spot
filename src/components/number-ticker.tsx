@@ -24,7 +24,7 @@ export function NumberTicker({ value, format = v => Math.round(v).toLocaleString
     const origin = from.current;
     let frame = 0;
     const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
+      const t = Math.min(1, Math.max(0, (now - start) / duration)); // o 1º quadro pode vir com horário anterior ao início
       const eased = 1 - Math.pow(1 - t, 3);
       const current = origin + (value - origin) * eased;
       setDisplay(current);

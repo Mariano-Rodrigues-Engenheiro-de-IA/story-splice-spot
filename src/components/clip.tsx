@@ -8,9 +8,11 @@ type Props = {
   opts?: ClipOpts | undefined;
   className?: string;
   label?: string | undefined;
+  /** Part of a group that plays together (carousel, before/after): loads the whole video up front. */
+  grupo?: boolean;
 };
 
-export function Clip({ src, preset = "pronto", opts, className = "", label }: Props) {
+export function Clip({ src, preset = "pronto", opts, className = "", label, grupo = false }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
   const merged = { ...PRESETS[preset], ...opts };
   const key = JSON.stringify(merged);
@@ -18,15 +20,30 @@ export function Clip({ src, preset = "pronto", opts, className = "", label }: Pr
   const video = useRef<HTMLVideoElement>(null);
 
   // Real videos only play while on screen (saves data and battery on phones).
+  // Inside a [data-clip-grupo] (gallery carousel, before/after) the whole group is observed, so the cards keep
+  // playing while they slide in and out instead of pausing and freezing on the first frame.
   useEffect(() => {
     const node = video.current;
     if (!src || !node || typeof IntersectionObserver === "undefined") return;
+    let quer = false;
+    const tocar = () => {
+      if (!quer || !node.paused) return;
+      // still loading: try again as soon as there is a frame to show
+      void node.play().catch(() => node.addEventListener("canplay", tocar, { once: true }));
+    };
+    const alvo = node.closest<HTMLElement>("[data-clip-grupo]") ?? node;
     const io = new IntersectionObserver(([entry]) => {
-      if (entry?.isIntersecting) void node.play().catch(() => undefined);
+      quer = !!entry?.isIntersecting;
+      if (quer) tocar();
       else node.pause();
-    });
-    io.observe(node);
-    return () => io.disconnect();
+    }, { rootMargin: "200px 0px" });
+    io.observe(alvo);
+    node.addEventListener("loadeddata", tocar);
+    return () => {
+      io.disconnect();
+      node.removeEventListener("loadeddata", tocar);
+      node.removeEventListener("canplay", tocar);
+    };
   }, [src]);
 
   useEffect(() => {
@@ -50,7 +67,7 @@ export function Clip({ src, preset = "pronto", opts, className = "", label }: Pr
         muted
         loop
         playsInline
-        preload="metadata"
+        preload={grupo ? "auto" : "metadata"}
         aria-label={label}
         className={`clip ${className}`}
       />
