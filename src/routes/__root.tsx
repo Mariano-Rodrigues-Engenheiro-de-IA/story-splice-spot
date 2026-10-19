@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { iniciarPixel } from "../lib/pixel";
 
 function NotFoundComponent() {
   return (
@@ -95,7 +96,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
-    // META PIXEL: add the Meta Pixel script here, e.g. scripts: [{ children: "...fbq('init', 'PIXEL_ID')..." }]
+    // Meta Pixel: carregado no navegador por iniciarPixel() (src/lib/pixel.ts), com o id de siteConfig.pixel
     scripts: [],
   }),
   shellComponent: RootShell,
@@ -120,6 +121,7 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => iniciarPixel(), []);
 
   return (
     <QueryClientProvider client={queryClient}>

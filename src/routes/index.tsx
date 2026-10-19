@@ -10,6 +10,7 @@ import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
+import { cliqueComprar, eventoProprio, linkCheckout } from '@/lib/pixel';
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
@@ -31,6 +32,12 @@ const purchaseHref = siteConfig.checkoutUrl || '#oferta';
 function Brand() {
   return <a href="#" className="brand" aria-label="Modo Editor, início"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</a>;
 }
+/** De onde veio o clique de compra (para o pixel): barra fixa, ou a seção onde o botão está. */
+function localDoBotao(el: HTMLElement) {
+  if (el.closest('.sticky-bar')) return 'barra-fixa';
+  const sec = el.closest('section');
+  return sec?.id || sec?.className.split(' ').find(c => c && c !== 'section' && c !== 'container') || 'topo';
+}
 function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className }: { label?: string; className?: string }) {
   // o toque precisa de resposta: o botão afunda e mostra que o pagamento está abrindo
   const [abrindo, setAbrindo] = useState(false);
@@ -39,7 +46,7 @@ function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}
     window.addEventListener('pageshow', volta);
     return () => window.removeEventListener('pageshow', volta);
   }, []);
-  return <Button asChild variant="purchase" className={`botao-compra ${abrindo ? 'is-abrindo' : ''} ${className ?? ''}`}><a href={purchaseHref} onClick={() => { setAbrindo(true); window.setTimeout(() => setAbrindo(false), 8000); }} aria-busy={abrindo}>{abrindo ? <><Loader2 className="botao-girando" /> Abrindo o pagamento…</> : <>{label} <ArrowRight /></>}</a></Button>;
+  return <Button asChild variant="purchase" className={`botao-compra ${abrindo ? 'is-abrindo' : ''} ${className ?? ''}`}><a href={purchaseHref} onClick={e => { e.currentTarget.href = linkCheckout(purchaseHref); cliqueComprar(localDoBotao(e.currentTarget)); setAbrindo(true); window.setTimeout(() => setAbrindo(false), 8000); }} aria-busy={abrindo}>{abrindo ? <><Loader2 className="botao-girando" /> Abrindo o pagamento…</> : <>{label} <ArrowRight /></>}</a></Button>;
 }
 /** "Agora as suas aulas saem prontas": trecho de uma aula no formato de YouTube, editada no mesmo processo. */
 function Aulas() {
@@ -218,7 +225,7 @@ function StickyBar() {
     let offerVisible = false;
     const offer = document.getElementById('oferta');
     const update = () => setShow(window.scrollY > 700 && !offerVisible);
-    const observer = new IntersectionObserver(([entry]) => { offerVisible = !!entry?.isIntersecting; update(); });
+    const observer = new IntersectionObserver(([entry]) => { offerVisible = !!entry?.isIntersecting; if (offerVisible) eventoProprio('ViuOferta'); update(); });
     if (offer) observer.observe(offer);
     window.addEventListener('scroll', update, { passive: true }); update();
     return () => { observer.disconnect(); window.removeEventListener('scroll', update); };

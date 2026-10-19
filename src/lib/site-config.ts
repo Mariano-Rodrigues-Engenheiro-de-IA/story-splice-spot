@@ -5,6 +5,12 @@ export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
   checkoutUrl: 'https://pay.kiwify.com.br/hFsZJIo',
   price: 67,
+  /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
+  pixel: {
+    id: '' as string,
+    /** true = dispara InitiateCheckout no clique do botão (aí desligue esse evento na Kiwify para não contar duas vezes). */
+    initiateCheckoutNoBotao: false as boolean,
+  },
   /** Installment value for 12x on card, e.g. 6.93. 0 = installment line hidden. */
   installmentValue: 0,
   /** ISO date when the bonus ends, e.g. '2026-11-01T23:59:00-03:00'. Empty = no countdown. */

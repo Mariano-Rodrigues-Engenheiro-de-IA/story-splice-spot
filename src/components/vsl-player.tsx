@@ -1,5 +1,6 @@
 import { Play, RotateCcw, VolumeX } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import { eventoProprio } from '@/lib/pixel';
 
 // Player do vídeo de vendas no padrão dos concorrentes (VTurb): começa mudo, aviso grande no centro para ativar o som,
 // sem controles nem duração, barra de progresso que anda rápido no começo e devagar no fim, e "continuar de onde parou".
@@ -37,7 +38,9 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
     const tempo = () => {
       if (!v.duration) return;
       if (!v.muted) {
-        setProg(progressoVisivel(v.currentTime / v.duration));
+        const x = v.currentTime / v.duration;
+        setProg(progressoVisivel(x));
+        for (const m of [25, 50, 75]) if (x >= m / 100) eventoProprio(`VSL_${m}`); // retenção (com som)
         if (Math.abs(v.currentTime - salva.current) > 2) {
           salva.current = v.currentTime;
           gravarPosicao(v.currentTime);
@@ -47,6 +50,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
     const fim = () => {
       if (v.muted) return;
       gravarPosicao(0);
+      eventoProprio('VSL_Concluiu');
       setFase('fim');
     };
     v.addEventListener('timeupdate', tempo);
@@ -60,6 +64,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
   const tocarComSom = (de: number) => {
     const v = ref.current;
     if (!v) return;
+    eventoProprio('VSL_AtivouSom');
     v.loop = false;
     v.muted = false;
     v.currentTime = de;
