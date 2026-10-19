@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { mountClip, PRESETS, type ClipOpts } from "@/lib/clip-renderer";
+import type { ClipOpts } from "@/lib/clip-renderer";
 
 type Props = {
   /** Path of the real video (site-config). Empty = animated preview drawn on canvas. */
@@ -14,9 +14,9 @@ type Props = {
 
 export function Clip({ src, preset = "pronto", opts, className = "", label, grupo = false }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
-  const merged = { ...PRESETS[preset], ...opts };
-  const key = JSON.stringify(merged);
-  const ctl = useRef<ReturnType<typeof mountClip> | null>(null);
+  const key = JSON.stringify([preset, opts]);
+  const ctl = useRef<{ set: (o: ClipOpts) => void; destroy: () => void } | null>(null);
+  const presets = useRef<Record<string, ClipOpts> | null>(null);
   const video = useRef<HTMLVideoElement>(null);
 
   // Real videos only load when the visitor gets close and only play while on screen: the page opens light and the
@@ -55,15 +55,21 @@ export function Clip({ src, preset = "pronto", opts, className = "", label, grup
     };
   }, [perto]);
 
+  // Prévia desenhada (só quando não há vídeo): o desenhista é baixado sob demanda, fora do código inicial da página.
   useEffect(() => {
     if (src || !ref.current) return;
-    ctl.current = mountClip(ref.current, merged);
-    return () => ctl.current?.destroy();
+    let vivo = true;
+    void import("@/lib/clip-renderer").then(({ mountClip, PRESETS }) => {
+      if (!vivo || !ref.current) return;
+      presets.current = PRESETS;
+      ctl.current = mountClip(ref.current, { ...PRESETS[preset], ...opts });
+    });
+    return () => { vivo = false; ctl.current?.destroy(); ctl.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [src]);
 
   useEffect(() => {
-    ctl.current?.set(merged);
+    if (ctl.current && presets.current) ctl.current.set({ ...presets.current[preset], ...opts });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key]);
 

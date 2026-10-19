@@ -69,24 +69,38 @@ function Aulas() {
 function MiniClip({ className = '', preset = 'pronto', opts, src }: { className?: string; preset?: 'bruto' | 'pronto'; opts?: ClipOpts; src?: string | undefined }) {
   return <div className={`mini-clip ${className}`}><Clip src={src} preset={preset} opts={opts} /></div>;
 }
+/** true enquanto o elemento está na tela (ou perto): animações e temporizadores só rodam quando alguém vê. */
+function useNaTela<T extends Element>() {
+  const ref = useRef<T>(null);
+  const [visivel, setVisivel] = useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node || typeof IntersectionObserver === 'undefined') return setVisivel(true);
+    const io = new IntersectionObserver(([e]) => setVisivel(!!e?.isIntersecting), { rootMargin: '100px 0px' });
+    io.observe(node);
+    return () => io.disconnect();
+  }, []);
+  return [ref, visivel] as const;
+}
 function Comparison() {
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
-  const box = useRef<HTMLDivElement>(null);
+  const [box, naTela] = useNaTela<HTMLDivElement>();
   // bruto e editado são o mesmo trecho: o lado bruto segue o tempo do editado para a linha comparar o mesmo instante
   useEffect(() => {
+    if (!naTela) return;
     const timer = window.setInterval(() => {
       const [raw, edit] = Array.from(box.current?.querySelectorAll('video') ?? []);
       if (raw && edit && !edit.paused && Math.abs(raw.currentTime - edit.currentTime) > 0.12) raw.currentTime = edit.currentTime;
     }, 400);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [naTela, box]);
   useEffect(() => {
-    if (touched || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (touched || !naTela || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const start = Date.now();
     const timer = window.setInterval(() => setPosition(50 + Math.sin((Date.now() - start) / 1600) * 25), 40);
     return () => window.clearInterval(timer);
-  }, [touched]);
+  }, [touched, naTela]);
   return <div className="comparison-wrap">
     <div className="comparison" ref={box} data-clip-grupo>
       <div className="compare-raw"><Clip grupo src={siteConfig.videos.raw} preset="bruto" opts={{ scene: 'green', offset: 1 }} label="Gravação bruta" /></div>
@@ -100,13 +114,14 @@ function Comparison() {
   </div>;
 }
 const requests = ['Corta as pausas e coloca legenda', 'Troca meu fundo por uma cidade', 'Dá zoom quando eu enfatizar'];
-function useTyping(lines: string[]) {
+function useTyping(lines: string[], ativo = true) {
   const [state, setState] = useState({ line: 0, chars: 0 });
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { setState({ line: 0, chars: lines[0]?.length ?? 0 }); return; }
+    if (!ativo) return;
     const timer = window.setInterval(() => setState(({ line, chars }) => chars < (lines[line]?.length ?? 0) + 25 ? { line, chars: chars + 1 } : { line: (line + 1) % lines.length, chars: 0 }), 60);
     return () => window.clearInterval(timer);
-  }, [lines]);
+  }, [lines, ativo]);
   return (lines[state.line] ?? "").slice(0, state.chars);
 }
 function ChatHeader() {
@@ -119,8 +134,9 @@ function DropChat() {
   </div></div>;
 }
 function RequestChat() {
-  const text = useTyping(requests);
-  return <div className="chat-window"><ChatHeader /><div className="chat-body">
+  const [ref, naTela] = useNaTela<HTMLDivElement>();
+  const text = useTyping(requests, naTela);
+  return <div className="chat-window" ref={ref}><ChatHeader /><div className="chat-body">
     <div className="file-bubble"><Play className="file-icon" /><div><strong>gravacao.mp4</strong><small>vídeo · 1:11</small></div></div>
     <div className="chat-prompt" aria-label={requests.join(' / ')}>{text}<span className="caret" /></div>
   </div></div>;
@@ -193,17 +209,19 @@ function BonusCountdown() {
 function BonusBox() {
   const [example, setExample] = useState(0);
   const [shown, setShown] = useState(0);
+  const [box, naTela] = useNaTela<HTMLDivElement>();
   const [before = '', after = ''] = scripts[example] ?? [];
   const words = (after ?? '').split(' ');
   useEffect(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     setShown(reduced ? words.length : 0);
-    if (reduced) return;
-    const reveal = window.setInterval(() => setShown(current => current + 1), 110);
+    if (reduced || !naTela) return;
+    // as palavras aparecem uma a uma e o contador para quando todas apareceram
+    const reveal = window.setInterval(() => setShown(current => { if (current >= words.length) window.clearInterval(reveal); return Math.min(current + 1, words.length); }), 110);
     const next = window.setTimeout(() => setExample(current => (current + 1) % scripts.length), 7000);
     return () => { window.clearInterval(reveal); window.clearTimeout(next); };
-  }, [example, words.length]);
-  return <div className="bonus-box border-beam"><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
+  }, [example, words.length, naTela]);
+  return <div className="bonus-box border-beam" ref={box}><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
     <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{before}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={after}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
 }
 function Calculator() {
@@ -278,8 +296,18 @@ function WhatsAppButton() {
     </svg>
   </a>;
 }
+/** Seções fora da tela ficam com as animações de CSS pausadas: o celular não gasta recalculando o que ninguém vê. */
+function usePausaForaDaTela() {
+  useEffect(() => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(entradas => entradas.forEach(e => e.target.classList.toggle('fora-da-tela', !e.isIntersecting)), { rootMargin: '150px 0px' });
+    document.querySelectorAll('main > section, main > div > section, .lamp, footer').forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+}
 function Index() {
   useReveal();
+  usePausaForaDaTela();
   const [word, setWord] = useState(0);
   const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(false);

@@ -489,12 +489,12 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .mix-ondas { flex: 1; height: 100%; display: flex; align-items: center; justify-content: space-between; border-radius: 8px; background: var(--surface); padding: 0 6px; min-width: 0; }
 .mix-ondas span { width: 3px; border-radius: 3px; }
 .mix-voz span { background: var(--foreground); opacity: .85; transform-origin: center; animation: mix-voz 1.2s ease-in-out infinite; }
-.mix-trilha span { height: 34%; background: var(--bonus); opacity: .75; animation: mix-trilha 2.4s ease-in-out infinite; }
+.mix-trilha span { height: 42%; background: var(--bonus); opacity: .75; transform-origin: center; animation: mix-trilha 2.4s ease-in-out infinite; }
 .mix-efeitos { position: relative; flex: 1; height: 100%; border-radius: 8px; border: 1px dashed var(--border); }
 .mix-efeitos i { position: absolute; top: 50%; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--ready); border: 1px solid var(--ready); animation: mix-efeito 4s ease-out infinite; }
 .mix-agulha { position: absolute; top: -4px; bottom: -4px; left: 58px; width: 2px; background: var(--ready); box-shadow: 0 0 10px var(--ready); animation: mix-agulha 4s linear infinite; }
 @keyframes mix-voz { 0%, 100% { transform: scaleY(.35); } 50% { transform: scaleY(1); } }
-@keyframes mix-trilha { 0%, 100% { height: 22%; } 50% { height: 42%; } }
+@keyframes mix-trilha { 0%, 100% { transform: scaleY(.52); } 50% { transform: scaleY(1); } }
 @keyframes mix-efeito { 0% { transform: scale(1.5); background: var(--ready); color: var(--background); box-shadow: 0 0 0 0 color-mix(in oklch, var(--ready) 60%, transparent); } 14% { box-shadow: 0 0 0 10px transparent; } 22%, 100% { transform: scale(1); background: var(--surface); color: var(--ready); } }
 @keyframes mix-agulha { from { left: 58px; } to { left: calc(100% - 2px); } }
 @media (max-width: 767px) {
@@ -569,3 +569,6 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .offer-details .offer-marca { display: flex; align-items: center; gap: 10px; }
 .offer-details .offer-marca .brand-icon { width: 30px; height: 30px; flex: none; }
 .offer-details .offer-marca .brand-icon svg { width: 14px; height: 14px; }
+
+/* ---------- desempenho: animações das seções fora da tela ficam pausadas ---------- */
+.fora-da-tela, .fora-da-tela *, .fora-da-tela *::before, .fora-da-tela *::after { animation-play-state: paused !important; }

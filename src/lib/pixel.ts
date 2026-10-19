@@ -42,10 +42,17 @@ export function iniciarPixel() {
     n.queue = [];
     window.fbq = n;
     window._fbq = n;
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://connect.facebook.net/en_US/fbevents.js';
-    document.head.appendChild(s);
+    // Os eventos entram na fila na hora; o código da Meta (~270 KB) só baixa depois que a página terminou de
+    // carregar, para não disputar o celular com o vídeo de vendas. Ao chegar, ele envia a fila inteira.
+    const carregar = () => {
+      const s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(s);
+    };
+    const depois = () => window.setTimeout(carregar, 300);
+    if (document.readyState === 'complete') depois();
+    else window.addEventListener('load', depois, { once: true });
   }
   window.fbq!('init', id);
   window.fbq!('track', 'PageView');
