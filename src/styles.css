@@ -541,17 +541,29 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .bonus-card p { margin-top: 6px; font-size: 12px; line-height: 1.55; color: var(--muted-foreground); }
 .bonus-card-gratis { display: inline-flex; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--bonus); }
 
-/* ---------- preço que gira (caça-níquel) até parar no valor ---------- */
-.odometro { display: inline-flex; line-height: 1; font-variant-numeric: tabular-nums; }
+/* ---------- preço em rolos de caça-níquel (de R$ 197 até R$ 67) com batida de luz no fim ---------- */
+.odometro { position: relative; isolation: isolate; display: inline-flex; line-height: 1; font-variant-numeric: tabular-nums; }
 .odometro-coluna { display: inline-block; height: 1em; overflow: hidden; }
-.odometro-fita { display: flex; flex-direction: column; transition: transform 2.2s cubic-bezier(.12,.72,.1,1); will-change: transform; }
+.odometro-fita { display: flex; flex-direction: column; will-change: transform; }
 .odometro-fita > span { display: block; height: 1em; text-align: center; }
-.odometro.girando .odometro-fita { animation: odometro-borrao 2.2s ease-out both; }
-@keyframes odometro-borrao { 0% { filter: blur(0); } 10% { filter: blur(6px); } 55% { filter: blur(2.5px); } 100% { filter: blur(0); } }
-/* o "1" do 197: sobe e some enquanto a coluna se fecha, junto com o giro dos outros dígitos */
-.odometro-coluna.odometro-some { width: .56em; transition: width .9s cubic-bezier(.4,0,.2,1) .25s, opacity .45s ease .2s; }
-.odometro-coluna.odometro-some .odometro-fita { transition: transform .55s cubic-bezier(.5,0,.75,0); animation: none; }
-.odometro.girando .odometro-some { width: 0; opacity: 0; }
+.odometro-some { width: 0; }
+.odometro.armado .odometro-some { width: .6em; }
+.odometro.armado.fechando .odometro-some { width: 0; transition: width .62s cubic-bezier(.7,0,.25,1); }
+.odometro.batida { animation: odometro-batida .6s cubic-bezier(.2,1.6,.4,1); }
+.odometro-luz, .odometro-anel, .odometro-faiscas { position: absolute; left: 50%; top: 50%; pointer-events: none; z-index: -1; opacity: 0; }
+.odometro-luz { width: 2.4em; height: 1.4em; translate: -50% -50%; border-radius: 50%; background: radial-gradient(closest-side, color-mix(in oklch, var(--bonus) 70%, white), transparent); filter: blur(14px); }
+.odometro-anel { width: 2.2em; height: 1.1em; translate: -50% -50%; border-radius: 50%; border: 2px solid color-mix(in oklch, var(--bonus) 80%, white); }
+.odometro-faiscas { width: 0; height: 0; opacity: 1; }
+.odometro-faiscas i { position: absolute; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: color-mix(in oklch, var(--bonus) 60%, white); opacity: 0; transform: rotate(var(--a)) translateX(.4em); }
+.odometro.batida .odometro-luz { animation: odometro-luz 1.1s ease-out; }
+.odometro.batida .odometro-anel { animation: odometro-anel .9s cubic-bezier(.2,.7,.3,1); }
+.odometro.batida .odometro-faiscas i { animation: odometro-faisca .8s cubic-bezier(.2,.7,.3,1); }
+@keyframes odometro-batida { 0% { scale: 1; } 35% { scale: 1.09; } 100% { scale: 1; } }
+@keyframes odometro-luz { 0% { opacity: 0; } 20% { opacity: .55; } 100% { opacity: 0; } }
+@keyframes odometro-anel { 0% { opacity: .9; scale: .7; } 100% { opacity: 0; scale: 1.5; } }
+@keyframes odometro-faisca { 0% { opacity: 1; transform: rotate(var(--a)) translateX(.45em) scale(1); } 100% { opacity: 0; transform: rotate(var(--a)) translateX(1.25em) scale(.4); } }
+.offer-price .preco-depois { transition: opacity .4s ease, transform .4s ease; }
+.offer-price.preco-armado .preco-depois { opacity: 0; transform: translateY(4px); }
 .offer-price .preco-rotulo { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--bonus); }
 .offer-price .preco-depois { margin-top: -4px; margin-bottom: 4px; font-size: 12px; color: var(--muted-foreground); }
 .offer-details .offer-marca { display: flex; align-items: center; gap: 10px; }
