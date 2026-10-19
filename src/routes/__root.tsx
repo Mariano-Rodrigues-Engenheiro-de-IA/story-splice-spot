@@ -11,6 +11,9 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+
+const FONTES =
+  "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { iniciarPixel } from "../lib/pixel";
 
@@ -89,7 +92,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap" },
+      // fontes: baixam em paralelo e entram sem segurar a primeira pintura da página (ver scripts abaixo)
+      { rel: "preload", as: "style", href: FONTES },
+      // capa do vídeo de vendas: é o maior elemento da primeira tela, então vem primeiro
+      { rel: "preload", as: "image", href: "/videos/vsl_capa.webp", fetchPriority: "high" },
       {
         rel: "stylesheet",
         href: appCss,
@@ -97,7 +103,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
     // Meta Pixel: carregado no navegador por iniciarPixel() (src/lib/pixel.ts), com o id de siteConfig.pixel
-    scripts: [],
+    scripts: [{ children: `(function(){var l=document.createElement("link");l.rel="stylesheet";l.href=${JSON.stringify(FONTES)};document.head.appendChild(l)})()` }],
   }),
   shellComponent: RootShell,
   component: RootComponent,

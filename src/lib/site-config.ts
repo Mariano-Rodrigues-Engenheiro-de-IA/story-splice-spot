@@ -21,7 +21,7 @@ export const siteConfig = {
     hero: '/videos/criativo06.mp4',
     /** Vídeo de vendas (player com aviso de som e barra sem duração). Preenchido, ele substitui o vídeo do topo. */
     vsl: '/videos/vsl.mp4' as string,
-    vslPoster: '/videos/vsl_capa.jpg' as string,
+    vslPoster: '/videos/vsl_capa.webp' as string,
     raw: '/videos/antes_mapa.mp4',
     edited: '/videos/depois_mapa.mp4',
     gallery: [] as string[],
