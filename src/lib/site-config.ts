@@ -3,7 +3,7 @@ export type Testimonial = { result: string; quote: string; name: string; handle:
 
 export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
-  checkoutUrl: '',
+  checkoutUrl: 'https://pay.kiwify.com.br/hFsZJIo',
   price: 67,
   /** Installment value for 12x on card, e.g. 6.93. 0 = installment line hidden. */
   installmentValue: 0,
