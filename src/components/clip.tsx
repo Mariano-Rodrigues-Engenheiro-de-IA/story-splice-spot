@@ -23,7 +23,20 @@ export function Clip({ src, preset = "pronto", opts, className = "", label, grup
   // sales video gets the whole connection. Inside a [data-clip-grupo] (gallery carousel, before/after) the whole
   // group is observed, so the cards keep playing while they slide in and out instead of freezing on the first frame.
   const [perto, setPerto] = useState(false);
+  const [capa, setCapa] = useState(false);
   const quer = useRef(false);
+
+  // capa leve (.webp com o mesmo nome do vídeo, ~15 KB): entra antes de a pessoa chegar, para o cartão nunca
+  // aparecer vazio enquanto o vídeo ainda está baixando
+  useEffect(() => {
+    const node = video.current;
+    if (!src || !node) return;
+    if (typeof IntersectionObserver === "undefined") return setCapa(true);
+    const alvo = node.closest<HTMLElement>("[data-clip-grupo]") ?? node;
+    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) { setCapa(true); io.disconnect(); } }, { rootMargin: "900px 0px" });
+    io.observe(alvo);
+    return () => io.disconnect();
+  }, [src]);
   useEffect(() => {
     const node = video.current;
     if (!src || !node) return;
@@ -78,6 +91,7 @@ export function Clip({ src, preset = "pronto", opts, className = "", label, grup
       <video
         ref={video}
         src={perto ? src : undefined}
+        poster={grupo || capa || perto ? src.replace(/\.mp4$/, ".webp") : undefined /* no carrossel e no antes e depois a capa já vem no HTML, sem depender do JavaScript */}
         muted
         loop
         playsInline
