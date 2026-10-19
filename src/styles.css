@@ -506,10 +506,10 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 }
 
 /* ---------- botão flutuante do WhatsApp (igual ao do checkout) ---------- */
-.whats { position: fixed; right: 40px; bottom: 40px; z-index: 45; width: 64px; height: 64px; border-radius: 9999px; display: block; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05); transition: transform .2s ease, bottom .3s ease; -webkit-tap-highlight-color: transparent; }
+.whats { position: fixed; right: 32px; bottom: 32px; z-index: 45; width: 54px; height: 54px; border-radius: 9999px; display: block; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05); transition: transform .2s ease, bottom .3s ease; -webkit-tap-highlight-color: transparent; }
 .whats svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 6px 14px rgba(0,0,0,.35)); }
 .whats:hover { transform: scale(1.06); } .whats:active { transform: scale(.94); }
 @media (max-width: 767px) {
-  .whats { right: 16px; bottom: 20px; width: 58px; height: 58px; }
-  .sticky-bar.on ~ .whats { bottom: 92px; } /* fica acima da barra de compra fixa */
+  .whats { right: 16px; bottom: 20px; width: 48px; height: 48px; }
+  .sticky-bar.on ~ .whats { bottom: 90px; } /* fica acima da barra de compra fixa */
 }
