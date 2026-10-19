@@ -6,7 +6,8 @@
 //   VSL_25 / VSL_50 / VSL_75 ....... assistiu 25%, 50% e 75% do vídeo (com som)
 //   VSL_Concluiu ................... assistiu até o fim
 //   ViuOferta ...................... a seção do preço apareceu na tela
-//   CliqueComprar {local} .......... tocou num botão de compra (topo, barra, oferta, recurso…)
+//   IrParaOferta {local} ........... tocou num botão de compra acima da oferta (desce até a oferta)
+//   CliqueComprar {local} .......... tocou num botão que abre o checkout (oferta ou fim da página)
 //   Contact ........................ tocou no botão flutuante do WhatsApp
 //   InitiateCheckout / Purchase .... disparados pela Kiwify no checkout (configure o mesmo pixel lá).
 //                                    Se preferir o InitiateCheckout no clique do botão, ligue

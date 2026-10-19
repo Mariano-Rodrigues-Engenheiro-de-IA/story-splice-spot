@@ -529,3 +529,14 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 
 /* ---------- logos do ChatGPT e do Claude no selo do topo: do tamanho da letra ---------- */
 .marca-ia { width: 1.35em; height: 1.35em; flex: none; display: inline-block; vertical-align: -0.28em; margin: 0 -2px 0 -3px; color: var(--foreground); }
+
+/* ---------- bônus em destaque na oferta, acima do preço ---------- */
+.bonus-card { position: relative; width: 100%; max-width: 360px; margin: 0 auto 26px; padding: 18px 18px 16px; border-radius: 16px; text-align: left; overflow: hidden;
+  background: linear-gradient(160deg, color-mix(in oklch, var(--bonus) 14%, var(--card)), var(--card) 70%);
+  border: 1px solid color-mix(in oklch, var(--bonus) 45%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklch, var(--bonus) 10%, transparent), 0 18px 40px -18px color-mix(in oklch, var(--bonus) 45%, transparent); }
+.bonus-card::before { content: ""; position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; border-radius: 50%; background: var(--bonus); opacity: .14; filter: blur(30px); }
+.bonus-card-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--bonus); color: var(--background); font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.bonus-card strong { display: block; margin-top: 12px; font-size: 17px; line-height: 1.25; color: var(--foreground); }
+.bonus-card p { margin-top: 6px; font-size: 12px; line-height: 1.55; color: var(--muted-foreground); }
+.bonus-card-gratis { display: inline-flex; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--bonus); }

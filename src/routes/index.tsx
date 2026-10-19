@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, Loader2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Sparkles, Subtitles, Volume2, ZoomIn } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Gift, Loader2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Sparkles, Subtitles, Volume2, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -39,7 +39,9 @@ function localDoBotao(el: HTMLElement) {
   const sec = el.closest('section');
   return sec?.id || sec?.className.split(' ').find(c => c && c !== 'section' && c !== 'container') || 'topo';
 }
-function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className }: { label?: string; className?: string }) {
+/** Botão de compra. Acima da oferta ele desce até a oferta (a pessoa vê o pacote, o bônus e a garantia antes de pagar);
+ *  só o da oferta e o do fim da página abrem o checkout. */
+function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className, destino = 'oferta' }: { label?: string; className?: string; destino?: 'oferta' | 'checkout' }) {
   // o toque precisa de resposta: o botão afunda e mostra que o pagamento está abrindo
   const [abrindo, setAbrindo] = useState(false);
   useEffect(() => {
@@ -47,6 +49,8 @@ function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}
     window.addEventListener('pageshow', volta);
     return () => window.removeEventListener('pageshow', volta);
   }, []);
+  if (destino === 'oferta' || !siteConfig.checkoutUrl)
+    return <Button asChild variant="purchase" className={`botao-compra ${className ?? ''}`}><a href="#oferta" onClick={e => eventoProprio('IrParaOferta', { local: localDoBotao(e.currentTarget) }, false)}>{label} <ArrowRight /></a></Button>;
   return <Button asChild variant="purchase" className={`botao-compra ${abrindo ? 'is-abrindo' : ''} ${className ?? ''}`}><a href={purchaseHref} onClick={e => { e.currentTarget.href = linkCheckout(purchaseHref); cliqueComprar(localDoBotao(e.currentTarget)); setAbrindo(true); window.setTimeout(() => setAbrindo(false), 8000); }} aria-busy={abrindo}>{abrindo ? <><Loader2 className="botao-girando" /> Abrindo o pagamento…</> : <>{label} <ArrowRight /></>}</a></Button>;
 }
 /** "Agora as suas aulas saem prontas": trecho de uma aula no formato de YouTube, editada no mesmo processo. */
@@ -229,14 +233,13 @@ function SpinningSeal() {
 }
 const offerItems = [
   ['Arquivo Modo Editor', 'Você solta na conversa e a sua IA passa a cortar, legendar e animar sozinha.'],
-  ['Bônus: O Arquivo Secreto do Roteiro', 'Revisa o seu roteiro antes de gravar: gancho, clareza e chamada final.'],
   ['Acesso na hora', 'Chega no seu e-mail assim que o pagamento é aprovado.'],
   ['Funciona no ChatGPT e no Claude', 'No plano pago, contratado à parte direto com eles.'],
 ];
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><span className="eyebrow">A oferta</span><h2>Comece hoje <em>por R$ {siteConfig.price}.</em></h2><p>Pagamento único. Sem mensalidade do nosso lado.</p></div>
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3>Modo Editor</h3><p>Arquivo de edição para ChatGPT e Claude</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
-      <div className="offer-price"><p>Pagamento único</p><div className="price"><sup>R$</sup><NumberTicker value={siteConfig.price} duration={1400} /></div><p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span></div></div>
+      <div className="offer-price"><div className="bonus-card"><span className="bonus-card-tag"><Gift size={13} /> Bônus incluído</span><strong>O Arquivo Secreto do Roteiro</strong><p>Antes de gravar, a IA revisa o seu roteiro: gancho forte nos 3 primeiros segundos, fala clara e chamada final.</p><span className="bonus-card-gratis">Vem junto, sem pagar nada a mais</span></div><p>Pagamento único</p><div className="price"><sup>R$</sup><NumberTicker value={siteConfig.price} duration={1400} /></div><p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div></section>;
 }
 const faqItems = [
@@ -325,7 +328,7 @@ function Index() {
         <ModeSwitch />
         <section className="section container" id="o-que-faz">
           <div className="section-heading reveal"><span className="eyebrow">O que a IA faz no seu vídeo</span><h2>O que você fazia na mão, <em>a IA faz sozinha.</em></h2><p>Do primeiro corte à trilha: você grava, diz o que quer e recebe o vídeo editado.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' ? <CutTimeline /> : feature.type === 'music' ? <MusicTimeline /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'zoom' ? siteConfig.videos.cenas.zoom : siteConfig.videos.cenas.legendaTroca} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' ? <CutTimeline /> : feature.type === 'music' ? <MusicTimeline /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'zoom' ? siteConfig.videos.cenas.zoom : siteConfig.videos.cenas.legendaTroca} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p></article>)}</div>
         </section>
         <Aulas />
         <ForWho />
@@ -340,7 +343,7 @@ function Index() {
         <Creator name={siteConfig.creator.name} video={siteConfig.creator.video} />
         <Offer />
         <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
-        <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
+        <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton destino="checkout" /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
       </main>
     </div>
     <footer className="footer"><div className="container"><Brand /><p>ChatGPT é uma marca da OpenAI e Claude, da Anthropic. Este produto é independente e não tem vínculo com nenhuma das duas.</p><nav className="footer-links" aria-label="Links legais"><a href={siteConfig.legal.termsUrl}>Termos de uso</a>·<a href={siteConfig.legal.privacyUrl}>Política de privacidade</a>·<a href={siteConfig.legal.supportUrl}>Suporte</a></nav><p className="copyright">© 2026 Modo Editor</p></div></footer>
