@@ -40,7 +40,7 @@
   --primary-bright: oklch(.695 .208 25);
   --primary-deep: oklch(.601 .222 26);
   --ready: oklch(.828 .149 176);
-  --bonus: oklch(.837 .164 84);
+  --bonus: oklch(.74 .17 300); /* roxo do bônus (antes amarelo) */
   --border: oklch(1 0 0 / .09);
   --inner-glow: inset 0 1px 0 oklch(1 0 0 / .035);
   --red-glow: 0 12px 50px oklch(.656 .237 26 / .16);
@@ -540,3 +540,11 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .bonus-card strong { display: block; margin-top: 12px; font-size: 17px; line-height: 1.25; color: var(--foreground); }
 .bonus-card p { margin-top: 6px; font-size: 12px; line-height: 1.55; color: var(--muted-foreground); }
 .bonus-card-gratis { display: inline-flex; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--bonus); }
+
+/* ---------- preço que gira (caça-níquel) até parar no valor ---------- */
+.odometro { display: inline-flex; line-height: 1; font-variant-numeric: tabular-nums; }
+.odometro-coluna { display: inline-block; height: 1em; overflow: hidden; }
+.odometro-fita { display: flex; flex-direction: column; transition: transform 2.2s cubic-bezier(.12,.72,.1,1); will-change: transform; }
+.odometro-fita > span { display: block; height: 1em; text-align: center; }
+.odometro.girando .odometro-fita { animation: odometro-borrao 2.2s ease-out both; }
+@keyframes odometro-borrao { 0% { filter: blur(0); } 10% { filter: blur(6px); } 55% { filter: blur(2.5px); } 100% { filter: blur(0); } }
