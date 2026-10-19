@@ -45,9 +45,6 @@ export const siteConfig = {
   /** Only real, authorized testimonials. Empty list hides the section. */
   testimonials: [] as Testimonial[],
   legal: {
-    companyName: '[Razão social]',
-    cnpj: '[00.000.000/0000-00]',
-    city: '[Cidade/UF]',
     termsUrl: '#',
     privacyUrl: '#',
     supportUrl: '#',
