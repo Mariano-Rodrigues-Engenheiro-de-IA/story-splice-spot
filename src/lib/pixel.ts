@@ -7,6 +7,7 @@
 //   VSL_Concluiu ................... assistiu até o fim
 //   ViuOferta ...................... a seção do preço apareceu na tela
 //   CliqueComprar {local} .......... tocou num botão de compra (topo, barra, oferta, recurso…)
+//   Contact ........................ tocou no botão flutuante do WhatsApp
 //   InitiateCheckout / Purchase .... disparados pela Kiwify no checkout (configure o mesmo pixel lá).
 //                                    Se preferir o InitiateCheckout no clique do botão, ligue
 //                                    siteConfig.pixel.initiateCheckoutNoBotao (e desligue na Kiwify para não duplicar).

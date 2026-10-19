@@ -44,9 +44,11 @@ export const siteConfig = {
   creator: { name: 'Mariano Rodrigues', video: '/videos/cenas/criador.mp4' },
   /** Only real, authorized testimonials. Empty list hides the section. */
   testimonials: [] as Testimonial[],
+  /** WhatsApp de dúvidas (DDI + DDD + número, só dígitos). Vazio = sem botão flutuante. */
+  whatsapp: '5561983012868',
   legal: {
     termsUrl: '#',
     privacyUrl: '#',
-    supportUrl: '#',
+    supportUrl: 'https://api.whatsapp.com/send?phone=5561983012868&text=Oi!%20Tenho%20uma%20d%C3%BAvida%20sobre%20o%20Modo%20Editor.',
   },
 };
