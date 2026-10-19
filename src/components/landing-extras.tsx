@@ -37,8 +37,8 @@ function useStepper(count: number, ms: number, active: boolean) {
 
 const liveSteps = [
   { title: 'Ouvindo a sua gravação.', note: 'A IA lê a fala inteira, palavra por palavra.' },
-  { title: `Achei ${siteConfig.demo.cuts} pausas e erros.`, note: 'Silêncio, "ééé" e a frase que travou.' },
-  { title: `Cortei. ${siteConfig.demo.rawLength} virou ${siteConfig.demo.editedLength}.`, note: 'A fala fica corrida, sem buraco.' },
+  { title: `Achei ${siteConfig.vslDemo.cuts} pausas e erros.`, note: 'Silêncio, "ééé" e a frase que travou.' },
+  { title: `Cortei. ${siteConfig.vslDemo.rawLength} virou ${siteConfig.vslDemo.editedLength}.`, note: 'A fala fica corrida, sem buraco.' },
   { title: 'Legenda no tempo da sua fala.', note: 'Cada palavra acende quando você fala.' },
   { title: 'Pronto pra postar.', note: 'E você nem estava olhando.' },
 ];
@@ -67,13 +67,13 @@ export function LiveDemo() {
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
         <div className="live-phone">
-          <Clip src={step >= 3 ? siteConfig.videos.edited : siteConfig.videos.raw} preset={step >= 3 ? 'pronto' : 'bruto'} opts={{ scene: 'studio', captions: step >= 3, zoom: step >= 4, offset: 0.5 }} />
+          <Clip src={step >= 3 ? siteConfig.videos.cenas.aoVivoPronto : siteConfig.videos.cenas.aoVivoBruto} preset={step >= 3 ? 'pronto' : 'bruto'} opts={{ scene: 'studio', captions: step >= 3, zoom: step >= 4, offset: 0.5 }} />
           <span className={`live-badge ${step >= 4 ? 'done' : ''}`}>{step >= 4 ? '✓ Pronto' : '● Bruto'}</span>
         </div>
         <div className="live-panel">
           <div className="live-top">
             <span><i className="rec" />{step >= 4 ? 'Edição concluída' : 'Editando'}</span>
-            <span className="live-time" key={step >= 2 ? 'b' : 'a'}>{step >= 2 ? siteConfig.demo.editedLength : siteConfig.demo.rawLength}</span>
+            <span className="live-time" key={step >= 2 ? 'b' : 'a'}>{step >= 2 ? siteConfig.vslDemo.editedLength : siteConfig.vslDemo.rawLength}</span>
           </div>
           <ol className="live-steps">
             {liveSteps.map((item, i) => (
@@ -110,7 +110,7 @@ export function LiveDemo() {
           </div>
         </div>
       </div>
-      <p className="illustration-note">{siteConfig.videos.raw ? `Gravação real: ${siteConfig.demo.rawLength} viraram ${siteConfig.demo.editedLength}. Os números mudam com cada gravação.` : 'Demonstração ilustrativa. Os números mudam com cada gravação.'}</p>
+      <p className="illustration-note">{`Gravação real do vídeo de vendas: ${siteConfig.vslDemo.rawLength} de bruto viraram ${siteConfig.vslDemo.editedLength}. Os números mudam com cada gravação.`}</p>
     </section>
   );
 }
@@ -139,7 +139,7 @@ export function ModeSwitch() {
       <div className="section-heading reveal">
         <span className="eyebrow">A diferença</span>
         <h2>Mesma IA. <em>Outro resultado.</em></h2>
-        <p>Sem instrução, a IA chuta como você quer o vídeo. Com o Modo Editor, ela já começa sabendo.</p>
+        <p>Sozinha, a IA chuta como você quer o vídeo. Com o Modo Editor, ela já começa sabendo.</p>
       </div>
       <div className="reveal"><div ref={ref} className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -149,7 +149,7 @@ export function ModeSwitch() {
           </button>
         </div>
         <div className="mode-body">
-          <div className="mode-phone"><Clip src={on ? siteConfig.videos.edited : siteConfig.videos.raw} preset={on ? 'pronto' : 'bruto'} opts={{ scene: 'blue', offset: 3 }} /></div>
+          <div className="mode-phone"><Clip src={on ? siteConfig.videos.cenas.comModo : siteConfig.videos.cenas.semModo} preset={on ? 'pronto' : 'bruto'} opts={{ scene: 'blue', offset: 3 }} /></div>
           <ul className="mode-list">
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>

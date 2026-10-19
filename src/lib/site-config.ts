@@ -11,14 +11,31 @@ export const siteConfig = {
   bonusEndsAt: '',
   videos: {
     hero: '/videos/criativo06.mp4',
+    /** Vídeo de vendas (player com aviso de som e barra sem duração). Preenchido, ele substitui o vídeo do topo. */
+    vsl: '/videos/vsl.mp4' as string,
+    vslPoster: '/videos/vsl_capa.jpg' as string,
     raw: '/videos/antes.mp4',
     edited: '/videos/depois.mp4',
-    gallery: ['', '', '', '', '', ''] as string[],
+    gallery: [] as string[],
+    /** Cenas do vídeo de vendas espalhadas pela página (cada lugar com uma cena diferente). */
+    cenas: {
+      pronto: '/videos/cenas/pronto.mp4',
+      legendaTroca: '/videos/cenas/legenda_troca.mp4',
+      zoom: '/videos/cenas/zoom.mp4',
+      fundoBruto: '/videos/cenas/fundo_bruto.mp4',
+      fundoNovo: '/videos/cenas/fundo_novo.mp4',
+      aoVivoBruto: '/videos/cenas/ao_vivo_bruto.mp4',
+      aoVivoPronto: '/videos/cenas/ao_vivo_pronto.mp4',
+      semModo: '/videos/cenas/sem_modo.mp4',
+      comModo: '/videos/cenas/com_modo.mp4',
+    },
   },
   /** Real numbers of the raw/edited pair above (shown in the stats and the live demo). Update when the videos change. */
   demo: { cuts: 68, rawLength: '5:09', editedLength: '1:50', secondsSaved: 199 },
+  /** Números reais do vídeo de vendas (gravação de 17/10/2026), usados na demonstração "ao vivo" com as cenas dele. */
+  vslDemo: { cuts: 119, rawLength: '13:13', editedLength: '5:25' },
   /** Owner section. Shown only when a real video of the owner is set. */
-  creator: { name: 'Mariano Rodrigues', video: '' },
+  creator: { name: 'Mariano Rodrigues', video: '/videos/cenas/criador.mp4' },
   /** Only real, authorized testimonials. Empty list hides the section. */
   testimonials: [] as Testimonial[],
   legal: {

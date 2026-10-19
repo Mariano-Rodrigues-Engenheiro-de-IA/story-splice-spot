@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Clip } from '@/components/clip';
+import { VslPlayer } from '@/components/vsl-player';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
@@ -94,16 +95,22 @@ const features = [
   { title: 'Troca o fundo sem pano verde', copy: 'Você no cenário que pedir, recortado com capricho.', icon: ImageIcon, type: 'background', wide: true },
   { title: 'Trilha e efeitos no tempo certo', copy: 'Trilha baixinha por baixo da voz e um efeito em cada corte.', icon: Music2, type: 'music' },
 ];
-const galleryCopy: [string, string][] = [
-  ['Legenda que acompanha', 'legenda palavra por palavra'], ['Frase em destaque', 'põe a ideia principal no topo'], ['Cidade à noite', 'troca meu fundo, sem pano verde'],
-  ['Cor de cinema', 'cor quente e faixas pretas'], ['Ritmo de anúncio', 'zoom em cada ênfase'], ['Com trilha', 'trilha baixinha por baixo'],
+const galleryCopy: [string, string, string][] = [
+  ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/cenas/titulo.mp4'],
+  ['Virou quadrinho', 'me transforma em personagem de HQ', '/videos/cenas/quadrinho.mp4'],
+  ['Objeto 3D na mão', 'coloca um cérebro 3D na minha mão', '/videos/cenas/cerebro.mp4'],
+  ['Explicação em 3D', 'mostra o dente em corte enquanto explico', '/videos/cenas/dente.mp4'],
+  ['Modo cinema', 'cor de cinema e faixas pretas', '/videos/cenas/cinema.mp4'],
+  ['Cenário novo', 'troca meu fundo, sem pano verde', '/videos/cenas/cenario.mp4'],
+  ['Mapa de satélite', 'mostra a cidade no mapa', '/videos/cenas/mapa.mp4'],
+  ['Legenda que acompanha', 'legenda palavra por palavra', '/videos/cenas/legenda.mp4'],
 ];
-/** Look of each animated preview, matching the style named on the card. */
+/** Look of each animated preview (only used if a card has no video). */
 const galleryLooks: ClipOpts[] = [
-  { scene: 'studio' }, { impact: 'A IDEIA VEM PRIMEIRO', captions: false, scene: 'blue' }, { bgSwap: true },
-  { letterbox: true, scene: 'warm', captions: false }, { scene: 'blue', captions: false }, { music: true, scene: 'green' },
+  { impact: 'A IDEIA VEM PRIMEIRO', captions: false, scene: 'blue' }, { scene: 'studio' }, { scene: 'blue', captions: false }, { scene: 'green' },
+  { letterbox: true, scene: 'warm', captions: false }, { bgSwap: true }, { scene: 'blue' }, { scene: 'studio' },
 ];
-const gallery: [string, string, string][] = galleryCopy.map(([title, request], i) => [title, request, siteConfig.videos.gallery[i] ?? '']);
+const gallery: [string, string, string][] = galleryCopy;
 const scripts = [
   ['Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeo.', 'Você grava em 2 minutos e passa 2 horas editando? Dá pra inverter isso.'],
   ['Nesse vídeo eu vou mostrar umas dicas de anúncio pra vocês.', 'Seu anúncio morre nos 3 primeiros segundos. Olha o que muda quando o gancho vem antes.'],
@@ -227,7 +234,7 @@ function Index() {
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT e no Claude</div>
           <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
           <div className="hero-video">
-            {siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
+            {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
           </div>
           <div className="hero-cta"><PurchaseButton /></div>
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
@@ -242,12 +249,12 @@ function Index() {
         </section>
         <section className="section container" id="como-funciona">
           <div className="section-heading reveal"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O último é sair.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
-          <div className="steps"><div className="step reveal"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step reveal"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step reveal"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><MiniClip className="ready-clip" src={siteConfig.videos.edited} opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
+          <div className="steps"><div className="step reveal"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step reveal"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step reveal"><div className="step-number">3</div><h3>Vá viver. Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado e legendado.</p><div className="ready-preview"><MiniClip className="ready-clip" src={siteConfig.videos.cenas.pronto} opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
         </section>
         <ModeSwitch />
         <section className="section container" id="o-que-faz">
           <div className="section-heading reveal"><span className="eyebrow">O que a IA faz</span><h2>Tudo isso a partir de <em>uma frase.</em></h2><p>Você pede do seu jeito. O Modo Editor transforma o pedido em edição.</p></div>
-          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.raw} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.gallery[2]} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} src={siteConfig.videos.gallery[feature.type === 'zoom' ? 4 : 0]} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
+          <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'music' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' || feature.type === 'music' ? <Waveform music={feature.type === 'music'} /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'zoom' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'zoom' ? siteConfig.videos.cenas.zoom : siteConfig.videos.cenas.legendaTroca} opts={feature.type === 'zoom' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p><a className="feature-link" href={purchaseHref}>Quero o Modo Editor <ArrowRight size={12} /></a></article>)}</div>
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading reveal"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
