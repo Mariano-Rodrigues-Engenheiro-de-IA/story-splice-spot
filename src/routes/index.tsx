@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Volume2, ZoomIn } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Loader2, FileArchive, Lock, MousePointer2, GripVertical, Image as ImageIcon, Music2, Play, RefreshCw, Scissors, Subtitles, Volume2, ZoomIn } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -32,7 +32,25 @@ function Brand() {
   return <a href="#" className="brand" aria-label="Modo Editor, início"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</a>;
 }
 function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className }: { label?: string; className?: string }) {
-  return <Button asChild variant="purchase" className={className}><a href={purchaseHref}>{label} <ArrowRight /></a></Button>;
+  // o toque precisa de resposta: o botão afunda e mostra que o pagamento está abrindo
+  const [abrindo, setAbrindo] = useState(false);
+  useEffect(() => {
+    const volta = () => setAbrindo(false); // voltou do checkout pelo botão de voltar
+    window.addEventListener('pageshow', volta);
+    return () => window.removeEventListener('pageshow', volta);
+  }, []);
+  return <Button asChild variant="purchase" className={`botao-compra ${abrindo ? 'is-abrindo' : ''} ${className ?? ''}`}><a href={purchaseHref} onClick={() => { setAbrindo(true); window.setTimeout(() => setAbrindo(false), 8000); }} aria-busy={abrindo}>{abrindo ? <><Loader2 className="botao-girando" /> Abrindo o pagamento…</> : <>{label} <ArrowRight /></>}</a></Button>;
+}
+/** "Agora as suas aulas saem prontas": trecho de uma aula no formato de YouTube, editada no mesmo processo. */
+function Aulas() {
+  return <section className="section container" id="aulas">
+    <div className="section-heading reveal"><span className="eyebrow">Aulas e vídeos longos</span><h2>Agora as suas aulas <em>saem prontas.</em></h2><p>Do Reels à aula do YouTube: a IA corta os erros, alterna o enquadramento e coloca as ilustrações no tempo da sua fala.</p></div>
+    <div className="aula reveal">
+      <div className="aula-tela"><Clip src="/videos/cenas/aula_youtube.mp4" label="Trecho de uma aula editada com IA" /><div className="aula-progresso" aria-hidden="true"><span /></div></div>
+      <div className="aula-info"><span className="aula-avatar">M</span><div><strong>Aula · IA no atendimento pelo WhatsApp</strong><small>{siteConfig.creator.name} · editada com IA</small></div></div>
+      <div className="aula-chips">{['Corte limpo, sem pausa', 'Zoom a cada corte', 'Ilustração ao lado', 'Palavra-chave na tela'].map(t => <span key={t}><CheckCircle2 size={14} />{t}</span>)}</div>
+    </div>
+  </section>;
 }
 /** Small vertical preview used in the cards. Animated canvas until real videos are configured. */
 function MiniClip({ className = '', preset = 'pronto', opts, src }: { className?: string; preset?: 'bruto' | 'pronto'; opts?: ClipOpts; src?: string | undefined }) {
@@ -260,6 +278,7 @@ function Index() {
           <div className="section-heading reveal"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
           <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor"><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
         </section>
+        <Aulas />
         <ForWho />
         <RequestLibrary />
         <section className="section container" id="bonus"><BonusBox /></section>

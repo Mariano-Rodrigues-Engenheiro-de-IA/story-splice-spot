@@ -197,7 +197,6 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .waveform .cut { animation: cut-blink 3s ease-in-out infinite; }
 .marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, var(--background) 8%, var(--background) 92%, transparent); }
 .marquee-track { display: flex; gap: 14px; width: max-content; animation: marquee 40s linear infinite; }
-.marquee:hover .marquee-track, .marquee:active .marquee-track, .marquee:focus-within .marquee-track { animation-play-state: paused; }
 .marquee .gallery-card { flex: 0 0 210px; }
 .gallery-card video { width: 100%; height: 100%; object-fit: cover; }
 .gallery-caption strong { color: var(--foreground); }
@@ -445,3 +444,25 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .vsl-retomar .vsl-retomar-inicio { background: rgba(255,255,255,.14); }
 .vsl-barra { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: rgba(255,255,255,.18); pointer-events: none; }
 .vsl-barra span { display: block; height: 100%; background: var(--progress-gradient); transform-origin: left; transition: transform .25s linear; }
+
+/* ---------- botão de compra: resposta ao toque ---------- */
+.botao-compra { transition: transform .12s ease, filter .12s ease, box-shadow .12s ease; -webkit-tap-highlight-color: transparent; }
+.botao-compra:active { transform: scale(.95); filter: brightness(1.15); }
+.botao-compra.is-abrindo { filter: brightness(1.12); box-shadow: 0 0 0 4px color-mix(in oklch, var(--primary) 35%, transparent), var(--red-glow); }
+.botao-girando { animation: botao-gira .8s linear infinite; }
+@keyframes botao-gira { to { transform: rotate(360deg); } }
+
+/* ---------- aulas (trecho no formato de YouTube) ---------- */
+.aula { max-width: 760px; margin: 0 auto; }
+.aula-tela { position: relative; aspect-ratio: 16 / 9; border-radius: 18px; overflow: hidden; border: 1px solid var(--border); background: #000; box-shadow: var(--red-glow); }
+.aula-tela .clip { width: 100%; height: 100%; object-fit: cover; display: block; }
+.aula-progresso { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(255,255,255,.25); }
+.aula-progresso span { display: block; height: 100%; width: 38%; background: var(--primary); animation: aula-anda 14s linear infinite; }
+@keyframes aula-anda { from { width: 6%; } to { width: 96%; } }
+.aula-info { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.aula-avatar { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--purchase-gradient); color: #fff; font-weight: 700; flex: none; }
+.aula-info strong { display: block; font-size: 15px; }
+.aula-info small { color: var(--muted-foreground); font-size: 13px; }
+.aula-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.aula-chips span { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--card); font-size: 13px; }
+.aula-chips svg { color: var(--ready); }
