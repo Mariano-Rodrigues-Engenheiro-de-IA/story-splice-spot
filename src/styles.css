@@ -514,11 +514,11 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .sticky-bar.on ~ .whats { bottom: 90px; } /* fica acima da barra de compra fixa */
 }
 
-/* ---------- barra de compra fixa (celular): botão "Quero" largo e centralizado, o destaque é a compra ---------- */
+/* ---------- barra de compra fixa (celular): botão "Quero" um pouco maior e centralizado ---------- */
 @media (max-width: 767px) {
-  .sticky-bar > div:first-child { flex: 0 1 108px; min-width: 0; } .sticky-bar > div:first-child p { line-height: 1.35; }
-  .sticky-bar .sticky-button { flex: 1; max-width: none; height: 48px; position: relative; justify-content: center; font-size: 18px; font-weight: 700; padding-inline: 34px; }
+  .sticky-bar > div:first-child { flex: 1 1 auto; min-width: 0; }
+  .sticky-bar .sticky-button { flex: none; width: 142px; height: 46px; position: relative; justify-content: center; font-size: 17px; font-weight: 700; padding-inline: 28px; }
   .sticky-bar .sticky-button svg { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); }
   .sticky-bar .sticky-button .botao-girando { position: static; }
-  .sticky-bar .sticky-button.is-abrindo { font-size: 14px; padding-inline: 12px; gap: 6px; }
+  .sticky-bar .sticky-button.is-abrindo { width: auto; font-size: 13px; padding-inline: 12px; gap: 6px; }
 }
