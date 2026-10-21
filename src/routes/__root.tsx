@@ -103,7 +103,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
     ],
     // Meta Pixel: carregado no navegador por iniciarPixel() (src/lib/pixel.ts), com o id de siteConfig.pixel
-    scripts: [{ children: `(function(){var l=document.createElement("link");l.rel="stylesheet";l.href=${JSON.stringify(FONTES)};document.head.appendChild(l)})()` }],
+    scripts: [
+      { children: `(function(){var l=document.createElement("link");l.rel="stylesheet";l.href=${JSON.stringify(FONTES)};document.head.appendChild(l)})()` },
+      // UTMify: guarda as UTMs de quem chegou pelo anúncio e passa para o link da Kiwify (é o script do painel deles, sem o embaralhamento)
+      { src: "https://cdn.utmify.com.br/scripts/utms/latest.js", async: true, defer: true, "data-utmify-prevent-xcod-sck": "", "data-utmify-prevent-subids": "" },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,

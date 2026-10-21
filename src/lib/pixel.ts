@@ -80,7 +80,8 @@ export function cliqueComprar(local: string) {
   if (siteConfig.pixel.initiateCheckoutNoBotao) evento('InitiateCheckout', PRODUTO());
 }
 
-/** Link do checkout com os UTMs e o fbclid de quem chegou pelo anúncio (a venda fica atribuída à campanha). */
+/** Link do checkout com os UTMs e o fbclid de quem chegou pelo anúncio (a venda fica atribuída à campanha).
+ *  Recebe o link como está no botão: o que a UTMify já colocou nele fica, aqui só entra o que faltar. */
 export function linkCheckout(base: string) {
   if (typeof window === 'undefined' || !base.startsWith('http')) return base;
   try {
