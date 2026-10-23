@@ -128,10 +128,19 @@ const criteria = [
 export function ModeSwitch() {
   // alterna sozinho entre a gravação crua e a editada; o toque no botão troca na hora e o ciclo continua
   const [on, setOn] = useState(false);
+  const tela = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (reduced()) return;
     const id = window.setTimeout(() => setOn(v => !v), on ? 4500 : 3000);
     return () => window.clearTimeout(id);
+  }, [on]);
+  // só o vídeo que está à mostra toca: o escondido fica pausado para não gastar o celular à toa
+  useEffect(() => {
+    const camadas = Array.from(tela.current?.querySelectorAll<HTMLElement>('.mode-camada') ?? []);
+    const pausaEscondido = (e: Event) => { const v = e.target as HTMLVideoElement; if (!v.closest('.mode-camada.ativa')) v.pause(); };
+    const videos = camadas.map(c => c.querySelector('video')).filter((v): v is HTMLVideoElement => !!v);
+    videos.forEach(v => { v.addEventListener('play', pausaEscondido); if (v.closest('.mode-camada.ativa')) { if (v.src) void v.play().catch(() => undefined); } else v.pause(); });
+    return () => videos.forEach(v => v.removeEventListener('play', pausaEscondido));
   }, [on]);
   return (
     <section className="section container" id="diferenca">
@@ -148,7 +157,7 @@ export function ModeSwitch() {
           </button>
         </div>
         <div className="mode-body">
-          <div className="mode-phone">
+          <div className="mode-phone" ref={tela}>
             <div className={`mode-camada ${on ? '' : 'ativa'}`}><Clip src={siteConfig.videos.cenas.cruModo} preset="bruto" label="Gravação crua, sem edição" /></div>
             <div className={`mode-camada ${on ? 'ativa' : ''}`}><Clip src={siteConfig.videos.cenas.comModo} preset="pronto" label="Vídeo editado com o Modo Editor" /></div>
             <span className={`live-badge ${on ? 'done' : ''}`}>{on ? '✓ Editado' : '● Cru'}</span>

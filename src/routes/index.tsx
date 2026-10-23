@@ -223,9 +223,11 @@ function BonusBox() {
   return <div className="bonus-box border-beam" ref={box}><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
     <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{before}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={after}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
 }
-/** Custo de cada vídeo no plano da IA, com os números que o Mariano mostra na aula "Quanto custa editar com IA":
- *  simples (corte e legenda) de até 1 min sai de R$ 2 a 5; longo ou detalhado, com 3D, de R$ 8 a 15;
- *  casos reais: 1:50 cheio de efeitos = R$ 8 e 4 min = R$ 12. Cada tipo cresce um pouco por minuto a mais. */
+/** Quantos vídeos cabem no plano mais barato da IA (US$ 20/mês, uns R$ 110). Usa o custo por vídeo que o Mariano
+ *  mostra na aula "Quanto custa editar com IA" (simples de até 1 min: R$ 2 a 5; longo ou detalhado com 3D: R$ 8 a 15;
+ *  casos reais: 1:50 cheio de efeitos = R$ 8 e 4 min = R$ 12) e divide o plano pelo custo do meio da faixa.
+ *  A página não mostra preço por vídeo: só quantos vídeos o plano edita no mês. */
+const PLANO_BASICO_REAIS = 110;
 const tiposEdicao = [
   { nome: 'Simples', desc: 'cortes e legenda', base: [2, 5], porMinuto: [0.6, 1.2] },
   { nome: 'Com efeitos', desc: 'zoom, títulos, trilha', base: [4, 8], porMinuto: [1, 1.6] },
@@ -234,23 +236,23 @@ const tiposEdicao = [
 const duracaoTexto = (min: number) => min < 1 ? '30 s' : `${Math.floor(min)}${min % 1 ? ':30' : ''} min`;
 function Calculator() {
   const [minutos, setMinutos] = useState(1);
-  const [tipo, setTipo] = useState(1);
-  const t = tiposEdicao[tipo] ?? tiposEdicao[1];
+  const [tipo, setTipo] = useState(0);
+  const t = tiposEdicao[tipo] ?? tiposEdicao[0];
   const extra = Math.max(0, minutos - 1);
-  const de = Math.floor(t.base[0] + t.porMinuto[0] * extra);
-  const ate = Math.ceil(t.base[1] + t.porMinuto[1] * extra);
+  const custoMedio = (t.base[0] + t.porMinuto[0] * extra + t.base[1] + t.porMinuto[1] * extra) / 2;
+  const videos = Math.max(1, Math.floor(PLANO_BASICO_REAIS / custoMedio));
   return <div className="calculator"><div>
       <div className="calc-control"><div className="calc-label"><label>Duração do vídeo</label><strong>{duracaoTexto(minutos)}</strong></div><Slider aria-label="Duração do vídeo" value={[minutos]} onValueChange={v => setMinutos(v[0] ?? 1)} min={0.5} max={10} step={0.5} /></div>
       <div className="calc-control"><div className="calc-label"><label>Tipo de edição</label></div>
         <div className="calc-tipos" role="radiogroup" aria-label="Tipo de edição">{tiposEdicao.map((item, k) => <button key={item.nome} type="button" role="radio" aria-checked={k === tipo} className={k === tipo ? 'on' : ''} onClick={() => setTipo(k)}><strong>{item.nome}</strong><small>{item.desc}</small></button>)}</div>
       </div>
-      <div className="calc-sem-extra"><CheckCircle2 size={18} /><p><strong>Você não paga nada a mais por vídeo.</strong> Só o plano da sua IA (ChatGPT ou Claude, a partir de US$ 20 por mês). A estimativa mostra quanto desse plano cada vídeo usa.</p></div>
+      <div className="calc-sem-extra"><CheckCircle2 size={18} /><p><strong>Você não paga nada a mais por vídeo.</strong> Só o plano da sua IA (ChatGPT ou Claude, a partir de US$ 20 por mês). Se bater o limite de uso, é só esperar um pouco: ele renova sozinho.</p></div>
     </div>
     <div className="calc-result" aria-live="polite">
-      <p className="calc-rotulo">Quanto do seu plano cada vídeo usa</p>
-      <strong className="calc-faixa">R$ {de} <span className="calc-a">a</span> R$ {ate}</strong>
-      <p>estimados para um vídeo de {duracaoTexto(minutos)}, edição {t.nome.toLowerCase()}. Já está dentro da mensalidade do seu plano: não vem cobrança separada. Muda com cada vídeo e com os ajustes que você pedir.</p>
-      <p className="calc-caso"><b>Caso real:</b> um vídeo de 1:50 cheio de efeitos, com mapa de satélite, saiu por R$ 8. Um editor cobraria de R$ 200 a R$ 300.</p>
+      <p className="calc-rotulo">No plano mais barato da IA</p>
+      <strong className="calc-faixa"><span className="calc-a">cerca de</span> {videos} <span className="calc-a">vídeos</span></strong>
+      <p>por mês, de {duracaoTexto(minutos)} com edição {t.nome.toLowerCase()}. É uma estimativa: muda com cada vídeo e com os ajustes que você pedir. Quem edita mais pode subir de plano.</p>
+      <p className="calc-caso"><b>Caso real:</b> um vídeo de 1:50 cheio de efeitos, com mapa de satélite, que um editor cobraria de R$ 200 a R$ 300, saiu dentro do plano da IA.</p>
     </div></div>;
 }
 function DepoVideo({ name, role, quote, video }: { name: string; role: string; quote: string; video: string }) {
@@ -427,7 +429,7 @@ function Index() {
         <ForWho />
         <RequestLibrary />
         <section className="section container" id="conta">
-          <div className="section-heading reveal"><span className="eyebrow">Custo por vídeo</span><h2>Quanto sai cada vídeo <em>editado com IA?</em></h2><p>Você só paga o plano da sua IA. Escolha a duração e o tipo de edição e veja quanto desse plano cada vídeo usa.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">Quantos vídeos cabem</span><h2>Quantos vídeos o seu plano <em>edita por mês?</em></h2><p>Você só paga o plano da sua IA. Escolha a duração e o tipo de edição e veja quantos vídeos cabem no plano mais barato.</p></div>
           <Calculator />
         </section>
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
