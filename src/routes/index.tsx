@@ -226,8 +226,9 @@ function BonusBox() {
 /** Quantos vídeos cabem no plano mais barato da IA (US$ 20/mês, uns R$ 110). Usa o custo por vídeo que o Mariano
  *  mostra na aula "Quanto custa editar com IA" (simples de até 1 min: R$ 2 a 5; longo ou detalhado com 3D: R$ 8 a 15;
  *  casos reais: 1:50 cheio de efeitos = R$ 8 e 4 min = R$ 12) e divide o plano pelo custo do meio da faixa.
- *  A página não mostra preço por vídeo: só quantos vídeos o plano edita no mês. */
-const PLANO_BASICO_REAIS = 110;
+ *  A página não mostra preço por vídeo: só quantos vídeos o plano edita no mês.
+ *  O valor do plano está um pouco acima dos R$ 110 para dar 35 vídeos simples de 1 min (pedido do Mariano em 23/10). */
+const PLANO_BASICO_REAIS = 125;
 const tiposEdicao = [
   { nome: 'Simples', desc: 'cortes e legenda', base: [2, 5], porMinuto: [0.6, 1.2] },
   { nome: 'Com efeitos', desc: 'zoom, títulos, trilha', base: [4, 8], porMinuto: [1, 1.6] },
@@ -237,20 +238,22 @@ const duracaoTexto = (min: number) => min < 1 ? '30 s' : `${Math.floor(min)}${mi
 function Calculator() {
   const [minutos, setMinutos] = useState(1);
   const [tipo, setTipo] = useState(0);
+  // até a pessoa mexer, os botões de tipo dão uma cutucada de vez em quando para mostrar que dá pra clicar
+  const [mexeu, setMexeu] = useState(false);
   const t = tiposEdicao[tipo] ?? tiposEdicao[0];
   const extra = Math.max(0, minutos - 1);
   const custoMedio = (t.base[0] + t.porMinuto[0] * extra + t.base[1] + t.porMinuto[1] * extra) / 2;
   const videos = Math.max(1, Math.floor(PLANO_BASICO_REAIS / custoMedio));
   return <div className="calculator"><div>
-      <div className="calc-control"><div className="calc-label"><label>Duração do vídeo</label><strong>{duracaoTexto(minutos)}</strong></div><Slider aria-label="Duração do vídeo" value={[minutos]} onValueChange={v => setMinutos(v[0] ?? 1)} min={0.5} max={10} step={0.5} /></div>
+      <div className="calc-control"><div className="calc-label"><label>Duração do vídeo</label><strong>{duracaoTexto(minutos)}</strong></div><Slider aria-label="Duração do vídeo" value={[minutos]} onValueChange={v => { setMinutos(v[0] ?? 1); setMexeu(true); }} min={0.5} max={10} step={0.5} /></div>
       <div className="calc-control"><div className="calc-label"><label>Tipo de edição</label></div>
-        <div className="calc-tipos" role="radiogroup" aria-label="Tipo de edição">{tiposEdicao.map((item, k) => <button key={item.nome} type="button" role="radio" aria-checked={k === tipo} className={k === tipo ? 'on' : ''} onClick={() => setTipo(k)}><strong>{item.nome}</strong><small>{item.desc}</small></button>)}</div>
+        <div className={`calc-tipos ${mexeu ? '' : 'chamando'}`} role="radiogroup" aria-label="Tipo de edição">{tiposEdicao.map((item, k) => <button key={item.nome} type="button" role="radio" aria-checked={k === tipo} className={k === tipo ? 'on' : ''} onClick={() => { setTipo(k); setMexeu(true); }}><strong>{item.nome}</strong><small>{item.desc}</small></button>)}</div>
       </div>
       <div className="calc-sem-extra"><CheckCircle2 size={18} /><p><strong>Você não paga nada a mais por vídeo.</strong> Só o plano da sua IA (ChatGPT ou Claude, a partir de US$ 20 por mês). Se bater o limite de uso, é só esperar um pouco: ele renova sozinho.</p></div>
     </div>
     <div className="calc-result" aria-live="polite">
       <p className="calc-rotulo">No plano mais barato da IA</p>
-      <strong className="calc-faixa"><span className="calc-a">cerca de</span> {videos} <span className="calc-a">vídeos</span></strong>
+      <strong className="calc-faixa"><span className="calc-a">cerca de</span> <NumberTicker value={videos} duration={1600} /> <span className="calc-a">vídeos</span></strong>
       <p>por mês, de {duracaoTexto(minutos)} com edição {t.nome.toLowerCase()}. É uma estimativa: muda com cada vídeo e com os ajustes que você pedir. Quem edita mais pode subir de plano.</p>
       <p className="calc-caso"><b>Caso real:</b> um vídeo de 1:50 cheio de efeitos, com mapa de satélite, que um editor cobraria de R$ 200 a R$ 300, saiu dentro do plano da IA.</p>
     </div></div>;

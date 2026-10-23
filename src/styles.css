@@ -626,6 +626,17 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .calc-tipos button strong { font-size: 12px; color: var(--foreground); }
 .calc-tipos button small { font-size: 10px; line-height: 1.35; }
 .calc-tipos button.on { border-color: var(--ready); background: oklch(.828 .149 176 / .1); color: var(--foreground); }
+.calc-tipos.chamando button:not(.on) { animation: calc-cutucada 3.6s ease-in-out infinite; }
+.calc-tipos.chamando button:nth-child(2):not(.on) { animation-delay: .25s; }
+.calc-tipos.chamando button:nth-child(3):not(.on) { animation-delay: .5s; }
+@keyframes calc-cutucada {
+  0%, 62%, 100% { transform: none; border-color: var(--border); }
+  68% { transform: translateY(-3px) rotate(-1.5deg); border-color: oklch(.828 .149 176 / .55); }
+  74% { transform: translateY(0) rotate(1.5deg); }
+  80% { transform: rotate(-1deg); }
+  86% { transform: none; border-color: oklch(.828 .149 176 / .55); }
+}
+@media (prefers-reduced-motion: reduce) { .calc-tipos.chamando button:not(.on) { animation: none; } }
 .calc-rotulo { font-family: var(--font-mono); font-size: 9px !important; letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 8px !important; }
 .calc-result .calc-faixa { color: var(--ready); font-size: 40px; white-space: nowrap; }
 .calc-faixa .calc-a { font-family: var(--font-editorial); font-style: italic; font-weight: 400; color: var(--muted-foreground); font-size: .6em; }
