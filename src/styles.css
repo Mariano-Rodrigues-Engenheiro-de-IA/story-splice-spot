@@ -389,7 +389,15 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .unbox-files { display: grid; gap: 10px; margin-top: 18px; }
 .unbox-file { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 14px; align-items: center; background: var(--background); border: 1px solid var(--border); border-radius: 14px; padding: 14px; opacity: 0; transform: translateY(-14px) scale(.97); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1); }
 .unbox.open .unbox-file { opacity: 1; transform: none; }
-.unbox.open .unbox-file.bonus { transition-delay: .25s; }
+.unbox.open .unbox-file:nth-child(2) { transition-delay: .12s; }
+.unbox.open .unbox-file:nth-child(3) { transition-delay: .24s; }
+.unbox.open .unbox-file.bonus { transition-delay: .36s; }
+.unbox-file.principal { border-color: oklch(.656 .237 26 / .45); background: linear-gradient(135deg, oklch(.656 .237 26 / .10), var(--background) 60%); }
+.unbox-file.principal strong { font-size: 15px; }
+.unbox-file.principal strong em { background: var(--primary); color: #fff; }
+.unbox-marca { background: transparent; }
+.unbox-marca .brand-icon { width: 36px; height: 36px; border-radius: 11px; color: #fff; }
+.unbox-marca .brand-icon svg { width: 16px; height: 16px; }
 .unbox-icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: oklch(.656 .237 26 / .15); color: var(--primary); }
 .unbox-file.bonus .unbox-icon { background: oklch(.837 .164 84 / .15); color: var(--bonus); }
 .unbox-file strong { font-size: 13px; color: var(--foreground); }

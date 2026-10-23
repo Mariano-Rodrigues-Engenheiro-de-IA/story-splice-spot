@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  Check, Clapperboard, Copy, FileArchive, FileText, GraduationCap, Mail, Megaphone, Play, Power, Sparkles, Timer, Wallet,
+  Check, Clapperboard, Copy, FileArchive, FileText, GraduationCap, KeyRound, Mail, Megaphone, MonitorPlay, Play, Power, Sparkles, Timer, Wallet, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -281,14 +281,19 @@ export function WhatYouGet() {
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
         <span className="eyebrow">O que você recebe</span>
-        <h2>Chega no seu e-mail. <em>Você usa hoje.</em></h2>
-        <p>Dois arquivos. Você solta na conversa da sua IA e começa a pedir.</p>
+        <h2>Não é só um arquivo. <em>É o caminho inteiro.</em></h2>
+        <p>Você entra na área de membros e encontra tudo pra editar o seu primeiro vídeo com IA ainda hoje.</p>
       </div>
       <div className="reveal"><div ref={ref} className={`unbox ${inView ? 'open' : ''}`}>
-        <div className="unbox-mail"><Mail size={18} /><div><strong>Seu acesso ao Modo Editor</strong><small>chega assim que o pagamento é aprovado</small></div></div>
+        <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora à área de membros</strong><small>o login chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
         <div className="unbox-files">
-          <div className="unbox-file"><span className="unbox-icon"><FileArchive size={20} /></span><div><strong>Modo Editor</strong><p>O arquivo que faz a sua IA cortar, legendar e animar seus vídeos.</p></div></div>
-          <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>O Arquivo Secreto do Roteiro <em>bônus</em></strong><p>Revisa o roteiro antes de gravar: gancho, clareza e chamada final.</p></div></div>
+          <div className="unbox-file principal">
+            <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
+            <div><strong>Modo Editor <em>o coração</em></strong><p>O arquivo que transforma o seu ChatGPT ou Claude num editor de vídeo profissional: corta os erros e as pausas, legenda, coloca zoom, efeitos e trilha, e confere tudo antes de entregar.</p></div>
+          </div>
+          <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>Videoaulas curtas</strong><p>Tutoriais direto ao ponto: preparar o computador, instalar o Modo Editor, montar o pedido e editar o seu primeiro vídeo, mostrado tela por tela.</p></div></div>
+          <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>Gerador de Pedido</strong><p>Você clica nas opções (estilo, legenda, efeitos, trilha) e ele monta o pedido completo pra IA. Dá até pra explicar em áudio.</p></div></div>
+          <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>O Arquivo Secreto do Roteiro <em>bônus</em></strong><p>Antes de gravar, a IA revisa o seu roteiro: gancho forte, fala clara e chamada final.</p></div></div>
         </div>
         <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>plano pago, contratado à parte</small></div>
       </div></div>
