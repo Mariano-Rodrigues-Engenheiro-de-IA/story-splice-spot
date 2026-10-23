@@ -310,11 +310,6 @@ export function Creator({ name, photo }: { name: string; photo: string }) {
         <p>Empreendo desde 2021 e, nesse tempo todo, nunca parei de produzir conteúdo. Sempre estive ativo na internet, e todo vídeo esbarrava no mesmo problema: ou eu editava na mão, ou pagava um editor e ficava esperando.</p>
         <p>Quando a IA abriu essa possibilidade, comecei a testar na minha própria operação. Validei, ajustei e uso até hoje. Os vídeos desta página foram editados assim.</p>
         <p>Aí os meus alunos começaram a pedir pra aprender do mesmo jeito. Foi daí que nasceu o Modo Editor: tudo o que eu sei de edição com IA, no método que eu uso todos os dias.</p>
-        <ul className="produtor-selos">
-          <li><Sparkles size={16} />Empreendedor desde 2021</li>
-          <li><Clapperboard size={16} />Edita os próprios vídeos com IA até hoje</li>
-          <li><GraduationCap size={16} />Alunos em todo o Brasil</li>
-        </ul>
       </div>
     </section>
   );

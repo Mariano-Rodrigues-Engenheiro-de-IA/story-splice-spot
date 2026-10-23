@@ -609,14 +609,9 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .produtor-texto h2 { margin-bottom: 6px; }
 .produtor-cargo { font-family: var(--font-mono); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ready) !important; margin: 0 0 18px; }
 .produtor-texto > p:not(.produtor-cargo) { font-size: 14px; line-height: 1.75; margin: 0 0 14px; }
-.produtor-selos { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 10px; }
-.produtor-selos li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--foreground); background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px; }
-.produtor-selos svg { flex: none; color: var(--ready); }
 @media (max-width: 760px) {
   .produtor { grid-template-columns: minmax(0, 1fr); gap: 34px; }
   .produtor-foto { width: min(100%, 340px); margin: 0 auto; }
   .produtor-texto { text-align: center; }
   .produtor-texto > p:not(.produtor-cargo) { font-size: 13px; }
-  .produtor-selos { text-align: left; }
-  .produtor-selos li { font-size: 12px; }
 }
