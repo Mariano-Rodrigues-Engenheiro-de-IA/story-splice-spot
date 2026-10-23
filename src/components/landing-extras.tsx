@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  Check, Clapperboard, Copy, FileArchive, FileText, GraduationCap, KeyRound, Mail, Megaphone, MonitorPlay, Play, Power, Sparkles, Timer, Wallet, WandSparkles,
+  ArrowUp, Check, Clapperboard, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -126,14 +126,13 @@ const criteria = [
 ] as const;
 
 export function ModeSwitch() {
-  const [ref, inView] = useInView<HTMLDivElement>('-20% 0px');
-  const [touched, setTouched] = useState(false);
+  // alterna sozinho entre a gravação crua e a editada; o toque no botão troca na hora e o ciclo continua
   const [on, setOn] = useState(false);
   useEffect(() => {
-    if (!inView || touched || reduced()) return;
-    const id = window.setTimeout(() => setOn(v => !v), on ? 4200 : 2600);
+    if (reduced()) return;
+    const id = window.setTimeout(() => setOn(v => !v), on ? 4500 : 3000);
     return () => window.clearTimeout(id);
-  }, [inView, touched, on]);
+  }, [on]);
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
@@ -141,15 +140,19 @@ export function ModeSwitch() {
         <h2>Mesma IA. <em>Outro resultado.</em></h2>
         <p>Sozinha, a IA chuta como você quer o vídeo. Com o Modo Editor, ela já começa sabendo.</p>
       </div>
-      <div className="reveal"><div ref={ref} className={`mode ${on ? 'is-on' : ''}`}>
+      <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
           <div className="mode-request"><small>Seu pedido</small>“Edita esse vídeo e deixa bonito.”</div>
-          <button type="button" className="mode-toggle" role="switch" aria-checked={on} onClick={() => { setTouched(true); setOn(v => !v); }}>
+          <button type="button" className="mode-toggle" role="switch" aria-checked={on} onClick={() => setOn(v => !v)}>
             <Power size={13} /> Modo Editor <span className="mode-knob"><i /></span> <b>{on ? 'ligado' : 'desligado'}</b>
           </button>
         </div>
         <div className="mode-body">
-          <div className="mode-phone">{on ? <Clip key="com" src={siteConfig.videos.cenas.comModo} preset="pronto" opts={{ scene: 'blue', offset: 3 }} /> : <Clip key="sem" preset="bruto" opts={{ scene: 'blue', offset: 3 }} label="Exemplo genérico de vídeo sem o Modo Editor" />}</div>
+          <div className="mode-phone">
+            <div className={`mode-camada ${on ? '' : 'ativa'}`}><Clip src={siteConfig.videos.cenas.cruModo} preset="bruto" label="Gravação crua, sem edição" /></div>
+            <div className={`mode-camada ${on ? 'ativa' : ''}`}><Clip src={siteConfig.videos.cenas.comModo} preset="pronto" label="Vídeo editado com o Modo Editor" /></div>
+            <span className={`live-badge ${on ? 'done' : ''}`}>{on ? '✓ Editado' : '● Cru'}</span>
+          </div>
           <ul className="mode-list">
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
@@ -168,32 +171,11 @@ export function ModeSwitch() {
 /* ───────────── Para quem é ───────────── */
 
 const personas = [
-  { icon: Clapperboard, title: 'Quem cria conteúdo', copy: 'Você grava no domingo e o vídeo só sai na quinta, quando sobra tempo.', art: 'files' },
-  { icon: Megaphone, title: 'Quem anuncia', copy: 'O criativo cansa em poucos dias e o próximo depende de alguém editar.', art: 'ads' },
-  { icon: GraduationCap, title: 'Quem ensina', copy: 'Você explica bem falando. Falta o vídeo mostrar o que você disse.', art: 'class' },
-  { icon: Wallet, title: 'Quem paga editor', copy: 'O vídeo vai, a fatura vem e você fica esperando ele voltar.', art: 'wait' },
+  { icon: Clapperboard, title: 'Quem cria conteúdo', copy: 'Grava no domingo e só posta na quinta.' },
+  { icon: Megaphone, title: 'Quem anuncia', copy: 'Precisa de criativo novo toda semana.' },
+  { icon: GraduationCap, title: 'Quem ensina', copy: 'Tem aula gravada esperando edição.' },
+  { icon: Wallet, title: 'Quem paga editor', copy: 'Paga caro e ainda espera dias.' },
 ] as const;
-
-function PersonaArt({ type }: { type: string }) {
-  if (type === 'files') return (
-    <div className="pa-list"><small>Sua pasta de gravações</small>
-      {['gravacao_07.mov', 'gravacao_06.mov', 'gravacao_05.mov'].map((f, i) => <span key={f} style={{ animationDelay: `${i * 0.9}s` }}><FileText size={11} />{f}<em>esperando</em><b>✓ editado</b></span>)}
-    </div>
-  );
-  if (type === 'ads') return (
-    <div className="pa-list"><small>Seus anúncios</small>
-      <span className="worn"><Megaphone size={11} />Anúncio 1<em className="bad">cansou</em></span>
-      <span className="worn"><Megaphone size={11} />Anúncio 2<em className="bad">cansou</em></span>
-      <span style={{ animationDelay: '0s' }}><Megaphone size={11} />Anúncio novo<em>esperando edição</em><b>✓ no ar</b></span>
-    </div>
-  );
-  if (type === 'class') return (
-    <div className="pa-list"><small>Sua aula gravada</small>
-      <div className="pa-tags">{['legenda', 'zoom', 'destaque'].map((t, i) => <span key={t} style={{ animationDelay: `${i * 0.5}s` }}>✓ {t}</span>)}</div>
-    </div>
-  );
-  return <div className="pa-wait"><Timer size={16} /><span>esperando o editor<i>…</i></span><b>✓ pronto com a IA</b></div>;
-}
 
 export function ForWho() {
   return (
@@ -201,74 +183,85 @@ export function ForWho() {
       <div className="section-heading reveal">
         <span className="eyebrow">Para quem é</span>
         <h2>A ideia você já tem. <em>Falta a edição sair.</em></h2>
-        <p>Se uma dessas cenas é a sua semana, o Modo Editor foi feito pra você.</p>
       </div>
-      <div className="personas">
+      <div className="reveal"><div className="publico">
         {personas.map(p => (
-          <article key={p.title} className="persona reveal">
-            <div className="persona-art"><PersonaArt type={p.art} /></div>
-            <p.icon className="feature-icon" />
-            <h3>{p.title}</h3>
-            <p>{p.copy}</p>
-          </article>
+          <div key={p.title} className="publico-item">
+            <span className="publico-icon"><p.icon size={18} /></span>
+            <div><strong>{p.title}</strong><p>{p.copy}</p></div>
+          </div>
         ))}
-      </div>
-      <p className="persona-close reveal">Em todos os casos, a edição sai da sua agenda e vai pra sua IA.</p>
+      </div></div>
     </section>
   );
 }
 
 /* ───────────── Pedidos que funcionam ───────────── */
 
-const requestExamples = [
-  'Corta as pausas e deixa o ritmo rápido',
-  'Tira os “é”, os “ãã” e as frases repetidas',
-  'Coloca legenda palavra por palavra, branca e grande',
-  'Dá zoom quando eu falar mais forte',
-  'Troca o fundo por um escritório moderno',
-  'Põe a frase principal escrita no topo',
-  'Cor quente com faixas pretas, estilo cinema',
-  'Trilha calma bem baixinha por baixo da voz',
+/** Conversas de exemplo: o pedido em português e o que a IA responde. O vídeo do fim é um efeito real feito pela IA. */
+const conversas = [
+  { pedido: 'Corta as pausas e os “ééé”, coloca legenda palavra por palavra e deixa o ritmo rápido', passos: ['Ouvi a gravação inteira', 'Tirei as pausas e as repetições', 'Legenda no tempo da sua fala'], video: '/videos/cenas/legenda.mp4' },
+  { pedido: 'Troca meu fundo por um cenário de estúdio e dá zoom quando eu falar mais forte', passos: ['Recortei você do fundo', 'Cenário novo atrás de você', 'Zoom nas partes fortes'], video: '/videos/cenas/cenario.mp4' },
+  { pedido: 'Deixa com cor de cinema, faixas pretas e uma trilha calma bem baixinha', passos: ['Cor de cinema na imagem', 'Faixas pretas em cima e embaixo', 'Trilha baixinha por baixo da voz'], video: '/videos/cenas/cinema.mp4' },
 ];
 
 export function RequestLibrary() {
-  const [pick, setPick] = useState(0);
-  const [phase, setPhase] = useState(0);
-  const [copied, setCopied] = useState(false);
+  // 0 digitando · 1 enviado · 2, 3, 4 a IA trabalhando (um passo cada) · 5 pronto
+  const [ref, visivel] = useInView<HTMLDivElement>('200px 0px');
+  const [i, setI] = useState(0);
+  const [chars, setChars] = useState(0);
+  const [fase, setFase] = useState(0);
+  const c = conversas[i] ?? conversas[0]!;
   useEffect(() => {
-    setPhase(0); setCopied(false);
-    if (reduced()) { setPhase(2); return; }
-    const a = window.setTimeout(() => setPhase(1), 700);
-    const b = window.setTimeout(() => setPhase(2), 2000);
-    return () => { window.clearTimeout(a); window.clearTimeout(b); };
-  }, [pick]);
-  const text = requestExamples[pick] ?? '';
-  const copy = () => { void navigator.clipboard?.writeText(text).then(() => setCopied(true)).catch(() => undefined); };
+    if (reduced()) { setChars(c.pedido.length); setFase(5); return; }
+    if (!visivel) return;
+    let id: number;
+    if (fase === 0) id = chars < c.pedido.length ? window.setTimeout(() => setChars(n => n + 1), 30) : window.setTimeout(() => setFase(1), 450);
+    else if (fase < 5) id = window.setTimeout(() => setFase(f => f + 1), fase === 1 ? 700 : 900);
+    else id = window.setTimeout(() => { setI(n => (n + 1) % conversas.length); setChars(0); setFase(0); }, 5000);
+    return () => window.clearTimeout(id);
+  }, [visivel, fase, chars, c.pedido.length]);
   return (
     <section className="section container" id="pedidos">
       <div className="section-heading reveal">
         <span className="eyebrow">Exemplos de pedido</span>
         <h2>Escreva como <em>você fala.</em></h2>
-        <p>Nada de termo técnico. Toque num pedido e veja como ele fica na conversa.</p>
+        <p>Nada de termo técnico: você manda a gravação e pede, como numa conversa. Se preferir, o Gerador de Pedido monta o pedido pra você.</p>
       </div>
-      <div className="requests reveal">
-        <div className="request-chips" role="list">
-          {requestExamples.map((r, i) => (
-            <button key={r} type="button" role="listitem" className={i === pick ? 'on' : ''} onClick={() => setPick(i)}>{r}</button>
-          ))}
-        </div>
-        <div className="chat-window request-chat">
-          <div className="chat-header"><i className="chat-dot" /><i className="chat-dot" /><i className="chat-dot" /><span>Sua IA · ChatGPT ou Claude</span></div>
-          <div className="chat-body">
-            <div className="file-bubble"><Play className="file-icon" /><div><strong>gravacao.mp4</strong><small>vídeo</small></div></div>
-            <div className="chat-prompt" key={pick}>{text}</div>
-            <div className={`chat-success request-reply ${phase >= 1 ? 'on' : ''}`}>
-              {phase >= 2 ? <><Check size={12} /> Vídeo pronto. Quer mudar alguma coisa?</> : <><Sparkles size={12} /> Editando…</>}
+      <div className="reveal"><div className="ia-chat" ref={ref}>
+        <div className="ia-topo"><span className="ia-avatar"><Sparkles size={12} /></span><strong>Sua IA</strong><small>ChatGPT ou Claude · Modo Editor ativo</small></div>
+        <div className="ia-conversa" aria-live="polite">
+          {fase === 0 && <p className="ia-vazio">Mande a gravação e diga o que quer.</p>}
+          {fase >= 1 && (
+            <div className="ia-eu" key={`eu-${i}`}>
+              <div className="ia-anexo"><Play size={14} /><div><strong>gravacao.mp4</strong><small>vídeo</small></div></div>
+              <p>{c.pedido}</p>
             </div>
-          </div>
-          <button type="button" className="request-copy" onClick={copy}>{copied ? <><Check size={12} /> Copiado</> : <><Copy size={12} /> Copiar pedido</>}</button>
+          )}
+          {fase >= 2 && (
+            <div className="ia-ela" key={`ela-${i}`}>
+              <span className="ia-avatar"><Sparkles size={12} /></span>
+              <div>
+                <ul className="ia-passos">
+                  {c.passos.map((p, k) => fase >= 2 + k && (
+                    <li key={p} className={fase > 2 + k ? 'ok' : ''}>{fase > 2 + k ? <Check size={11} /> : <i className="ia-girando" />}{p}</li>
+                  ))}
+                </ul>
+                {fase >= 5 && (
+                  <div className="ia-pronto">
+                    <div className="ia-video"><Clip src={c.video} label="Vídeo editado pela IA" /></div>
+                    <p><strong>Pronto!</strong> Seu vídeo está editado. Quer mudar alguma coisa?</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-      </div>
+        <div className="ia-entrada">
+          <span className={fase === 0 ? '' : 'vazio'}>{fase === 0 ? <>{c.pedido.slice(0, chars)}<i className="caret" /></> : 'Mensagem para a IA'}</span>
+          <span className="ia-enviar" aria-hidden="true"><ArrowUp size={14} /></span>
+        </div>
+      </div></div>
     </section>
   );
 }

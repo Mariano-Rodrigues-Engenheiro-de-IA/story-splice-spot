@@ -277,9 +277,9 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 /* ───── Scroll reveal ───── */
 .js-reveal .reveal { opacity: 0; transform: translateY(26px); filter: blur(6px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1), filter .7s ease; }
 .js-reveal .reveal.in { opacity: 1; transform: none; filter: none; }
-.steps .reveal:nth-child(2), .personas .reveal:nth-child(2), .bento .reveal:nth-child(2) { transition-delay: .1s; }
-.steps .reveal:nth-child(3), .personas .reveal:nth-child(3), .bento .reveal:nth-child(3) { transition-delay: .2s; }
-.personas .reveal:nth-child(4), .bento .reveal:nth-child(4) { transition-delay: .3s; }
+.steps .reveal:nth-child(2), .bento .reveal:nth-child(2) { transition-delay: .1s; }
+.steps .reveal:nth-child(3), .bento .reveal:nth-child(3) { transition-delay: .2s; }
+.bento .reveal:nth-child(4) { transition-delay: .3s; }
 .feature { transition: border-color .3s, transform .3s, opacity .7s ease, filter .7s ease; } .feature:hover { border-color: oklch(1 0 0 / .18); }
 
 /* ───── Editando ao vivo ───── */
@@ -333,7 +333,10 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .is-on .mode-knob i { transform: translateX(14px); background: var(--background); }
 .is-on .mode-toggle b { color: var(--ready); }
 .mode-body { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 26px; margin-top: 24px; align-items: center; }
-.mode-phone { aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+.mode-phone { aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); position: relative; }
+.mode-camada { position: absolute; inset: 0; opacity: 0; transition: opacity .5s ease; }
+.mode-camada.ativa { opacity: 1; }
+.mode-phone .live-badge { z-index: 2; font-size: 8px; }
 .mode-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .mode-list li { display: grid; grid-template-columns: 26px minmax(0,1fr); gap: 12px; align-items: center; transition: opacity .4s; opacity: .55; }
 .is-on .mode-list li { opacity: 1; }
@@ -346,39 +349,8 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .is-on .mode-foot span { color: var(--ready); }
 
 /* ───── Para quem é ───── */
-.personas { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
-.persona { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: var(--inner-glow); }
-.persona h3 { font-size: 15px; margin-bottom: 8px; }
-.persona p { font-size: 11px; line-height: 1.65; }
-.persona-art { height: 96px; margin-bottom: 18px; display: grid; align-items: center; }
-.pa-files { display: grid; gap: 6px; }
-.pa-files span { display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--muted-foreground); background: var(--background); border: 1px solid var(--border); border-radius: 7px; padding: 5px 7px; animation: pa-file 3.6s ease-in-out infinite; }
-.pa-files b { margin-left: auto; color: var(--ready); font-weight: 500; opacity: 0; animation: pa-ok 3.6s ease-in-out infinite; animation-delay: inherit; }
-.pa-ads { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-.pa-ads span { aspect-ratio: 9 / 16; border-radius: 7px; border: 1px dashed oklch(1 0 0 / .2); display: grid; place-items: end center; padding-bottom: 6px; font-size: 8px; font-family: var(--font-mono); color: var(--muted-foreground); animation: pa-ad 2.8s ease-in-out infinite; }
-.pa-class { display: flex; gap: 8px; align-items: center; justify-content: center; }
-.pa-word { font-size: 18px; font-weight: 700; color: var(--muted-foreground); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); }
-.pa-word.hl { color: var(--background); background: var(--ready); border-color: transparent; animation: ready-pulse 2.4s ease-in-out infinite; }
-.pa-wait { display: grid; justify-items: center; gap: 6px; font-family: var(--font-mono); font-size: 10px; color: var(--muted-foreground); }
-.pa-wait svg { color: var(--primary); animation: beam-spin 3s linear infinite; }
-.pa-wait i { font-style: normal; animation: pulse 1s infinite; }
-.pa-wait b { color: var(--ready); font-weight: 500; animation: pa-ok 4s ease-in-out infinite; }
-.persona-close { text-align: center; margin-top: 30px; font-size: 13px; color: var(--foreground); }
-@keyframes pa-file { 0%, 100% { border-color: var(--border); } 40%, 70% { border-color: oklch(.828 .149 176 / .5); } }
-@keyframes pa-ok { 0%, 30% { opacity: 0; } 45%, 85% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes pa-ad { 0%, 20% { border-color: oklch(1 0 0 / .2); background: transparent; } 40%, 80% { border-color: var(--primary); background: oklch(.656 .237 26 / .12); color: var(--foreground); } 100% { border-color: oklch(1 0 0 / .2); } }
 
 /* ───── Pedidos ───── */
-.requests { max-width: 860px; margin: auto; display: grid; grid-template-columns: minmax(0,1fr) 330px; gap: 28px; align-items: center; }
-.request-chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.request-chips button { border: 1px solid var(--border); background: var(--card); color: var(--muted-foreground); border-radius: 99px; padding: 9px 14px; font-size: 12px; cursor: pointer; text-align: left; transition: border-color .2s, color .2s, background .2s; }
-.request-chips button:hover { color: var(--foreground); border-color: oklch(1 0 0 / .2); }
-.request-chips button.on { color: var(--foreground); border-color: var(--primary); background: oklch(.656 .237 26 / .12); }
-.request-chat { position: relative; height: auto !important; min-height: 280px; }
-.request-chat .chat-prompt { animation: word-in .4s ease both; }
-.request-reply { opacity: 0; transform: translateY(6px); transition: opacity .35s, transform .35s; }
-.request-reply.on { opacity: 1; transform: none; }
-.request-copy { position: absolute; right: 12px; bottom: 12px; display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 99px; padding: 7px 11px; font-size: 10px; background: var(--background); color: var(--foreground) !important; cursor: pointer; }
 
 /* ───── O que você recebe ───── */
 .unbox { max-width: 640px; margin: auto; background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 26px; box-shadow: var(--inner-glow); }
@@ -427,29 +399,12 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .mode-list { gap: 9px; }
   .mode-list strong { font-size: 12px; }
   .mode-list p { font-size: 10px; }
-  .personas { grid-template-columns: minmax(0,1fr); gap: 12px; }
-  .persona { padding: 20px; }
-  .requests { grid-template-columns: minmax(0,1fr); gap: 20px; }
-  .request-chips { justify-content: center; }
-  .request-chips button { font-size: 11px; padding: 8px 12px; }
   .unbox { padding: 20px; border-radius: 20px; }
   .creator { grid-template-columns: minmax(0,1fr); gap: 26px; text-align: center; }
   .creator-video { width: 220px; margin: auto; }
 }
 
 /* Personas: self-explaining visuals */
-.pa-list { display: grid; gap: 5px; }
-.pa-list small { font-family: var(--font-mono); font-size: 8px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted-foreground); margin-bottom: 2px; }
-.pa-list > span { position: relative; display: flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9px; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 7px; padding: 5px 7px; }
-.pa-list > span em { margin-left: auto; font-style: normal; color: var(--muted-foreground); animation: pa-wait 3.6s ease-in-out infinite; animation-delay: inherit; }
-.pa-list > span em.bad { color: var(--primary); animation: none; }
-.pa-list > span b { position: absolute; right: 7px; color: var(--ready); font-weight: 500; opacity: 0; animation: pa-ok 3.6s ease-in-out infinite; animation-delay: inherit; }
-.pa-list > span:not(.worn) { animation: pa-file 3.6s ease-in-out infinite; }
-.pa-list > span.worn { opacity: .5; }
-.pa-tags { display: flex; flex-wrap: wrap; gap: 6px; background: var(--background); border: 1px solid var(--border); border-radius: 10px; padding: 12px 10px; }
-.pa-tags span { font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px; background: var(--surface); color: var(--muted-foreground); animation: pa-tag 3s ease-in-out infinite; }
-@keyframes pa-wait { 0%, 30% { opacity: 1; } 45%, 85% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes pa-tag { 0%, 25% { background: var(--surface); color: var(--muted-foreground); } 40%, 85% { background: var(--ready); color: var(--background); } 100% { background: var(--surface); color: var(--muted-foreground); } }
 
 /* ---------- player do vídeo de vendas (padrão VTurb: mudo + aviso grande, sem controles, barra sem duração) ---------- */
 .vsl { position: absolute; inset: 0; background: #000; }
@@ -600,3 +555,53 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 
 /* ---------- desempenho: animações das seções fora da tela ficam pausadas ---------- */
 .fora-da-tela, .fora-da-tela *, .fora-da-tela *::before, .fora-da-tela *::after { animation-play-state: paused !important; }
+
+
+/* Para quem é: quatro cartões curtos */
+.publico { max-width: 760px; margin: auto; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+.publico-item { display: flex; gap: 12px; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--inner-glow); }
+.publico-icon { flex: none; width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: oklch(.828 .149 176 / .12); color: var(--ready); }
+.publico-item strong { display: block; font-size: 14px; color: var(--foreground); }
+.publico-item p { font-size: 12px; line-height: 1.5; margin-top: 3px; }
+@media (max-width: 560px) {
+  .publico { gap: 8px; }
+  .publico-item { flex-direction: column; gap: 10px; padding: 14px; }
+  .publico-icon { width: 32px; height: 32px; }
+  .publico-item strong { font-size: 13px; }
+  .publico-item p { font-size: 11px; }
+}
+
+/* Escreva como você fala: conversa de IA que se escreve sozinha */
+.ia-chat { max-width: 520px; margin: auto; background: oklch(.19 .004 286); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; box-shadow: var(--inner-glow); text-align: left; }
+.ia-topo { display: flex; align-items: center; gap: 8px; padding: 13px 16px; border-bottom: 1px solid var(--border); }
+.ia-topo strong { font-size: 13px; color: var(--foreground); }
+.ia-topo small { font-size: 10px; color: var(--muted-foreground); margin-left: auto; }
+.ia-avatar { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: #fff; }
+.ia-conversa { height: 430px; padding: 18px 16px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+.ia-vazio { margin: auto; font-size: 13px; color: oklch(1 0 0 / .3); text-align: center; }
+.ia-eu { align-self: flex-end; max-width: 86%; display: grid; justify-items: end; gap: 6px; animation: word-in .35s ease both; }
+.ia-eu p { margin: 0; background: oklch(.27 .006 286); color: var(--foreground); font-size: 13px; line-height: 1.5; padding: 10px 14px; border-radius: 18px 18px 4px 18px; }
+.ia-anexo { display: flex; align-items: center; gap: 8px; background: oklch(.27 .006 286); border-radius: 12px; padding: 8px 12px; }
+.ia-anexo svg { color: var(--primary); }
+.ia-anexo strong { display: block; font-size: 11px; color: var(--foreground); }
+.ia-anexo small { font-size: 9px; color: var(--muted-foreground); }
+.ia-ela { display: flex; gap: 10px; align-items: flex-start; animation: word-in .35s ease both; }
+.ia-passos { list-style: none; margin: 2px 0 0; padding: 0; display: grid; gap: 7px; }
+.ia-passos li { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted-foreground); animation: word-in .3s ease both; }
+.ia-passos li.ok { color: var(--foreground); }
+.ia-passos li svg { color: var(--ready); }
+.ia-girando { width: 11px; height: 11px; border-radius: 50%; border: 2px solid oklch(1 0 0 / .2); border-top-color: var(--ready); animation: beam-spin .8s linear infinite; }
+.ia-pronto { display: flex; gap: 12px; align-items: flex-end; margin-top: 12px; animation: word-in .4s ease both; }
+.ia-video { flex: none; width: 104px; aspect-ratio: 9 / 16; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.ia-pronto p { margin: 0; font-size: 12px; line-height: 1.5; }
+.ia-pronto strong { color: var(--ready); }
+.ia-entrada { display: flex; align-items: center; gap: 10px; margin: 0 12px 12px; padding: 10px 10px 10px 16px; border: 1px solid oklch(1 0 0 / .14); border-radius: 22px; background: oklch(.23 .005 286); }
+.ia-entrada > span:first-child { flex: 1; min-height: 20px; font-size: 13px; line-height: 1.5; color: var(--foreground); }
+.ia-entrada > span.vazio { color: var(--muted-foreground); }
+.ia-enviar { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--foreground); color: var(--background); }
+@media (max-width: 560px) {
+  .ia-conversa { height: 410px; padding: 16px 12px; }
+  .ia-topo small { display: none; }
+  .ia-eu p { font-size: 12px; }
+  .ia-video { width: 92px; }
+}
