@@ -234,6 +234,39 @@ const tiposEdicao = [
   { nome: 'Com efeitos', desc: 'zoom, títulos, trilha', base: [4, 8], porMinuto: [1, 1.6] },
   { nome: 'Detalhado', desc: '3D, mapas, motion', base: [6, 10], porMinuto: [1.5, 1.6] },
 ] as const;
+/** Número que sobe de 0 até o valor quando o elemento chega na tela e corre até o novo valor quando ele muda.
+ *  Mede a posição na rolagem e anima por tempo (setInterval), então funciona até dentro de prévias em iframe. */
+function useContador(valor: number, duracao = 1600) {
+  const alvo = useRef<HTMLElement>(null);
+  const [comecou, setComecou] = useState(false);
+  const [mostrado, setMostrado] = useState(0);
+  const atual = useRef(0);
+  useEffect(() => {
+    if (comecou) return;
+    const ver = () => {
+      const r = alvo.current?.getBoundingClientRect();
+      if (r && r.top < window.innerHeight * 0.9 && r.bottom > 0) setComecou(true);
+    };
+    ver();
+    const id = window.setInterval(ver, 400); // rolagem por programa ou prévia que não manda o evento de scroll
+    window.addEventListener('scroll', ver, { passive: true });
+    window.addEventListener('resize', ver);
+    return () => { window.clearInterval(id); window.removeEventListener('scroll', ver); window.removeEventListener('resize', ver); };
+  }, [comecou]);
+  useEffect(() => {
+    if (!comecou) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { atual.current = valor; setMostrado(valor); return; }
+    const de = atual.current, inicio = Date.now();
+    const id = window.setInterval(() => {
+      const t = Math.min(1, (Date.now() - inicio) / duracao);
+      const v = de + (valor - de) * (1 - Math.pow(1 - t, 3));
+      atual.current = v; setMostrado(Math.round(v));
+      if (t >= 1) window.clearInterval(id);
+    }, 30);
+    return () => window.clearInterval(id);
+  }, [comecou, valor, duracao]);
+  return [alvo, mostrado] as const;
+}
 const duracaoTexto = (min: number) => min < 1 ? '30 s' : `${Math.floor(min)}${min % 1 ? ':30' : ''} min`;
 function Calculator() {
   const [minutos, setMinutos] = useState(1);
@@ -244,6 +277,7 @@ function Calculator() {
   const extra = Math.max(0, minutos - 1);
   const custoMedio = (t.base[0] + t.porMinuto[0] * extra + t.base[1] + t.porMinuto[1] * extra) / 2;
   const videos = Math.max(1, Math.floor(PLANO_BASICO_REAIS / custoMedio));
+  const [contadorRef, contado] = useContador(videos);
   return <div className="calculator"><div>
       <div className="calc-control"><div className="calc-label"><label>Duração do vídeo</label><strong>{duracaoTexto(minutos)}</strong></div><Slider aria-label="Duração do vídeo" value={[minutos]} onValueChange={v => { setMinutos(v[0] ?? 1); setMexeu(true); }} min={0.5} max={10} step={0.5} /></div>
       <div className="calc-control"><div className="calc-label"><label>Tipo de edição</label></div>
@@ -253,7 +287,7 @@ function Calculator() {
     </div>
     <div className="calc-result" aria-live="polite">
       <p className="calc-rotulo">No plano mais barato da IA</p>
-      <strong className="calc-faixa"><span className="calc-a">cerca de</span> <NumberTicker value={videos} duration={1600} /> <span className="calc-a">vídeos</span></strong>
+      <strong className="calc-faixa" ref={contadorRef} aria-label={`cerca de ${videos} vídeos`}><span className="calc-a">cerca de</span> {contado} <span className="calc-a">vídeos</span></strong>
       <p>por mês, de {duracaoTexto(minutos)} com edição {t.nome.toLowerCase()}. É uma estimativa: muda com cada vídeo e com os ajustes que você pedir. Quem edita mais pode subir de plano.</p>
       <p className="calc-caso"><b>Caso real:</b> um vídeo de 1:50 cheio de efeitos, com mapa de satélite, que um editor cobraria de R$ 200 a R$ 300, saiu dentro do plano da IA.</p>
     </div></div>;
