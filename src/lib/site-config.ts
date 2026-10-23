@@ -36,7 +36,6 @@ export const siteConfig = {
       fundoNovo: '/videos/cenas/fundo_novo.mp4',
       aoVivoBruto: '/videos/cenas/ao_vivo_bruto.mp4',
       aoVivoPronto: '/videos/cenas/ao_vivo_pronto.mp4',
-      semModo: '/videos/cenas/sem_modo.mp4',
       comModo: '/videos/cenas/com_modo.mp4',
     },
   },

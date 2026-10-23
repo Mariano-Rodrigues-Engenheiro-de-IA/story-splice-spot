@@ -59,8 +59,8 @@ function Aulas() {
   return <section className="section container" id="aulas">
     <div className="section-heading reveal"><span className="eyebrow">Aulas e vídeos longos</span><h2>Agora as suas aulas <em>saem prontas.</em></h2><p>Do Reels à aula do YouTube: a IA corta os erros, alterna o enquadramento e coloca as ilustrações no tempo da sua fala.</p></div>
     <div className="aula reveal">
-      <div className="aula-tela"><Clip src="/videos/cenas/aula_youtube.mp4" label="Trecho de uma aula editada com IA" /><div className="aula-progresso" aria-hidden="true"><span /></div></div>
-      <div className="aula-info"><span className="aula-avatar">M</span><div><strong>Aula · IA no atendimento pelo WhatsApp</strong><small>{siteConfig.creator.name} · editada com IA</small></div></div>
+      <div className="aula-tela"><Clip src="/videos/cenas/aula_modo_editor.mp4" label="Trecho de uma aula editada com IA" /><div className="aula-progresso" aria-hidden="true"><span /></div></div>
+      <div className="aula-info"><span className="aula-avatar">M</span><div><strong>Aula · Boas-vindas ao Modo Editor</strong><small>{siteConfig.creator.name} · editada com IA</small></div></div>
       <div className="aula-chips">{['Corte limpo, sem pausa', 'Zoom a cada corte', 'Ilustração ao lado', 'Palavra-chave na tela'].map(t => <span key={t}><CheckCircle2 size={14} />{t}</span>)}</div>
     </div>
   </section>;
@@ -283,20 +283,27 @@ const faqItems = [
   ['Posso mesmo sair enquanto a IA edita?', 'Pode. Depois que você manda a gravação e o pedido, a edição segue sozinha. Na volta, o vídeo está pronto pra revisar.'],
   ['Funciona no ChatGPT e no Claude?', 'Sim, nos dois, no plano pago. Você usa a IA que já tem.'],
   ['Quanto custa a assinatura da IA?', 'A partir de US$ 20 por mês, pagos direto à OpenAI ou à Anthropic. Não está incluída no valor do Modo Editor.'],
-  ['É um curso de edição?', 'Não. É um arquivo que você solta no ChatGPT ou no Claude, e a IA passa a editar. Você não precisa aprender a editar.'],
+  ['É um curso de edição?', 'Não. Você não precisa aprender a editar: quem edita é a IA. As videoaulas curtas só mostram, tela por tela, como instalar o Modo Editor, montar o pedido e editar o seu primeiro vídeo.'],
+  ['O que é o Gerador de Pedido?', 'Uma página onde você clica no que quer (estilo, legenda, efeitos, trilha) e ele monta o pedido completo pra você colar na IA. Dá até pra explicar por áudio.'],
   ['Serve pra anúncio e pra conteúdo?', 'Serve. Reels, anúncio, aula, depoimento: se é um vídeo falado, você manda a gravação e pede a edição.'],
   ['Preciso de computador?', 'Para editar, sim: Mac ou Windows. O celular serve para gravar.'],
-  ['Como recebo o acesso?', 'Por e-mail, assim que o pagamento é aprovado. No PIX e no cartão é na hora.'],
+  ['Como recebo o acesso?', 'O login da área de membros chega no seu e-mail assim que o pagamento é aprovado. No PIX e no cartão é na hora.'],
   ['E se eu não gostar?', 'Você tem 7 dias de garantia. Pede o reembolso e recebe 100% do valor de volta.'],
 ];
 function StickyBar() {
   const [show, setShow] = useState(false);
   useEffect(() => {
-    let offerVisible = false;
+    let offerVisible = false, fimVisivel = false;
     const offer = document.getElementById('oferta');
-    const update = () => setShow(window.scrollY > 700 && !offerVisible);
-    const observer = new IntersectionObserver(([entry]) => { offerVisible = !!entry?.isIntersecting; if (offerVisible) eventoProprio('ViuOferta'); update(); });
+    const fim = document.querySelector('.lamp');
+    const update = () => setShow(window.scrollY > 700 && !offerVisible && !fimVisivel);
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.target === offer) { offerVisible = entry.isIntersecting; if (offerVisible) eventoProprio('ViuOferta'); }
+      else fimVisivel = entry.isIntersecting;
+      update();
+    }));
     if (offer) observer.observe(offer);
+    if (fim) observer.observe(fim);
     window.addEventListener('scroll', update, { passive: true }); update();
     return () => { observer.disconnect(); window.removeEventListener('scroll', update); };
   }, []);
@@ -384,7 +391,7 @@ function Index() {
           <p className="hero-copy">Solte o arquivo Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado e pronto pra postar.</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada vídeo abaixo saiu de um pedido de uma frase.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">Feito com o Modo Editor</span><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada efeito abaixo foi a IA que fez, a partir de um pedido em português.</p></div>
           <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor" data-clip-grupo><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip grupo src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
         </section>
         <LiveDemo />

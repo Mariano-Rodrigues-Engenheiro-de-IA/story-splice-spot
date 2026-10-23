@@ -149,7 +149,7 @@ export function ModeSwitch() {
           </button>
         </div>
         <div className="mode-body">
-          <div className="mode-phone"><Clip src={on ? siteConfig.videos.cenas.comModo : siteConfig.videos.cenas.semModo} preset={on ? 'pronto' : 'bruto'} opts={{ scene: 'blue', offset: 3 }} /></div>
+          <div className="mode-phone">{on ? <Clip key="com" src={siteConfig.videos.cenas.comModo} preset="pronto" opts={{ scene: 'blue', offset: 3 }} /> : <Clip key="sem" preset="bruto" opts={{ scene: 'blue', offset: 3 }} label="Exemplo genérico de vídeo sem o Modo Editor" />}</div>
           <ul className="mode-list">
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
@@ -310,7 +310,7 @@ export function Creator({ name, video }: { name: string; video: string }) {
       <div className="creator-copy reveal">
         <span className="eyebrow">Quem grava</span>
         <h2>Os vídeos desta página <em>são meus.</em></h2>
-        <p>Eu gravei cada um deles no celular e mandei pra IA com o Modo Editor. A edição é dela.</p>
+        <p>Eu gravei cada um deles e mandei pra IA com o Modo Editor. A edição é dela.</p>
         <strong>{name}</strong>
       </div>
     </section>
