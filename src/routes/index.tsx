@@ -406,7 +406,6 @@ function Index() {
         <Aulas />
         <ForWho />
         <RequestLibrary />
-        <section className="section container" id="bonus"><BonusBox /></section>
         <section className="section container" id="conta">
           <div className="section-heading reveal"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
           <Calculator />
@@ -414,6 +413,7 @@ function Index() {
         <Creator name={siteConfig.creator.name} video={siteConfig.creator.video} />
         <Testimonials />
         <WhatYouGet />
+        <section className="section container" id="bonus"><BonusBox /></section>
         <Offer />
         <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><span className="eyebrow">Dúvidas</span><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
         <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton destino="checkout" /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
