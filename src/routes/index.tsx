@@ -244,12 +244,12 @@ function Calculator() {
       <div className="calc-control"><div className="calc-label"><label>Tipo de edição</label></div>
         <div className="calc-tipos" role="radiogroup" aria-label="Tipo de edição">{tiposEdicao.map((item, k) => <button key={item.nome} type="button" role="radio" aria-checked={k === tipo} className={k === tipo ? 'on' : ''} onClick={() => setTipo(k)}><strong>{item.nome}</strong><small>{item.desc}</small></button>)}</div>
       </div>
-      <p className="fine-print">É o custo do uso da IA no seu plano pago do ChatGPT ou do Claude (a partir de US$ 20 por mês). Não é o preço do Modo Editor, que você paga uma vez só.</p>
+      <div className="calc-sem-extra"><CheckCircle2 size={18} /><p><strong>Você não paga nada a mais por vídeo.</strong> Só o plano da sua IA (ChatGPT ou Claude, a partir de US$ 20 por mês). A estimativa mostra quanto desse plano cada vídeo usa.</p></div>
     </div>
     <div className="calc-result" aria-live="polite">
-      <p className="calc-rotulo">Estimativa por vídeo</p>
-      <strong className="calc-faixa">R$ <NumberTicker value={de} format={v => String(Math.round(v))} /> <span className="calc-a">a</span> R$ <NumberTicker value={ate} format={v => String(Math.round(v))} /></strong>
-      <p>para editar um vídeo de {duracaoTexto(minutos)}, edição {t.nome.toLowerCase()}. Muda com cada vídeo e com os ajustes que você pedir.</p>
+      <p className="calc-rotulo">Quanto do seu plano cada vídeo usa</p>
+      <strong className="calc-faixa">R$ {de} <span className="calc-a">a</span> R$ {ate}</strong>
+      <p>estimados para um vídeo de {duracaoTexto(minutos)}, edição {t.nome.toLowerCase()}. Já está dentro da mensalidade do seu plano: não vem cobrança separada. Muda com cada vídeo e com os ajustes que você pedir.</p>
       <p className="calc-caso"><b>Caso real:</b> um vídeo de 1:50 cheio de efeitos, com mapa de satélite, saiu por R$ 8. Um editor cobraria de R$ 200 a R$ 300.</p>
     </div></div>;
 }
@@ -427,7 +427,7 @@ function Index() {
         <ForWho />
         <RequestLibrary />
         <section className="section container" id="conta">
-          <div className="section-heading reveal"><span className="eyebrow">Custo por vídeo</span><h2>Quanto sai cada vídeo <em>editado com IA?</em></h2><p>Escolha a duração e o tipo de edição e veja quanto você gasta no seu plano da IA, por vídeo.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">Custo por vídeo</span><h2>Quanto sai cada vídeo <em>editado com IA?</em></h2><p>Você só paga o plano da sua IA. Escolha a duração e o tipo de edição e veja quanto desse plano cada vídeo usa.</p></div>
           <Calculator />
         </section>
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
