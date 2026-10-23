@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Check, Clapperboard, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
+  ArrowUp, Building2, Check, Clapperboard, Code2, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -293,18 +293,28 @@ export function WhatYouGet() {
   );
 }
 
-/* ───────────── Quem grava (only with a real video of the owner) ───────────── */
+/* ───────────── Quem está por trás (foto do produtor + um vídeo dele editado pela IA) ───────────── */
 
-export function Creator({ name, video }: { name: string; video: string }) {
-  if (!video) return null;
+export function Creator({ name, photo, video }: { name: string; photo: string; video: string }) {
+  if (!photo && !video) return null;
   return (
-    <section className="section container creator" id="quem">
-      <div className="creator-video reveal"><Clip src={video} label={`Vídeo de ${name}`} /></div>
-      <div className="creator-copy reveal">
-        <span className="eyebrow">Quem grava</span>
-        <h2>Os vídeos desta página <em>são meus.</em></h2>
-        <p>Eu gravei cada um deles e mandei pra IA com o Modo Editor. A edição é dela.</p>
-        <strong>{name}</strong>
+    <section className="section container produtor" id="quem">
+      <div className="produtor-foto reveal">
+        {photo && <img src={photo} alt={`${name}, criador do Modo Editor`} width={820} height={1024} loading="lazy" decoding="async" />}
+        <span className="produtor-tag"><i className="record-dot" />Criador do Modo Editor</span>
+        {video && <div className="produtor-video"><Clip src={video} label={`Vídeo de ${name} editado pela IA`} /><small>editado pela IA</small></div>}
+      </div>
+      <div className="produtor-texto reveal">
+        <span className="eyebrow">Quem está por trás</span>
+        <h2>Prazer, eu sou o <em>{name}.</em></h2>
+        <p className="produtor-cargo">Creator e estrategista de IA</p>
+        <p>Já criei sistemas, softwares, SaaS, aplicativos e sites. Hoje estou mergulhado na produção de conteúdo com IA, e o Modo Editor nasceu disso: é o mesmo jeito que eu uso para editar os meus vídeos todos os dias.</p>
+        <p>Os vídeos desta página são meus, e a edição é da IA. Temos alunos espalhados pelo Brasil inteiro e empresas de todo o país que confiam no nosso trabalho.</p>
+        <ul className="produtor-selos">
+          <li><GraduationCap size={16} />Alunos em todo o Brasil</li>
+          <li><Building2 size={16} />Empresas que confiam no nosso trabalho</li>
+          <li><Code2 size={16} />Sistemas, SaaS e apps criados</li>
+        </ul>
       </div>
     </section>
   );

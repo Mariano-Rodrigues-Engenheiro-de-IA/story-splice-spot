@@ -44,8 +44,8 @@ export const siteConfig = {
   demo: { cuts: 68, rawLength: '5:09', editedLength: '1:50', secondsSaved: 199 },
   /** Números reais do vídeo de vendas (gravação de 17/10/2026), usados na demonstração "ao vivo" com as cenas dele. */
   vslDemo: { cuts: 119, rawLength: '13:13', editedLength: '5:25' },
-  /** Owner section. Shown only when a real video of the owner is set. */
-  creator: { name: 'Mariano Rodrigues', video: '/videos/cenas/criador.mp4' },
+  /** Seção do produtor: foto (public/img) e um vídeo dele editado pela IA no canto da foto. */
+  creator: { name: 'Mariano Rodrigues', photo: '/img/mariano.webp', video: '/videos/cenas/criador.mp4' },
   /** Only real, authorized testimonials. Empty list hides the section. */
   testimonials: [] as Testimonial[],
   /** Depoimentos em vídeo (reais e autorizados). Lista vazia esconde o bloco. */
