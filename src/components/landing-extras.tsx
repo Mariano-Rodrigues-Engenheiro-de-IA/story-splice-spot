@@ -276,7 +276,6 @@ export function RequestLibrary() {
 /* ───────────── O que você recebe ───────────── */
 
 export function WhatYouGet() {
-  const [ref, inView] = useInView<HTMLDivElement>('-20% 0px');
   return (
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
@@ -284,7 +283,7 @@ export function WhatYouGet() {
         <h2>Não é só um arquivo. <em>É o caminho inteiro.</em></h2>
         <p>Você entra na área de membros e encontra tudo pra editar o seu primeiro vídeo com IA ainda hoje.</p>
       </div>
-      <div className="reveal"><div ref={ref} className={`unbox ${inView ? 'open' : ''}`}>
+      <div className="reveal"><div className="unbox">
         <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora à área de membros</strong><small>o login chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
         <div className="unbox-files">
           <div className="unbox-file principal">
