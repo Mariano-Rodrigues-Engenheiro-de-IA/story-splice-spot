@@ -615,3 +615,22 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .produtor-texto { text-align: center; }
   .produtor-texto > p:not(.produtor-cargo) { font-size: 13px; }
 }
+
+/* Custo por vídeo: tipo de edição e faixa estimada */
+.calc-tipos { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; }
+.calc-tipos button { display: grid; gap: 3px; text-align: left; padding: 11px 12px; border-radius: 12px; border: 1px solid var(--border); background: var(--background); color: var(--muted-foreground); cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
+.calc-tipos button strong { font-size: 12px; color: var(--foreground); }
+.calc-tipos button small { font-size: 10px; line-height: 1.35; }
+.calc-tipos button.on { border-color: var(--ready); background: oklch(.828 .149 176 / .1); color: var(--foreground); }
+.calc-rotulo { font-family: var(--font-mono); font-size: 9px !important; letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 8px !important; }
+.calc-result .calc-faixa { color: var(--ready); font-size: 40px; white-space: nowrap; }
+.calc-faixa .calc-a { font-family: var(--font-editorial); font-style: italic; font-weight: 400; color: var(--muted-foreground); font-size: .6em; }
+.calc-result .calc-caso { border-top: 1px solid var(--border); padding-top: 16px; margin-bottom: 0; color: var(--foreground); }
+.calc-caso b { color: var(--ready); font-weight: 600; }
+@media (max-width: 560px) {
+  .calc-tipos { gap: 6px; }
+  .calc-tipos button { padding: 10px 8px; }
+  .calc-tipos button strong { font-size: 11px; }
+  .calc-tipos button small { font-size: 9px; }
+  .calc-result .calc-faixa { font-size: 34px; }
+}

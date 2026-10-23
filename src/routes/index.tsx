@@ -27,7 +27,6 @@ export const Route = createFileRoute('/')({
 });
 
 const words = ['treinar.', 'almoçar.', 'passear.', 'dormir.', 'viver.'];
-const brl = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }).format(value);
 const brlCents = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 const purchaseHref = siteConfig.checkoutUrl || '#oferta';
 
@@ -224,21 +223,35 @@ function BonusBox() {
   return <div className="bonus-box border-beam" ref={box}><div><span className="bonus-badge"><Lock size={11} /> BÔNUS</span><BonusCountdown /><h2>O Arquivo<br />Secreto <em>do Roteiro.</em></h2><p>Um segundo arquivo, pra usar antes de gravar. Você cola o seu roteiro e a IA devolve com gancho mais forte, fala mais clara e um final que chama pra ação.</p><ul className="bonus-list"><li>Gancho nos 3 primeiros segundos</li><li>Frases curtas, fáceis de falar</li><li>Chamada pra ação no final</li></ul></div>
     <div className="script-demo"><span className="eyebrow">Seu roteiro</span><p className="script-old">{before}</p><div className="after-label">↓ DEPOIS DO ARQUIVO SECRETO</div><strong aria-label={after}>{words.map((word, i) => <span key={`${example}-${i}`} className={i < shown ? 'gen-word on' : 'gen-word'}>{word} </span>)}</strong><Button variant="ghost" size="sm" className="script-next" onClick={() => setExample(current => (current + 1) % scripts.length)}><RefreshCw size={10} />Outro exemplo</Button></div></div>;
 }
+/** Custo de cada vídeo no plano da IA, com os números que o Mariano mostra na aula "Quanto custa editar com IA":
+ *  simples (corte e legenda) de até 1 min sai de R$ 2 a 5; longo ou detalhado, com 3D, de R$ 8 a 15;
+ *  casos reais: 1:50 cheio de efeitos = R$ 8 e 4 min = R$ 12. Cada tipo cresce um pouco por minuto a mais. */
+const tiposEdicao = [
+  { nome: 'Simples', desc: 'cortes e legenda', base: [2, 5], porMinuto: [0.6, 1.2] },
+  { nome: 'Com efeitos', desc: 'zoom, títulos, trilha', base: [4, 8], porMinuto: [1, 1.6] },
+  { nome: 'Detalhado', desc: '3D, mapas, motion', base: [6, 10], porMinuto: [1.5, 1.6] },
+] as const;
+const duracaoTexto = (min: number) => min < 1 ? '30 s' : `${Math.floor(min)}${min % 1 ? ':30' : ''} min`;
 function Calculator() {
-  const [videos, setVideos] = useState(12);
-  const [minutes, setMinutes] = useState(90);
-  const [cost, setCost] = useState(60);
-  const hours = videos * Math.max(0, minutes - 10) / 60;
-  const payback = cost > 0 ? Math.ceil(siteConfig.price / cost) : 0;
-  const duration = `${Math.floor(minutes / 60)}h${String(minutes % 60).padStart(2, '0')}`.replace(/^0h/, '').replace(/h00$/, 'h');
-  const controls = [
-    { label: 'Vídeos por mês', value: videos, min: 1, max: 60, step: 1, display: String(videos), set: setVideos },
-    { label: 'Tempo editando cada um', value: minutes, min: 15, max: 240, step: 5, display: minutes < 60 ? `${minutes} min` : duration, set: setMinutes },
-    { label: 'Quanto paga a um editor por vídeo', value: cost, min: 0, max: 300, step: 5, display: brl(cost), set: setCost },
-  ];
-  return <div className="calculator"><div>{controls.map(control => <div className="calc-control" key={control.label}><div className="calc-label"><label>{control.label}</label><strong>{control.display}</strong></div><Slider aria-label={control.label} value={[control.value]} onValueChange={value => control.set(value[0] ?? control.min)} min={control.min} max={control.max} step={control.step} /></div>)}<p className="fine-print">Estimativa com os seus números, considerando cerca de 10 minutos por vídeo com a IA. O tempo real muda com o tipo de vídeo.</p></div>
-    <div className="calc-result" aria-live="polite"><strong className="hours"><NumberTicker value={hours} format={v => `${v.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} h`} /></strong><p>por mês de volta pra você</p><strong><NumberTicker value={videos * cost} format={brl} /></strong><p>por mês que deixam de ir pro editor</p>
-      <p>{cost > 0 ? <>R$ {siteConfig.price} uma vez. Se paga com <b>{payback} {payback === 1 ? 'vídeo' : 'vídeos'}</b> que você deixa de mandar pro editor.</> : <>São <b>{Math.round(hours * 12).toLocaleString('pt-BR')} {Math.round(hours * 12) === 1 ? 'hora' : 'horas'} por ano</b> de volta na sua agenda.</>}</p></div></div>;
+  const [minutos, setMinutos] = useState(1);
+  const [tipo, setTipo] = useState(1);
+  const t = tiposEdicao[tipo] ?? tiposEdicao[1];
+  const extra = Math.max(0, minutos - 1);
+  const de = Math.floor(t.base[0] + t.porMinuto[0] * extra);
+  const ate = Math.ceil(t.base[1] + t.porMinuto[1] * extra);
+  return <div className="calculator"><div>
+      <div className="calc-control"><div className="calc-label"><label>Duração do vídeo</label><strong>{duracaoTexto(minutos)}</strong></div><Slider aria-label="Duração do vídeo" value={[minutos]} onValueChange={v => setMinutos(v[0] ?? 1)} min={0.5} max={10} step={0.5} /></div>
+      <div className="calc-control"><div className="calc-label"><label>Tipo de edição</label></div>
+        <div className="calc-tipos" role="radiogroup" aria-label="Tipo de edição">{tiposEdicao.map((item, k) => <button key={item.nome} type="button" role="radio" aria-checked={k === tipo} className={k === tipo ? 'on' : ''} onClick={() => setTipo(k)}><strong>{item.nome}</strong><small>{item.desc}</small></button>)}</div>
+      </div>
+      <p className="fine-print">É o custo do uso da IA no seu plano pago do ChatGPT ou do Claude (a partir de US$ 20 por mês). Não é o preço do Modo Editor, que você paga uma vez só.</p>
+    </div>
+    <div className="calc-result" aria-live="polite">
+      <p className="calc-rotulo">Estimativa por vídeo</p>
+      <strong className="calc-faixa">R$ <NumberTicker value={de} format={v => String(Math.round(v))} /> <span className="calc-a">a</span> R$ <NumberTicker value={ate} format={v => String(Math.round(v))} /></strong>
+      <p>para editar um vídeo de {duracaoTexto(minutos)}, edição {t.nome.toLowerCase()}. Muda com cada vídeo e com os ajustes que você pedir.</p>
+      <p className="calc-caso"><b>Caso real:</b> um vídeo de 1:50 cheio de efeitos, com mapa de satélite, saiu por R$ 8. Um editor cobraria de R$ 200 a R$ 300.</p>
+    </div></div>;
 }
 function DepoVideo({ name, role, quote, video }: { name: string; role: string; quote: string; video: string }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -414,7 +427,7 @@ function Index() {
         <ForWho />
         <RequestLibrary />
         <section className="section container" id="conta">
-          <div className="section-heading reveal"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">Custo por vídeo</span><h2>Quanto sai cada vídeo <em>editado com IA?</em></h2><p>Escolha a duração e o tipo de edição e veja quanto você gasta no seu plano da IA, por vídeo.</p></div>
           <Calculator />
         </section>
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
