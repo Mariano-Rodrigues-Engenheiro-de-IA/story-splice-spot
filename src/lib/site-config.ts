@@ -1,5 +1,7 @@
 // Single place to configure the sales page. Leave fields empty until the real values exist.
 export type Testimonial = { result: string; quote: string; name: string; handle: string };
+/** Depoimento em vídeo (real e autorizado): vídeo vertical em public/videos, com a capa .webp ao lado. */
+export type VideoTestimonial = { name: string; role: string; quote: string; video: string };
 
 export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
@@ -46,6 +48,15 @@ export const siteConfig = {
   creator: { name: 'Mariano Rodrigues', video: '/videos/cenas/criador.mp4' },
   /** Only real, authorized testimonials. Empty list hides the section. */
   testimonials: [] as Testimonial[],
+  /** Depoimentos em vídeo (reais e autorizados). Lista vazia esconde o bloco. */
+  videoTestimonials: [
+    {
+      name: 'Isaque',
+      role: 'aluno do Modo Editor',
+      quote: 'Depois que eu deixei o primeiro vídeo do jeito que eu gostei, o segundo e o terceiro vieram com muito mais facilidade.',
+      video: '/videos/depo-isaque.mp4',
+    },
+  ] as VideoTestimonial[],
   /** WhatsApp de dúvidas (DDI + DDD + número, só dígitos). Vazio = sem botão flutuante. */
   whatsapp: '5561983012868',
   legal: {

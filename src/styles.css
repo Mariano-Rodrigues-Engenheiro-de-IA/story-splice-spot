@@ -233,6 +233,24 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .spin-seal > span { font-family: var(--font-editorial); font-size: 30px; color: var(--foreground); }
 .spin-ring { position: absolute; inset: 0; animation: beam-spin 14s linear infinite; }
 .spin-ring text { fill: var(--ready); font-family: var(--font-mono); font-size: 8.4px; }
+/* depoimento em vídeo: a frase ao lado do vídeo (no celular, a frase em cima e o vídeo menor) */
+.depo-videos { display: flex; flex-direction: column; gap: 24px; align-items: center; }
+.depo-video { margin: 0; display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 300px); gap: 28px; align-items: center; justify-content: center; }
+.depo-tela { position: relative; }
+.depo-tela video { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 18px; border: 1px solid var(--border); background: #000; box-shadow: 0 24px 60px -30px rgba(0,0,0,.8); }
+.depo-play { position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; border-radius: 50%; border: 0; display: grid; place-items: center; cursor: pointer; color: #fff; background: var(--primary); box-shadow: 0 0 0 10px rgba(255,255,255,.12), 0 12px 30px rgba(0,0,0,.5); transition: transform .15s; }
+.depo-play:hover { transform: scale(1.06); }
+.depo-play svg { width: 30px; height: 30px; margin-left: 4px; fill: currentColor; }
+.depo-play:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
+.depo-video blockquote { margin: 0 0 14px; font-size: 18px; line-height: 1.5; color: var(--foreground); text-wrap: balance; }
+.depo-video figcaption span { color: var(--muted-foreground); font-size: 13px; }
+.depo-video figcaption strong { color: var(--foreground); }
+@media (max-width: 720px) {
+  .depo-video { grid-template-columns: minmax(0, 240px); gap: 18px; text-align: center; justify-items: center; }
+  .depo-video figcaption { max-width: 320px; }
+  .depo-tela { width: 240px; }
+  .depo-video blockquote { font-size: 16px; }
+}
 .testimonial-card { flex: 0 0 280px; margin: 0; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; }
 .testimonial-card strong { color: var(--ready); font-size: 18px; display: block; }
 .testimonial-card blockquote { margin: 12px 0 16px; color: var(--muted-foreground); font-size: 12px; line-height: 1.7; }

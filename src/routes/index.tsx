@@ -240,11 +240,27 @@ function Calculator() {
     <div className="calc-result" aria-live="polite"><strong className="hours"><NumberTicker value={hours} format={v => `${v.toLocaleString('pt-BR', { maximumFractionDigits: 1 })} h`} /></strong><p>por mês de volta pra você</p><strong><NumberTicker value={videos * cost} format={brl} /></strong><p>por mês que deixam de ir pro editor</p>
       <p>{cost > 0 ? <>R$ {siteConfig.price} uma vez. Se paga com <b>{payback} {payback === 1 ? 'vídeo' : 'vídeos'}</b> que você deixa de mandar pro editor.</> : <>São <b>{Math.round(hours * 12).toLocaleString('pt-BR')} {Math.round(hours * 12) === 1 ? 'hora' : 'horas'} por ano</b> de volta na sua agenda.</>}</p></div></div>;
 }
+function DepoVideo({ name, role, quote, video }: { name: string; role: string; quote: string; video: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [tocando, setTocando] = useState(false);
+  const tocar = () => { const v = ref.current; if (v) { v.controls = true; void v.play(); } };
+  return <figure className="depo-video reveal">
+    <figcaption><blockquote>“{quote}”</blockquote><span><strong>{name}</strong> · {role}</span></figcaption>
+    <div className="depo-tela">
+      {/* só baixa o vídeo quando a pessoa aperta o play; a capa .webp tem poucos KB */}
+      <video ref={ref} src={video} poster={video.replace(/\.mp4$/, '.webp')} playsInline preload="none" aria-label={`Depoimento de ${name}`}
+        onPlay={() => { setTocando(true); eventoProprio('Depoimento_Play', { nome: name }); }} onPause={() => setTocando(false)} />
+      {!tocando && <button type="button" className="depo-play" onClick={tocar} aria-label={`Assistir o depoimento de ${name}`}><Play /></button>}
+    </div>
+  </figure>;
+}
 function Testimonials() {
   const list = siteConfig.testimonials;
-  if (list.length === 0) return null;
+  const videos = siteConfig.videoTestimonials;
+  if (list.length === 0 && videos.length === 0) return null;
   return <section className="section container" id="depoimentos"><div className="section-heading reveal"><span className="eyebrow">Quem já usa</span><h2>Gente que parou<br /><em>de esperar o editor.</em></h2></div>
-    <div className="marquee" tabIndex={0} aria-label="Depoimentos de clientes"><div className="marquee-track">{[...list, ...list].map((item, i) => <figure className="testimonial-card" key={i} aria-hidden={i >= list.length}><strong>{item.result}</strong><blockquote>“{item.quote}”</blockquote><figcaption>{item.name} <span>{item.handle}</span></figcaption></figure>)}</div></div></section>;
+    {videos.length > 0 && <div className="depo-videos">{videos.map(item => <DepoVideo key={item.video} {...item} />)}</div>}
+    {list.length > 0 && <div className="marquee" tabIndex={0} aria-label="Depoimentos de clientes"><div className="marquee-track">{[...list, ...list].map((item, i) => <figure className="testimonial-card" key={i} aria-hidden={i >= list.length}><strong>{item.result}</strong><blockquote>“{item.quote}”</blockquote><figcaption>{item.name} <span>{item.handle}</span></figcaption></figure>)}</div></div>}</section>;
 }
 function SpinningSeal() {
   const text = '7 DIAS DE GARANTIA • REEMBOLSO TOTAL • ';
