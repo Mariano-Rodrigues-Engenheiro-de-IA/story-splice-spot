@@ -417,7 +417,7 @@ function Index() {
           <div className="section-heading reveal"><span className="eyebrow">Faça a conta</span><h2>Quanto a edição <em>te custa hoje?</em></h2><p>Mexa nos números e veja o tempo e o dinheiro que voltam pra você.</p></div>
           <Calculator />
         </section>
-        <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} video={siteConfig.creator.video} />
+        <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
         <Testimonials />
         <WhatYouGet />
         <section className="section container" id="bonus"><BonusBox /></section>

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Building2, Check, Clapperboard, Code2, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
+  ArrowUp, Check, Clapperboard, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -293,27 +293,27 @@ export function WhatYouGet() {
   );
 }
 
-/* ───────────── Quem está por trás (foto do produtor + um vídeo dele editado pela IA) ───────────── */
+/* ───────────── Quem está por trás (foto e a história do produtor) ───────────── */
 
-export function Creator({ name, photo, video }: { name: string; photo: string; video: string }) {
-  if (!photo && !video) return null;
+export function Creator({ name, photo }: { name: string; photo: string }) {
+  if (!photo) return null;
   return (
     <section className="section container produtor" id="quem">
       <div className="produtor-foto reveal">
-        {photo && <img src={photo} alt={`${name}, criador do Modo Editor`} width={820} height={1024} loading="lazy" decoding="async" />}
+        <img src={photo} alt={`${name}, criador do Modo Editor`} width={820} height={1024} loading="lazy" decoding="async" />
         <span className="produtor-tag"><i className="record-dot" />Criador do Modo Editor</span>
-        {video && <div className="produtor-video"><Clip src={video} label={`Vídeo de ${name} editado pela IA`} /><small>editado pela IA</small></div>}
       </div>
       <div className="produtor-texto reveal">
         <span className="eyebrow">Quem está por trás</span>
         <h2>Prazer, eu sou o <em>{name}.</em></h2>
         <p className="produtor-cargo">Creator e estrategista de IA</p>
-        <p>Já criei sistemas, softwares, SaaS, aplicativos e sites. Hoje estou mergulhado na produção de conteúdo com IA, e o Modo Editor nasceu disso: é o mesmo jeito que eu uso para editar os meus vídeos todos os dias.</p>
-        <p>Os vídeos desta página são meus, e a edição é da IA. Temos alunos espalhados pelo Brasil inteiro e empresas de todo o país que confiam no nosso trabalho.</p>
+        <p>Empreendo desde 2021 e, nesse tempo todo, nunca parei de produzir conteúdo. Sempre estive ativo na internet, e todo vídeo esbarrava no mesmo problema: ou eu editava na mão, ou pagava um editor e ficava esperando.</p>
+        <p>Quando a IA abriu essa possibilidade, comecei a testar na minha própria operação. Validei, ajustei e uso até hoje. Os vídeos desta página foram editados assim.</p>
+        <p>Aí os meus alunos começaram a pedir pra aprender do mesmo jeito. Foi daí que nasceu o Modo Editor: tudo o que eu sei de edição com IA, no método que eu uso todos os dias.</p>
         <ul className="produtor-selos">
+          <li><Sparkles size={16} />Empreendedor desde 2021</li>
+          <li><Clapperboard size={16} />Edita os próprios vídeos com IA até hoje</li>
           <li><GraduationCap size={16} />Alunos em todo o Brasil</li>
-          <li><Building2 size={16} />Empresas que confiam no nosso trabalho</li>
-          <li><Code2 size={16} />Sistemas, SaaS e apps criados</li>
         </ul>
       </div>
     </section>
