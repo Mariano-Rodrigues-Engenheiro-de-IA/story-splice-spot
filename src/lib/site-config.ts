@@ -15,8 +15,8 @@ export const siteConfig = {
     /** Depoimentos em vídeo só da /pro (o com `destaque` vira a vitrine). Vídeo vazio = não aparece. */
     videoTestimonials: [
       {
-        name: 'Dona de clínica de estética',
-        role: 'aluna do Modo Editor',
+        name: 'Sarah Rodrigues',
+        role: 'dona de clínica de estética · aluna do Modo Editor',
         quote: 'Eu tava quebrando a cabeça com vídeo, com edição, e não conseguia. Resultados extraordinários.',
         video: '/videos/depo-esteticista.mp4' as string, // capa: depo-esteticista.webp (vídeo 3:4, mandado pelo WhatsApp em 3/11)
         destaque: true,
