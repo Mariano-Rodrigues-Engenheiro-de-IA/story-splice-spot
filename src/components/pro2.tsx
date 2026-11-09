@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Check, Film, Fingerprint, Loader2 } from 'lucide-react';
+import { ArrowUp, Check, Fingerprint, Loader2 } from 'lucide-react';
 import { NumberTicker } from '@/components/number-ticker';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
@@ -58,14 +58,26 @@ function Celular({ children, className = '', escura = true, ...resto }: React.HT
 
 const passos = [
   { titulo: 'Mande o vídeo e peça o que quer', linha: 'No ChatGPT ou no Claude, pelo computador.' },
-  { titulo: 'A IA edita sozinha', linha: 'Você pode fechar e ir trabalhar.' },
+  { titulo: 'A IA edita sozinha', linha: 'Você pode sair e ir trabalhar.' },
   { titulo: 'Receba pronto pra postar', linha: 'É só passar pro celular e postar.' },
 ];
 const pedido = 'Tira as pausas, põe legenda e mostra o dente quando eu falar do canal';
 
 export function ComoFunciona() {
-  const [caixa, naTela] = useNaTela<HTMLDivElement>('0px');
+  const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
   const [passo, setPasso] = useState(0);
+  const cena = useRef<HTMLDivElement>(null);
+  const [escala, setEscala] = useState(0.488);
+  // o MacBook tem 740 px de largura no desenho original: a cena mede a própria largura e reduz o aparelho inteiro
+  useEffect(() => {
+    const el = cena.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const medir = () => setEscala(el.clientWidth / 740);
+    medir();
+    const ro = new ResizeObserver(medir);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const [letras, setLetras] = useState(0);
   const [carga, setCarga] = useState(0);
   // anda sozinho: digita o pedido (~1,4 s), carrega a edição (~2,8 s), mostra o vídeo pronto no celular (4 s)
@@ -84,7 +96,7 @@ export function ComoFunciona() {
     <section className="section container p2-como" id="como-funciona">
       <div className="section-heading reveal">
         <h2>Como <em>funciona?</em></h2>
-        <p>Você coloca o Modo Editor no seu ChatGPT ou Claude uma vez, seguindo a aula. Depois, todo vídeo é assim:</p>
+        <p>Você coloca o Modo Editor no ChatGPT ou no Claude uma vez. Depois, todo vídeo é assim:</p>
       </div>
       <div className="p2-como-corpo reveal" ref={caixa}>
         <ol className="p2-etapas" aria-label="Passos">
@@ -98,34 +110,45 @@ export function ComoFunciona() {
           ))}
         </ol>
         <div className="p2-etapa-texto" key={passo}><strong>{passo + 1}. {atual.titulo}</strong><span>{atual.linha}</span></div>
-        <div className={`p2-cena passo-${passo}`}>
-          {/* o notebook: o pedido e a IA editando (sem mostrar o resultado) */}
-          <div className="p2-note" aria-hidden="true">
-            <div className="p2-note-tampa">
-              <span className="p2-note-cam" />
-              <div className="p2-note-tela">
-                <div className="p2-app-topo"><span className="p2-semaforo"><i /><i /><i /></span><LogoChatGPT /><LogoClaude /><span>Sua IA · Modo Editor ativo</span></div>
-                <div className="p2-app-corpo">
-                  {letras > 0 && (
-                    <div className="p2-msg-eu">
-                      <span className="p2-arquivo"><Film size={13} /> gravacao.mp4</span>
-                      <p>{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>
-                    </div>
-                  )}
-                  {passo >= 1 && (
-                    <div className="p2-msg-ia">
-                      <span className="p2-msg-ia-ico">{passo === 1 ? <Loader2 size={14} className="p2-girando" /> : <Check size={14} />}</span>
-                      <div>
-                        <strong>{passo === 1 ? 'A IA está editando o seu vídeo…' : 'Pronto! Seu vídeo foi editado.'}</strong>
-                        <span className="p2-carga"><i style={{ width: `${passo === 1 ? carga : 100}%` }} /></span>
-                        <small>{passo === 1 ? `${carga}%` : '100%'}</small>
+        <div className={`p2-cena passo-${passo}`} ref={cena} style={{ height: Math.round(434 * escala + 92), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
+          {/* MacBook Pro (devices.css, MIT) com a tela no estilo do chat do Claude: o pedido e a IA editando, sem mostrar o resultado */}
+          <div className="p2-mac" aria-hidden="true">
+            <div className="device device-macbook-pro" style={{ transform: `scale(${escala})` }}>
+              <div className="device-frame">
+                <div className="device-screen p2-claude">
+                  <aside className="p2-cl-lado">
+                    <span className="p2-cl-nova"><b>+</b>Novo chat</span>
+                    <small>Recentes</small>
+                    <span className="p2-cl-item on">Vídeo do consultório</span>
+                    <span className="p2-cl-item">Legenda do Reels</span>
+                    <span className="p2-cl-item">Corte da aula de ontem</span>
+                    <span className="p2-cl-item">Antes e depois</span>
+                    <span className="p2-cl-conta"><i>M</i>Plano Pro</span>
+                  </aside>
+                  <div className="p2-cl-main">
+                    <div className="p2-cl-topo"><LogoChatGPT /><LogoClaude /><span>Modo Editor ativo</span></div>
+                    <div className="p2-cl-conversa">
+                      <div className="p2-cl-voce">
+                        <span className="p2-cl-anexo"><img src={capa(siteConfig.videos.cenas.aoVivoBruto)} alt="" width={27} height={48} /><span><b>gravacao.mp4</b><small>Vídeo do celular</small></span></span>
+                        {letras > 0 && <p>{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>}
                       </div>
+                      {passo >= 1 && (
+                        <div className="p2-cl-ia">
+                          <span className="p2-cl-ia-ico"><LogoClaude /></span>
+                          <div>
+                            <p>{passo === 1 ? 'Editando o seu vídeo…' : 'Pronto! Seu vídeo foi editado.'}</p>
+                            <span className="p2-cl-carga"><i style={{ width: `${passo === 1 ? carga : 100}%` }} /></span>
+                            <small>{passo === 1 ? <><Loader2 className="p2-girando" /> {carga}%</> : <><Check /> 100%</>}</small>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
+                    <div className="p2-cl-entrada"><b>+</b><span>Responder…</span><i><ArrowUp /></i></div>
+                  </div>
                 </div>
               </div>
+              <div className="device-stripe" /><div className="device-header" /><div className="device-sensors" /><div className="device-btns" /><div className="device-power" />
             </div>
-            <div className="p2-note-base" />
           </div>
           {/* o celular: o vídeo pronto pra postar */}
           <div className="p2-cena-cel">
