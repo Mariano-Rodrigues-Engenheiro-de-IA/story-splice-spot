@@ -1026,3 +1026,6 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-prints { columns: 2 150px; column-gap: 12px; margin-top: 28px; }
 .pro2 .p2-prints img { display: block; width: 100%; margin-bottom: 12px; border-radius: 14px; border: 1px solid var(--border); break-inside: avoid; }
 .pro2 .p2-cartao-tela .p2-video { background: transparent; }
+.pro2 .lamp-content h2.p2-fim-titulo { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.pro2 .lamp-content h2.p2-fim-titulo > span { white-space: nowrap; font-size: clamp(19px, 5.4vw, 42px); line-height: 1.15; font-weight: 650; }
+.pro2 .lamp-content h2.p2-fim-titulo > em { white-space: nowrap; font-size: clamp(28px, 8.4vw, 58px); line-height: 1.1; }
