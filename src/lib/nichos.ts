@@ -31,7 +31,7 @@ export type Nicho = {
 export const nichoPadrao: Nicho = {
   slug: '',
   selo: 'Funciona no ChatGPT e no Claude',
-  titulo: ['Vídeos profissionais todo dia,', 'sem editar nada.'],
+  titulo: ['A IA edita seus vídeos', 'enquanto você trabalha.'],
   frase: 'Você grava no celular. O Modo Editor corta os erros, legenda e coloca na tela o que você explica. Volta pronto em minutos.',
   publico: '',
   galeriaPrimeiro: 'Explicação em 3D',
@@ -44,7 +44,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'psicologo',
     selo: 'Pra psicólogos e terapeutas que postam',
-    titulo: ['Vídeos que o paciente entende,', 'prontos em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'e o paciente entende.'],
     frase: 'Você grava no consultório como fala com o paciente. A IA corta, legenda e coloca na tela o sintoma, o padrão, a saída. Sem editor, sem programa de edição.',
     publico: 'Psicólogos e terapeutas',
     galeriaPrimeiro: 'Objeto 3D na mão',
@@ -61,7 +61,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'nutricionista',
     selo: 'Pra nutricionistas que postam',
-    titulo: ['Vídeos que o paciente entende,', 'prontos em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'e o paciente entende.'],
     frase: 'Você grava explicando o prato, a troca, a quantidade. A IA corta, legenda e coloca tudo na tela. Sem editor, sem programa de edição.',
     publico: 'Nutricionistas',
     galeriaPrimeiro: 'Título atrás de você',
@@ -78,7 +78,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'fisioterapeuta',
     selo: 'Pra fisioterapeutas que postam',
-    titulo: ['Vídeos que mostram por que dói,', 'prontos em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'e o paciente entende.'],
     frase: 'Você grava na clínica. A IA corta, legenda e coloca na tela a coluna, o disco, o exercício certo. Sem editor, sem programa de edição.',
     publico: 'Fisioterapeutas e personais',
     galeriaPrimeiro: 'Explicação em 3D',
@@ -95,7 +95,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'dentista',
     selo: 'Pra dentistas que postam',
-    titulo: ['Vídeos que explicam o tratamento,', 'prontos em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'e o paciente entende.'],
     frase: 'Você grava no consultório. A IA corta, legenda e coloca na tela o dente em corte, a cárie, o tratamento. Sem editor, sem programa de edição.',
     publico: 'Dentistas',
     galeriaPrimeiro: 'Explicação em 3D',
@@ -112,7 +112,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'estetica',
     selo: 'Pra clínicas de estética e harmonização',
-    titulo: ['Antes e depois que vende,', 'pronto em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'de antes e depois.'],
     frase: 'Você grava na clínica e manda as fotos. A IA corta, legenda e monta o antes e depois com a região em destaque. Sem editor, sem programa de edição.',
     publico: 'Clínicas de estética',
     galeriaPrimeiro: 'Explicação em 3D',
@@ -129,7 +129,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'arquiteto',
     selo: 'Pra arquitetos e designers de interiores',
-    titulo: ['Vídeos que mostram o projeto,', 'prontos em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'e o cliente enxerga.'],
     frase: 'Você grava no projeto ou na obra. A IA corta, legenda e coloca na tela o antes e depois, a medida, a mudança. Sem editor, sem programa de edição.',
     publico: 'Arquitetos e corretores',
     galeriaPrimeiro: 'Cenário novo',
@@ -146,7 +146,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'personal',
     selo: 'Pra personais e professores de educação física',
-    titulo: ['Vídeos que mostram o movimento,', 'prontos em minutos.'],
+    titulo: ['A IA edita seus vídeos', 'e o aluno entende.'],
     frase: 'Você grava na academia. A IA corta, legenda e coloca na tela o músculo, o erro comum e o jeito certo. Sem editor, sem programa de edição.',
     publico: 'Fisioterapeutas e personais',
     galeriaPrimeiro: 'Título atrás de você',
@@ -163,7 +163,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'professor',
     selo: 'Pra quem dá aula e grava conteúdo',
-    titulo: ['Sua aula gravada vira aula pronta,', 'sem editor.'],
+    titulo: ['A IA edita as suas aulas', 'enquanto você ensina.'],
     frase: 'Você grava a aula de uma vez. A IA corta os erros, legenda, alterna o enquadramento e coloca as ilustrações no tempo da sua fala.',
     publico: 'Quem ensina',
     galeriaPrimeiro: 'Legenda que acompanha',

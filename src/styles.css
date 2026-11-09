@@ -869,3 +869,19 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* a caixa de digitar já nasce com a altura do pedido inteiro, pra não crescer enquanto o texto aparece */
 .pro .ia-entrada { align-items: flex-end; }
 .pro .ia-entrada > span:first-child { min-height: 7.2em; font-size: 14px; line-height: 1.45; display: block; }
+
+/* ── 9/11: primeira dobra em duas linhas exatas (uma por frase), cartão da foto no canto de baixo, selo do item 2 sem cortar ── */
+.pro .hero h1.hero-titulo { display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 16px 0 18px; }
+.pro .hero h1.hero-titulo > span { white-space: nowrap; font-size: clamp(24px, 7.6vw, 52px); line-height: 1.08; }
+.pro .hero h1.hero-titulo > em { white-space: nowrap; font-size: clamp(27px, 8.6vw, 58px); line-height: 1.08; width: auto; display: block; text-align: center; animation: none; }
+.pro .produtor-tag { top: auto; bottom: 14px; left: 14px; padding: 5px 10px; font-size: 11px; gap: 6px; }
+.pro .unbox-file strong { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; line-height: 1.3; }
+.pro .unbox-file strong em { margin-left: 0; white-space: nowrap; vertical-align: 0; }
+.pro .unbox-file { align-items: start; }
+/* barra fixa numa linha; cartões do "pra quem" compactos (ícone ao lado) pra página não ficar comprida no celular */
+.pro .sticky-bar p { font-size: 11px; white-space: nowrap; }
+@media (max-width: 760px) {
+  .pro .publico-item { display: grid; grid-template-columns: 36px minmax(0,1fr); gap: 12px; align-items: center; padding: 12px 14px; }
+  .pro .publico-item strong { font-size: 15px; } .pro .publico-item p { font-size: 13px; margin-top: 2px; }
+  .pro .publico.publico-8 { gap: 8px; }
+}

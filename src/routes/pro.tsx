@@ -19,9 +19,9 @@ export const Route = createFileRoute('/pro')({
   // ?p=psicologo, ?p=dentista… escolhe a porta da página (src/lib/nichos.ts); qualquer outro valor cai no padrão
   validateSearch: (search: Record<string, unknown>) => { const p = search['p']; return { p: typeof p === 'string' && p ? p : undefined }; },
   head: () => ({ meta: [
-    { title: 'Modo Editor — Vídeos profissionais todos os dias, sem editar nada.' },
+    { title: 'Modo Editor — A IA edita seus vídeos enquanto você trabalha.' },
     { name: 'description', content: `Grave explicando o que faz. A IA corta, legenda e coloca na tela o que você explica. R$ ${siteConfig.pro.price}, pagamento único e 7 dias de garantia. Ou peça a edição por vídeo.` },
-    { property: 'og:title', content: 'Modo Editor — Vídeos profissionais todos os dias, sem editar nada.' },
+    { property: 'og:title', content: 'Modo Editor — A IA edita seus vídeos enquanto você trabalha.' },
     { property: 'og:description', content: `Seu vídeo pronto, com a explicação na tela. Modo Editor: R$ ${siteConfig.pro.price}, pagamento único.` },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
@@ -341,7 +341,7 @@ function Pro() {
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
-          <h1 id="hero-title" className="hero-titulo">{nicho.titulo[0]}<br /><em>{nicho.titulo[1]}</em></h1>
+          <h1 id="hero-title" className="hero-titulo"><span>{nicho.titulo[0]}</span><em>{nicho.titulo[1]}</em></h1>
           <div className="hero-video">
             {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
           </div>
