@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Brain, Check, ShieldCheck, Clapperboard, FileText, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
+  ArrowUp, Brain, Check, Clapperboard, FileText, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
-import { nichos, type Nicho } from '@/lib/nichos';
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -63,7 +62,7 @@ export function LiveDemo() {
     <section className="section container" id="ao-vivo">
       <div className="section-heading reveal">
         <span className="eyebrow">Quanto tempo leva?</span>
-        <h2>Você grava em 10 minutos. <em>A IA edita enquanto você atende.</em></h2>
+        <h2>Você grava em 10 minutos. <em>A edição acontece enquanto você trabalha.</em></h2>
         <p>Uma gravação comum entra. Em cinco passos, sai um vídeo pronto, sem você abrir programa nenhum.</p>
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
@@ -121,9 +120,9 @@ export function LiveDemo() {
 /** O que muda no vídeo com e sem o Modo Editor, dito como o profissional vê no vídeo pronto. */
 const criteria = [
   ['Os erros somem', 'a pausa em que você pensou, o "éééé" e a frase que você repetiu saem; a fala fica limpa'],
-  ['A explicação aparece na tela', 'quando você fala "três sinais", os três sinais acendem em lista; quando fala do dente, o dente aparece'],
+  ['A explicação aparece na tela', 'quando você fala "três sinais", os três sinais acendem em lista; quando fala do imóvel, a planta aparece'],
   ['Legenda certa', 'cada palavra entra na hora em que você fala, pra quem assiste sem som'],
-  ['Título com a dúvida do paciente', 'a pergunta que ele faz no consultório vira o título grande do vídeo'],
+  ['Título com a dúvida do cliente', 'a pergunta que ele sempre faz vira o título grande do vídeo'],
   ['Som e enquadramento', 'a câmera aproxima quando você enfatiza, a música fica baixinha por baixo da voz'],
 ] as const;
 
@@ -147,9 +146,9 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <span className="eyebrow">E se eu só pedir pra IA, sem o Modo Editor?</span>
-        <h2>Sozinha, ela chuta. <em>Com o Modo Editor, ela sabe.</em></h2>
-        <p>Se você pedir "edita esse vídeo" pro ChatGPT ou pro Claude, ele devolve qualquer coisa. O Modo Editor é o treinamento que você coloca nele uma vez: depois disso ele edita como um editor que entende de vídeo de consultório. Toque no botão e compare.</p>
+        <span className="eyebrow">Por que não basta usar o ChatGPT sozinho?</span>
+        <h2>Sem o Modo Editor, o ChatGPT <em>não sabe editar vídeo.</em></h2>
+        <p>Peça "edita esse vídeo" pro ChatGPT puro e ele devolve qualquer coisa, ou nada. Com o Modo Editor dentro dele, o vídeo sai com tudo isso. Toque no botão e compare.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -168,12 +167,12 @@ export function ModeSwitch() {
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
                 <span className="mode-check">{on ? <Check size={12} /> : '?'}</span>
-                <div><strong>{title}</strong><p>{on ? copy : 'a IA não sabe o que você quer e chuta'}</p></div>
+                <div><strong>{title}</strong><p>{on ? copy : 'o ChatGPT sozinho não faz'}</p></div>
               </li>
             ))}
           </ul>
         </div>
-        <div className="mode-foot"><span>{on ? 5 : 0}/5</span> {on ? 'coisas que o vídeo pronto tem' : 'coisas que o vídeo pronto tem (a IA sozinha não faz nenhuma)'}</div>
+        <div className="mode-foot"><span>{on ? 5 : 0}/5</span> {on ? 'coisas que o seu vídeo sai tendo' : 'coisas que o seu vídeo sai tendo'}</div>
       </div></div>
     </section>
   );
@@ -200,7 +199,7 @@ export function ForWho({ destaque = '' }: { destaque?: string }) {
       <div className="section-heading reveal">
         <span className="eyebrow">É pra mim?</span>
         <h2>Se você explica o seu trabalho pra alguém, <em>é pra você.</em></h2>
-        <p>Preparado pra quem atende paciente e cliente e precisa postar toda semana, mesmo com a agenda cheia.</p>
+        <p>Quem atende, ensina, vende ou cria conteúdo e precisa postar toda semana, mesmo sem tempo. Alguns exemplos:</p>
       </div>
       <div className="reveal"><div className="publico publico-8">
         {lista.map(p => (
@@ -220,7 +219,7 @@ export function ForWho({ destaque = '' }: { destaque?: string }) {
 const conversas = [
   { quem: 'Dentista', pedido: 'Corta as pausas, coloca legenda e, quando eu explicar a cárie, mostra o dente em corte do lado da minha cabeça', passos: ['Ouvi a gravação inteira e tirei as pausas', 'Achei o trecho em que você explica a cárie', 'Dente em corte ao lado de você, no tempo da fala'], video: '/videos/cenas/dente.mp4' },
   { quem: 'Psicóloga', pedido: 'Tira os meus "éééé", coloca o título "Parece grosseria, pode ser ansiedade" e, quando eu falar dos três sinais, mostra eles em lista', passos: ['Tirei as pausas e os "éééé"', 'Título grande no topo', 'Os três sinais acendem um a um enquanto você fala'], video: '/videos/cenas/titulo.mp4' },
-  { quem: 'Fisioterapeuta', pedido: 'Legenda palavra por palavra e, quando eu falar do disco entre as vértebras, mostra a coluna em 3D sobre o meu tronco', passos: ['Legenda no tempo da sua fala', 'Achei o trecho do disco', 'Coluna em 3D sobre você, só nesse trecho'], video: '/videos/cenas/cerebro.mp4' },
+  { quem: 'Corretor', pedido: 'Tira as pausas, coloca legenda e, quando eu falar do bairro, mostra a localização no mapa de satélite', passos: ['Tirei as pausas e os erros', 'Achei o trecho em que você fala do bairro', 'Mapa de satélite descendo até o bairro, nesse trecho'], video: '/videos/cenas/mapa.mp4' },
 ];
 
 export function RequestLibrary() {
@@ -244,7 +243,7 @@ export function RequestLibrary() {
       <div className="section-heading reveal">
         <span className="eyebrow">Como eu peço?</span>
         <h2>Do jeito que você pediria <em>a um editor.</em></h2>
-        <p>Em português, sem termo técnico. Veja três pedidos reais de consultório e o que a IA faz com cada um. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você em cliques.</p>
+        <p>Em português, sem termo técnico. Veja três pedidos reais e o que o Modo Editor faz com cada um. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você em cliques.</p>
       </div>
       <div className="reveal"><div className="ia-chat" ref={ref}>
         <div className="ia-topo"><span className="ia-avatar"><Sparkles size={12} /></span><strong>Sua IA</strong><small>ChatGPT ou Claude · Modo Editor ativo</small></div>
@@ -292,7 +291,7 @@ export function WhatYouGet() {
       <div className="section-heading reveal">
         <span className="eyebrow">O que eu recebo?</span>
         <h2>Você entra hoje <em>e edita o primeiro vídeo hoje.</em></h2>
-        <p>Não é um curso de edição. É um passo a passo curto, com a sua IA já preparada pra editar vídeo de consultório.</p>
+        <p>Não é um curso de edição. É um passo a passo curto pra colocar o editor dentro do seu ChatGPT e usar ainda hoje.</p>
       </div>
       <div className="reveal"><div className="unbox">
         <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora</strong><small>o login da área de membros chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
@@ -300,11 +299,11 @@ export function WhatYouGet() {
           <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>1 · Videoaulas que te guiam do zero</strong><p>Curtas e tela por tela: como preparar o computador, como colocar o Modo Editor na sua IA e como editar o seu primeiro vídeo. Quem nunca mexeu com IA acompanha.</p></div></div>
           <div className="unbox-file principal">
             <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
-            <div><strong>2 · O Modo Editor <em>o treinamento da sua IA</em></strong><p>Você coloca na sua IA uma vez, seguindo a aula. A partir daí ela passa a editar como um editor que entende de consultório: corta os erros, legenda, coloca o título com a dúvida do paciente, mostra a anatomia e o antes e depois na tela. Pronto pra psicólogo, dentista, nutri, fisio, estética e arquiteto.</p></div>
+            <div><strong>2 · O Modo Editor <em>o editor dentro do seu ChatGPT</em></strong><p>Você coloca no ChatGPT ou no Claude uma vez, seguindo a aula. A partir daí ele edita como um editor profissional: corta os erros, legenda, coloca o título com a dúvida do cliente, mostra a ilustração, o 3D, o mapa ou o antes e depois na tela.</p></div>
           </div>
           <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>3 · Gerador de Pedido</strong><p>Se você não souber o que pedir, clica nas opções (legenda, título, o que mostrar na tela) e ele escreve o pedido pra você colar na IA. Dá até pra explicar por áudio.</p></div></div>
           <div className="unbox-file"><span className="unbox-icon"><Sparkles size={20} /></span><div><strong>4 · Suporte no WhatsApp</strong><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div></div>
-          <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>Bônus · Revisão do roteiro</strong><p>Antes de gravar, você cola o que vai falar e a IA devolve com um começo mais forte e um final que chama o paciente pra agendar.</p></div></div>
+          <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>Bônus · Revisão do roteiro</strong><p>Antes de gravar, você cola o que vai falar e recebe de volta com um começo mais forte e um final que chama pra ação.</p></div></div>
         </div>
         <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>você usa a assinatura que já tem (plano pago, a partir de US$ 20/mês, contratado direto com eles)</small></div>
       </div></div>
@@ -313,57 +312,20 @@ export function WhatYouGet() {
 }
 
 
-/* ───────────── O que eu vou conseguir postar? (por profissão) ───────────── */
-
-/** A pessoa escolhe a profissão e vê 4 vídeos que pode gravar esta semana: a pergunta do paciente, o que ela fala,
- *  o que a IA coloca na tela. Com ?p= a profissão já vem escolhida. */
-export function OQueVouPostar({ inicial }: { inicial: Nicho }) {
-  const lista = nichos.filter(n => n.ideias.length);
-  const [slug, setSlug] = useState(inicial.ideias.length ? inicial.slug : 'psicologo');
-  const n = lista.find(x => x.slug === slug) ?? lista[0]!;
-  return (
-    <section className="section container" id="postar">
-      <div className="section-heading reveal">
-        <span className="eyebrow">O que eu vou conseguir postar?</span>
-        <h2>Quatro vídeos que você grava <em>esta semana.</em></h2>
-        <p>Você grava respondendo a pergunta que o paciente faz no consultório. A IA coloca a resposta na tela. Escolha a sua profissão:</p>
-      </div>
-      <div className="reveal">
-        <div className="prof-chips" role="tablist" aria-label="Profissão">
-          {lista.map(x => <button key={x.slug} type="button" role="tab" aria-selected={x.slug === n.slug} className={x.slug === n.slug ? 'on' : ''} onClick={() => setSlug(x.slug)}>{x.nome}</button>)}
-        </div>
-        <div className="ideias" key={n.slug}>
-          {n.ideias.map((v, i) => (
-            <article className="ideia" key={v.pergunta} style={{ animationDelay: `${i * 70}ms` }}>
-              <span className="ideia-num">Vídeo {i + 1}</span>
-              <h3>“{v.pergunta}”</h3>
-              <dl>
-                <div><dt>Você fala</dt><dd>{v.fala}</dd></div>
-                <div><dt>A IA coloca na tela</dt><dd>{v.tela}</dd></div>
-              </dl>
-            </article>
-          ))}
-        </div>
-        {n.regra && <p className="regra"><ShieldCheck size={16} /><span><strong>Dentro das regras do seu conselho.</strong> {n.regra}</span></p>}
-      </div>
-    </section>
-  );
-}
-
 /* ───────────── Entenda em 30 segundos ───────────── */
 
 /** O que a pessoa está comprando, dito de uma vez, pra quem nunca ouviu falar de IA editando vídeo. */
 export function Entenda() {
   const passos = [
-    ['Você já tem a ferramenta', 'O ChatGPT ou o Claude, no plano pago. É a mesma IA que você usa pra tirar dúvida. Se ainda não tem, assina direto com eles.'],
-    ['Você coloca o Modo Editor nela, uma vez', 'É um treinamento pronto. Você segue a aula de 5 minutos e a sua IA passa a saber editar vídeo de consultório: cortar, legendar, mostrar a anatomia e o antes e depois na tela.'],
-    ['Daí em diante, você só grava e pede', 'Grava no celular, manda a gravação pra sua IA e pede em português. Ela edita e devolve pronto pra postar. Quantos vídeos você quiser, sem pagar por vídeo.'],
+    ['Você já tem o ChatGPT ou o Claude', 'No plano pago. É o mesmo que você usa pra tirar dúvida. Se ainda não tem, assina direto com eles.'],
+    ['Você coloca o Modo Editor nele, uma vez', 'É um treinamento pronto. Você segue a aula de 5 minutos e o seu ChatGPT passa a saber editar vídeo como um editor profissional: cortar os erros, legendar, colocar na tela o que você explica.'],
+    ['Pronto: você tem um editor de vídeo no seu negócio', 'Todo vídeo é assim: você grava no celular, manda pra ele e pede em português. Ele edita e devolve pronto pra postar. Não cobra por vídeo, não atrasa, não tira férias.'],
   ] as const;
   return (
     <section className="section container" id="entenda">
       <div className="section-heading reveal">
         <span className="eyebrow">Como isso funciona?</span>
-        <h2>Sua IA vira <em>o seu editor de vídeo.</em></h2>
+        <h2>É como contratar um editor de vídeo <em>que trabalha dentro do seu ChatGPT.</em></h2>
         <p>Em três passos. Sem programa de edição, sem contratar ninguém.</p>
       </div>
       <div className="reveal"><ol className="entenda">

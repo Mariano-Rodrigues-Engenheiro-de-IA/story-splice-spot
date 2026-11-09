@@ -753,3 +753,26 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .regra svg { flex: none; color: var(--ready); margin-top: 2px; }
 .regra strong { color: var(--foreground); }
 @media (max-width: 760px) { .ideias { grid-template-columns: minmax(0,1fr); } .ideia { padding: 18px; } .ideia h3 { font-size: 17px; } .prof-chips { gap: 6px; } .prof-chips button { padding: 8px 12px; font-size: 12px; } }
+
+/* ── 9/11: lista numerada de exemplos de vídeo (substitui o carrossel) ── */
+.exemplos { list-style: none; margin: 0 auto; padding: 0; max-width: 900px; display: grid; gap: 16px; }
+.exemplo { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 22px; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 18px; box-shadow: var(--inner-glow); }
+.exemplo:nth-child(even) { grid-template-columns: minmax(0,1fr) 150px; } .exemplo:nth-child(even) .exemplo-cena { order: 2; }
+.exemplo-cena { aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); background: #000; position: relative; }
+.exemplo-cena .clip { position: absolute; inset: 0; }
+.exemplo-par { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.exemplo-par .clip { position: relative; }
+.exemplo-par > span { position: absolute; bottom: 8px; font-family: var(--font-mono); font-size: 8px; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: oklch(0 0 0 / .55); padding: 3px 7px; border-radius: 99px; }
+.exemplo-par > span:nth-of-type(1) { left: 8px; } .exemplo-par > span:nth-of-type(2) { right: 8px; }
+.exemplo-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--ready); }
+.exemplo h3 { font-size: 20px; line-height: 1.2; margin: 6px 0 4px; color: var(--foreground); }
+.exemplo-quem { font-size: 12px; color: var(--muted-foreground); margin-bottom: 12px; }
+.exemplo dl { margin: 0; display: grid; gap: 8px; }
+.exemplo dt { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-foreground); }
+.exemplo dd { margin: 2px 0 0; font-size: 13px; line-height: 1.55; color: var(--foreground); }
+.exemplo dl div:last-child dd { color: var(--ready); font-weight: 500; }
+@media (max-width: 760px) {
+  .exemplo, .exemplo:nth-child(even) { grid-template-columns: 110px minmax(0,1fr); gap: 14px; padding: 14px; align-items: start; }
+  .exemplo:nth-child(even) .exemplo-cena { order: 0; }
+  .exemplo h3 { font-size: 17px; } .exemplo dd { font-size: 12px; } .exemplo-quem { font-size: 11px; margin-bottom: 8px; }
+}

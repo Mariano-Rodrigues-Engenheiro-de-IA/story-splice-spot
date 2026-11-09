@@ -7,7 +7,7 @@ import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
-import { Creator, Entenda, ForWho, OQueVouPostar, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
+import { Creator, Entenda, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { MessageCircle } from 'lucide-react';
@@ -172,30 +172,25 @@ function MusicTimeline() {
     <span className="mix-agulha" />
   </div>;
 }
-/** O que a IA faz no vídeo, dito pelo uso no consultório. As cenas são dos vídeos reais desta página. */
+/** O que o Modo Editor faz no vídeo, dito pelo que a pessoa vê no vídeo pronto. As cenas são dos vídeos reais desta página. */
 const features = [
   { title: 'Tira o que você erraria na edição', copy: 'A pausa em que você pensou, o "éééé" e a frase que você repetiu somem. Você grava de uma vez, sem decorar.', icon: Scissors, type: 'cut', wide: true },
-  { title: 'Mostra a anatomia enquanto você explica', copy: 'O dente em corte, a coluna, o músculo: aparece ao seu lado só no trecho em que você fala dele.', icon: Sparkles, type: 'anatomia' },
-  { title: 'O título é a dúvida do paciente', copy: '"Isso é ansiedade?", "Por que a coluna dói ao pegar peso?": a pergunta vira o título grande do vídeo.', icon: Subtitles, type: 'titulo' },
-  { title: 'Antes e depois lado a lado', copy: 'Estética, arquitetura, odonto: as duas fotos entram juntas quando você fala do resultado, sem mexer na imagem.', icon: ImageIcon, type: 'background', wide: true },
+  { title: 'Mostra na tela o que você está explicando', copy: 'O dente, a planta do imóvel, o gráfico, o produto: aparece ao seu lado só no trecho em que você fala dele.', icon: Sparkles, type: 'anatomia' },
+  { title: 'O título é a dúvida do seu cliente', copy: '"Isso é ansiedade?", "Vale a pena financiar?": a pergunta que sempre te fazem vira o título grande do vídeo.', icon: Subtitles, type: 'titulo' },
+  { title: 'Antes e depois lado a lado', copy: 'As duas fotos entram juntas quando você fala do resultado, sem mexer na imagem.', icon: ImageIcon, type: 'background', wide: true },
   { title: 'Legenda e zoom pra quem assiste sem som', copy: 'Cada palavra acende na hora em que você fala e a câmera aproxima quando você enfatiza. A maioria assiste no mudo: é isso que segura a pessoa até o fim.', icon: ZoomIn, type: 'legenda' },
 ];
-const galleryCopy: [string, string, string][] = [
-  ['Explicação em 3D', 'quando eu explicar a cárie, mostra o dente em corte', '/videos/cenas/dente.mp4'],
-  ['Objeto 3D na mão', 'quando eu falar de ansiedade, coloca o cérebro na minha mão', '/videos/cenas/cerebro.mp4'],
-  ['Título atrás de você', 'põe a dúvida do paciente em título grande atrás de mim', '/videos/cenas/titulo.mp4'],
-  ['Legenda que acompanha', 'legenda palavra por palavra, pra quem assiste sem som', '/videos/cenas/legenda.mp4'],
-  ['Cenário novo', 'troca o fundo do meu quarto por um consultório claro', '/videos/cenas/cenario.mp4'],
-  ['Mapa de satélite', 'quando eu falar da clínica, mostra a cidade no mapa', '/videos/cenas/mapa.mp4'],
-  ['Modo cinema', 'cor de cinema e faixas pretas, mais sério', '/videos/cenas/cinema.mp4'],
-  ['Virou quadrinho', 'me transforma em personagem de quadrinho nesse trecho', '/videos/cenas/quadrinho.mp4'],
+/** Exemplos de vídeo que a pessoa pode gravar hoje: o formato, pra quem serve, o que ela grava e o que sai. Cena real de cada um. */
+const exemplos = [
+  { titulo: 'Antes e depois lado a lado', quem: 'estética, odonto, arquitetura, reforma, emagrecimento', grava: 'Você fala do resultado e manda as duas fotos.', sai: 'As duas fotos entram lado a lado na hora em que você fala, sem mexer na imagem.', par: true },
+  { titulo: 'Explicação com 3D ao seu lado', quem: 'saúde, engenharia, mecânica, qualquer coisa que a pessoa não vê', grava: 'Você explica como explica pro cliente.', sai: 'O dente, a coluna, o motor ou a casa em 3D aparece ao seu lado, só no trecho em que você fala dele.', src: '/videos/cenas/dente.mp4' },
+  { titulo: 'A dúvida do cliente vira o título', quem: 'todo mundo que responde a mesma pergunta toda semana', grava: 'Você responde a pergunta que sempre te fazem.', sai: 'A pergunta vira título grande atrás de você e a resposta acende em lista.', src: '/videos/cenas/titulo.mp4' },
+  { titulo: 'Objeto 3D na sua mão', quem: 'quem explica um produto, um órgão, uma peça', grava: 'Você fala e faz o gesto de segurar.', sai: 'O objeto em 3D aparece na sua mão e some quando você termina.', src: '/videos/cenas/cerebro.mp4' },
+  { titulo: 'Onde fica, no mapa', quem: 'corretor, clínica, loja, evento', grava: 'Você fala do bairro ou da cidade.', sai: 'O mapa de satélite desce do céu até o endereço enquanto você fala.', src: '/videos/cenas/mapa.mp4' },
+  { titulo: 'Dica rápida, limpa e legendada', quem: 'professor, nutricionista, personal, qualquer dica', grava: 'Você grava de uma vez, com erro e tudo.', sai: 'Os erros e as pausas somem, cada palavra acende na hora em que você fala.', src: '/videos/cenas/legenda.mp4' },
+  { titulo: 'Gravou em casa, saiu no escritório', quem: 'quem não tem cenário bonito pra gravar', grava: 'Você grava no quarto, na frente da parede.', sai: 'O fundo vira o consultório, o escritório ou o estúdio que você pedir, sem pano verde.', src: '/videos/cenas/cenario.mp4' },
+  { titulo: 'Vídeo institucional com cara de cinema', quem: 'apresentação da clínica, do escritório, da empresa', grava: 'Você fala da sua história ou do seu serviço.', sai: 'Cor de cinema, faixas pretas e música baixinha por baixo da voz.', src: '/videos/cenas/cinema.mp4' },
 ];
-/** Look of each animated preview (only used if a card has no video). */
-const galleryLooks: ClipOpts[] = [
-  { impact: 'A IDEIA VEM PRIMEIRO', captions: false, scene: 'blue' }, { scene: 'studio' }, { scene: 'blue', captions: false }, { scene: 'green' },
-  { letterbox: true, scene: 'warm', captions: false }, { bgSwap: true }, { scene: 'blue' }, { scene: 'studio' },
-];
-const gallery: [string, string, string][] = galleryCopy;
 const scripts = [
   ['Oi gente, tudo bem? Hoje eu vou falar um pouco sobre como editar vídeo.', 'Você grava em 2 minutos e passa 2 horas editando? Dá pra inverter isso.'],
   ['Nesse vídeo eu vou mostrar umas dicas de anúncio pra vocês.', 'Seu anúncio morre nos 3 primeiros segundos. Olha o que muda quando o gancho vem antes.'],
@@ -260,7 +255,7 @@ function SpinningSeal() {
   return <div className="spin-seal" aria-label="7 dias de garantia"><svg viewBox="0 0 100 100" className="spin-ring" aria-hidden="true"><defs><path id="seal-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs><text><textPath href="#seal-circle" textLength="238">{text}</textPath></text></svg><span>7</span></div>;
 }
 const offerItems = [
-  ['Modo Editor: o treinamento da sua IA', 'Você coloca no ChatGPT ou no Claude uma vez e ele passa a editar vídeo de consultório: corta os erros, legenda, mostra a anatomia e o antes e depois na tela.'],
+  ['Modo Editor: o editor dentro do seu ChatGPT', 'Você coloca no ChatGPT ou no Claude uma vez e ele passa a editar como um editor profissional: corta os erros, legenda, mostra na tela o que você explica.'],
   ['Videoaulas que te guiam do zero', 'Curtas, tela por tela: preparar o computador, colocar o Modo Editor na IA e editar o primeiro vídeo.'],
   ['Gerador de Pedido', 'Se não souber o que pedir, clica nas opções e ele escreve o pedido pra você.'],
   ['Suporte no WhatsApp', 'Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.'],
@@ -268,15 +263,15 @@ const offerItems = [
 ];
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><span className="eyebrow">Quanto custa?</span><h2>R$ {siteConfig.price}, <em>uma vez só.</em></h2><p>Sem mensalidade do nosso lado. Vídeos sem limite. Garantia de 7 dias.</p></div>
-    <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>Sua IA preparada pra editar vídeo de consultório, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
+    <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
       <div className="offer-price"><p className="preco-rotulo">{siteConfig.priceAfterLaunch ? 'Preço de lançamento' : 'Pagamento único'}</p><div className="price"><sup>R$</sup><Odometro valor={siteConfig.price} de={siteConfig.priceAfterLaunch || siteConfig.price} /></div>{siteConfig.priceAfterLaunch > 0 && <p className="preco-depois">Depois do lançamento: R$ {siteConfig.priceAfterLaunch}</p>}<p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span><div className="bonus-card"><span className="bonus-card-tag"><Gift size={13} /> Bônus incluído</span><strong>O Arquivo Secreto do Roteiro</strong><p>Antes de gravar, a IA revisa o seu roteiro: gancho forte nos 3 primeiros segundos, fala clara e chamada final.</p><span className="bonus-card-gratis">Vem junto, sem pagar nada a mais</span></div></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
     {siteConfig.servico.ativo && siteConfig.whatsapp && <aside className="delegar reveal"><div><strong>Prefere delegar?</strong><p>Se você não quer editar, a nossa equipe edita por vídeo, no mesmo padrão desta página. Você manda a gravação e recebe pronto.</p></div><a className="delegar-link" href={linkServico()} target="_blank" rel="noopener noreferrer" onClick={() => { evento('Contact', { content_name: 'Edição por vídeo' }); eventoProprio('Servico_WhatsApp'); }}><MessageCircle size={15} /> Quero delegar</a></aside>}</section>;
 }
 const faqItems = [
-  ['O que exatamente eu estou comprando?', 'Um treinamento pronto pra sua IA (ChatGPT ou Claude) mais as videoaulas pra colocar ele lá e editar o primeiro vídeo. Depois disso, a sua IA edita os seus vídeos de consultório: você grava, manda e pede em português. Não é um curso pra você aprender a editar e não é um programa pra instalar.'],
-  ['Serve pra quem atende paciente ou cliente?', 'Serve, e é pra isso que ele foi afinado: psicólogo, dentista, nutricionista, fisioterapeuta, estética, arquiteto. Você grava explicando como explica no consultório e pede o que quer na tela. A IA monta e devolve.'],
-  ['Dá pra mostrar na tela o que eu explico?', 'Dá. Título grande, lista de sinais, antes e depois, o dente ou a coluna em 3D, mapa, comparação de dois pratos. Você pede em português; a IA coloca no tempo da sua fala.'],
+  ['O que exatamente eu estou comprando?', 'Um treinamento pronto pro seu ChatGPT ou Claude, mais as videoaulas pra colocar ele lá e editar o primeiro vídeo. Depois disso, o seu ChatGPT edita os seus vídeos: você grava, manda e pede em português. Não é um curso pra você aprender a editar e não é um programa pra instalar.'],
+  ['Serve pra minha profissão?', 'Se você grava falando do seu trabalho, serve: saúde, estética, arquitetura, imóveis, aulas, consultoria, loja, igreja, conteúdo. Você explica como explica pro seu cliente e pede o que quer na tela.'],
+  ['Dá pra mostrar na tela o que eu explico?', 'Dá. Título grande, lista, antes e depois, um objeto ou órgão em 3D, mapa, comparação de duas opções. Você pede em português e entra no tempo da sua fala.'],
   ['Não quero editar. Vocês editam pra mim?', 'Editamos. É a edição por vídeo: você manda a gravação pelo WhatsApp e recebe pronta, no mesmo padrão desta página. O valor é por vídeo e a gente passa na conversa.'],
   ['Preciso saber editar vídeo?', 'Não. Você descreve o que quer em português e a IA faz a edição. Quem nunca abriu um editor consegue usar.'],
   ['Posso mesmo sair enquanto a IA edita?', 'Pode. Depois que você manda a gravação e o pedido, a edição segue sozinha. Na volta, o vídeo está pronto pra revisar.'],
@@ -360,8 +355,6 @@ function Index() {
   useSempreNoTopo();
   const { p } = Route.useSearch();
   const nicho = nichoPorSlug(p);
-  // a cena da profissão vem primeiro na galeria
-  const galeria = [...gallery].sort((a, b) => Number(b[0] === nicho.galeriaPrimeiro) - Number(a[0] === nicho.galeriaPrimeiro));
   const duvidas = nicho.duvida ? [nicho.duvida, ...faqItems] : faqItems;
   const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(false);
@@ -379,7 +372,7 @@ function Index() {
   return <div className="page">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#postar">O que vou postar</a><a href="#entenda">Como funciona</a><a href="#conta">Quanto gasto</a><a href="#oferta">Preço</a></nav></header>
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#galeria">Exemplos</a><a href="#entenda">Como funciona</a><a href="#conta">Quanto gasto</a><a href="#oferta">Preço</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />{nicho.selo}</div>
@@ -392,11 +385,15 @@ function Index() {
           <p className="hero-copy">{nicho.frase}</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal"><span className="eyebrow">Como fica na prática?</span><h2>Gravei no celular, pedi, <em>e voltou assim.</em></h2><p>Cada cena abaixo foi a IA que fez, a partir de um pedido em português. Ninguém abriu programa de edição.</p></div>
-          <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor" data-clip-grupo><div className="marquee-track">{[...galeria, ...galeria].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= galeria.length}><Clip grupo src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
-          <CtaMeio texto="Tudo isso a partir de uma gravação no celular e um pedido em português." />
+          <div className="section-heading reveal"><span className="eyebrow">O que eu consigo fazer com isso?</span><h2>Exemplos de vídeo que você pode gravar <em>ainda hoje.</em></h2><p>Oito formatos prontos. Você escolhe um, grava no celular e pede. Cada cena abaixo é real, feita pelo Modo Editor a partir de um pedido em português.</p></div>
+          <ol className="exemplos reveal" data-clip-grupo>
+            {exemplos.map((x, i) => <li className="exemplo" key={x.titulo}>
+              <div className="exemplo-cena">{x.par ? <div className="exemplo-par"><Clip grupo src={siteConfig.videos.cenas.fundoBruto} preset="bruto" label="Antes" /><Clip grupo src={siteConfig.videos.cenas.fundoNovo} label="Depois" /><span>Antes</span><span>Depois</span></div> : <Clip grupo src={x.src} label={x.titulo} />}</div>
+              <div className="exemplo-texto"><span className="exemplo-num">Exemplo {i + 1}</span><h3>{x.titulo}</h3><p className="exemplo-quem">Serve pra: {x.quem}</p><dl><div><dt>Você grava</dt><dd>{x.grava}</dd></div><div><dt>O vídeo sai</dt><dd>{x.sai}</dd></div></dl></div>
+            </li>)}
+          </ol>
+          <CtaMeio texto="Qualquer um desses, a partir de uma gravação no celular e um pedido em português." />
         </section>
-        <OQueVouPostar inicial={nicho} />
         <Entenda />
         <ForWho destaque={nicho.publico} />
         <Testimonials />
@@ -413,7 +410,7 @@ function Index() {
         <RequestLibrary />
         <ModeSwitch />
         <section className="section container" id="o-que-faz">
-          <div className="section-heading reveal"><span className="eyebrow">O que a IA faz no meu vídeo?</span><h2>O que você fazia na mão, <em>a IA faz sozinha.</em></h2><p>É o que o profissional precisa no dia a dia: a explicação na tela, a dúvida do paciente no título, o antes e depois. Você grava, pede e recebe pronto.</p></div>
+          <div className="section-heading reveal"><span className="eyebrow">O que ele faz no meu vídeo?</span><h2>O que você fazia na mão, <em>o Modo Editor faz sozinho.</em></h2><p>Você grava, pede e recebe pronto. É isso que acontece no meio do caminho:</p></div>
           <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'legenda' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' ? <CutTimeline /> : feature.type === 'music' ? <MusicTimeline /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'anatomia' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'anatomia' ? '/videos/cenas/dente.mp4' : feature.type === 'legenda' ? siteConfig.videos.cenas.legendaTroca : '/videos/cenas/titulo.mp4'} opts={feature.type === 'anatomia' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p></article>)}</div>
         </section>
         <LiveDemo />
