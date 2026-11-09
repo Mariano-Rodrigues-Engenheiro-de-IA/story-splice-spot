@@ -30,9 +30,9 @@ export type Nicho = {
 
 export const nichoPadrao: Nicho = {
   slug: '',
-  selo: 'Pra quem grava explicando o que faz',
-  titulo: ['Vídeo pronto toda semana,', 'mesmo com a agenda cheia.'],
-  frase: 'Você grava no celular explicando o que faz. A IA corta os erros, legenda e coloca na tela o que você está dizendo. Volta pronto em minutos, no padrão dos vídeos desta página.',
+  selo: 'Funciona no ChatGPT e no Claude',
+  titulo: ['Poste vídeos profissionais todos os dias,', 'sem editar nada.'],
+  frase: 'Você grava no celular, do seu jeito. O Modo Editor corta os erros, legenda e coloca na tela o que você está explicando. Volta pronto em minutos, no padrão dos vídeos desta página.',
   publico: '',
   galeriaPrimeiro: 'Explicação em 3D',
   nome: 'Todas',

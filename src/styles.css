@@ -785,3 +785,18 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .ia-card p { font-size: 13px; line-height: 1.6; margin-top: 4px; }
 .ias-nota { text-align: center; font-size: 12px; margin: 16px auto 0; max-width: 560px; }
 @media (max-width: 760px) { .ias { grid-template-columns: minmax(0,1fr); } }
+
+/* ── 9/11: exemplos = vídeo grande, título e uma linha (grade de 2 no celular, 4 no desktop) ── */
+.exemplos { grid-template-columns: repeat(4, minmax(0,1fr)); gap: 16px; max-width: 1000px; }
+.exemplo, .exemplo:nth-child(even) { display: block; padding: 10px 10px 16px; border-radius: 18px; }
+.exemplo:nth-child(even) .exemplo-cena { order: 0; }
+.exemplo-cena { width: 100%; border-radius: 12px; }
+.exemplo-texto { padding: 12px 4px 0; }
+.exemplo h3 { font-size: 15px; margin: 4px 0 4px; }
+.exemplo-texto > p { font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
+@media (max-width: 1000px) { .exemplos { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 760px) {
+  .exemplos { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+  .exemplo, .exemplo:nth-child(even) { display: block; padding: 8px 8px 12px; }
+  .exemplo h3 { font-size: 14px; } .exemplo-texto > p { font-size: 11px; } .exemplo-texto { padding: 10px 2px 0; }
+}

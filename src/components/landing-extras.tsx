@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Brain, Check, Clapperboard, FileText, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
+  ArrowUp, Brain, Check, Clapperboard, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -62,9 +62,9 @@ export function LiveDemo() {
   return (
     <section className="section container" id="ao-vivo">
       <div className="section-heading reveal">
-        <span className="eyebrow">Quanto tempo leva?</span>
-        <h2>Você grava em 10 minutos. <em>A edição acontece enquanto você trabalha.</em></h2>
-        <p>Uma gravação comum entra. Em cinco passos, sai um vídeo pronto, sem você abrir programa nenhum.</p>
+        <span className="eyebrow">O tempo</span>
+        <h2>Quanto tempo <em>leva?</em></h2>
+        <p>Você grava em 10 minutos. A edição acontece sozinha enquanto você trabalha, em cinco passos, sem você abrir programa nenhum.</p>
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
         <div className="live-phone">
@@ -147,9 +147,9 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <span className="eyebrow">Por que não basta usar o ChatGPT ou o Claude sozinho?</span>
-        <h2>Sem o Modo Editor, a sua IA <em>não sabe editar vídeo.</em></h2>
-        <p>Peça "edita esse vídeo" pro ChatGPT ou pro Claude puro e ele devolve qualquer coisa, ou nada. Com o Modo Editor dentro, o vídeo sai com tudo isso. Toque no botão e compare.</p>
+        <span className="eyebrow">A diferença</span>
+        <h2>Por que não basta usar o ChatGPT <em>ou o Claude sozinho?</em></h2>
+        <p>Porque sem o Modo Editor eles não sabem editar vídeo: você pede "edita esse vídeo" e volta qualquer coisa, ou nada. Com o Modo Editor dentro, o vídeo sai com tudo isso. Toque no botão e compare.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -198,9 +198,9 @@ export function ForWho({ destaque = '' }: { destaque?: string }) {
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
-        <span className="eyebrow">É pra mim?</span>
-        <h2>Se você explica o seu trabalho pra alguém, <em>é pra você.</em></h2>
-        <p>Quem atende, ensina, vende ou cria conteúdo e precisa postar toda semana, mesmo sem tempo. Alguns exemplos:</p>
+        <span className="eyebrow">Para quem é</span>
+        <h2>Isso é <em>pra mim?</em></h2>
+        <p>Se você quer postar vídeo melhor e com mais frequência, sem passar horas editando nem pagar editor, é pra você. Alguns exemplos:</p>
       </div>
       <div className="reveal"><div className="publico publico-8">
         {lista.map(p => (
@@ -242,9 +242,9 @@ export function RequestLibrary() {
   return (
     <section className="section container" id="pedidos">
       <div className="section-heading reveal">
-        <span className="eyebrow">Como eu peço?</span>
-        <h2>Do jeito que você pediria <em>a um editor.</em></h2>
-        <p>Em português, sem termo técnico. Veja três pedidos reais e o que o Modo Editor faz com cada um. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você em cliques.</p>
+        <span className="eyebrow">O pedido</span>
+        <h2>Como eu peço <em>a edição?</em></h2>
+        <p>Em português, do jeito que você pediria a um editor. Veja três pedidos reais e o que o Modo Editor faz com cada um. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você em cliques.</p>
       </div>
       <div className="reveal"><div className="ia-chat" ref={ref}>
         <div className="ia-topo"><span className="ia-avatar"><Sparkles size={12} /></span><strong>Sua IA</strong><small>ChatGPT ou Claude · Modo Editor ativo</small></div>
@@ -290,9 +290,9 @@ export function WhatYouGet() {
   return (
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
-        <span className="eyebrow">O que eu recebo?</span>
-        <h2>Você entra hoje <em>e edita o primeiro vídeo hoje.</em></h2>
-        <p>Não é um curso de edição. É um passo a passo curto pra colocar o editor dentro do seu ChatGPT ou do seu Claude e usar ainda hoje.</p>
+        <span className="eyebrow">O que vem</span>
+        <h2>O que eu <em>recebo?</em></h2>
+        <p>Tudo pra colocar o editor dentro do seu ChatGPT ou Claude e editar o primeiro vídeo ainda hoje. Não é um curso de edição.</p>
       </div>
       <div className="reveal"><div className="unbox">
         <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora</strong><small>o login da área de membros chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
@@ -304,7 +304,6 @@ export function WhatYouGet() {
           </div>
           <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>3 · Gerador de Pedido</strong><p>Se você não souber o que pedir, clica nas opções (legenda, título, o que mostrar na tela) e ele escreve o pedido pra você colar na IA. Dá até pra explicar por áudio.</p></div></div>
           <div className="unbox-file"><span className="unbox-icon"><Sparkles size={20} /></span><div><strong>4 · Suporte no WhatsApp</strong><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div></div>
-          <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>Bônus · Revisão do roteiro</strong><p>Antes de gravar, você cola o que vai falar e recebe de volta com um começo mais forte e um final que chama pra ação.</p></div></div>
         </div>
         <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>você usa a assinatura que já tem (plano pago, a partir de US$ 20/mês, contratado direto com eles)</small></div>
       </div></div>
@@ -320,9 +319,9 @@ export function QualIA() {
   return (
     <section className="section container" id="qual-ia">
       <div className="section-heading reveal">
-        <span className="eyebrow">Qual IA eu vou usar?</span>
-        <h2>A que você já usa: <em>ChatGPT ou Claude.</em></h2>
-        <p>O Modo Editor funciona nos dois. Se você já paga um deles, já tem tudo o que precisa. Se não, escolhe um e assina direto no site deles.</p>
+        <span className="eyebrow">A ferramenta</span>
+        <h2>Qual IA você <em>vai usar?</em></h2>
+        <p>ChatGPT ou Claude. O Modo Editor funciona nos dois. Se você já paga um deles, já tem tudo o que precisa. Se não, escolhe um e assina direto no site deles.</p>
       </div>
       <div className="reveal"><div className="ias">
         <div className="ia-card"><LogoChatGPT /><div><strong>ChatGPT</strong><p>Plano Plus, da OpenAI. Você abre, coloca o Modo Editor uma vez e passa a pedir as edições por ali.</p></div></div>
@@ -345,9 +344,9 @@ export function Entenda() {
   return (
     <section className="section container" id="entenda">
       <div className="section-heading reveal">
-        <span className="eyebrow">Como isso funciona?</span>
-        <h2>É como contratar um editor de vídeo <em>que trabalha dentro da sua IA.</em></h2>
-        <p>Funciona no ChatGPT e no Claude. Em três passos, sem programa de edição, sem contratar ninguém.</p>
+        <span className="eyebrow">O método</span>
+        <h2>Como isso <em>funciona?</em></h2>
+        <p>É como contratar um editor de vídeo que trabalha dentro da sua IA. Em três passos, sem programa de edição, sem contratar ninguém.</p>
       </div>
       <div className="reveal"><ol className="entenda">
         {passos.map(([t, c], i) => (
