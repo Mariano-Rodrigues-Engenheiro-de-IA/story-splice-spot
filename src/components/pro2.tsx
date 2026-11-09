@@ -351,7 +351,12 @@ export function Segure() {
     <section className="section container p2-segure" id="antes-depois">
       <div className="section-heading reveal">
         <h2>Veja como o seu vídeo <em>muda.</em></h2>
-        <p>Segure o dedo no vídeo para ver como ele foi gravado.</p>
+        <div className="p2-relogio-linha" aria-label="Gravou às 10:00, pronto pra postar às 10:20">
+          <span>Gravou às <b>10:00</b></span>
+          <i aria-hidden="true">→</i>
+          <span className="pronto">Pronto às <b><NumberTicker value={20} duration={1800} format={v => `10:${String(Math.round(v)).padStart(2, '0')}`} /></b></span>
+        </div>
+        <p>Enquanto a IA editava, você trabalhava.</p>
       </div>
       <div className="reveal" ref={caixa}>
         <Celular className={`p2-cel-segure ${mostraBruto ? 'is-bruto' : ''}`}
@@ -363,12 +368,6 @@ export function Segure() {
           <span className={`p2-selo ${mostraBruto ? '' : 'pronto'}`}>{mostraBruto ? 'Como foi gravado' : '✓ Editado pela IA'}</span>
         </Celular>
         <p className={`p2-segure-dica ${tocou ? 'tocou' : ''}`}><Fingerprint size={22} /> {segurando ? 'Agora solte' : 'Segure o dedo no vídeo'}</p>
-        <div className="p2-relogio">
-          <div><small>Você gravou às</small><strong>10:00</strong></div>
-          <span aria-hidden="true">→</span>
-          <div className="pronto"><small>Pronto pra postar às</small><strong><NumberTicker value={20} duration={1800} format={v => `10:${String(Math.round(v)).padStart(2, '0')}`} /></strong></div>
-        </div>
-        <p className="p2-relogio-nota">Enquanto a IA editava, você trabalhava.</p>
       </div>
     </section>
   );

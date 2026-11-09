@@ -1269,3 +1269,11 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-feed-item > .p2-video { position: absolute; inset: 0; }
 .pro2 .p2-feed-tag { position: absolute; z-index: 2; left: 50%; bottom: 10px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; padding: 4px 9px; border-radius: 99px; background: rgba(255, 255, 255, .95); color: var(--foreground); font-size: 12px; font-weight: 800; box-shadow: 0 6px 14px -8px rgba(0, 0, 0, .5); }
 .pro2 .p2-feed-tag > span { font-size: 13px; }
+/* veja como muda: o relógio sobe para logo abaixo do título, numa linha */
+.pro2 .p2-relogio-linha { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 14px auto 0; flex-wrap: nowrap; }
+.pro2 .p2-relogio-linha > span { display: inline-flex; align-items: baseline; gap: 6px; padding: 7px 12px; border-radius: 12px; background: var(--card); border: 1px solid var(--border); font-size: 13px; color: var(--muted-foreground); white-space: nowrap; }
+.pro2 .p2-relogio-linha b { font-family: var(--font-mono); font-size: 20px; font-weight: 700; color: var(--foreground); font-variant-numeric: tabular-nums; }
+.pro2 .p2-relogio-linha > span.pronto { border-color: color-mix(in oklch, var(--ready) 45%, transparent); }
+.pro2 .p2-relogio-linha > span.pronto b { color: var(--ready); }
+.pro2 .p2-relogio-linha > i { font-style: normal; font-size: 18px; color: var(--muted-foreground); }
+.pro2 .p2-segure .section-heading p { margin-top: 12px; font-weight: 600; color: var(--foreground); }
