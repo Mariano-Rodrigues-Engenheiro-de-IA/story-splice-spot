@@ -62,7 +62,7 @@ const passos = [
   { titulo: 'A IA edita sozinha', linha: 'Você pode sair e ir trabalhar.' },
   { titulo: 'Receba pronto pra postar', linha: 'É só passar pro celular e postar.' },
 ];
-const pedido = 'Tira as pausas, põe legenda e mostra o dente quando eu falar do canal';
+const pedido = 'Tira as pausas, põe legenda e mostra na tela o que eu explicar';
 
 /* Efeitos sonoros do "Como funciona", feitos no próprio navegador (sem arquivo): tecla, tique da lista, sininho e vush.
    O navegador só libera som depois que a pessoa toca na página (por exemplo, no vídeo); até lá, fica tudo em silêncio. */
@@ -218,12 +218,12 @@ export function ComoFunciona() {
                     <span className="p2-cl-nav"><Shapes />Biblioteca</span>
                     <small className="p2-cl-grupo">Fixados <ChevronRight /></small>
                     <small className="p2-cl-grupo">Recentes <ChevronDown /></small>
-                    {['Vídeo do consultório', 'Legenda do Reels', 'Corte da aula de ontem', 'Antes e depois da paciente', 'Roteiro da semana', 'Dúvidas dos pacientes', 'Vídeo do mapa da clínica'].map((t, i) => <span key={t} className={`p2-cl-item ${i === 0 ? 'on' : ''}`}>{t}</span>)}
+                    {['Vídeo da semana', 'Legenda do Reels', 'Corte da aula de ontem', 'Vídeo explicativo', 'Roteiro do próximo vídeo', 'Dúvidas dos clientes', 'Vídeo do lançamento'].map((t, i) => <span key={t} className={`p2-cl-item ${i === 0 ? 'on' : ''}`}>{t}</span>)}
                     <span className="p2-cl-conta"><i>M</i>Mariano <em>· Pro</em><ChevronDown /></span>
                   </aside>
                   <div className="p2-cl-main">
                     <div className="p2-cl-topo">
-                      <span className="p2-cl-titulo">Vídeo do consultório <ChevronDown /></span>
+                      <span className="p2-cl-titulo">Vídeo da semana <ChevronDown /></span>
                       <span className={`p2-cl-modo ${instalado ? '' : 'oculto'}`}><Check />Modo Editor ativo</span>
                       <span className="p2-cl-share">Compartilhar</span>
                     </div>
@@ -251,7 +251,7 @@ export function ComoFunciona() {
                           <div className="p2-cl-ia">
                             <p>{passo === 2 ? 'Combinado! Estou editando o seu vídeo agora.' : 'Pronto! O seu vídeo está editado e salvo na pasta.'}</p>
                             <ul>
-                              {['Ouvi a gravação inteira', 'Cortei as pausas e os erros', 'Coloquei a legenda', 'Coloquei o dente em 3D'].map((t, i) => {
+                              {['Ouvi a gravação inteira', 'Cortei as pausas e os erros', 'Coloquei a legenda', 'Coloquei na tela o que você explicou'].map((t, i) => {
                                 const feito = passo === 3 || carga >= (i + 1) * 24;
                                 const agora = passo === 2 && !feito && carga >= i * 24;
                                 return <li key={t} className={feito ? 'ok' : agora ? 'agora' : ''}>{feito ? <Check /> : agora ? <Loader2 className="p2-girando" /> : <i />}{t}</li>;
@@ -278,7 +278,7 @@ export function ComoFunciona() {
           <div className="p2-cena-cel">
             <span className="p2-pronto"><Check size={14} /> Pronto pra postar</span>
             <Celular className="p2-cel-mini">
-              <VideoVivo src="/videos/cenas/dente.mp4" ativo={naTela && passo === 3} perto={naTela} label="Vídeo pronto, com o dente em 3D" />
+              <VideoVivo src="/videos/pro2/generico-pronto.mp4" ativo={naTela && passo === 3} perto={naTela} label="Vídeo pronto: título atrás, objeto em 3D, gráfico e passo a passo" />
             </Celular>
           </div>
         </div>
