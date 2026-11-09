@@ -953,7 +953,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-etapas li:nth-child(1) button.on .p2-etapa-barra i { animation-duration: 3.7s; }
 .pro2 .p2-etapas li:nth-child(2) button.on .p2-etapa-barra i { animation-duration: 2.55s; }
 .pro2 .p2-etapas li:nth-child(3) button.on .p2-etapa-barra i { animation-duration: 3.1s; }
-.pro2 .p2-etapas li:nth-child(4) button.on .p2-etapa-barra i { animation-duration: 4.2s; }
+.pro2 .p2-etapas li:nth-child(4) button.on .p2-etapa-barra i { animation-duration: 10.3s; }
 .pro2 .p2-etapa-texto { text-align: center; min-height: 3.7em; display: flex; flex-direction: column; gap: 3px; animation: p2-entra .35s both; }
 .pro2 .p2-etapa-texto strong { font-size: 20px; line-height: 1.25; color: var(--foreground); }
 .pro2 .p2-etapa-texto span { font-size: 16px; color: var(--muted-foreground); }
@@ -1206,7 +1206,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-cl-barra i { margin-left: 2px; width: 13px; height: 13px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: #fff; }
 .pro2 .p2-cl-barra .p2-cl-mic { margin-left: auto; width: 7px; height: 7px; color: rgba(0, 0, 0, .55); }
 .pro2 .p2-cl-barra i svg { width: 7px; height: 7px; }
-.pro2 .p2-cena-cel { position: absolute; right: 2%; bottom: 0; width: clamp(124px, 34%, 190px); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; transform: translateY(40px) scale(.9); transition: opacity .5s, transform .55s cubic-bezier(.2, .9, .3, 1.15); pointer-events: none; }
+.pro2 .p2-cena-cel { position: absolute; right: 2%; bottom: 0; width: clamp(142px, 40%, 200px); display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; transform: translateY(40px) scale(.9); transition: opacity .5s, transform .55s cubic-bezier(.2, .9, .3, 1.15); pointer-events: none; }
 .pro2 .p2-cena.passo-3 .p2-cena-cel { opacity: 1; transform: none; }
 .pro2 .p2-pronto { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; background: var(--ready); color: #fff; font-size: 13px; font-weight: 700; padding: 6px 11px; border-radius: 99px; box-shadow: 0 10px 22px -10px rgba(0, 0, 0, .45); }
 .pro2 .p2-cel-mini { width: 100%; padding: 6px; border-radius: 26px; }
@@ -1263,3 +1263,9 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-etapa-textos { display: grid; width: 100%; }
 .pro2 .p2-etapa-textos > .p2-etapa-texto { grid-area: 1 / 1; min-height: 0; opacity: 0; transform: translateY(6px); transition: none; animation: none; }
 .pro2 .p2-etapa-textos > .p2-etapa-texto.on { opacity: 1; transform: none; transition: opacity .3s .05s, transform .3s .05s; }
+/* passo 4: o celular rola os vídeos prontos como o Reels, um por profissão */
+.pro2 .p2-feed { position: absolute; inset: 0; transition: transform .5s cubic-bezier(.3, .9, .3, 1); }
+.pro2 .p2-feed-item { position: absolute; left: 0; right: 0; height: 100%; }
+.pro2 .p2-feed-item > .p2-video { position: absolute; inset: 0; }
+.pro2 .p2-feed-tag { position: absolute; z-index: 2; left: 50%; bottom: 10px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; padding: 4px 9px; border-radius: 99px; background: rgba(255, 255, 255, .95); color: var(--foreground); font-size: 12px; font-weight: 800; box-shadow: 0 6px 14px -8px rgba(0, 0, 0, .5); }
+.pro2 .p2-feed-tag > span { font-size: 13px; }

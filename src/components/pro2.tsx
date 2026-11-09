@@ -143,6 +143,35 @@ function somVush() {
   fonte.start(t); fonte.stop(t + 0.75);
 }
 
+/** Passo 4: o celular rola um vídeo pronto a cada 2 s, como o Reels, cada um de uma profissão. */
+const FEED = [
+  { src: '/videos/karina-estria.mp4', profissao: 'Esteticista', emoji: '💆‍♀️' },
+  { src: '/videos/pro2/fisio-coluna.mp4', profissao: 'Fisioterapeuta', emoji: '🦴' },
+  { src: '/videos/cenas/dente.mp4', profissao: 'Dentista', emoji: '🦷' },
+  { src: '/videos/pro2/professor-aula.mp4', profissao: 'Professor', emoji: '📚' },
+  { src: '/videos/pro2/arquiteto-obra.mp4', profissao: 'Arquiteto', emoji: '📐' },
+];
+const TEMPO_FEED = 2000;
+function FeedCelular({ ativo, perto }: { ativo: boolean; perto: boolean }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    setI(0);
+    if (!ativo) return;
+    const id = window.setInterval(() => setI(n => Math.min(n + 1, FEED.length - 1)), TEMPO_FEED);
+    return () => window.clearInterval(id);
+  }, [ativo]);
+  return (
+    <div className="p2-feed" style={{ transform: `translateY(${-i * 100}%)` }}>
+      {FEED.map((f, k) => (
+        <div className="p2-feed-item" key={f.src} style={{ top: `${k * 100}%` }}>
+          <VideoVivo src={f.src} ativo={ativo && k === i} perto={perto && k <= i + 1} label={`Vídeo pronto de ${f.profissao}`} />
+          <span className="p2-feed-tag"><span aria-hidden="true">{f.emoji}</span>{f.profissao}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function ComoFunciona() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
   const [passo, setPasso] = useState(0);
@@ -178,7 +207,7 @@ export function ComoFunciona() {
       else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 1350);
     } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => n + 1); if (comSom() && letras % 2 === 0) somTecla(); }, 26) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
     else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 4); if (comSom() && Math.floor(nova / 24) > Math.floor(carga / 24)) somTique(); setCarga(nova); }, 110) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 350);
-    else id = window.setTimeout(() => { voltas.current += 1; setInst(0); setLetras(0); setPasso(0); }, 4200);
+    else id = window.setTimeout(() => { voltas.current += 1; setInst(0); setLetras(0); setPasso(0); }, FEED.length * TEMPO_FEED + 300);
     return () => window.clearTimeout(id);
   }, [naTela, passo, inst, letras, carga]);
   const irPara = (i: number) => { setPasso(i); setInst(i === 0 ? 0 : 2); setLetras(i <= 1 ? 0 : pedido.length); setCarga(i === 3 ? 100 : 0); };
@@ -201,7 +230,7 @@ export function ComoFunciona() {
           ))}
         </ol>
         <div className="p2-etapa-textos" aria-live="polite">{passos.map((p, i) => <div key={p.titulo} className={`p2-etapa-texto ${i === passo ? 'on' : ''}`} aria-hidden={i !== passo}><strong>{i + 1}. {p.titulo}</strong><span>{p.linha}</span></div>)}</div>
-        <div className={`p2-cena passo-${passo}`} ref={cena} style={{ height: Math.round(434 * escala + 92), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
+        <div className={`p2-cena passo-${passo}`} ref={cena} style={{ height: Math.round(434 * escala + 108), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
           {/* MacBook Pro (devices.css, MIT) com a tela no estilo do chat do Claude: o pedido e a IA editando, sem mostrar o resultado */}
           {passo === 0 && inst === 0 && <span className="p2-voa" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>}
           <span className={`p2-instalado ${passo === 0 && inst === 2 ? 'on' : ''}`} aria-hidden={!(passo === 0 && inst === 2)}><Check size={14} /> Modo Editor instalado</span>
@@ -278,7 +307,7 @@ export function ComoFunciona() {
           <div className="p2-cena-cel">
             <span className="p2-pronto"><Check size={14} /> Pronto pra postar</span>
             <Celular className="p2-cel-mini">
-              <VideoVivo src="/videos/pro2/generico-pronto.mp4" ativo={naTela && passo === 3} perto={naTela} label="Vídeo pronto: título atrás, objeto em 3D, gráfico e passo a passo" />
+              <FeedCelular ativo={naTela && passo === 3} perto={naTela && passo >= 2} />
             </Celular>
           </div>
         </div>
