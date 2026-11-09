@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { VslPlayer } from '@/components/vsl-player';
 import { Creator, QualIA, useReveal } from '@/components/landing-pro';
-import { ComoEdita, Recibo, Saidas, Segure } from '@/components/pro2';
+import { ComoEdita, Recibo, ResultadoCliente, Saidas, Segure } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
@@ -67,7 +67,7 @@ function linkServico() {
   return `https://api.whatsapp.com/send?phone=${siteConfig.whatsapp}&text=${encodeURIComponent(siteConfig.servico.mensagem)}`;
 }
 
-function DepoVideo({ name, role, quote, video, destaque }: { name: string; role: string; quote: string; video: string; destaque?: boolean }) {
+function DepoVideo({ name, role, quote, video, destaque, resultado }: { name: string; role: string; quote: string; video: string; destaque?: boolean; resultado?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [tocando, setTocando] = useState(false);
   const tocar = () => { const v = ref.current; if (v) { v.controls = true; void v.play(); } };
@@ -79,6 +79,7 @@ function DepoVideo({ name, role, quote, video, destaque }: { name: string; role:
         onPlay={() => { setTocando(true); eventoProprio('Depoimento_Play', { nome: name }); }} onPause={() => setTocando(false)} />
       {!tocando && <button type="button" className="depo-play" onClick={tocar} aria-label={`Assistir o depoimento de ${name}`}><Play /></button>}
     </div>
+    {resultado && <ResultadoCliente src={resultado} nome={name} />}
   </figure>;
 }
 

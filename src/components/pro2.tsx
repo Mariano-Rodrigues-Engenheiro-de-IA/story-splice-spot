@@ -45,6 +45,7 @@ function VideoVivo({ src, ativo, perto, className = '', label, onRef }: { src: s
 /* ───────────── 1. O que vai aparecer no seu vídeo (carrossel de saídas) ───────────── */
 
 const saidas = [
+  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', linha: 'Vídeo real da Karina, esteticista, editado com o Modo Editor.' },
   { src: '/videos/cenas/dente.mp4', titulo: 'Explicação em 3D', linha: 'O paciente entende o tratamento na hora.' },
   { src: '/videos/cenas/titulo.mp4', titulo: 'A dúvida vira título', linha: 'Você responde antes de perguntarem.' },
   { src: '/videos/cenas/cerebro.mp4', titulo: 'Objeto na sua mão', linha: 'Prende o olho de quem está rolando.' },
@@ -53,6 +54,23 @@ const saidas = [
   { src: '/videos/cenas/cenario.mp4', titulo: 'Gravou em casa, saiu no estúdio', linha: 'Sem montar cenário nenhum.' },
   { src: '/videos/cenas/cinema.mp4', titulo: 'Cara de cinema', linha: 'Pro vídeo institucional da sua marca.' },
 ];
+
+/** O vídeo que a aluna editou, tocando mudo em loop; um toque liga o som. */
+export function ResultadoCliente({ src, nome }: { src: string; nome: string }) {
+  const [caixa, naTela] = useNaTela<HTMLDivElement>('100px 0px');
+  const video = useRef<HTMLVideoElement | null>(null);
+  const [som, setSom] = useState(false);
+  const alternar = () => { const v = video.current; if (!v) return; const ligar = v.muted; v.muted = !ligar; if (ligar) { v.currentTime = 0; void v.play().catch(() => undefined); } setSom(ligar); };
+  return (
+    <div className="p2-resultado" ref={caixa}>
+      <p>O vídeo que a {nome.split(' ')[0]} editou com o Modo Editor:</p>
+      <div className="p2-resultado-tela">
+        <VideoVivo src={src} ativo={naTela} perto={naTela} label={`Vídeo editado por ${nome}`} onRef={v => { video.current = v; }} />
+        <button type="button" className="p2-ouvir" onClick={alternar}>{som ? 'Som ligado' : 'Toque para ouvir'}</button>
+      </div>
+    </div>
+  );
+}
 
 export function Saidas() {
   const [secao, naTela] = useNaTela<HTMLElement>('200px 0px');

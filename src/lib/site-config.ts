@@ -1,7 +1,7 @@
 // Single place to configure the sales page. Leave fields empty until the real values exist.
 export type Testimonial = { result: string; quote: string; name: string; handle: string };
 /** Depoimento em vídeo (real e autorizado): vídeo vertical em public/videos, com a capa .webp ao lado. */
-export type VideoTestimonial = { name: string; role: string; quote: string; video: string; destaque?: boolean };
+export type VideoTestimonial = { name: string; role: string; quote: string; video: string; destaque?: boolean; /** vídeo que a pessoa editou com o Modo Editor (aparece junto do depoimento na /pro2) */ resultado?: string };
 
 export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
@@ -15,10 +15,11 @@ export const siteConfig = {
     /** Depoimentos em vídeo só da /pro (o com `destaque` vira a vitrine). Vídeo vazio = não aparece. */
     videoTestimonials: [
       {
-        name: 'Sarah Rodrigues',
+        name: 'Karina Guimarães',
         role: 'dona de clínica de estética · aluna do Modo Editor',
         quote: 'Eu tava quebrando a cabeça com vídeo, com edição, e não conseguia. Resultados extraordinários.',
         video: '/videos/depo-esteticista.mp4' as string, // capa: depo-esteticista.webp (vídeo 3:4, mandado pelo WhatsApp em 3/11)
+        resultado: '/videos/karina-estria.mp4', // vídeo que ela editou com o Modo Editor (estria, pele em 3D)
         destaque: true,
       },
     ] as VideoTestimonial[],
