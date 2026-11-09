@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Brain, Check, Clapperboard, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
+  ArrowUp, Brain, Check, Clapperboard, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Sparkles, Stethoscope, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -63,7 +63,7 @@ export function LiveDemo() {
     <section className="section container" id="ao-vivo">
       <div className="section-heading reveal">
         <h2>Quanto tempo leva <em>para editar.</em></h2>
-        <p>Você grava em 10 minutos. A edição acontece sozinha enquanto você trabalha, em cinco passos, sem você abrir programa nenhum.</p>
+        <p>Você grava em 10 minutos. A IA edita sozinha enquanto você trabalha.</p>
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
         <div className="live-phone">
@@ -119,11 +119,11 @@ export function LiveDemo() {
 
 /** O que muda no vídeo com e sem o Modo Editor, dito como o profissional vê no vídeo pronto. */
 const criteria = [
-  ['Os erros somem', 'a pausa em que você pensou, o "éééé" e a frase que você repetiu saem; a fala fica limpa'],
-  ['A explicação aparece na tela', 'quando você fala "três sinais", os três sinais acendem em lista; quando fala do imóvel, a planta aparece'],
-  ['Legenda certa', 'cada palavra entra na hora em que você fala, pra quem assiste sem som'],
-  ['Título com a dúvida do cliente', 'a pergunta que ele sempre faz vira o título grande do vídeo'],
-  ['Som e enquadramento', 'a câmera aproxima quando você enfatiza, a música fica baixinha por baixo da voz'],
+  ['Os erros somem', 'pausas, "éééé" e frases repetidas saem'],
+  ['A explicação aparece na tela', 'o que você fala vira lista, imagem ou 3D'],
+  ['Legenda certa', 'cada palavra na hora em que você fala'],
+  ['Título com a dúvida do cliente', 'a pergunta dele em letras grandes'],
+  ['Som e enquadramento', 'zoom na ênfase e música baixinha'],
 ] as const;
 
 export function ModeSwitch() {
@@ -147,7 +147,7 @@ export function ModeSwitch() {
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
         <h2>A edição antes e depois <em>do Modo Editor.</em></h2>
-        <p>Sem o Modo Editor, o ChatGPT e o Claude não sabem editar vídeo. Com ele, o seu vídeo sai com tudo isso. Toque no botão e compare.</p>
+        <p>Sem o Modo Editor, o ChatGPT e o Claude não sabem editar vídeo. Toque no botão e compare.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -179,16 +179,20 @@ export function ModeSwitch() {
 
 /* ───────────── Para quem é ───────────── */
 
+/** Dente em traço, no mesmo desenho dos outros ícones (a biblioteca não tem um). */
+function Dente({ size = 18 }: { size?: number }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 5.6c-1.4-1.3-2.9-2.1-4.4-2.1C5.1 3.5 3.5 5.5 3.5 8c0 2 .8 3.6 1.3 5.6.5 2.2.7 6.9 2.7 6.9 1.8 0 1.5-5 4.5-5s2.7 5 4.5 5c2 0 2.2-4.7 2.7-6.9.5-2 1.3-3.6 1.3-5.6 0-2.5-1.6-4.5-4.1-4.5-1.5 0-3 .8-4.4 2.1z" /></svg>;
+}
 /** Cada cartão é uma profissão que grava explicando o que faz. Com `?p=`, o cartão da profissão vem primeiro, em destaque. */
 const personas = [
-  { icon: Brain, title: 'Psicólogos e terapeutas', copy: 'Explica o mesmo padrão dez vezes por dia. No vídeo, ninguém vê.' },
-  { icon: Smile, title: 'Dentistas', copy: 'O paciente só entende o tratamento quando enxerga o dente.' },
-  { icon: Stethoscope, title: 'Fisioterapeutas e personais', copy: 'A coluna, o músculo, o movimento certo: tem que aparecer.' },
-  { icon: Salad, title: 'Nutricionistas', copy: 'O prato, a troca, a quantidade. Falado, some; na tela, fica.' },
-  { icon: Sparkles, title: 'Clínicas de estética', copy: 'O antes e depois é a sua prova. Precisa sair bonito e rápido.' },
-  { icon: Ruler, title: 'Arquitetos e corretores', copy: 'O cliente precisa ver o espaço, a medida, a mudança.' },
-  { icon: GraduationCap, title: 'Quem ensina', copy: 'Tem aula gravada esperando edição.' },
-  { icon: Clapperboard, title: 'Quem cria conteúdo e anuncia', copy: 'Grava no domingo e só posta na quinta.' },
+  { icon: Brain, title: 'Psicólogos e terapeutas', copy: 'Os sinais que você explica viram lista na tela.' },
+  { icon: Dente, title: 'Dentistas', copy: 'O dente aparece em 3D enquanto você explica.' },
+  { icon: Stethoscope, title: 'Fisioterapeutas e personais', copy: 'A coluna e o músculo aparecem na tela.' },
+  { icon: Salad, title: 'Nutricionistas', copy: 'O prato e a troca aparecem ao seu lado.' },
+  { icon: Sparkles, title: 'Clínicas de estética', copy: 'Antes e depois lado a lado.' },
+  { icon: Ruler, title: 'Arquitetos e corretores', copy: 'A planta e o mapa do bairro na tela.' },
+  { icon: GraduationCap, title: 'Quem ensina', copy: 'A aula gravada sai cortada e ilustrada.' },
+  { icon: Clapperboard, title: 'Quem cria conteúdo e anuncia', copy: 'Gravou hoje, posta hoje.' },
 ] as const;
 
 export function ForWho({ destaque = '' }: { destaque?: string }) {
@@ -197,7 +201,7 @@ export function ForWho({ destaque = '' }: { destaque?: string }) {
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
         <h2>Pra quem quer postar melhor <em>todos os dias.</em></h2>
-        <p>Sem passar horas editando e sem pagar editor. Alguns exemplos de quem usa:</p>
+        <p>Sem passar horas editando e sem pagar editor.</p>
       </div>
       <div className="reveal"><div className="publico publico-8">
         {lista.map(p => (
@@ -240,7 +244,7 @@ export function RequestLibrary() {
     <section className="section container" id="pedidos">
       <div className="section-heading reveal">
         <h2>Como você vai pedir a edição <em>para a IA.</em></h2>
-        <p>Em português, do jeito que você pediria a um editor. Veja três pedidos reais. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você.</p>
+        <p>Em português, como você falaria com um editor.</p>
       </div>
       <div className="reveal"><div className="ia-chat" ref={ref}>
         <div className="ia-topo"><span className="ia-avatar"><Sparkles size={12} /></span><strong>Sua IA</strong><small>ChatGPT ou Claude · Modo Editor ativo</small></div>
@@ -287,20 +291,20 @@ export function WhatYouGet() {
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
         <h2>O que você <em>vai receber.</em></h2>
-        <p>Tudo pra colocar o editor dentro do seu ChatGPT ou Claude e editar o primeiro vídeo ainda hoje. Não é um curso de edição.</p>
+        <p>Tudo pra editar o seu primeiro vídeo ainda hoje.</p>
       </div>
       <div className="reveal"><div className="unbox">
         <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora</strong><small>o login da área de membros chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
         <div className="unbox-files">
-          <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>1 · Videoaulas que te guiam do zero</strong><p>Curtas e tela por tela: como preparar o computador, como colocar o Modo Editor na sua IA e como editar o seu primeiro vídeo. Quem nunca mexeu com IA acompanha.</p></div></div>
+          <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>1 · Videoaulas que te guiam do zero</strong><p>Curtas, tela por tela. Quem nunca mexeu com IA acompanha.</p></div></div>
           <div className="unbox-file principal">
             <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
-            <div><strong>2 · O Modo Editor <em>o editor dentro da sua IA</em></strong><p>Você coloca no ChatGPT ou no Claude uma vez, seguindo a aula. A partir daí ele edita como um editor profissional: corta os erros, legenda, coloca o título com a dúvida do cliente, mostra a ilustração, o 3D, o mapa ou o antes e depois na tela.</p></div>
+            <div><strong>2 · O Modo Editor <em>o editor dentro da sua IA</em></strong><p>Você coloca no ChatGPT ou no Claude uma vez, seguindo a aula. Depois ele edita todos os seus vídeos.</p></div>
           </div>
-          <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>3 · Gerador de Pedido</strong><p>Se você não souber o que pedir, clica nas opções (legenda, título, o que mostrar na tela) e ele escreve o pedido pra você colar na IA. Dá até pra explicar por áudio.</p></div></div>
+          <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>3 · Gerador de Pedido</strong><p>Não sabe o que pedir? Clica nas opções e ele escreve o pedido pra você.</p></div></div>
           <div className="unbox-file"><span className="unbox-icon"><Sparkles size={20} /></span><div><strong>4 · Suporte no WhatsApp</strong><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div></div>
         </div>
-        <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>você usa a assinatura que já tem (plano pago, a partir de US$ 20/mês, contratado direto com eles)</small></div>
+        <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>você paga só o plano da sua IA, a partir de US$ 20 por mês</small></div>
       </div></div>
     </section>
   );
@@ -315,13 +319,13 @@ export function QualIA() {
     <section className="section container" id="qual-ia">
       <div className="section-heading reveal">
         <h2>Qual IA você <em>vai usar?</em></h2>
-        <p>ChatGPT ou Claude. O Modo Editor funciona nos dois. Se você já paga um deles, já tem tudo o que precisa. Se não, escolhe um e assina direto no site deles.</p>
+        <p>O Modo Editor funciona nos dois. Você escolhe um.</p>
       </div>
       <div className="reveal"><div className="ias">
-        <div className="ia-card"><LogoChatGPT /><div><strong>ChatGPT</strong><p>Plano Plus, da OpenAI. Você abre, coloca o Modo Editor uma vez e passa a pedir as edições por ali.</p></div></div>
-        <div className="ia-card"><LogoClaude /><div><strong>Claude</strong><p>Plano Pro, da Anthropic. Mesmo caminho: coloca o Modo Editor uma vez e pede as edições na conversa.</p></div></div>
+        <div className="ia-card"><LogoChatGPT /><div><strong>ChatGPT</strong><p>Plano Plus</p></div></div>
+        <div className="ia-card"><LogoClaude /><div><strong>Claude</strong><p>Plano Pro</p></div></div>
       </div>
-      <p className="ias-nota">A aula mostra tela por tela nos dois. Precisa de computador (Mac ou Windows) pra editar; o celular serve pra gravar.</p></div>
+      <p className="ias-nota">Você edita no computador (Mac ou Windows). O celular serve pra gravar.</p></div>
     </section>
   );
 }
