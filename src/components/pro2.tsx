@@ -148,7 +148,7 @@ const FEED = [
   { src: '/videos/karina-estria.mp4', profissao: 'Esteticista', emoji: '💆‍♀️' },
   { src: '/videos/pro2/fisio-coluna.mp4', profissao: 'Fisioterapeuta', emoji: '🦴' },
   { src: '/videos/cenas/dente.mp4', profissao: 'Dentista', emoji: '🦷' },
-  { src: '/videos/pro2/professor-aula.mp4', profissao: 'Professor', emoji: '📚' },
+  { src: '/videos/pro2/professor-cassio.mp4', profissao: 'Professor', emoji: '📚' },
   { src: '/videos/pro2/arquiteto-obra.mp4', profissao: 'Arquiteto', emoji: '📐' },
 ];
 const TEMPO_FEED = 2000;
@@ -375,11 +375,11 @@ export function Segure() {
 
 /* ───────────── Estilos de conteúdo (esteira que roda sem parar; dedo em cima para) ───────────── */
 
-const saidas: { src: string; titulo: string; profissao: string; emoji: string; aluna?: boolean }[] = [
-  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', profissao: 'Esteticista', emoji: '💆‍♀️', aluna: true },
+const saidas: { src: string; titulo: string; profissao: string; emoji: string; real?: string }[] = [
+  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', profissao: 'Esteticista', emoji: '💆‍♀️', real: 'Aluna real' },
   { src: '/videos/pro2/fisio-coluna.mp4', titulo: 'A coluna em 3D', profissao: 'Fisioterapeuta', emoji: '🦴' },
   { src: '/videos/cenas/dente.mp4', titulo: 'O dente por dentro', profissao: 'Dentista', emoji: '🦷' },
-  { src: '/videos/pro2/professor-aula.mp4', titulo: 'A aula ganha cenas', profissao: 'Professor', emoji: '📚' },
+  { src: '/videos/pro2/professor-cassio.mp4', titulo: 'A aula ganha desenhos', profissao: 'Professor', emoji: '📚', real: 'Aluno real' },
   { src: '/videos/pro2/psicologo-ansiedade.mp4', titulo: 'A ansiedade no corpo', profissao: 'Psicólogo', emoji: '🧠' },
   { src: '/videos/pro2/arquiteto-obra.mp4', titulo: 'A obra subindo', profissao: 'Arquiteto', emoji: '📐' },
   { src: '/videos/pro2/personal-braco.mp4', titulo: 'O músculo trabalhando', profissao: 'Personal', emoji: '💪' },
@@ -391,13 +391,13 @@ const VELOCIDADE = 36;
 const VOLTAS = 3;
 
 /** Cartão da esteira: a capa fica por baixo do vídeo, então ele nunca aparece vazio, nem carregando. */
-function CartaoEstilo({ src, titulo, profissao, emoji, aluna, copia, ativo, perto }: { src: string; titulo: string; profissao: string; emoji: string; aluna?: boolean; copia: boolean; ativo: boolean; perto: boolean }) {
+function CartaoEstilo({ src, titulo, profissao, emoji, real, copia, ativo, perto }: { src: string; titulo: string; profissao: string; emoji: string; real?: string; copia: boolean; ativo: boolean; perto: boolean }) {
   return (
     <li className="p2-cartao" aria-hidden={copia || undefined}>
       <span className="p2-etiqueta"><span aria-hidden="true">{emoji}</span>{profissao}</span>
       <div className="p2-cartao-tela" style={{ backgroundImage: `url(${capa(src)})` }}>
         <VideoVivo src={src} ativo={ativo} perto={perto} label={`${profissao}: ${titulo}`} />
-        {aluna && <span className="p2-aluna">✓ Aluna real</span>}
+        {real && <span className="p2-aluna">✓ {real}</span>}
       </div>
       <h3>{titulo}</h3>
     </li>
