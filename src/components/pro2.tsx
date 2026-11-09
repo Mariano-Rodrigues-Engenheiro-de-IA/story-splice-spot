@@ -145,10 +145,11 @@ function somVush() {
 
 /** Passo 4: o celular rola um vídeo pronto a cada 2 s, como o Reels, cada um de uma profissão. */
 const FEED = [
+  // primeiro três pessoas diferentes: a Karina, o professor e o Mariano; depois os outros vídeos
   { src: '/videos/karina-estria.mp4', profissao: 'Esteticista', emoji: '💆‍♀️' },
-  { src: '/videos/pro2/fisio-coluna.mp4', profissao: 'Fisioterapeuta', emoji: '🦴' },
-  { src: '/videos/cenas/dente.mp4', profissao: 'Dentista', emoji: '🦷' },
   { src: '/videos/pro2/professor-cassio.mp4', profissao: 'Professor', emoji: '📚' },
+  { src: '/videos/cenas/dente.mp4', profissao: 'Dentista', emoji: '🦷' },
+  { src: '/videos/pro2/fisio-coluna.mp4', profissao: 'Fisioterapeuta', emoji: '🦴' },
   { src: '/videos/pro2/arquiteto-obra.mp4', profissao: 'Arquiteto', emoji: '📐' },
 ];
 const TEMPO_FEED = 2000;
