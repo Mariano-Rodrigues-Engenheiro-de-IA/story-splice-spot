@@ -6,8 +6,23 @@ export type VideoTestimonial = { name: string; role: string; quote: string; vide
 export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
   checkoutUrl: 'https://pay.kiwify.com.br/hFsZJIo',
-  /** Preço anunciado na página. Tem que bater com o preço cadastrado no checkout da Kiwify (mudado para 97 em 8/11/2026). */
-  price: 97,
+  /** Preço da página geral (/). Tem que bater com o checkout da Kiwify acima. */
+  price: 67,
+  /** Página dos profissionais (/pro): oferta de R$ 97 do mesmo produto, com checkout próprio. O pixel é o mesmo. */
+  pro: {
+    price: 97,
+    checkoutUrl: 'https://pay.kiwify.com.br/xNp75vQ',
+    /** Depoimentos em vídeo só da /pro (o com `destaque` vira a vitrine). Vídeo vazio = não aparece. */
+    videoTestimonials: [
+      {
+        name: 'Esteticista',
+        role: 'clínica de estética · aluna do Modo Editor',
+        quote: '',
+        video: '' as string, // → /videos/depo-esteticista.mp4 (+ capa depo-esteticista.webp) quando o Mariano mandar
+        destaque: true,
+      },
+    ] as VideoTestimonial[],
+  },
   /** Edição feita pela equipe, cobrada por vídeo. É a segunda porta da página: quem não quer editar fala no WhatsApp.
    *  `precoPorVideo` vazio = a página não mostra valor, só "peça o valor no WhatsApp". Ex.: 'a partir de R$ 60 por vídeo'. */
   servico: {
@@ -60,13 +75,6 @@ export const siteConfig = {
   /** Depoimentos em vídeo (reais e autorizados). O primeiro com `destaque` vira a vitrine, acima dos outros.
    *  Vídeo vazio = o depoimento não aparece (fica aqui esperando o arquivo). */
   videoTestimonials: [
-    {
-      name: 'Esteticista',
-      role: 'clínica de estética · aluna do Modo Editor',
-      quote: '',
-      video: '' as string, // → /videos/depo-esteticista.mp4 (+ capa depo-esteticista.webp) quando o Mariano mandar
-      destaque: true,
-    },
     {
       name: 'Isaque',
       role: 'aluno do Modo Editor',
