@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, Fingerprint, Loader2 } from 'lucide-react';
+import { ArrowUp, Briefcase, CalendarClock, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, PanelLeft, Plus, Search, Shapes } from 'lucide-react';
 import { NumberTicker } from '@/components/number-ticker';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
@@ -117,33 +117,50 @@ export function ComoFunciona() {
               <div className="device-frame">
                 <div className="device-screen p2-claude">
                   <aside className="p2-cl-lado">
-                    <span className="p2-cl-nova"><b>+</b>Novo chat</span>
-                    <small>Recentes</small>
-                    <span className="p2-cl-item on">Vídeo do consultório</span>
-                    <span className="p2-cl-item">Legenda do Reels</span>
-                    <span className="p2-cl-item">Corte da aula de ontem</span>
-                    <span className="p2-cl-item">Antes e depois</span>
-                    <span className="p2-cl-conta"><i>M</i>Plano Pro</span>
+                    <div className="p2-cl-marca"><PanelLeft /><span>Claude</span></div>
+                    <span className="p2-cl-nav on"><Plus />Criar</span>
+                    <span className="p2-cl-nav"><Search />Procurar</span>
+                    <span className="p2-cl-nav"><FolderClosed />Projetos</span>
+                    <span className="p2-cl-nav"><Shapes />Artefatos</span>
+                    <span className="p2-cl-nav"><CalendarClock />Agendados</span>
+                    <span className="p2-cl-nav"><Briefcase />Personalização</span>
+                    <small className="p2-cl-grupo">Fixados <ChevronRight /></small>
+                    <small className="p2-cl-grupo">Recentes <ChevronDown /></small>
+                    {['Vídeo do consultório', 'Legenda do Reels', 'Corte da aula de ontem', 'Antes e depois da paciente', 'Roteiro da semana', 'Dúvidas dos pacientes', 'Vídeo do mapa da clínica'].map((t, i) => <span key={t} className={`p2-cl-item ${i === 0 ? 'on' : ''}`}>{t}</span>)}
+                    <span className="p2-cl-conta"><i>M</i>Mariano <em>· Pro</em><ChevronDown /></span>
                   </aside>
                   <div className="p2-cl-main">
-                    <div className="p2-cl-topo"><LogoChatGPT /><LogoClaude /><span>Modo Editor ativo</span></div>
-                    <div className="p2-cl-conversa">
-                      <div className="p2-cl-voce">
-                        <span className="p2-cl-anexo"><img src={capa(siteConfig.videos.cenas.aoVivoBruto)} alt="" width={27} height={48} /><span><b>gravacao.mp4</b><small>Vídeo do celular</small></span></span>
-                        {letras > 0 && <p>{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>}
-                      </div>
-                      {passo >= 1 && (
-                        <div className="p2-cl-ia">
-                          <span className="p2-cl-ia-ico"><LogoClaude /></span>
-                          <div>
-                            <p>{passo === 1 ? 'Editando o seu vídeo…' : 'Pronto! Seu vídeo foi editado.'}</p>
-                            <span className="p2-cl-carga"><i style={{ width: `${passo === 1 ? carga : 100}%` }} /></span>
-                            <small>{passo === 1 ? <><Loader2 className="p2-girando" /> {carga}%</> : <><Check /> 100%</>}</small>
-                          </div>
-                        </div>
-                      )}
+                    <div className="p2-cl-topo">
+                      <span className="p2-cl-titulo">Vídeo do consultório <ChevronDown /></span>
+                      <span className="p2-cl-modo"><LogoChatGPT /><LogoClaude />Modo Editor ativo</span>
+                      <span className="p2-cl-share">Compartilhar</span>
                     </div>
-                    <div className="p2-cl-entrada"><b>+</b><span>Responder…</span><i><ArrowUp /></i></div>
+                    <div className="p2-cl-conversa">
+                      <div className="p2-cl-coluna">
+                        <div className="p2-cl-voce">
+                          <span className="p2-cl-anexo"><img src={capa(siteConfig.videos.cenas.aoVivoBruto)} alt="" width={14} height={25} /><span><b>gravacao.mp4</b><small>MP4 · 2:14</small></span></span>
+                          {letras > 0 && <p>{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>}
+                        </div>
+                        {passo >= 1 && (
+                          <div className="p2-cl-ia">
+                            <p>{passo === 1 ? 'Combinado! Estou editando o seu vídeo agora.' : 'Pronto! O seu vídeo está editado e salvo na pasta.'}</p>
+                            <ul>
+                              {['Ouvi a gravação inteira', 'Cortei as pausas e os erros', 'Coloquei a legenda', 'Coloquei o dente em 3D'].map((t, i) => {
+                                const feito = passo === 2 || carga >= (i + 1) * 24;
+                                const agora = passo === 1 && !feito && carga >= i * 24;
+                                return <li key={t} className={feito ? 'ok' : agora ? 'agora' : ''}>{feito ? <Check /> : agora ? <Loader2 className="p2-girando" /> : <i />}{t}</li>;
+                              })}
+                            </ul>
+                            <span className="p2-cl-carga"><i style={{ width: `${passo === 1 ? carga : 100}%` }} /></span>
+                            <span className={`p2-cl-spark ${passo === 1 ? 'pensando' : ''}`}><LogoClaude /></span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="p2-cl-entrada">
+                      <span className="p2-cl-placeholder">Responder…</span>
+                      <span className="p2-cl-barra"><Plus /><span className="p2-cl-modelo">Opus 5.5 <ChevronDown /></span><i><ArrowUp /></i></span>
+                    </div>
                   </div>
                 </div>
               </div>
