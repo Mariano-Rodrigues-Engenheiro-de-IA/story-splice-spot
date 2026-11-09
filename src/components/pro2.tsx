@@ -266,7 +266,7 @@ export function Saidas() {
   return (
     <section className="section p2-saidas" id="exemplos" ref={secao}>
       <div className="container section-heading reveal">
-        <h2>Estilos de conteúdo que você pode usar <em>no seu vídeo.</em></h2>
+        <h2>Estilos de edição que você pode usar <em>no seu vídeo.</em></h2>
       </div>
       <div className="p2-esteira" aria-label="Exemplos de estilos de vídeo"
         onPointerDown={segurar} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}>
