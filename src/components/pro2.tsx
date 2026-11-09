@@ -206,15 +206,16 @@ const saidas = [
   { src: '/videos/cenas/cenario.mp4', titulo: 'Gravou em casa, saiu no estúdio', linha: 'Sem montar cenário nenhum.' },
   { src: '/videos/cenas/cinema.mp4', titulo: 'Cara de cinema', linha: 'Pro vídeo institucional da sua marca.' },
 ];
-/** segundos que a esteira leva para andar um cartão */
-const SEGUNDOS_POR_CARTAO = 3.4;
+/** velocidade da esteira, em pixels por segundo (~5 s por cartão no celular) */
+const VELOCIDADE = 36;
+/** quantas voltas da lista ficam montadas lado a lado: com 3, a tela nunca alcança o fim, nem no computador */
+const VOLTAS = 3;
 
-/** Cada cartão toca só enquanto está à vista (a esteira tem duas voltas da lista, para nunca acabar). */
-function CartaoEstilo({ src, titulo, linha, copia }: { src: string; titulo: string; linha: string; copia: boolean }) {
-  const [ref, naTela] = useNaTela<HTMLLIElement>('0px 160px 0px 160px');
+/** Cartão da esteira: a capa fica por baixo do vídeo, então ele nunca aparece vazio, nem carregando. */
+function CartaoEstilo({ src, titulo, linha, copia, ativo, perto }: { src: string; titulo: string; linha: string; copia: boolean; ativo: boolean; perto: boolean }) {
   return (
-    <li ref={ref} className="p2-cartao" aria-hidden={copia || undefined}>
-      <div className="p2-cartao-tela"><VideoVivo src={src} ativo={naTela} perto={naTela} label={titulo} /></div>
+    <li className="p2-cartao" aria-hidden={copia || undefined}>
+      <div className="p2-cartao-tela" style={{ backgroundImage: `url(${capa(src)})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={titulo} /></div>
       <h3>{titulo}</h3>
       <p>{linha}</p>
     </li>
@@ -222,20 +223,58 @@ function CartaoEstilo({ src, titulo, linha, copia }: { src: string; titulo: stri
 }
 
 export function Saidas() {
-  const [parado, setParado] = useState(false);
-  const soltar = () => setParado(false);
+  const [secao, naTela] = useNaTela<HTMLElement>('200px 0px');
+  const fila = useRef<HTMLOListElement>(null);
+  const posicao = useRef(0);
+  const parado = useRef(false);
+  const [paradoTela, setParadoTela] = useState(false);
+  const [visiveis, setVisiveis] = useState<number[]>([0, 1, 2]);
+  // a esteira anda quadro a quadro e mede a si mesma: quando uma volta inteira passa, ela recua exatamente
+  // uma volta (o que está na tela é idêntico), então nunca existe fim nem tela vazia
+  useEffect(() => {
+    const el = fila.current;
+    if (!el || !naTela) return;
+    let quadro = 0, antes = performance.now(), vistos = '';
+    const andar = (agora: number) => {
+      const dt = Math.min(64, agora - antes); antes = agora;
+      const itens = el.children as HTMLCollectionOf<HTMLElement>;
+      const volta = (itens[saidas.length]?.offsetLeft ?? 0) - (itens[0]?.offsetLeft ?? 0);
+      if (!parado.current && !menosMovimento() && volta > 0) {
+        posicao.current += (VELOCIDADE * dt) / 1000;
+        if (posicao.current >= volta) posicao.current -= volta;
+      }
+      el.style.transform = `translate3d(${-posicao.current}px, 0, 0)`;
+      const largura = el.parentElement?.clientWidth ?? window.innerWidth;
+      const agoraVistos: number[] = [];
+      for (let i = 0; i < itens.length; i++) {
+        const esquerda = itens[i]!.offsetLeft - posicao.current;
+        if (esquerda + itens[i]!.offsetWidth > -20 && esquerda < largura + 20) agoraVistos.push(i);
+      }
+      const chave = agoraVistos.join(',');
+      if (chave !== vistos) { vistos = chave; setVisiveis(agoraVistos); }
+      quadro = requestAnimationFrame(andar);
+    };
+    quadro = requestAnimationFrame(andar);
+    return () => cancelAnimationFrame(quadro);
+  }, [naTela]);
+  const segurar = () => { parado.current = true; setParadoTela(true); };
+  const soltar = () => { parado.current = false; setParadoTela(false); };
+  const lista = Array.from({ length: VOLTAS }, () => saidas).flat();
   return (
-    <section className="section p2-saidas" id="exemplos">
+    <section className="section p2-saidas" id="exemplos" ref={secao}>
       <div className="container section-heading reveal">
         <h2>Estilos de conteúdo que você pode usar <em>no seu vídeo.</em></h2>
       </div>
-      <div className={`p2-esteira ${parado ? 'parado' : ''}`} aria-label="Exemplos de estilos de vídeo"
-        onPointerDown={() => setParado(true)} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}>
-        <ol className="p2-esteira-fila" style={{ animationDuration: `${saidas.length * SEGUNDOS_POR_CARTAO}s` }}>
-          {[...saidas, ...saidas].map((s, i) => <CartaoEstilo key={i} {...s} copia={i >= saidas.length} />)}
+      <div className="p2-esteira" aria-label="Exemplos de estilos de vídeo"
+        onPointerDown={segurar} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}>
+        <ol className="p2-esteira-fila" ref={fila}>
+          {lista.map((s, i) => {
+            const perto = visiveis.some(v => Math.abs(v - i) <= 1);
+            return <CartaoEstilo key={i} {...s} copia={i >= saidas.length} ativo={naTela && visiveis.includes(i)} perto={naTela && perto} />;
+          })}
         </ol>
       </div>
-      <p className="p2-dica">{parado ? 'Solte para continuar' : 'Toque e segure para parar'}</p>
+      <p className="p2-dica">{paradoTela ? 'Solte para continuar' : 'Toque e segure para parar'}</p>
     </section>
   );
 }
