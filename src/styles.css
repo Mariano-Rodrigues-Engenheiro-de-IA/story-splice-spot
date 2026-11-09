@@ -65,7 +65,7 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .scroll-progress { position: fixed; height: 2px; inset: 0 0 auto; background: var(--progress-gradient); transform-origin: left; z-index: 50; }
 .site-header { height: 76px; display: grid; grid-template-columns: minmax(0,1fr) auto; align-items: center; gap: 24px; position: relative; z-index: 2; }
 .brand { display: inline-flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 700; width: fit-content; color: var(--foreground); }
-.brand-icon { width: 27px; height: 27px; border-radius: 9px; background: var(--primary); display: grid; place-items: center; position: relative; transform: rotate(-8deg); box-shadow: var(--red-glow); }
+.brand-icon { width: 27px; height: 27px; border-radius: 9px; background: var(--ready); display: grid; place-items: center; position: relative; transform: rotate(-8deg); box-shadow: var(--red-glow); }
 .brand-icon svg { width: 13px; height: 13px; fill: currentColor; }
 .brand-dot { width: 8px; height: 8px; background: var(--ready); border: 2px solid var(--background); border-radius: 50%; position: absolute; top: -3px; right: -3px; }
 .nav { display: flex; gap: 30px; color: var(--muted-foreground); font-size: 12px; }
@@ -720,3 +720,19 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .offer.border-beam, .bonus-box.border-beam { background: var(--card); }
 .offer-price .price { color: var(--foreground); }
 .whats svg { filter: drop-shadow(0 6px 14px oklch(.23 .035 262 / .25)); }
+
+/* ── 9/11: logo em verde, tarja da foto legível, "entenda em 30 s", bloco do plano ── */
+.brand-icon { background: var(--ready); box-shadow: var(--teal-glow); color: #fff; }
+.brand-dot { background: var(--primary); border-color: var(--background); }
+.produtor-tag { color: #fff; background: oklch(.23 .035 262 / .72); border-color: oklch(1 0 0 / .25); }
+.entenda { list-style: none; margin: 0 auto; padding: 0; max-width: 760px; display: grid; gap: 14px; counter-reset: none; }
+.entenda li { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 16px; align-items: start; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; box-shadow: var(--inner-glow); }
+.entenda-num { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--purchase-gradient); color: #fff; font-weight: 700; font-size: 18px; }
+.entenda strong { display: block; font-size: 16px; color: var(--foreground); }
+.entenda p { font-size: 13px; line-height: 1.65; margin-top: 5px; }
+.plano { max-width: 760px; margin: auto; display: grid; gap: 12px; }
+.plano-item { display: grid; grid-template-columns: 20px minmax(0,1fr); gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; box-shadow: var(--inner-glow); }
+.plano-item svg { width: 20px; height: 20px; color: var(--ready); margin-top: 1px; }
+.plano-item strong { display: block; font-size: 15px; color: var(--foreground); }
+.plano-item p { font-size: 13px; line-height: 1.65; margin-top: 4px; }
+@media (max-width: 760px) { .entenda li, .plano-item { padding: 16px; } .entenda strong { font-size: 15px; } }
