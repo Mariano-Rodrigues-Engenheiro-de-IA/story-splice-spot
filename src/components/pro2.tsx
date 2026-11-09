@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Briefcase, CalendarClock, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, PanelLeft, Play, Plus, Search, Shapes } from 'lucide-react';
+import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
 import { NumberTicker } from '@/components/number-ticker';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
@@ -207,17 +207,16 @@ export function ComoFunciona() {
           {passo === 0 && inst === 0 && <span className="p2-voa" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>}
           <span className={`p2-instalado ${passo === 0 && inst === 2 ? 'on' : ''}`} aria-hidden={!(passo === 0 && inst === 2)}><Check size={14} /> Modo Editor instalado</span>
           <div className="p2-mac" aria-hidden="true">
+            <span className="p2-mac-ias"><LogoChatGPT /><small>ou</small><LogoClaude /></span>
             <div className="device device-macbook-pro" style={{ transform: `scale(${escala})` }}>
               <div className="device-frame">
                 <div className="device-screen p2-claude">
                   <aside className="p2-cl-lado">
-                    <div className="p2-cl-marca"><PanelLeft /><span>Claude</span></div>
-                    <span className="p2-cl-nav on"><Plus />Criar</span>
-                    <span className="p2-cl-nav"><Search />Procurar</span>
+                    <div className="p2-cl-marca"><span className="p2-cl-marca-ico"><Sparkles /></span><span>Sua IA</span><PanelLeft /></div>
+                    <span className="p2-cl-nav on"><SquarePen />Novo chat</span>
+                    <span className="p2-cl-nav"><Search />Buscar chats</span>
                     <span className="p2-cl-nav"><FolderClosed />Projetos</span>
-                    <span className="p2-cl-nav"><Shapes />Artefatos</span>
-                    <span className="p2-cl-nav"><CalendarClock />Agendados</span>
-                    <span className="p2-cl-nav"><Briefcase />Personalização</span>
+                    <span className="p2-cl-nav"><Shapes />Biblioteca</span>
                     <small className="p2-cl-grupo">Fixados <ChevronRight /></small>
                     <small className="p2-cl-grupo">Recentes <ChevronDown /></small>
                     {['Vídeo do consultório', 'Legenda do Reels', 'Corte da aula de ontem', 'Antes e depois da paciente', 'Roteiro da semana', 'Dúvidas dos pacientes', 'Vídeo do mapa da clínica'].map((t, i) => <span key={t} className={`p2-cl-item ${i === 0 ? 'on' : ''}`}>{t}</span>)}
@@ -226,13 +225,13 @@ export function ComoFunciona() {
                   <div className="p2-cl-main">
                     <div className="p2-cl-topo">
                       <span className="p2-cl-titulo">Vídeo do consultório <ChevronDown /></span>
-                      <span className={`p2-cl-modo ${instalado ? '' : 'oculto'}`}><LogoChatGPT /><LogoClaude />Modo Editor ativo</span>
+                      <span className={`p2-cl-modo ${instalado ? '' : 'oculto'}`}><Check />Modo Editor ativo</span>
                       <span className="p2-cl-share">Compartilhar</span>
                     </div>
                     {passo === 0 ? (
                       <div className="p2-cl-inicio">
-                        <p className="p2-cl-saudacao"><LogoClaude />Boa tarde, Mariano</p>
-                        <div className="p2-cl-entrada p2-cl-entrada-inicio"><span className="p2-cl-placeholder">Como posso ajudar você hoje?</span><span className="p2-cl-barra"><Plus /><span className="p2-cl-modelo">Opus 5.5 <ChevronDown /></span><i><ArrowUp /></i></span></div>
+                        <p className="p2-cl-saudacao">Boa tarde, Mariano</p>
+                        <div className="p2-cl-entrada p2-cl-entrada-inicio"><span className="p2-cl-placeholder">Pergunte qualquer coisa</span><span className="p2-cl-barra"><Plus /><Mic className="p2-cl-mic" /><i><ArrowUp /></i></span></div>
                         <div className={`p2-cl-instalando fase-${inst}`}>
                           <span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>
                           <div>
@@ -260,15 +259,15 @@ export function ComoFunciona() {
                               })}
                             </ul>
                             <span className="p2-cl-carga"><i style={{ width: `${passo === 2 ? carga : 100}%` }} /></span>
-                            <span className={`p2-cl-spark ${passo === 2 ? 'pensando' : ''}`}><LogoClaude /></span>
+                            <span className={`p2-cl-spark ${passo === 2 ? 'pensando' : ''}`}><Sparkles /></span>
                           </div>
                         )}
                       </div>
                     </div>
                     )}
                     {passo > 0 && <div className="p2-cl-entrada">
-                      <span className="p2-cl-placeholder">Responder…</span>
-                      <span className="p2-cl-barra"><Plus /><span className="p2-cl-modelo">Opus 5.5 <ChevronDown /></span><i><ArrowUp /></i></span>
+                      <span className="p2-cl-placeholder">Escreva sua mensagem…</span>
+                      <span className="p2-cl-barra"><Plus /><Mic className="p2-cl-mic" /><i><ArrowUp /></i></span>
                     </div>}
                   </div>
                 </div>
