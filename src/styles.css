@@ -803,3 +803,69 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 /* ── a /pro é clara do topo ao rodapé, inclusive o fundo atrás da página ── */
 .pro { background: var(--background); color: var(--foreground); }
 body:has(.pro) { background: oklch(.972 .006 85); }
+
+/* ── 9/11 (noite): /pro legível no celular, sem pulo, com mais arte ── */
+/* 1. a comparação não muda de altura: os dois textos ocupam o mesmo espaço */
+.pro .mode-copy { display: grid; }
+.pro .mode-copy > span { grid-area: 1 / 1; opacity: 0; transition: opacity .3s; }
+.pro .mode-copy > span.vis { opacity: 1; }
+/* 2. nada de letra miúda: tamanhos mínimos em toda a página */
+.pro .eyebrow { font-size: 11px; letter-spacing: 1.5px; }
+.pro .section-heading p, .pro .comparison-copy > p, .pro .faq-intro p { font-size: 16px; line-height: 1.55; max-width: 560px; }
+.pro .badge { font-size: 12px; padding: 7px 13px; }
+.pro .hero-copy { font-size: 16px; line-height: 1.55; max-width: 440px; }
+.pro .purchase-note, .pro .fine-print, .pro .illustration-note, .pro .compare-help { font-size: 13px; line-height: 1.5; }
+.pro .step h3 { font-size: 19px; } .pro .step > p { font-size: 15px; line-height: 1.55; }
+.pro .feature h3 { font-size: 18px; } .pro .feature p { font-size: 15px; line-height: 1.55; }
+.pro .stat p { font-size: 13px; } .pro .exemplo-num { font-size: 10px; }
+.pro .exemplo h3 { font-size: 15px; } .pro .exemplo-texto > p { font-size: 13px; }
+.pro .publico-item strong { font-size: 16px; } .pro .publico-item p { font-size: 14px; }
+.pro .ia-card p, .pro .ias-nota, .pro .plano-item p, .pro .entenda p { font-size: 15px; }
+.pro .mode-list strong { font-size: 15px; } .pro .mode-list p { font-size: 13.5px; line-height: 1.5; } .pro .mode-foot, .pro .mode-request small { font-size: 13px; }
+.pro .live-copy strong { font-size: 18px; } .pro .live-copy p, .pro .live-top span, .pro .live-caps span { font-size: 14px; } .pro .live-label { font-size: 11px; }
+.pro .produtor-texto p { font-size: 16px; line-height: 1.65; } .pro .produtor-cargo { font-size: 13px; }
+.pro .unbox-file strong { font-size: 16px; } .pro .unbox-file p, .pro .unbox-mail small { font-size: 14px; line-height: 1.55; } .pro .unbox-mail strong { font-size: 15px; }
+.pro .unbox-file strong em { font-size: 10px; } .pro .unbox-works span, .pro .unbox-works b { font-size: 14px; } .pro .unbox-works small { font-size: 12px; }
+.pro .offer-details > p { font-size: 14px; } .pro .offer-list strong { font-size: 15px; } .pro .offer-list p { font-size: 13.5px; line-height: 1.55; }
+.pro .offer-price > p { font-size: 14px; } .pro .offer-price .preco-rotulo { font-size: 12px; } .pro .offer-price .preco-depois { font-size: 14px; }
+.pro .guarantee strong { font-size: 16px; } .pro .guarantee p { font-size: 14px; }
+.pro .delegar strong { font-size: 15px; } .pro .delegar p { font-size: 14px; }
+.pro .faq-list { font-size: 16px; } .pro .faq-answer { font-size: 15px; line-height: 1.6; }
+.pro .footer p, .pro .footer-links a, .pro .footer .copyright { font-size: 12px; } .pro .footer .brand { font-size: 14px; }
+.pro .ia-topo small, .pro .ia-anexo small { font-size: 12px; } .pro .chat-header span { font-size: 11px; } .pro .chat-success { font-size: 12px; }
+.pro .sticky-bar p { font-size: 12px; }
+/* 3. título do topo em no máximo 3 linhas */
+@media (max-width: 760px) {
+  .pro .hero h1 { font-size: 29px; line-height: 1.12; margin: 14px 0 16px; }
+  .pro .section h2, .pro .comparison-copy h2, .pro .faq-intro h2 { font-size: 28px; line-height: 1.15; }
+  .pro .section-heading p, .pro .comparison-copy > p, .pro .faq-intro p { font-size: 15.5px; max-width: 340px; }
+  .pro .section-heading { margin-bottom: 30px; }
+}
+/* 4. cartão "Criador do Modo Editor": claro, legível sobre a foto cinza */
+.pro .produtor-tag { background: #fff; color: var(--foreground); border-color: var(--border); font-size: 12px; font-weight: 600; box-shadow: 0 6px 18px -8px oklch(.23 .035 262 / .4); }
+/* 5. arte do custo: duas barras, editor x Modo Editor */
+.custo { max-width: 760px; margin: 0 auto 22px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; align-items: end; }
+.custo-col { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--inner-glow); }
+.custo-rotulo { font-size: 13px; font-weight: 600; color: var(--muted-foreground); }
+.custo-barra { height: 120px; display: flex; align-items: flex-end; }
+.custo-barra i { display: block; width: 100%; border-radius: 10px; }
+.custo-editor .custo-barra i { height: 100%; background: repeating-linear-gradient(135deg, oklch(.23 .035 262 / .16) 0 8px, oklch(.23 .035 262 / .08) 8px 16px); }
+.custo-modo .custo-barra i { height: 11%; background: var(--ready); }
+.custo-col strong { font-size: 24px; line-height: 1.1; color: var(--foreground); }
+.custo-modo strong { color: var(--ready); }
+.custo-col small { font-size: 13px; line-height: 1.45; color: var(--muted-foreground); }
+.custo-modo { border-color: oklch(.5 .09 180 / .45); box-shadow: var(--teal-glow); }
+@media (max-width: 760px) { .custo-col { padding: 14px; } .custo-col strong { font-size: 20px; } .custo-barra { height: 96px; } }
+/* 6. ritmo: faixas brancas alternadas, pra página não ficar um bloco só */
+.pro main > .section:nth-of-type(odd) { position: relative; isolation: isolate; padding-bottom: 84px; }
+.pro main > .section:nth-of-type(odd)::before { content: ""; position: absolute; inset: 40px -100vw 0; background: oklch(1 0 0 / .7); z-index: -1; }
+.pro .ia-card > .marca-ia { width: 52px; height: 52px; }
+/* o chat de exemplo tem altura fixa: a conversa cresce por dentro, a página não se mexe */
+.pro .ia-conversa { height: 560px; min-height: 0; overflow: hidden; justify-content: flex-end; }
+@media (max-width: 760px) { .pro .ia-conversa { height: 540px; } }
+/* rótulos dentro das telas de exemplo */
+.pro .ready-tag, .pro .away-tag, .pro .compare-labels span, .pro .live-badge, .pro .exemplo-par > span, .pro .corte-ok, .pro .mode-toggle b { font-size: 11px; }
+.pro .file-bubble small, .pro .ia-anexo small { font-size: 11px; } .pro .file-bubble strong { font-size: 13px; }
+/* a caixa de digitar já nasce com a altura do pedido inteiro, pra não crescer enquanto o texto aparece */
+.pro .ia-entrada { align-items: flex-end; }
+.pro .ia-entrada > span:first-child { min-height: 7.2em; font-size: 14px; line-height: 1.45; display: block; }

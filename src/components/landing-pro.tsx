@@ -62,8 +62,7 @@ export function LiveDemo() {
   return (
     <section className="section container" id="ao-vivo">
       <div className="section-heading reveal">
-        <span className="eyebrow">O tempo</span>
-        <h2>Quanto tempo <em>leva?</em></h2>
+        <h2>Quanto tempo leva <em>para editar.</em></h2>
         <p>Você grava em 10 minutos. A edição acontece sozinha enquanto você trabalha, em cinco passos, sem você abrir programa nenhum.</p>
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
@@ -147,9 +146,8 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <span className="eyebrow">A diferença</span>
-        <h2>Por que não basta usar o ChatGPT <em>ou o Claude sozinho?</em></h2>
-        <p>Porque sem o Modo Editor eles não sabem editar vídeo: você pede "edita esse vídeo" e volta qualquer coisa, ou nada. Com o Modo Editor dentro, o vídeo sai com tudo isso. Toque no botão e compare.</p>
+        <h2>A edição antes e depois <em>do Modo Editor.</em></h2>
+        <p>Sem o Modo Editor, o ChatGPT e o Claude não sabem editar vídeo. Com ele, o seu vídeo sai com tudo isso. Toque no botão e compare.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -168,7 +166,7 @@ export function ModeSwitch() {
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
                 <span className="mode-check">{on ? <Check size={12} /> : '?'}</span>
-                <div><strong>{title}</strong><p>{on ? copy : 'a IA sozinha não faz'}</p></div>
+                <div><strong>{title}</strong><p className="mode-copy"><span className={on ? 'vis' : ''}>{copy}</span><span className={on ? '' : 'vis'}>a IA sozinha não faz</span></p></div>
               </li>
             ))}
           </ul>
@@ -198,9 +196,8 @@ export function ForWho({ destaque = '' }: { destaque?: string }) {
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
-        <span className="eyebrow">Para quem é</span>
-        <h2>Isso é <em>pra mim?</em></h2>
-        <p>Se você quer postar vídeo melhor e com mais frequência, sem passar horas editando nem pagar editor, é pra você. Alguns exemplos:</p>
+        <h2>Pra quem quer postar melhor <em>todos os dias.</em></h2>
+        <p>Sem passar horas editando e sem pagar editor. Alguns exemplos de quem usa:</p>
       </div>
       <div className="reveal"><div className="publico publico-8">
         {lista.map(p => (
@@ -242,9 +239,8 @@ export function RequestLibrary() {
   return (
     <section className="section container" id="pedidos">
       <div className="section-heading reveal">
-        <span className="eyebrow">O pedido</span>
-        <h2>Como eu peço <em>a edição?</em></h2>
-        <p>Em português, do jeito que você pediria a um editor. Veja três pedidos reais e o que o Modo Editor faz com cada um. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você em cliques.</p>
+        <h2>Como você vai pedir a edição <em>para a IA.</em></h2>
+        <p>Em português, do jeito que você pediria a um editor. Veja três pedidos reais. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você.</p>
       </div>
       <div className="reveal"><div className="ia-chat" ref={ref}>
         <div className="ia-topo"><span className="ia-avatar"><Sparkles size={12} /></span><strong>Sua IA</strong><small>ChatGPT ou Claude · Modo Editor ativo</small></div>
@@ -290,8 +286,7 @@ export function WhatYouGet() {
   return (
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
-        <span className="eyebrow">O que vem</span>
-        <h2>O que eu <em>recebo?</em></h2>
+        <h2>O que você <em>vai receber.</em></h2>
         <p>Tudo pra colocar o editor dentro do seu ChatGPT ou Claude e editar o primeiro vídeo ainda hoje. Não é um curso de edição.</p>
       </div>
       <div className="reveal"><div className="unbox">
@@ -319,7 +314,6 @@ export function QualIA() {
   return (
     <section className="section container" id="qual-ia">
       <div className="section-heading reveal">
-        <span className="eyebrow">A ferramenta</span>
         <h2>Qual IA você <em>vai usar?</em></h2>
         <p>ChatGPT ou Claude. O Modo Editor funciona nos dois. Se você já paga um deles, já tem tudo o que precisa. Se não, escolhe um e assina direto no site deles.</p>
       </div>
@@ -368,7 +362,6 @@ export function Creator({ name, photo }: { name: string; photo: string }) {
         <span className="produtor-tag"><i className="record-dot" />Criador do Modo Editor</span>
       </div>
       <div className="produtor-texto reveal">
-        <span className="eyebrow">Quem está por trás disso?</span>
         <h2>Prazer, eu sou o <em>{name}.</em></h2>
         <p className="produtor-cargo">Creator e estrategista de IA</p>
         <p>Empreendo desde 2021 e, nesse tempo todo, nunca parei de produzir conteúdo. Sempre estive ativo na internet, e todo vídeo esbarrava no mesmo problema: ou eu editava na mão, ou pagava um editor e ficava esperando.</p>

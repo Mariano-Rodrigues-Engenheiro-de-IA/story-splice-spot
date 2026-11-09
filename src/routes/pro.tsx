@@ -7,7 +7,7 @@ import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
-import { Creator, Entenda, ForWho, LiveDemo, QualIA, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-pro';
+import { Creator, ForWho, LiveDemo, QualIA, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-pro';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { MessageCircle } from 'lucide-react';
@@ -210,7 +210,7 @@ function Testimonials() {
   // só depoimentos com arquivo; o destaque (a esteticista) vem primeiro, como vitrine
   const videos = [...siteConfig.pro.videoTestimonials, ...siteConfig.videoTestimonials].filter(v => v.video).sort((a, b) => Number(!!b.destaque) - Number(!!a.destaque));
   if (list.length === 0 && videos.length === 0) return null;
-  return <section className="section container" id="depoimentos"><div className="section-heading reveal"><span className="eyebrow">Depoimentos</span><h2>Quem já <em>usa?</em></h2></div>
+  return <section className="section container" id="depoimentos"><div className="section-heading reveal"><h2>Profissionais que já <em>editam com IA.</em></h2></div>
     {videos.length > 0 && <div className="depo-videos">{videos.map(item => <DepoVideo key={item.video} {...item} />)}</div>}
     {list.length > 0 && <div className="marquee" tabIndex={0} aria-label="Depoimentos de clientes"><div className="marquee-track">{[...list, ...list].map((item, i) => <figure className="testimonial-card" key={i} aria-hidden={i >= list.length}><strong>{item.result}</strong><blockquote>“{item.quote}”</blockquote><figcaption>{item.name} <span>{item.handle}</span></figcaption></figure>)}</div></div>}</section>;
 }
@@ -226,7 +226,7 @@ const offerItems = [
   ['Acesso na hora', 'Área de membros liberada assim que o pagamento é aprovado. Precisa de computador e do plano pago da sua IA.'],
 ];
 function Offer() {
-  return <section className="section container" id="oferta"><div className="section-heading reveal"><span className="eyebrow">A oferta</span><h2>Comece <em>hoje.</em></h2><p>Pagamento único. Vídeos sem limite. 7 dias de garantia.</p></div>
+  return <section className="section container" id="oferta"><div className="section-heading reveal"><h2>Comece <em>hoje.</em></h2><p>Pagamento único. Vídeos sem limite. 7 dias de garantia.</p></div>
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT ou Claude, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
       <div className="offer-price"><p className="preco-rotulo">{siteConfig.priceAfterLaunch ? 'Preço de lançamento' : 'Pagamento único'}</p><div className="price"><sup>R$</sup><Odometro valor={siteConfig.pro.price} de={siteConfig.priceAfterLaunch || siteConfig.pro.price} /></div>{siteConfig.priceAfterLaunch > 0 && <p className="preco-depois">Depois do lançamento: R$ {siteConfig.priceAfterLaunch}</p>}<p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
@@ -336,7 +336,7 @@ function Pro() {
   return <div className="page pro">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#galeria">Exemplos</a><a href="#entenda">Como funciona</a><a href="#conta">Quanto custa por mês</a><a href="#oferta">Comprar</a></nav></header>
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#galeria">Exemplos</a><a href="#como-funciona">Como funciona</a><a href="#conta">Quanto custa por mês</a><a href="#oferta">Comprar</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />{nicho.selo}</div>
@@ -349,7 +349,7 @@ function Pro() {
           <p className="hero-copy">{nicho.frase}</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal"><span className="eyebrow">Os exemplos</span><h2>O que eu consigo fazer <em>com isso?</em></h2><p>Exemplos de vídeo que você pode gravar ainda hoje. Cada cena é real, feita pelo Modo Editor a partir de um pedido em português.</p></div>
+          <div className="section-heading reveal"><h2>Exemplos de conteúdo que você pode postar <em>ainda hoje.</em></h2><p>Cada cena abaixo é real, feita pelo Modo Editor a partir de um pedido em português.</p></div>
           <ol className="exemplos reveal" data-clip-grupo>
             {exemplos.map((x, i) => <li className="exemplo" key={x.titulo}>
               <div className="exemplo-cena">{x.par ? <div className="exemplo-par"><Clip grupo src={siteConfig.videos.cenas.fundoBruto} preset="bruto" label="Antes" /><Clip grupo src={siteConfig.videos.cenas.fundoNovo} label="Depois" /><span>Antes</span><span>Depois</span></div> : <Clip grupo src={x.src} label={x.titulo} />}</div>
@@ -358,31 +358,34 @@ function Pro() {
           </ol>
           <CtaMeio texto="Qualquer um desses, a partir de uma gravação no celular e um pedido em português." />
         </section>
-        <Entenda />
+        <section className="section container" id="como-funciona">
+          <div className="section-heading reveal"><h2>Como usar o Modo Editor <em className="text-ready">no seu dia a dia.</em></h2><p>É como ter um editor de vídeo dentro do seu ChatGPT ou Claude: não cobra por vídeo, não atrasa. Você coloca o Modo Editor lá uma vez (a aula leva 5 minutos) e cada vídeo é assim:</p></div>
+          <div className="steps"><div className="step reveal"><div className="step-number">1</div><h3>Abra a sua IA com o Modo Editor</h3><p>No ChatGPT ou no Claude, o Modo Editor já está lá, como você deixou na aula. Ela avisa que está pronta pra editar.</p><DropChat /></div><div className="step reveal"><div className="step-number">2</div><h3>Mande a gravação e peça</h3><p>Em português, como pediria a um editor: "tira as pausas, coloca legenda e mostra o dente quando eu explicar a cárie".</p><RequestChat /></div><div className="step reveal"><div className="step-number">3</div><h3>Receba pronto e poste</h3><p>A IA edita sozinha e devolve o vídeo cortado, legendado e com a explicação na tela. Você confere e posta.</p><div className="ready-preview"><MiniClip className="ready-clip" src={siteConfig.videos.cenas.pronto} opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
+        </section>
         <QualIA />
         <ForWho destaque={nicho.publico} />
         <Testimonials />
         <section className="section container comparison-section" id="antes-depois">
-          <div className="comparison-copy reveal"><span className="eyebrow">Antes e depois</span><h2>Qual a diferença <em>de verdade?</em></h2><p>Arraste a linha. À esquerda, do jeito que saiu do celular. À direita, o que o Modo Editor devolveu sem ninguém editar: os erros cortados, legenda, música baixinha e a ilustração entrando no trecho certo da fala.</p>
+          <div className="comparison-copy reveal"><h2>Olha a diferença que dá <em>no seu vídeo.</em></h2><p>Arraste a linha. À esquerda, do jeito que saiu do celular. À direita, o que o Modo Editor devolveu: erros cortados, legenda, música baixinha e a ilustração no trecho certo da fala.</p>
             <div className="stats"><div className="stat"><strong><NumberTicker value={siteConfig.demo.cuts} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={siteConfig.demo.secondsSaved} format={v => `${Math.round(v)}s`} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
             <p className="fine-print">Números reais deste vídeo: {siteConfig.demo.rawLength} de gravação viraram {siteConfig.demo.editedLength}. Variam com cada gravação.</p>
           </div><Comparison />
         </section>
-        <section className="section container" id="como-funciona">
-          <div className="section-heading reveal"><span className="eyebrow">A rotina</span><h2>Como fica o meu <em className="text-ready">dia a dia?</em></h2><p>Grava, pede, posta. Depois que o Modo Editor está na sua IA (a aula leva 5 minutos, uma vez só), cada vídeo é assim:</p></div>
-          <div className="steps"><div className="step reveal"><div className="step-number">1</div><h3>Abra a sua IA com o Modo Editor</h3><p>No ChatGPT ou no Claude, o Modo Editor já está lá, como você deixou na aula. Ela avisa que está pronta pra editar.</p><DropChat /></div><div className="step reveal"><div className="step-number">2</div><h3>Mande a gravação e peça</h3><p>Em português, como pediria a um editor: "tira as pausas, coloca legenda e mostra o dente quando eu explicar a cárie".</p><RequestChat /></div><div className="step reveal"><div className="step-number">3</div><h3>Receba pronto e poste</h3><p>A IA edita sozinha e devolve o vídeo cortado, legendado e com a explicação na tela. Você confere e posta.</p><div className="ready-preview"><MiniClip className="ready-clip" src={siteConfig.videos.cenas.pronto} opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
-        </section>
         <RequestLibrary />
         <ModeSwitch />
         <section className="section container" id="o-que-faz">
-          <div className="section-heading reveal"><span className="eyebrow">A edição</span><h2>O que ele faz <em>no meu vídeo?</em></h2><p>O que você fazia na mão, o Modo Editor faz sozinho. Você grava, pede e recebe pronto. É isso que acontece no meio do caminho:</p></div>
+          <div className="section-heading reveal"><h2>O que a IA faz <em>no seu vídeo.</em></h2><p>O que você fazia na mão, ela faz sozinha:</p></div>
           <div className="bento">{features.map(feature => <article key={feature.type} className={`feature reveal ${feature.wide ? 'feature-wide' : ''} ${feature.type === 'legenda' ? 'feature-full' : ''}`}><div className="feature-art">{feature.type === 'cut' ? <CutTimeline /> : feature.type === 'music' ? <MusicTimeline /> : feature.type === 'background' ? <div className="background-pair"><MiniClip preset="bruto" src={siteConfig.videos.cenas.fundoBruto} opts={{ scene: 'studio', offset: 3 }} /><MiniClip src={siteConfig.videos.cenas.fundoNovo} opts={{ bgSwap: true, captions: false, offset: 3 }} /></div> : <MiniClip className={`feature-thumbnail ${feature.type === 'anatomia' ? 'zoom-thumbnail' : ''}`} src={feature.type === 'anatomia' ? '/videos/cenas/dente.mp4' : feature.type === 'legenda' ? siteConfig.videos.cenas.legendaTroca : '/videos/cenas/titulo.mp4'} opts={feature.type === 'anatomia' ? { captions: false, scene: 'warm', offset: 4 } : { zoom: false, offset: 2 }} />}</div><feature.icon className="feature-icon" /><h3>{feature.title}</h3><p>{feature.copy}</p></article>)}</div>
         </section>
         <LiveDemo />
         <CtaMeio texto="É assim que os vídeos desta página foram feitos." />
         {nicho.aulas && <Aulas />}
         <section className="section container" id="conta">
-          <div className="section-heading reveal"><span className="eyebrow">O custo</span><h2>Quanto eu vou pagar <em>por mês?</em></h2><p>Só a assinatura da sua IA. Nada mais. O Modo Editor você paga uma vez; depois disso, o único custo é o plano pago do ChatGPT ou do Claude, que você já usa ou vai assinar direto com eles.</p></div>
+          <div className="section-heading reveal"><h2>Quanto você vai pagar <em>por mês.</em></h2><p>Só a assinatura da sua IA. Nada mais. O Modo Editor você paga uma vez.</p></div>
+          <div className="custo reveal" role="img" aria-label="Comparação: editor cobra de 800 a 1.200 reais por mês por quatro vídeos; com o Modo Editor você paga cerca de 110 reais por mês da assinatura da IA">
+            <div className="custo-col custo-editor"><span className="custo-rotulo">Pagando editor</span><div className="custo-barra"><i /></div><strong>R$ 800 a R$ 1.200</strong><small>por mês · 4 vídeos de 2 min com efeitos</small></div>
+            <div className="custo-col custo-modo"><span className="custo-rotulo">Com o Modo Editor</span><div className="custo-barra"><i /></div><strong>R$ 110</strong><small>por mês · a assinatura do ChatGPT ou do Claude, vídeos à vontade</small></div>
+          </div>
           <div className="plano reveal">
             <div className="plano-item"><CheckCircle2 /><div><strong>A assinatura da IA: a partir de US$ 20 por mês</strong><p>Uns R$ 110. É pago direto pra OpenAI ou pra Anthropic, não pra gente. Se você já assina, não paga mais nada.</p></div></div>
             <div className="plano-item"><CheckCircle2 /><div><strong>Nenhum valor por vídeo</strong><p>Você edita quantos vídeos quiser dentro do plano, o mês inteiro. Se bater o limite de uso do dia, espera um pouco e ele renova sozinho.</p></div></div>
@@ -392,7 +395,7 @@ function Pro() {
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
         <WhatYouGet />
         <Offer />
-        <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><span className="eyebrow">Dúvidas</span><h2>Ainda tenho <em>dúvidas.</em></h2><p>As perguntas que mais chegam no direct, respondidas.</p></div><Accordion type="single" collapsible className="faq-list">{duvidas.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
+        <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><h2>Dúvidas <em>frequentes.</em></h2><p>As perguntas que mais chegam no direct, respondidas.</p></div><Accordion type="single" collapsible className="faq-list">{duvidas.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
         <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo sai pronto,<br />com a explicação <em>na tela.</em></h2><PurchaseButton destino="checkout" /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
       </main>
     </div>

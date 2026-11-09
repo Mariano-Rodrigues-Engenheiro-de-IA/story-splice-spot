@@ -31,8 +31,8 @@ export type Nicho = {
 export const nichoPadrao: Nicho = {
   slug: '',
   selo: 'Funciona no ChatGPT e no Claude',
-  titulo: ['Poste vídeos profissionais todos os dias,', 'sem editar nada.'],
-  frase: 'Você grava no celular, do seu jeito. O Modo Editor corta os erros, legenda e coloca na tela o que você está explicando. Volta pronto em minutos, no padrão dos vídeos desta página.',
+  titulo: ['Vídeos profissionais todo dia,', 'sem editar nada.'],
+  frase: 'Você grava no celular. O Modo Editor corta os erros, legenda e coloca na tela o que você explica. Volta pronto em minutos.',
   publico: '',
   galeriaPrimeiro: 'Explicação em 3D',
   nome: 'Todas',
@@ -44,7 +44,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'psicologo',
     selo: 'Pra psicólogos e terapeutas que postam',
-    titulo: ['O vídeo que faz o paciente entender,', 'pronto em minutos.'],
+    titulo: ['Vídeos que o paciente entende,', 'prontos em minutos.'],
     frase: 'Você grava no consultório como fala com o paciente. A IA corta, legenda e coloca na tela o sintoma, o padrão, a saída. Sem editor, sem programa de edição.',
     publico: 'Psicólogos e terapeutas',
     galeriaPrimeiro: 'Objeto 3D na mão',
@@ -61,7 +61,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'nutricionista',
     selo: 'Pra nutricionistas que postam',
-    titulo: ['O vídeo que faz o paciente entender,', 'pronto em minutos.'],
+    titulo: ['Vídeos que o paciente entende,', 'prontos em minutos.'],
     frase: 'Você grava explicando o prato, a troca, a quantidade. A IA corta, legenda e coloca tudo na tela. Sem editor, sem programa de edição.',
     publico: 'Nutricionistas',
     galeriaPrimeiro: 'Título atrás de você',
@@ -78,7 +78,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'fisioterapeuta',
     selo: 'Pra fisioterapeutas que postam',
-    titulo: ['O vídeo que mostra por que dói,', 'pronto em minutos.'],
+    titulo: ['Vídeos que mostram por que dói,', 'prontos em minutos.'],
     frase: 'Você grava na clínica. A IA corta, legenda e coloca na tela a coluna, o disco, o exercício certo. Sem editor, sem programa de edição.',
     publico: 'Fisioterapeutas e personais',
     galeriaPrimeiro: 'Explicação em 3D',
@@ -95,7 +95,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'dentista',
     selo: 'Pra dentistas que postam',
-    titulo: ['O paciente entende o tratamento,', 'em um vídeo pronto em minutos.'],
+    titulo: ['Vídeos que explicam o tratamento,', 'prontos em minutos.'],
     frase: 'Você grava no consultório. A IA corta, legenda e coloca na tela o dente em corte, a cárie, o tratamento. Sem editor, sem programa de edição.',
     publico: 'Dentistas',
     galeriaPrimeiro: 'Explicação em 3D',
@@ -129,7 +129,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'arquiteto',
     selo: 'Pra arquitetos e designers de interiores',
-    titulo: ['O cliente enxerga o projeto,', 'em um vídeo pronto em minutos.'],
+    titulo: ['Vídeos que mostram o projeto,', 'prontos em minutos.'],
     frase: 'Você grava no projeto ou na obra. A IA corta, legenda e coloca na tela o antes e depois, a medida, a mudança. Sem editor, sem programa de edição.',
     publico: 'Arquitetos e corretores',
     galeriaPrimeiro: 'Cenário novo',
@@ -146,7 +146,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'personal',
     selo: 'Pra personais e professores de educação física',
-    titulo: ['O vídeo que mostra o movimento certo,', 'pronto em minutos.'],
+    titulo: ['Vídeos que mostram o movimento,', 'prontos em minutos.'],
     frase: 'Você grava na academia. A IA corta, legenda e coloca na tela o músculo, o erro comum e o jeito certo. Sem editor, sem programa de edição.',
     publico: 'Fisioterapeutas e personais',
     galeriaPrimeiro: 'Título atrás de você',
