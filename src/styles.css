@@ -1287,3 +1287,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @media (prefers-reduced-motion: reduce) { .pro2 .botao-compra { animation: none !important; } }
 .pro2 .cta-meio { margin-top: 36px; }
 .pro2 .p2-segure .section-heading h2 em { white-space: nowrap; }
+/* WhatsApp do outro lado da barra de compra, mais alto e com "Dúvidas?": ninguém confunde com o botão de comprar */
+.pro2 .whats { left: 16px; right: auto; }
+@media (max-width: 760px) { .pro2 .sticky-bar.on ~ .whats { bottom: 108px; } }
+.pro2 .whats-rotulo { position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); white-space: nowrap; padding: 6px 11px; border-radius: 99px; background: #fff; border: 1px solid var(--border); color: var(--foreground); font-size: 13px; font-weight: 700; box-shadow: 0 8px 18px -10px rgba(10, 20, 40, .4); }
