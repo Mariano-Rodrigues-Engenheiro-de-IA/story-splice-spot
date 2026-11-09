@@ -142,6 +142,9 @@ export function ComoFunciona() {
 
 /* ───────────── 2. Veja como o seu vídeo muda (segure para ver como foi gravado) ───────────── */
 
+/** O mesmo trecho do fisioterapeuta (criativo 09): a gravação na parede branca e o vídeo editado, alinhados no tempo. */
+const PAR = { bruto: '/videos/pro2/fisio-bruto.mp4', editado: '/videos/pro2/fisio-editado.mp4' };
+
 export function Segure() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('150px 0px');
   const [segurando, setSegurando] = useState(false);
@@ -178,8 +181,8 @@ export function Segure() {
           onPointerDown={e => { if (e.button === 0) segurar(); }} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar}
           onContextMenu={e => e.preventDefault()} role="button" tabIndex={0} aria-pressed={segurando} aria-label="Segure para ver a gravação original"
           onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); segurar(); } }} onKeyUp={soltar}>
-          <VideoVivo src={siteConfig.videos.raw} ativo={naTela} perto={naTela} className="p2-camada-bruto" label="Gravação original" onRef={v => { bruto.current = v; }} />
-          <VideoVivo src={siteConfig.videos.edited} ativo={naTela} perto={naTela} className="p2-camada-editado" label="Vídeo editado pelo Modo Editor" onRef={v => { editado.current = v; }} />
+          <VideoVivo src={PAR.bruto} ativo={naTela} perto={naTela} className="p2-camada-bruto" label="Gravação original" onRef={v => { bruto.current = v; }} />
+          <VideoVivo src={PAR.editado} ativo={naTela} perto={naTela} className="p2-camada-editado" label="Vídeo editado pelo Modo Editor" onRef={v => { editado.current = v; }} />
           <span className={`p2-selo ${mostraBruto ? '' : 'pronto'}`}>{mostraBruto ? 'Como foi gravado' : '✓ Editado pela IA'}</span>
         </Celular>
         <p className={`p2-segure-dica ${tocou ? 'tocou' : ''}`}><Fingerprint size={22} /> {segurando ? 'Agora solte' : 'Segure o dedo no vídeo'}</p>
@@ -197,14 +200,14 @@ export function Segure() {
 /* ───────────── Estilos de conteúdo (esteira que roda sem parar; dedo em cima para) ───────────── */
 
 const saidas = [
-  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', linha: 'Vídeo da Karina, esteticista.' },
-  { src: '/videos/cenas/dente.mp4', titulo: 'Explicação em 3D', linha: 'O paciente entende o tratamento na hora.' },
-  { src: '/videos/cenas/titulo.mp4', titulo: 'A dúvida vira título', linha: 'Você responde antes de perguntarem.' },
-  { src: '/videos/cenas/cerebro.mp4', titulo: 'Objeto na sua mão', linha: 'Prende o olho de quem está rolando.' },
-  { src: '/videos/cenas/mapa.mp4', titulo: 'Onde fica, no mapa', linha: 'Mostra o caminho até você.' },
-  { src: '/videos/cenas/legenda.mp4', titulo: 'Dica legendada', linha: 'Quem assiste sem som entende tudo.' },
-  { src: '/videos/cenas/cenario.mp4', titulo: 'Gravou em casa, saiu no estúdio', linha: 'Sem montar cenário nenhum.' },
-  { src: '/videos/cenas/cinema.mp4', titulo: 'Cara de cinema', linha: 'Pro vídeo institucional da sua marca.' },
+  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', linha: 'Esteticista · vídeo da Karina.' },
+  { src: '/videos/pro2/fisio-coluna.mp4', titulo: 'A coluna em 3D', linha: 'Fisioterapeuta · por que a coluna dói.' },
+  { src: '/videos/cenas/dente.mp4', titulo: 'O dente por dentro', linha: 'Dentista · o paciente entende o tratamento.' },
+  { src: '/videos/pro2/arquiteto-obra.mp4', titulo: 'A obra subindo', linha: 'Arquiteto · o cliente vê a casa pronta.' },
+  { src: '/videos/pro2/psicologo-ansiedade.mp4', titulo: 'A ansiedade no corpo', linha: 'Psicólogo · o paciente se enxerga.' },
+  { src: '/videos/pro2/personal-braco.mp4', titulo: 'O músculo trabalhando', linha: 'Personal · o aluno entende o exercício.' },
+  { src: '/videos/pro2/arquiteto-sala.mp4', titulo: 'A sala que parece maior', linha: 'Arquiteto · a ideia aparece na tela.' },
+  { src: '/videos/cenas/mapa.mp4', titulo: 'Onde fica, no mapa', linha: 'Corretor · o bairro do imóvel.' },
 ];
 /** velocidade da esteira, em pixels por segundo (~5 s por cartão no celular) */
 const VELOCIDADE = 36;
