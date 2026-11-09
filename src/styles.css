@@ -649,3 +649,42 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .calc-tipos button small { font-size: 9px; }
   .calc-result .calc-faixa { font-size: 34px; }
 }
+
+/* ── 8/11/2026: página por profissão, duas portas (comprar ou contratar), botões no meio ── */
+.hero h1.hero-titulo em { width: auto; display: inline; text-align: center; animation: none; }
+.cta-meio { text-align: center; margin: 44px auto 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.cta-meio > p { font-size: 14px; max-width: 420px; text-wrap: balance; }
+.cta-meio .purchase-note { margin: 0; }
+.publico.publico-8 { max-width: 900px; grid-template-columns: repeat(2, minmax(0,1fr)); }
+.publico-item.em-destaque { border-color: oklch(.828 .149 176 / .55); box-shadow: 0 0 0 1px oklch(.828 .149 176 / .25), var(--teal-glow); grid-column: 1 / -1; }
+.publico-item.em-destaque strong::after { content: 'pra você'; margin-left: 8px; font-family: var(--font-mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--ready); }
+.formas { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; max-width: 900px; margin: auto; align-items: stretch; }
+.forma { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 28px; display: flex; flex-direction: column; gap: 14px; box-shadow: var(--inner-glow); }
+.forma-principal { box-shadow: var(--red-glow); }
+.forma-tag { display: inline-flex; align-items: center; gap: 7px; width: fit-content; font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted-foreground); border: 1px solid var(--border); border-radius: 99px; padding: 6px 11px; }
+.forma h3 { font-size: 24px; font-weight: 700; }
+.forma-preco { font-size: 44px; font-weight: 650; line-height: 1; color: var(--foreground); display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.forma-preco sup { font-size: 16px; font-weight: 400; }
+.forma-preco small { font-size: 12px; font-weight: 400; color: var(--muted-foreground); margin-left: 4px; }
+.forma-preco-texto { font-size: 20px; font-weight: 500; color: var(--ready); }
+.forma ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; flex: 1; }
+.forma li { display: grid; grid-template-columns: 15px minmax(0,1fr); gap: 10px; font-size: 13px; line-height: 1.55; color: var(--muted-foreground); }
+.forma li svg { color: var(--ready); margin-top: 3px; }
+.forma .botao-compra, .forma .forma-botao { width: 100%; margin-top: 6px; }
+.forma-botao { height: 46px; border-radius: 14px; font-weight: 600; gap: 8px; }
+.oferta-servico { text-align: center; margin-top: 22px; font-size: 13px; }
+.oferta-servico a { color: var(--ready); text-decoration: underline; text-underline-offset: 3px; }
+.depo-video.depo-vitrine { grid-template-columns: minmax(0, 380px) minmax(0, 360px); padding: 26px; border: 1px solid oklch(.828 .149 176 / .35); border-radius: 24px; background: var(--card); box-shadow: var(--teal-glow); }
+.depo-video.depo-vitrine .eyebrow { display: block; margin-bottom: 10px; }
+.depo-video.depo-vitrine blockquote { font-size: 21px; }
+@media (max-width: 760px) {
+  .formas { grid-template-columns: minmax(0,1fr); }
+  .forma { padding: 22px; }
+  .forma h3 { font-size: 21px; }
+  .forma-preco { font-size: 38px; }
+  .publico.publico-8 { grid-template-columns: minmax(0,1fr); }
+  .depo-video.depo-vitrine { grid-template-columns: minmax(0, 260px); padding: 18px; }
+  .depo-video.depo-vitrine .depo-tela { width: 240px; }
+  .depo-video.depo-vitrine blockquote { font-size: 17px; }
+  .nav { display: none; }
+}

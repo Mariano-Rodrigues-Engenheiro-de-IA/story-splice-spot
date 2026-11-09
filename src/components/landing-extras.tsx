@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Check, Clapperboard, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
+  ArrowUp, Brain, Check, Clapperboard, FileText, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -179,23 +179,30 @@ export function ModeSwitch() {
 
 /* ───────────── Para quem é ───────────── */
 
+/** Cada cartão é uma profissão que grava explicando o que faz. Com `?p=`, o cartão da profissão vem primeiro, em destaque. */
 const personas = [
-  { icon: Clapperboard, title: 'Quem cria conteúdo', copy: 'Grava no domingo e só posta na quinta.' },
-  { icon: Megaphone, title: 'Quem anuncia', copy: 'Precisa de criativo novo toda semana.' },
+  { icon: Brain, title: 'Psicólogos e terapeutas', copy: 'Explica o mesmo padrão dez vezes por dia. No vídeo, ninguém vê.' },
+  { icon: Smile, title: 'Dentistas', copy: 'O paciente só entende o tratamento quando enxerga o dente.' },
+  { icon: Stethoscope, title: 'Fisioterapeutas e personais', copy: 'A coluna, o músculo, o movimento certo: tem que aparecer.' },
+  { icon: Salad, title: 'Nutricionistas', copy: 'O prato, a troca, a quantidade. Falado, some; na tela, fica.' },
+  { icon: Sparkles, title: 'Clínicas de estética', copy: 'O antes e depois é a sua prova. Precisa sair bonito e rápido.' },
+  { icon: Ruler, title: 'Arquitetos e corretores', copy: 'O cliente precisa ver o espaço, a medida, a mudança.' },
   { icon: GraduationCap, title: 'Quem ensina', copy: 'Tem aula gravada esperando edição.' },
-  { icon: Wallet, title: 'Quem paga editor', copy: 'Paga caro e ainda espera dias.' },
+  { icon: Clapperboard, title: 'Quem cria conteúdo e anuncia', copy: 'Grava no domingo e só posta na quinta.' },
 ] as const;
 
-export function ForWho() {
+export function ForWho({ destaque = '' }: { destaque?: string }) {
+  const lista = [...personas].sort((a, b) => Number(b.title === destaque) - Number(a.title === destaque));
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
         <span className="eyebrow">Para quem é</span>
-        <h2>A ideia você já tem. <em>Falta a edição sair.</em></h2>
+        <h2>Você já sabe explicar. <em>Falta o vídeo mostrar.</em></h2>
+        <p>Feito pra quem grava falando do próprio trabalho e quer o vídeo pronto, com a explicação na tela, sem abrir programa de edição.</p>
       </div>
-      <div className="reveal"><div className="publico">
-        {personas.map(p => (
-          <div key={p.title} className="publico-item">
+      <div className="reveal"><div className="publico publico-8">
+        {lista.map(p => (
+          <div key={p.title} className={`publico-item ${p.title === destaque ? 'em-destaque' : ''}`}>
             <span className="publico-icon"><p.icon size={18} /></span>
             <div><strong>{p.title}</strong><p>{p.copy}</p></div>
           </div>

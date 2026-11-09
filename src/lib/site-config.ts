@@ -1,12 +1,20 @@
 // Single place to configure the sales page. Leave fields empty until the real values exist.
 export type Testimonial = { result: string; quote: string; name: string; handle: string };
 /** Depoimento em vídeo (real e autorizado): vídeo vertical em public/videos, com a capa .webp ao lado. */
-export type VideoTestimonial = { name: string; role: string; quote: string; video: string };
+export type VideoTestimonial = { name: string; role: string; quote: string; video: string; destaque?: boolean };
 
 export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
   checkoutUrl: 'https://pay.kiwify.com.br/hFsZJIo',
-  price: 67,
+  /** Preço anunciado na página. Tem que bater com o preço cadastrado no checkout da Kiwify (mudado para 97 em 8/11/2026). */
+  price: 97,
+  /** Edição feita pela equipe, cobrada por vídeo. É a segunda porta da página: quem não quer editar fala no WhatsApp.
+   *  `precoPorVideo` vazio = a página não mostra valor, só "peça o valor no WhatsApp". Ex.: 'a partir de R$ 60 por vídeo'. */
+  servico: {
+    ativo: true,
+    precoPorVideo: '' as string,
+    mensagem: 'Oi! Quero saber como funciona a edição por vídeo feita por vocês.',
+  },
   /** Preço depois do lançamento (o preço da oferta gira dele até `price`). 0 = sem preço de depois. */
   priceAfterLaunch: 197,
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
@@ -46,10 +54,19 @@ export const siteConfig = {
   vslDemo: { cuts: 119, rawLength: '13:13', editedLength: '5:25' },
   /** Seção do produtor: foto em public/img. */
   creator: { name: 'Mariano Rodrigues', photo: '/img/mariano.webp' },
-  /** Only real, authorized testimonials. Empty list hides the section. */
+  /** Depoimentos em texto, reais e autorizados (o Mariano tem vários no WhatsApp: colar aqui).
+   *  result = uma linha curta com a profissão ou o resultado ("Psicóloga · 2 vídeos por semana"); handle = @ ou cidade. */
   testimonials: [] as Testimonial[],
-  /** Depoimentos em vídeo (reais e autorizados). Lista vazia esconde o bloco. */
+  /** Depoimentos em vídeo (reais e autorizados). O primeiro com `destaque` vira a vitrine, acima dos outros.
+   *  Vídeo vazio = o depoimento não aparece (fica aqui esperando o arquivo). */
   videoTestimonials: [
+    {
+      name: 'Esteticista',
+      role: 'clínica de estética · aluna do Modo Editor',
+      quote: '',
+      video: '' as string, // → /videos/depo-esteticista.mp4 (+ capa depo-esteticista.webp) quando o Mariano mandar
+      destaque: true,
+    },
     {
       name: 'Isaque',
       role: 'aluno do Modo Editor',
