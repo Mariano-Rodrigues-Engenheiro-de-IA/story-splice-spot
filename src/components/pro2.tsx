@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, Check, Fingerprint, Play, Sparkles } from 'lucide-react';
+import { Check, Fingerprint, Loader2, Sparkles } from 'lucide-react';
 import { NumberTicker } from '@/components/number-ticker';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
 
-/* Página /pro2 (9/11/2026): refeita do zero a partir da pesquisa de mercado.
-   Cada seção tem UMA demonstração grande, e o que se transforma é o vídeo de verdade. */
+/* Página /pro2 (9/11/2026, 2ª versão): tudo anda sozinho (nada de rolar para o lado nem rolagem presa),
+   o celular tem proporção de celular de verdade e cada seção responde UMA pergunta do leigo. */
 
 const menosMovimento = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const capa = (src: string) => src.replace(/\.mp4$/, '.webp');
@@ -42,88 +42,93 @@ function VideoVivo({ src, ativo, perto, className = '', label, onRef }: { src: s
     muted loop playsInline preload={carregar ? 'auto' : 'none'} aria-label={label} className={`p2-video ${className}`} />;
 }
 
-/* ───────────── 1. O que vai aparecer no seu vídeo (carrossel de saídas) ───────────── */
-
-const saidas = [
-  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', linha: 'Vídeo real da Karina, esteticista, editado com o Modo Editor.' },
-  { src: '/videos/cenas/dente.mp4', titulo: 'Explicação em 3D', linha: 'O paciente entende o tratamento na hora.' },
-  { src: '/videos/cenas/titulo.mp4', titulo: 'A dúvida vira título', linha: 'Você responde antes de perguntarem.' },
-  { src: '/videos/cenas/cerebro.mp4', titulo: 'Objeto na sua mão', linha: 'Prende o olho de quem está rolando.' },
-  { src: '/videos/cenas/mapa.mp4', titulo: 'Onde fica, no mapa', linha: 'Mostra o caminho até o seu consultório.' },
-  { src: '/videos/cenas/legenda.mp4', titulo: 'Dica legendada', linha: 'Quem assiste sem som entende tudo.' },
-  { src: '/videos/cenas/cenario.mp4', titulo: 'Gravou em casa, saiu no estúdio', linha: 'Sem montar cenário nenhum.' },
-  { src: '/videos/cenas/cinema.mp4', titulo: 'Cara de cinema', linha: 'Pro vídeo institucional da sua marca.' },
-];
-
-/** O vídeo que a aluna editou, tocando mudo em loop; um toque liga o som. */
-export function ResultadoCliente({ src, nome }: { src: string; nome: string }) {
-  const [caixa, naTela] = useNaTela<HTMLDivElement>('100px 0px');
-  const video = useRef<HTMLVideoElement | null>(null);
-  const [som, setSom] = useState(false);
-  const alternar = () => { const v = video.current; if (!v) return; const ligar = v.muted; v.muted = !ligar; if (ligar) { v.currentTime = 0; void v.play().catch(() => undefined); } setSom(ligar); };
+/** Moldura de iPhone na proporção real (tela 9 : 19,5), com a ilha e a barra de status. */
+function Celular({ children, className = '', escura = true, ...resto }: React.HTMLAttributes<HTMLDivElement> & { escura?: boolean }) {
   return (
-    <div className="p2-resultado" ref={caixa}>
-      <p>O vídeo que a {nome.split(' ')[0]} editou com o Modo Editor:</p>
-      <div className="p2-resultado-tela">
-        <VideoVivo src={src} ativo={naTela} perto={naTela} label={`Vídeo editado por ${nome}`} onRef={v => { video.current = v; }} />
-        <button type="button" className="p2-ouvir" onClick={alternar}>{som ? 'Som ligado' : 'Toque para ouvir'}</button>
+    <div className={`p2-cel ${className}`} {...resto}>
+      <div className={`p2-cel-tela ${escura ? 'escura' : 'clara'}`}>
+        <div className="p2-status" aria-hidden="true"><span>9:41</span><span className="p2-ilha" /><span className="p2-status-icones"><i /><i /><i /></span></div>
+        {children}
       </div>
     </div>
   );
 }
 
-export function Saidas() {
-  const [secao, naTela] = useNaTela<HTMLElement>('200px 0px');
-  const trilho = useRef<HTMLOListElement>(null);
-  const [atual, setAtual] = useState(0);
+/* ───────────── 1. Como funciona? (3 passos que andam sozinhos dentro do celular) ───────────── */
+
+const passos = [
+  { titulo: 'Mande o vídeo e peça o que quer', linha: 'No seu ChatGPT ou Claude, em português.' },
+  { titulo: 'A IA edita sozinha', linha: 'Você pode fechar e ir trabalhar.' },
+  { titulo: 'Receba pronto pra postar', linha: 'Cortado, legendado e com a explicação na tela.' },
+];
+const pedido = 'Tira as pausas, coloca legenda e mostra o dente quando eu falar do canal';
+const tarefas = ['Cortando as pausas e os erros', 'Colocando a legenda', 'Colocando o dente em 3D'];
+
+export function ComoFunciona() {
+  const [caixa, naTela] = useNaTela<HTMLDivElement>('0px');
+  const [passo, setPasso] = useState(0);
+  const [letras, setLetras] = useState(0);
+  const [feitas, setFeitas] = useState(0);
+  // cada passo anda sozinho; o toque num passo pula para ele e o ciclo continua dali
   useEffect(() => {
-    const el = trilho.current;
-    if (!el) return;
-    let pedido = 0;
-    const medir = () => {
-      cancelAnimationFrame(pedido);
-      pedido = requestAnimationFrame(() => {
-        const cartoes = Array.from(el.children) as HTMLElement[];
-        const centro = el.scrollLeft + el.clientWidth / 2;
-        let melhor = 0, dist = Infinity;
-        cartoes.forEach((c, i) => { const d = Math.abs(c.offsetLeft + c.offsetWidth / 2 - centro); if (d < dist) { dist = d; melhor = i; } });
-        setAtual(melhor);
-      });
-    };
-    el.addEventListener('scroll', medir, { passive: true });
-    return () => { el.removeEventListener('scroll', medir); cancelAnimationFrame(pedido); };
-  }, []);
-  const irPara = (i: number) => { const el = trilho.current; const c = el?.children[i] as HTMLElement | undefined; if (el && c) el.scrollTo({ left: c.offsetLeft - (el.clientWidth - c.offsetWidth) / 2, behavior: 'smooth' }); };
+    if (!naTela) return;
+    if (menosMovimento()) { setLetras(pedido.length); setFeitas(tarefas.length); return; }
+    let id: number;
+    if (passo === 0) id = letras < pedido.length ? window.setTimeout(() => setLetras(n => n + 1), 32) : window.setTimeout(() => { setFeitas(0); setPasso(1); }, 1300);
+    else if (passo === 1) id = feitas < tarefas.length ? window.setTimeout(() => setFeitas(n => n + 1), 1100) : window.setTimeout(() => setPasso(2), 900);
+    else id = window.setTimeout(() => { setLetras(0); setPasso(0); }, 5200);
+    return () => window.clearTimeout(id);
+  }, [naTela, passo, letras, feitas]);
+  const irPara = (i: number) => { setPasso(i); if (i === 0) setLetras(0); if (i === 1) setFeitas(0); if (i === 2) setFeitas(tarefas.length); };
+  const atual = passos[passo] ?? passos[0]!;
   return (
-    <section className="section p2-saidas" id="exemplos" ref={secao}>
-      <div className="container section-heading reveal">
-        <h2>O que vai aparecer <em>no seu vídeo?</em></h2>
-        <p>Você grava no celular. A IA devolve assim:</p>
+    <section className="section container p2-como" id="como-funciona">
+      <div className="section-heading reveal">
+        <h2>Como <em>funciona?</em></h2>
+        <p>Você coloca o Modo Editor no seu ChatGPT ou Claude uma vez, seguindo a aula. Depois, todo vídeo é assim:</p>
       </div>
-      <div className="container p2-origem reveal">
-        <div className="p2-origem-video"><VideoVivo src="/videos/cenas/cru_modo.mp4" ativo={naTela} perto={naTela} label="Gravação no celular, sem edição" /></div>
-        <div><strong>Você grava assim</strong><span>no celular, de uma vez, sem nada</span></div>
-        <span className="p2-origem-seta" aria-hidden="true"><ArrowDown size={16} /></span>
+      <div className="p2-como-corpo reveal" ref={caixa}>
+        <ol className="p2-etapas" aria-label="Passos">
+          {passos.map((p, i) => (
+            <li key={p.titulo}>
+              <button type="button" className={i === passo ? 'on' : i < passo ? 'feito' : ''} onClick={() => irPara(i)} aria-label={`Passo ${i + 1}: ${p.titulo}`}>
+                <span className="p2-etapa-num">{i < passo ? <Check size={14} /> : i + 1}</span>
+                <span className="p2-etapa-barra"><i key={`${passo}-${i}`} /></span>
+              </button>
+            </li>
+          ))}
+        </ol>
+        <div className="p2-etapa-texto" key={passo}><strong>{passo + 1}. {atual.titulo}</strong><span>{atual.linha}</span></div>
+        <Celular escura={passo !== 0} className="p2-cel-como">
+          {/* passo 1: a conversa com a IA */}
+          <div className={`p2-tela p2-chat ${passo === 0 ? 'on' : ''}`}>
+            <div className="p2-chat-topo"><LogoChatGPT /><LogoClaude /><span>Sua IA · Modo Editor ativo</span></div>
+            <div className="p2-chat-corpo">
+              <div className="p2-anexo"><img src={capa(siteConfig.videos.cenas.aoVivoBruto)} alt="" width={54} height={96} /><div><strong>Vídeo</strong><small>gravado no celular</small></div></div>
+              {letras > 0 && <p className="p2-balao">{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>}
+            </div>
+            <div className="p2-chat-entrada" aria-hidden="true"><span>Mensagem</span><i /></div>
+          </div>
+          {/* passo 2: a IA trabalhando em cima da gravação */}
+          <div className={`p2-tela ${passo === 1 ? 'on' : ''}`}>
+            <VideoVivo src={siteConfig.videos.cenas.aoVivoBruto} ativo={naTela && passo === 1} perto={naTela} label="Gravação sendo editada" />
+            <div className="p2-tarefas">
+              <span className="p2-tarefas-topo"><Sparkles size={13} /> Editando seu vídeo…</span>
+              {tarefas.map((t, i) => <span key={t} className={`p2-tarefa ${i < feitas ? 'ok' : i === feitas ? 'agora' : ''}`}>{i < feitas ? <Check size={14} /> : i === feitas ? <Loader2 size={14} className="p2-girando" /> : <i />}{t}</span>)}
+            </div>
+          </div>
+          {/* passo 3: o vídeo pronto, com o dente na tela */}
+          <div className={`p2-tela ${passo === 2 ? 'on' : ''}`}>
+            <VideoVivo src="/videos/cenas/dente.mp4" ativo={naTela && passo === 2} perto={naTela} label="Vídeo pronto, com o dente em 3D" />
+            {passo === 2 && <span className="p2-aviso"><Check size={14} /> Vídeo pronto pra postar</span>}
+          </div>
+        </Celular>
       </div>
-      <div className="p2-ponte reveal" aria-hidden="true"><span><Sparkles size={13} /> O Modo Editor edita</span></div>
-      <ol className="p2-trilho" ref={trilho} aria-label="Exemplos de vídeos editados">
-        {saidas.map((s, i) => (
-          <li key={s.src} className={`p2-cartao ${i === atual ? 'on' : ''}`}>
-            <div className="p2-cartao-tela"><VideoVivo src={s.src} ativo={naTela && i === atual} perto={naTela && Math.abs(i - atual) <= 1} label={s.titulo} /></div>
-            <h3>{s.titulo}</h3>
-            <p>{s.linha}</p>
-          </li>
-        ))}
-      </ol>
-      <div className="p2-pontos" role="tablist" aria-label="Escolher exemplo">
-        {saidas.map((s, i) => <button key={s.src} type="button" role="tab" aria-selected={i === atual} aria-label={s.titulo} className={i === atual ? 'on' : ''} onClick={() => irPara(i)} />)}
-      </div>
-      <p className="p2-dica">{atual + 1} de {saidas.length} · deslize para o lado</p>
     </section>
   );
 }
 
-/* ───────────── 2. Segure para ver como foi gravado ───────────── */
+/* ───────────── 2. Veja como o seu vídeo muda (segure para ver como foi gravado) ───────────── */
 
 export function Segure() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('150px 0px');
@@ -142,159 +147,157 @@ export function Segure() {
     }, 300);
     return () => window.clearInterval(id);
   }, [naTela]);
-  // até a pessoa tocar, o vídeo mostra sozinho o antes de tempos em tempos
+  // até a pessoa tocar, o vídeo mostra sozinho como foi gravado, de tempos em tempos
   useEffect(() => {
     if (tocou || !naTela || menosMovimento()) return;
-    const id = window.setTimeout(() => setAuto(a => !a), auto ? 1800 : 3600);
+    const id = window.setTimeout(() => setAuto(a => !a), auto ? 2000 : 3800);
     return () => window.clearTimeout(id);
   }, [auto, tocou, naTela]);
   const soltar = () => setSegurando(false);
+  const segurar = () => { setTocou(true); setSegurando(true); };
   return (
     <section className="section container p2-segure" id="antes-depois">
       <div className="section-heading reveal">
         <h2>Veja como o seu vídeo <em>muda.</em></h2>
         <p>Segure o dedo no vídeo para ver como ele foi gravado.</p>
       </div>
-      <div className="reveal">
-        <div ref={caixa} className={`p2-fone p2-fone-segure ${mostraBruto ? 'is-bruto' : ''}`}
-          onPointerDown={e => { if (e.button === 0) { setTocou(true); setSegurando(true); } }}
-          onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}
-          role="button" tabIndex={0} aria-pressed={segurando} aria-label="Segure para ver a gravação original"
-          onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setTocou(true); setSegurando(true); } }} onKeyUp={soltar}>
-          <span className="p2-ilha" aria-hidden="true" />
-          <div className="p2-fone-tela">
-            <VideoVivo src={siteConfig.videos.raw} ativo={naTela} perto={naTela} className="p2-camada-bruto" label="Gravação original" onRef={v => { bruto.current = v; }} />
-            <VideoVivo src={siteConfig.videos.edited} ativo={naTela} perto={naTela} className="p2-camada-editado" label="Vídeo editado pelo Modo Editor" onRef={v => { editado.current = v; }} />
-            <span className={`p2-selo ${mostraBruto ? '' : 'pronto'}`}>{mostraBruto ? '● Como foi gravado' : '✓ Editado pela IA'}</span>
-          </div>
-        </div>
+      <div className="reveal" ref={caixa}>
+        <Celular className={`p2-cel-segure ${mostraBruto ? 'is-bruto' : ''}`}
+          onPointerDown={e => { if (e.button === 0) segurar(); }} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar}
+          onContextMenu={e => e.preventDefault()} role="button" tabIndex={0} aria-pressed={segurando} aria-label="Segure para ver a gravação original"
+          onKeyDown={e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); segurar(); } }} onKeyUp={soltar}>
+          <VideoVivo src={siteConfig.videos.raw} ativo={naTela} perto={naTela} className="p2-camada-bruto" label="Gravação original" onRef={v => { bruto.current = v; }} />
+          <VideoVivo src={siteConfig.videos.edited} ativo={naTela} perto={naTela} className="p2-camada-editado" label="Vídeo editado pelo Modo Editor" onRef={v => { editado.current = v; }} />
+          <span className={`p2-selo ${mostraBruto ? '' : 'pronto'}`}>{mostraBruto ? 'Como foi gravado' : '✓ Editado pela IA'}</span>
+        </Celular>
         <p className={`p2-segure-dica ${tocou ? 'tocou' : ''}`}><Fingerprint size={22} /> {segurando ? 'Agora solte' : 'Segure o dedo no vídeo'}</p>
-        <div className="p2-numeros">
-          <div><strong>{siteConfig.demo.rawLength}</strong><small>de gravação</small></div>
+        <div className="p2-relogio">
+          <div><small>Você gravou às</small><strong>10:00</strong></div>
           <span aria-hidden="true">→</span>
-          <div className="pronto"><strong>{siteConfig.demo.editedLength}</strong><small>pronto pra postar</small></div>
-          <div className="p2-numeros-cortes"><strong><NumberTicker value={siteConfig.demo.cuts} /></strong><small>pausas e erros cortados</small></div>
+          <div className="pronto"><small>Pronto pra postar às</small><strong><NumberTicker value={20} duration={1800} format={v => `10:${String(Math.round(v)).padStart(2, '0')}`} /></strong></div>
         </div>
+        <p className="p2-relogio-nota">Enquanto a IA editava, você trabalhava.</p>
       </div>
     </section>
   );
 }
 
-/* ───────────── 3. Como a IA edita (celular parado, passos trocam com a rolagem) ───────────── */
+/* ───────────── Estilos de conteúdo (arsenal lado a lado, passando sozinho) ───────────── */
 
-const passos = [
-  { titulo: 'Você manda o vídeo e pede', linha: 'Em português, como falaria com um editor.' },
-  { titulo: 'A IA tira os erros', linha: 'Pausas, “éééé” e frases repetidas somem.' },
-  { titulo: 'Coloca na tela o que você explica', linha: 'O dente aparece quando você fala dele.' },
-  { titulo: 'Devolve pronto pra postar', linha: 'Você confere e posta.' },
+const saidas = [
+  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', linha: 'Vídeo da Karina, esteticista.' },
+  { src: '/videos/cenas/dente.mp4', titulo: 'Explicação em 3D', linha: 'O paciente entende o tratamento na hora.' },
+  { src: '/videos/cenas/titulo.mp4', titulo: 'A dúvida vira título', linha: 'Você responde antes de perguntarem.' },
+  { src: '/videos/cenas/cerebro.mp4', titulo: 'Objeto na sua mão', linha: 'Prende o olho de quem está rolando.' },
+  { src: '/videos/cenas/mapa.mp4', titulo: 'Onde fica, no mapa', linha: 'Mostra o caminho até você.' },
+  { src: '/videos/cenas/legenda.mp4', titulo: 'Dica legendada', linha: 'Quem assiste sem som entende tudo.' },
+  { src: '/videos/cenas/cenario.mp4', titulo: 'Gravou em casa, saiu no estúdio', linha: 'Sem montar cenário nenhum.' },
+  { src: '/videos/cenas/cinema.mp4', titulo: 'Cara de cinema', linha: 'Pro vídeo institucional da sua marca.' },
 ];
-const pedido = 'Tira as pausas, coloca legenda e mostra o dente quando eu falar do canal';
+const TEMPO_CARTAO = 4200;
 
-export function ComoEdita() {
-  const secao = useRef<HTMLElement>(null);
-  const [passo, setPasso] = useState(0);
-  const [perto, setPerto] = useState(false);
-  const [letras, setLetras] = useState(0);
+export function Saidas() {
+  const [secao, naTela] = useNaTela<HTMLElement>('0px');
+  const trilho = useRef<HTMLOListElement>(null);
+  const [atual, setAtual] = useState(0);
+  const [volta, setVolta] = useState(0);
+  const pausaAte = useRef(0);
+  const rolandoSozinho = useRef(0);
+  const irPara = (i: number, suave = true) => {
+    const el = trilho.current; const c = el?.children[i] as HTMLElement | undefined;
+    if (!el || !c) return;
+    rolandoSozinho.current = Date.now() + 900;
+    el.scrollTo({ left: c.offsetLeft - parseFloat(getComputedStyle(el).paddingLeft), behavior: suave ? 'smooth' : 'auto' });
+    setAtual(i);
+  };
+  // quando a própria pessoa arrasta, o cartão do meio vira o atual e o automático espera um pouco
   useEffect(() => {
-    const el = secao.current;
+    const el = trilho.current;
     if (!el) return;
-    let pedidoQuadro = 0;
+    let quadro = 0;
     const medir = () => {
-      cancelAnimationFrame(pedidoQuadro);
-      pedidoQuadro = requestAnimationFrame(() => {
-        const r = el.getBoundingClientRect();
-        setPerto(r.top < window.innerHeight * 1.6 && r.bottom > -window.innerHeight * 0.6);
-        const curso = r.height - window.innerHeight;
-        const p = curso > 0 ? Math.min(0.999, Math.max(0, -r.top / curso)) : 0;
-        setPasso(Math.floor(p * passos.length));
+      if (Date.now() < rolandoSozinho.current) return;
+      cancelAnimationFrame(quadro);
+      quadro = requestAnimationFrame(() => {
+        const inicio = el.scrollLeft + parseFloat(getComputedStyle(el).paddingLeft);
+        let melhor = 0, dist = Infinity;
+        (Array.from(el.children) as HTMLElement[]).forEach((c, i) => { const d = Math.abs(c.offsetLeft - inicio); if (d < dist) { dist = d; melhor = i; } });
+        setAtual(melhor);
       });
     };
-    medir();
-    window.addEventListener('scroll', medir, { passive: true });
-    window.addEventListener('resize', medir);
-    return () => { window.removeEventListener('scroll', medir); window.removeEventListener('resize', medir); cancelAnimationFrame(pedidoQuadro); };
+    const tocou = () => { pausaAte.current = Date.now() + 7000; };
+    el.addEventListener('scroll', medir, { passive: true });
+    el.addEventListener('pointerdown', tocou);
+    el.addEventListener('touchstart', tocou, { passive: true });
+    return () => { el.removeEventListener('scroll', medir); el.removeEventListener('pointerdown', tocou); el.removeEventListener('touchstart', tocou); cancelAnimationFrame(quadro); };
   }, []);
-  // o pedido é digitado quando a pessoa chega no passo 1
+  // passa sozinho para o próximo vídeo enquanto a seção está na tela
   useEffect(() => {
-    if (!perto) return;
-    if (menosMovimento()) { setLetras(pedido.length); return; }
-    if (letras >= pedido.length) return;
-    const id = window.setTimeout(() => setLetras(n => n + 1), 28);
+    if (!naTela || menosMovimento()) return;
+    const id = window.setTimeout(() => {
+      if (Date.now() < pausaAte.current) { setVolta(v => v + 1); return; }
+      // no fim da fila (últimos já à mostra) volta para o primeiro
+      const el = trilho.current;
+      const noFim = !!el && el.scrollLeft + el.clientWidth >= el.scrollWidth - 8;
+      irPara(noFim ? 0 : (atual + 1) % saidas.length);
+    }, TEMPO_CARTAO);
     return () => window.clearTimeout(id);
-  }, [perto, letras]);
-  const irPara = (i: number) => {
-    const el = secao.current;
-    if (!el) return;
-    const curso = el.offsetHeight - window.innerHeight;
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + curso * ((i + 0.5) / passos.length), behavior: 'smooth' });
-  };
-  const atual = passos[passo] ?? passos[0]!;
+  }, [atual, naTela, volta]);
   return (
-    <section className="p2-como" id="como-funciona" ref={secao} style={{ height: `${passos.length * 75 + 25}svh` }}>
-      <div className="p2-como-fixo">
-        <h2 className="p2-como-titulo">Como a IA edita <em>o seu vídeo?</em></h2>
-        <div className="p2-fone p2-fone-como">
-          <span className="p2-ilha" aria-hidden="true" />
-          <div className="p2-fone-tela">
-            {/* passo 1: a conversa com a IA */}
-            <div className={`p2-tela p2-chat ${passo === 0 ? 'on' : ''}`}>
-              <div className="p2-chat-topo"><LogoChatGPT /><LogoClaude /><span>Sua IA · Modo Editor ativo</span></div>
-              <div className="p2-chat-corpo">
-                <div className="p2-anexo"><img src={capa('/videos/cenas/ao_vivo_bruto.mp4')} alt="" width={54} height={96} /><div><strong>gravacao.mp4</strong><small>gravado no celular</small></div></div>
-                <p className="p2-balao">{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>
-                <p className={`p2-resposta ${letras >= pedido.length ? 'on' : ''}`}><Sparkles size={13} /> Pode deixar. Já estou editando.</p>
-              </div>
-            </div>
-            {/* passo 2: os erros saem */}
-            <div className={`p2-tela ${passo === 1 ? 'on' : ''}`}>
-              <VideoVivo src={siteConfig.videos.cenas.aoVivoBruto} ativo={passo === 1} perto={perto} label="Gravação sendo cortada" />
-              <div className={`p2-faixa ${passo === 1 ? 'cortando' : ''}`} aria-hidden="true">
-                {Array.from({ length: 22 }, (_, i) => <i key={i} className={[4, 5, 11, 12, 13, 18].includes(i) ? 'erro' : ''} />)}
-              </div>
-            </div>
-            {/* passo 3: o que você explica aparece */}
-            <div className={`p2-tela ${passo === 2 ? 'on' : ''}`}><VideoVivo src="/videos/cenas/dente.mp4" ativo={passo === 2} perto={perto} label="Dente em 3D ao lado de quem explica" /></div>
-            {/* passo 4: pronto */}
-            <div className={`p2-tela ${passo === 3 ? 'on' : ''}`}><VideoVivo src={siteConfig.videos.cenas.aoVivoPronto} ativo={passo === 3} perto={perto} label="Vídeo pronto" /></div>
-            <div className="p2-avisos" aria-live="polite">
-              {passo === 1 && <span className="p2-aviso" key="a1"><Check size={13} /> {siteConfig.vslDemo.cuts} pausas e erros cortados</span>}
-              {passo === 2 && <span className="p2-aviso" key="a2"><Check size={13} /> Dente em 3D colocado</span>}
-              {passo === 3 && <span className="p2-aviso pronto" key="a3"><Check size={13} /> Vídeo pronto · {siteConfig.vslDemo.rawLength} viraram {siteConfig.vslDemo.editedLength}</span>}
-            </div>
-          </div>
-        </div>
-        <div className="p2-passo" key={passo}><strong>{passo + 1}. {atual.titulo}</strong><span>{atual.linha}</span></div>
-        <ol className="p2-bolinhas" aria-label="Passos">
-          {passos.map((p, i) => <li key={p.titulo}><button type="button" className={i === passo ? 'on' : i < passo ? 'feito' : ''} onClick={() => irPara(i)} aria-label={`Passo ${i + 1}: ${p.titulo}`}>{i < passo ? <Check size={13} /> : i + 1}</button></li>)}
-        </ol>
+    <section className="section p2-saidas" id="exemplos" ref={secao}>
+      <div className="container section-heading reveal">
+        <h2>Estilos de conteúdo que você pode usar <em>no seu vídeo.</em></h2>
+      </div>
+      <ol className="p2-trilho" ref={trilho} aria-label="Exemplos de vídeos editados">
+        {saidas.map((s, i) => (
+          <li key={s.src} className="p2-cartao">
+            <div className="p2-cartao-tela"><VideoVivo src={s.src} ativo={naTela && i >= atual && i <= atual + 2} perto={naTela && i >= atual - 1 && i <= atual + 3} label={s.titulo} /></div>
+            <h3>{s.titulo}</h3>
+            <p>{s.linha}</p>
+          </li>
+        ))}
+      </ol>
+      <div className="p2-pontos" aria-hidden="true">
+        {saidas.map((s, i) => <span key={s.src} className={i === atual ? 'on' : i < atual ? 'foi' : ''}>{i === atual && <i key={`${atual}-${volta}`} style={{ animationDuration: `${TEMPO_CARTAO}ms` }} />}</span>)}
       </div>
     </section>
   );
 }
 
-/* ───────────── 4. Quanto você vai pagar por mês (o recibo) ───────────── */
+/* ───────────── O vídeo que a aluna editou (junto do depoimento) ───────────── */
 
-export function Recibo() {
-  const linhas: [string, string, string?][] = [
-    ['Plano da sua IA', 'US$ 20', 'A partir de US$ 20, no ChatGPT ou no Claude, pago direto pra eles. Pode ser o plano mais básico.'],
-    ['Mensalidade do Modo Editor', 'R$ 0'],
-    ['Valor por vídeo editado', 'R$ 0'],
-    ['Aplicativo ou programa novo', 'R$ 0'],
-  ];
+/** O vídeo que a aluna editou, tocando mudo em loop; um toque liga o som. */
+export function ResultadoCliente({ src, nome }: { src: string; nome: string }) {
+  const [caixa, naTela] = useNaTela<HTMLDivElement>('100px 0px');
+  const video = useRef<HTMLVideoElement | null>(null);
+  const [som, setSom] = useState(false);
+  const alternar = () => { const v = video.current; if (!v) return; const ligar = v.muted; v.muted = !ligar; if (ligar) { v.currentTime = 0; void v.play().catch(() => undefined); } setSom(ligar); };
   return (
-    <section className="section container p2-conta" id="conta">
+    <div className="p2-resultado" ref={caixa}>
+      <p>O vídeo que a {nome.split(' ')[0]} editou:</p>
+      <div className="p2-resultado-tela">
+        <VideoVivo src={src} ativo={naTela} perto={naTela} label={`Vídeo editado por ${nome}`} onRef={v => { video.current = v; }} />
+        <button type="button" className="p2-ouvir" onClick={alternar}>{som ? 'Som ligado' : 'Toque para ouvir'}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ───────────── Qual IA você vai usar? ───────────── */
+
+export function QualIA2() {
+  return (
+    <section className="section container" id="qual-ia">
       <div className="section-heading reveal">
-        <h2>Quanto você vai pagar <em>por mês?</em></h2>
-        <p>Só o plano da sua IA. Nada a mais.</p>
+        <h2>Qual IA você <em>vai usar?</em></h2>
+        <p>O Modo Editor funciona nos dois. Você escolhe um.</p>
       </div>
       <div className="reveal">
-        <div className="p2-recibo" role="group" aria-label="Recibo do mês">
-          <div className="p2-recibo-topo"><span>SEU MÊS COM O MODO EDITOR</span><span className="p2-recibo-logos"><LogoChatGPT /><LogoClaude /></span></div>
-          <ul>{linhas.map(([nome, valor, obs]) => <li key={nome}><div><span>{nome}</span><b className={valor === 'R$ 0' ? 'zero' : ''}>{valor}</b></div>{obs && <small>{obs}</small>}</li>)}</ul>
-          <div className="p2-recibo-total"><span>A mais por mês</span><strong>R$ 0</strong></div>
-          <span className="p2-carimbo" aria-hidden="true">Sem mensalidade nova</span>
+        <div className="p2-ias">
+          <div className="p2-ia"><LogoChatGPT /><div><strong>ChatGPT</strong><span>Plano Plus <b>pago</b></span></div></div>
+          <div className="p2-ia"><LogoClaude /><div><strong>Claude</strong><span>Plano Pro <b>pago</b></span></div></div>
         </div>
-        <p className="p2-conta-nota"><Play size={13} /> O Modo Editor você paga uma vez só.</p>
+        <p className="p2-ias-nota">Você edita no computador (Mac ou Windows). O celular serve pra gravar.</p>
       </div>
     </section>
   );

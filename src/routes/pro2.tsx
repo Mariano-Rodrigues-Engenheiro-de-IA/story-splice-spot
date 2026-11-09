@@ -4,8 +4,8 @@ import { ArrowRight, Loader2, Play, CheckCircle2, MessageCircle } from 'lucide-r
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { VslPlayer } from '@/components/vsl-player';
-import { Creator, QualIA, useReveal } from '@/components/landing-pro';
-import { ComoEdita, Recibo, ResultadoCliente, Saidas, Segure } from '@/components/pro2';
+import { Creator, useReveal } from '@/components/landing-pro';
+import { ComoFunciona, QualIA2, ResultadoCliente, Saidas, Segure } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
@@ -126,18 +126,13 @@ const faqItems = [
   ['E se eu não gostar?', 'Você tem 7 dias de garantia. Pede o reembolso e recebe 100% do valor de volta.'],
 ];
 
-/** true enquanto o celular dos passos ("Como a IA edita") está preso na tela: nada flutua por cima dele. */
-function noComoEdita() {
-  const r = document.getElementById('como-funciona')?.getBoundingClientRect();
-  return !!r && r.top < window.innerHeight * 0.5 && r.bottom > window.innerHeight * 0.5;
-}
 function StickyBar() {
   const [show, setShow] = useState(false);
   useEffect(() => {
     let offerVisible = false, fimVisivel = false;
     const offer = document.getElementById('oferta');
     const fim = document.querySelector('.lamp');
-    const update = () => setShow(window.scrollY > 700 && !offerVisible && !fimVisivel && !noComoEdita());
+    const update = () => setShow(window.scrollY > 700 && !offerVisible && !fimVisivel);
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.target === offer) { offerVisible = entry.isIntersecting; if (offerVisible) eventoProprio('ViuOferta'); }
       else fimVisivel = entry.isIntersecting;
@@ -156,7 +151,7 @@ function WhatsAppButton() {
   // no topo ele ficaria em cima do botão de compra e da linha de garantia: só aparece depois que a pessoa rola um pouco
   const [on, setOn] = useState(false);
   useEffect(() => {
-    const ver = () => setOn(window.scrollY > 450 && !noComoEdita());
+    const ver = () => setOn(window.scrollY > 450);
     ver(); window.addEventListener('scroll', ver, { passive: true });
     return () => window.removeEventListener('scroll', ver);
   }, []);
@@ -216,24 +211,22 @@ function Pro2() {
   return <div className="page pro pro2">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#exemplos">Exemplos</a><a href="#como-funciona">Como funciona</a><a href="#conta">Quanto custa por mês</a><a href="#oferta">Comprar</a></nav></header>
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#exemplos">Exemplos</a><a href="#como-funciona">Como funciona</a><a href="#oferta">Comprar</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
           <h1 id="hero-title" className="hero-titulo"><span>{nicho.titulo[0]}</span><em>{nicho.titulo[1]}</em></h1>
           <div className="hero-video"><VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /></div>
           <div className="hero-cta"><PurchaseButton /></div>
-          <p className="purchase-note p2-sem">Sem programa de edição · Sem mensalidade a mais</p>
+          <p className="purchase-note">Pagamento único · 7 dias de garantia</p>
           <p className="hero-copy">{nicho.frase}</p>
         </section>
         <Saidas />
-        <div className="container"><CtaMeio texto="Tudo isso a partir de um vídeo gravado no celular." /></div>
+        <ComoFunciona />
         <Segure />
-        <ComoEdita />
         <div className="container"><CtaMeio texto="É assim que os vídeos desta página foram feitos." /></div>
         <Depoimentos />
-        <QualIA />
-        <Recibo />
+        <QualIA2 />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
         <Offer />
         <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><h2>Dúvidas <em>frequentes.</em></h2></div><Accordion type="single" collapsible className="faq-list">{duvidas.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
