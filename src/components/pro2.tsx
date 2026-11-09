@@ -199,15 +199,15 @@ export function Segure() {
 
 /* ───────────── Estilos de conteúdo (esteira que roda sem parar; dedo em cima para) ───────────── */
 
-const saidas = [
-  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', linha: 'Esteticista · vídeo da Karina.' },
-  { src: '/videos/pro2/fisio-coluna.mp4', titulo: 'A coluna em 3D', linha: 'Fisioterapeuta · por que a coluna dói.' },
-  { src: '/videos/cenas/dente.mp4', titulo: 'O dente por dentro', linha: 'Dentista · o paciente entende o tratamento.' },
-  { src: '/videos/pro2/arquiteto-obra.mp4', titulo: 'A obra subindo', linha: 'Arquiteto · o cliente vê a casa pronta.' },
-  { src: '/videos/pro2/psicologo-ansiedade.mp4', titulo: 'A ansiedade no corpo', linha: 'Psicólogo · o paciente se enxerga.' },
-  { src: '/videos/pro2/personal-braco.mp4', titulo: 'O músculo trabalhando', linha: 'Personal · o aluno entende o exercício.' },
-  { src: '/videos/pro2/arquiteto-sala.mp4', titulo: 'A sala que parece maior', linha: 'Arquiteto · a ideia aparece na tela.' },
-  { src: '/videos/cenas/mapa.mp4', titulo: 'Onde fica, no mapa', linha: 'Corretor · o bairro do imóvel.' },
+const saidas: { src: string; titulo: string; profissao: string; emoji: string; aluna?: boolean }[] = [
+  { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', profissao: 'Esteticista', emoji: '💆‍♀️', aluna: true },
+  { src: '/videos/pro2/fisio-coluna.mp4', titulo: 'A coluna em 3D', profissao: 'Fisioterapeuta', emoji: '🦴' },
+  { src: '/videos/cenas/dente.mp4', titulo: 'O dente por dentro', profissao: 'Dentista', emoji: '🦷' },
+  { src: '/videos/pro2/professor-aula.mp4', titulo: 'A aula ganha cenas', profissao: 'Professor', emoji: '📚' },
+  { src: '/videos/pro2/psicologo-ansiedade.mp4', titulo: 'A ansiedade no corpo', profissao: 'Psicólogo', emoji: '🧠' },
+  { src: '/videos/pro2/arquiteto-obra.mp4', titulo: 'A obra subindo', profissao: 'Arquiteto', emoji: '📐' },
+  { src: '/videos/pro2/personal-braco.mp4', titulo: 'O músculo trabalhando', profissao: 'Personal', emoji: '💪' },
+  { src: '/videos/cenas/mapa.mp4', titulo: 'Onde fica, no mapa', profissao: 'Corretor', emoji: '🏠' },
 ];
 /** velocidade da esteira, em pixels por segundo (~5 s por cartão no celular) */
 const VELOCIDADE = 36;
@@ -215,12 +215,15 @@ const VELOCIDADE = 36;
 const VOLTAS = 3;
 
 /** Cartão da esteira: a capa fica por baixo do vídeo, então ele nunca aparece vazio, nem carregando. */
-function CartaoEstilo({ src, titulo, linha, copia, ativo, perto }: { src: string; titulo: string; linha: string; copia: boolean; ativo: boolean; perto: boolean }) {
+function CartaoEstilo({ src, titulo, profissao, emoji, aluna, copia, ativo, perto }: { src: string; titulo: string; profissao: string; emoji: string; aluna?: boolean; copia: boolean; ativo: boolean; perto: boolean }) {
   return (
     <li className="p2-cartao" aria-hidden={copia || undefined}>
-      <div className="p2-cartao-tela" style={{ backgroundImage: `url(${capa(src)})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={titulo} /></div>
+      <span className="p2-etiqueta"><span aria-hidden="true">{emoji}</span>{profissao}</span>
+      <div className="p2-cartao-tela" style={{ backgroundImage: `url(${capa(src)})` }}>
+        <VideoVivo src={src} ativo={ativo} perto={perto} label={`${profissao}: ${titulo}`} />
+        {aluna && <span className="p2-aluna">✓ Aluna real</span>}
+      </div>
       <h3>{titulo}</h3>
-      <p>{linha}</p>
     </li>
   );
 }

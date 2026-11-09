@@ -932,7 +932,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-saidas .section-heading { margin-bottom: 24px; }
 .pro2 .p2-esteira { overflow: hidden; touch-action: pan-y; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; -webkit-mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent); mask-image: linear-gradient(90deg, transparent, #000 3%, #000 97%, transparent); }
 .pro2 .p2-esteira video { pointer-events: none; -webkit-touch-callout: none; }
-.pro2 .p2-esteira-fila { list-style: none; margin: 0; padding: 6px 0 10px 16px; display: flex; gap: 12px; width: max-content; will-change: transform; backface-visibility: hidden; }
+.pro2 .p2-esteira-fila { list-style: none; margin: 0; padding: 18px 0 10px 16px; display: flex; gap: 12px; width: max-content; will-change: transform; backface-visibility: hidden; }
 .pro2 .p2-cartao { flex: 0 0 min(190px, 44vw); }
 .pro2 .p2-cartao-tela { aspect-ratio: 9 / 16; border-radius: 20px; overflow: hidden; background: #0d1220 center / cover no-repeat; border: 1px solid var(--border); box-shadow: 0 22px 44px -26px rgba(10, 20, 40, .55); }
 .pro2 .p2-cartao h3 { margin: 12px 0 3px; font-size: 17px; line-height: 1.2; font-weight: 700; color: var(--foreground); text-align: center; }
@@ -1029,3 +1029,9 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .lamp-content h2.p2-fim-titulo { display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .pro2 .lamp-content h2.p2-fim-titulo > span { white-space: nowrap; font-size: clamp(19px, 5.4vw, 42px); line-height: 1.15; font-weight: 650; }
 .pro2 .lamp-content h2.p2-fim-titulo > em { white-space: nowrap; font-size: clamp(28px, 8.4vw, 58px); line-height: 1.1; }
+.pro2 .p2-cartao { position: relative; }
+.pro2 .p2-etiqueta { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); z-index: 2; display: inline-flex; align-items: center; gap: 5px; max-width: calc(100% - 8px); white-space: nowrap; padding: 5px 11px; border-radius: 99px; background: #fff; color: var(--foreground); font-size: 12px; font-weight: 800; letter-spacing: .03em; text-transform: uppercase; border: 1px solid color-mix(in oklch, var(--foreground) 10%, transparent); box-shadow: 0 8px 18px -10px rgba(10, 20, 40, .45); }
+.pro2 .p2-etiqueta > span { font-size: 14px; letter-spacing: 0; }
+.pro2 .p2-cartao-tela { position: relative; }
+.pro2 .p2-aluna { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); white-space: nowrap; padding: 5px 10px; border-radius: 99px; background: var(--ready); color: #fff; font-size: 12px; font-weight: 800; box-shadow: 0 8px 18px -10px rgba(0, 0, 0, .5); }
+.pro2 .p2-cartao h3 { margin-top: 10px; }

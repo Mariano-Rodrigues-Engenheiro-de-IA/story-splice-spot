@@ -126,13 +126,18 @@ const faqItems = [
   ['E se eu não gostar?', 'Você tem 7 dias de garantia. Pede o reembolso e recebe 100% do valor de volta.'],
 ];
 
+/** A barra de compra e o WhatsApp só entram depois da esteira de estilos: antes disso cobririam as etiquetas e os títulos. */
+function depoisDosEstilos() {
+  const e = document.getElementById('exemplos');
+  return e ? e.offsetTop + e.offsetHeight - window.innerHeight * 0.6 : 700;
+}
 function StickyBar() {
   const [show, setShow] = useState(false);
   useEffect(() => {
     let offerVisible = false, fimVisivel = false;
     const offer = document.getElementById('oferta');
     const fim = document.querySelector('.lamp');
-    const update = () => setShow(window.scrollY > 700 && !offerVisible && !fimVisivel);
+    const update = () => setShow(window.scrollY > depoisDosEstilos() && !offerVisible && !fimVisivel);
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.target === offer) { offerVisible = entry.isIntersecting; if (offerVisible) eventoProprio('ViuOferta'); }
       else fimVisivel = entry.isIntersecting;
@@ -151,7 +156,7 @@ function WhatsAppButton() {
   // no topo ele ficaria em cima do botão de compra e da linha de garantia: só aparece depois que a pessoa rola um pouco
   const [on, setOn] = useState(false);
   useEffect(() => {
-    const ver = () => setOn(window.scrollY > 450);
+    const ver = () => setOn(window.scrollY > depoisDosEstilos());
     ver(); window.addEventListener('scroll', ver, { passive: true });
     return () => window.removeEventListener('scroll', ver);
   }, []);
