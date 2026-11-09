@@ -1259,3 +1259,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-mac-ias { position: absolute; z-index: 3; top: -16px; right: 4%; display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 99px; background: #fff; border: 1px solid var(--border); box-shadow: 0 10px 22px -12px rgba(10, 20, 40, .45); }
 .pro2 .p2-mac-ias svg { width: 18px; height: 18px; }
 .pro2 .p2-mac-ias small { font-size: 12px; font-weight: 600; color: var(--muted-foreground); }
+.pro2 .p2-etapa-texto { min-height: 78px; }
+.pro2 .p2-etapa-textos { display: grid; width: 100%; }
+.pro2 .p2-etapa-textos > .p2-etapa-texto { grid-area: 1 / 1; min-height: 0; opacity: 0; transform: translateY(6px); transition: none; animation: none; }
+.pro2 .p2-etapa-textos > .p2-etapa-texto.on { opacity: 1; transform: none; transition: opacity .3s .05s, transform .3s .05s; }

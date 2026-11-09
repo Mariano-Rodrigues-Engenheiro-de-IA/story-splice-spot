@@ -57,7 +57,7 @@ function Celular({ children, className = '', escura = true, ...resto }: React.HT
 /* ───────────── 1. Como funciona? (pedido e edição no notebook, vídeo pronto no celular; anda sozinho) ───────────── */
 
 const passos = [
-  { titulo: 'Instale o Modo Editor na sua IA', linha: 'Uma vez só, seguindo a aula.' },
+  { titulo: 'Instale o Modo Editor no ChatGPT ou no Claude', linha: 'Uma vez só, seguindo a aula.' },
   { titulo: 'Mande o vídeo e peça o que quer', linha: 'No ChatGPT ou no Claude, pelo computador.' },
   { titulo: 'A IA edita sozinha', linha: 'Você pode sair e ir trabalhar.' },
   { titulo: 'Receba pronto pra postar', linha: 'É só passar pro celular e postar.' },
@@ -183,7 +183,6 @@ export function ComoFunciona() {
   }, [naTela, passo, inst, letras, carga]);
   const irPara = (i: number) => { setPasso(i); setInst(i === 0 ? 0 : 2); setLetras(i <= 1 ? 0 : pedido.length); setCarga(i === 3 ? 100 : 0); };
   const instalado = passo > 0 || inst === 2;
-  const atual = passos[passo] ?? passos[0]!;
   return (
     <section className="section container p2-como" id="como-funciona">
       <div className="section-heading reveal">
@@ -201,7 +200,7 @@ export function ComoFunciona() {
             </li>
           ))}
         </ol>
-        <div className="p2-etapa-texto" key={passo}><strong>{passo + 1}. {atual.titulo}</strong><span>{atual.linha}</span></div>
+        <div className="p2-etapa-textos" aria-live="polite">{passos.map((p, i) => <div key={p.titulo} className={`p2-etapa-texto ${i === passo ? 'on' : ''}`} aria-hidden={i !== passo}><strong>{i + 1}. {p.titulo}</strong><span>{p.linha}</span></div>)}</div>
         <div className={`p2-cena passo-${passo}`} ref={cena} style={{ height: Math.round(434 * escala + 92), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
           {/* MacBook Pro (devices.css, MIT) com a tela no estilo do chat do Claude: o pedido e a IA editando, sem mostrar o resultado */}
           {passo === 0 && inst === 0 && <span className="p2-voa" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>}
