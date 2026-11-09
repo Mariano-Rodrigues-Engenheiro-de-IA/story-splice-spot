@@ -736,3 +736,20 @@ em { font-family: var(--font-editorial); font-weight: 400; }
 .plano-item strong { display: block; font-size: 15px; color: var(--foreground); }
 .plano-item p { font-size: 13px; line-height: 1.65; margin-top: 4px; }
 @media (max-width: 760px) { .entenda li, .plano-item { padding: 16px; } .entenda strong { font-size: 15px; } }
+
+/* ── 9/11: "O que eu vou conseguir postar?" por profissão ── */
+.prof-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 auto 26px; max-width: 760px; }
+.prof-chips button { border: 1px solid var(--border); background: var(--card); color: var(--muted-foreground); border-radius: 99px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; }
+.prof-chips button.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+.ideias { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; max-width: 900px; margin: auto; }
+.ideia { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px 22px; box-shadow: var(--inner-glow); animation: word-in .4s ease both; }
+.ideia-num { font-family: var(--font-mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--ready); }
+.ideia h3 { font-size: 19px; line-height: 1.25; margin: 8px 0 14px; color: var(--foreground); text-wrap: balance; }
+.ideia dl { margin: 0; display: grid; gap: 10px; }
+.ideia dt { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-foreground); }
+.ideia dd { margin: 3px 0 0; font-size: 13px; line-height: 1.55; color: var(--foreground); }
+.ideia dl div:last-child dd { color: var(--ready); font-weight: 500; }
+.regra { max-width: 900px; margin: 18px auto 0; display: flex; gap: 10px; align-items: flex-start; padding: 14px 18px; border-radius: 14px; background: oklch(.5 .09 180 / .08); border: 1px solid oklch(.5 .09 180 / .3); font-size: 13px; line-height: 1.6; color: var(--foreground); }
+.regra svg { flex: none; color: var(--ready); margin-top: 2px; }
+.regra strong { color: var(--foreground); }
+@media (max-width: 760px) { .ideias { grid-template-columns: minmax(0,1fr); } .ideia { padding: 18px; } .ideia h3 { font-size: 17px; } .prof-chips { gap: 6px; } .prof-chips button { padding: 8px 12px; font-size: 12px; } }

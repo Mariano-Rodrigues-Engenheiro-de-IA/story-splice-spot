@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Brain, Check, Clapperboard, FileText, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
+  ArrowUp, Brain, Check, ShieldCheck, Clapperboard, FileText, GraduationCap, KeyRound, MonitorPlay, Play, Power, Ruler, Salad, Smile, Sparkles, Stethoscope, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
+import { nichos, type Nicho } from '@/lib/nichos';
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -61,8 +62,8 @@ export function LiveDemo() {
   return (
     <section className="section container" id="ao-vivo">
       <div className="section-heading reveal">
-        <span className="eyebrow">Editando ao vivo</span>
-        <h2>Veja a IA <em>trabalhando.</em></h2>
+        <span className="eyebrow">Quanto tempo leva?</span>
+        <h2>Você grava em 10 minutos. <em>A IA edita enquanto você atende.</em></h2>
         <p>Uma gravação comum entra. Em cinco passos, sai um vídeo pronto, sem você abrir programa nenhum.</p>
       </div>
       <div ref={ref} className="live reveal" data-step={step}>
@@ -146,8 +147,8 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <span className="eyebrow">Por que não basta pedir pra IA</span>
-        <h2>A sua IA sozinha não sabe editar. <em>Com o Modo Editor, sabe.</em></h2>
+        <span className="eyebrow">E se eu só pedir pra IA, sem o Modo Editor?</span>
+        <h2>Sozinha, ela chuta. <em>Com o Modo Editor, ela sabe.</em></h2>
         <p>Se você pedir "edita esse vídeo" pro ChatGPT ou pro Claude, ele devolve qualquer coisa. O Modo Editor é o treinamento que você coloca nele uma vez: depois disso ele edita como um editor que entende de vídeo de consultório. Toque no botão e compare.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
@@ -197,9 +198,9 @@ export function ForWho({ destaque = '' }: { destaque?: string }) {
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
-        <span className="eyebrow">Para quem é</span>
-        <h2>Você já sabe explicar. <em>Falta o vídeo mostrar.</em></h2>
-        <p>Feito pra quem grava falando do próprio trabalho e quer o vídeo pronto, com a explicação na tela, sem abrir programa de edição.</p>
+        <span className="eyebrow">É pra mim?</span>
+        <h2>Se você explica o seu trabalho pra alguém, <em>é pra você.</em></h2>
+        <p>Preparado pra quem atende paciente e cliente e precisa postar toda semana, mesmo com a agenda cheia.</p>
       </div>
       <div className="reveal"><div className="publico publico-8">
         {lista.map(p => (
@@ -241,8 +242,8 @@ export function RequestLibrary() {
   return (
     <section className="section container" id="pedidos">
       <div className="section-heading reveal">
-        <span className="eyebrow">Como você pede</span>
-        <h2>Você pede como pediria <em>a um editor.</em></h2>
+        <span className="eyebrow">Como eu peço?</span>
+        <h2>Do jeito que você pediria <em>a um editor.</em></h2>
         <p>Em português, sem termo técnico. Veja três pedidos reais de consultório e o que a IA faz com cada um. Se não souber o que pedir, o Gerador de Pedido monta o texto pra você em cliques.</p>
       </div>
       <div className="reveal"><div className="ia-chat" ref={ref}>
@@ -289,7 +290,7 @@ export function WhatYouGet() {
   return (
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
-        <span className="eyebrow">O que você recebe</span>
+        <span className="eyebrow">O que eu recebo?</span>
         <h2>Você entra hoje <em>e edita o primeiro vídeo hoje.</em></h2>
         <p>Não é um curso de edição. É um passo a passo curto, com a sua IA já preparada pra editar vídeo de consultório.</p>
       </div>
@@ -311,6 +312,44 @@ export function WhatYouGet() {
   );
 }
 
+
+/* ───────────── O que eu vou conseguir postar? (por profissão) ───────────── */
+
+/** A pessoa escolhe a profissão e vê 4 vídeos que pode gravar esta semana: a pergunta do paciente, o que ela fala,
+ *  o que a IA coloca na tela. Com ?p= a profissão já vem escolhida. */
+export function OQueVouPostar({ inicial }: { inicial: Nicho }) {
+  const lista = nichos.filter(n => n.ideias.length);
+  const [slug, setSlug] = useState(inicial.ideias.length ? inicial.slug : 'psicologo');
+  const n = lista.find(x => x.slug === slug) ?? lista[0]!;
+  return (
+    <section className="section container" id="postar">
+      <div className="section-heading reveal">
+        <span className="eyebrow">O que eu vou conseguir postar?</span>
+        <h2>Quatro vídeos que você grava <em>esta semana.</em></h2>
+        <p>Você grava respondendo a pergunta que o paciente faz no consultório. A IA coloca a resposta na tela. Escolha a sua profissão:</p>
+      </div>
+      <div className="reveal">
+        <div className="prof-chips" role="tablist" aria-label="Profissão">
+          {lista.map(x => <button key={x.slug} type="button" role="tab" aria-selected={x.slug === n.slug} className={x.slug === n.slug ? 'on' : ''} onClick={() => setSlug(x.slug)}>{x.nome}</button>)}
+        </div>
+        <div className="ideias" key={n.slug}>
+          {n.ideias.map((v, i) => (
+            <article className="ideia" key={v.pergunta} style={{ animationDelay: `${i * 70}ms` }}>
+              <span className="ideia-num">Vídeo {i + 1}</span>
+              <h3>“{v.pergunta}”</h3>
+              <dl>
+                <div><dt>Você fala</dt><dd>{v.fala}</dd></div>
+                <div><dt>A IA coloca na tela</dt><dd>{v.tela}</dd></div>
+              </dl>
+            </article>
+          ))}
+        </div>
+        {n.regra && <p className="regra"><ShieldCheck size={16} /><span><strong>Dentro das regras do seu conselho.</strong> {n.regra}</span></p>}
+      </div>
+    </section>
+  );
+}
+
 /* ───────────── Entenda em 30 segundos ───────────── */
 
 /** O que a pessoa está comprando, dito de uma vez, pra quem nunca ouviu falar de IA editando vídeo. */
@@ -323,9 +362,9 @@ export function Entenda() {
   return (
     <section className="section container" id="entenda">
       <div className="section-heading reveal">
-        <span className="eyebrow">Entenda em 30 segundos</span>
+        <span className="eyebrow">Como isso funciona?</span>
         <h2>Sua IA vira <em>o seu editor de vídeo.</em></h2>
-        <p>Preparado pra quem atende paciente e cliente: psicólogo, dentista, nutricionista, fisioterapeuta, estética, arquiteto.</p>
+        <p>Em três passos. Sem programa de edição, sem contratar ninguém.</p>
       </div>
       <div className="reveal"><ol className="entenda">
         {passos.map(([t, c], i) => (
@@ -347,7 +386,7 @@ export function Creator({ name, photo }: { name: string; photo: string }) {
         <span className="produtor-tag"><i className="record-dot" />Criador do Modo Editor</span>
       </div>
       <div className="produtor-texto reveal">
-        <span className="eyebrow">Quem está por trás</span>
+        <span className="eyebrow">Quem está por trás disso?</span>
         <h2>Prazer, eu sou o <em>{name}.</em></h2>
         <p className="produtor-cargo">Creator e estrategista de IA</p>
         <p>Empreendo desde 2021 e, nesse tempo todo, nunca parei de produzir conteúdo. Sempre estive ativo na internet, e todo vídeo esbarrava no mesmo problema: ou eu editava na mão, ou pagava um editor e ficava esperando.</p>
