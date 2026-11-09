@@ -25,7 +25,7 @@ export type Nicho = {
 export const nichoPadrao: Nicho = {
   slug: '',
   selo: 'Pra quem grava explicando o que faz',
-  titulo: ['Poste vídeo profissional toda semana,', 'sem editor e sem aprender a editar.'],
+  titulo: ['Vídeo profissional toda semana,', 'sem editor.'],
   frase: 'Você grava no celular explicando o que faz. A IA corta os erros, legenda e coloca na tela o que você está dizendo. Volta pronto em minutos, no padrão dos vídeos desta página.',
   publico: '',
   galeriaPrimeiro: 'Explicação em 3D',
@@ -62,7 +62,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'dentista',
     selo: 'Pra dentistas que postam',
-    titulo: ['O vídeo que faz o paciente entender o tratamento,', 'pronto em minutos.'],
+    titulo: ['O paciente entende o tratamento,', 'em um vídeo pronto em minutos.'],
     frase: 'Você grava no consultório. A IA corta, legenda e coloca na tela o dente em corte, a cárie, o tratamento. Sem editor, sem programa de edição.',
     publico: 'Dentistas',
     galeriaPrimeiro: 'Explicação em 3D',
@@ -80,7 +80,7 @@ export const nichos: Nicho[] = [
   {
     slug: 'arquiteto',
     selo: 'Pra arquitetos e designers de interiores',
-    titulo: ['O vídeo que faz o cliente enxergar o projeto,', 'pronto em minutos.'],
+    titulo: ['O cliente enxerga o projeto,', 'em um vídeo pronto em minutos.'],
     frase: 'Você grava no projeto ou na obra. A IA corta, legenda e coloca na tela o antes e depois, a medida, a mudança. Sem editor, sem programa de edição.',
     publico: 'Arquitetos e corretores',
     galeriaPrimeiro: 'Cenário novo',
