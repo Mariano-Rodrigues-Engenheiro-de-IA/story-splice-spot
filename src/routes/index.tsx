@@ -7,7 +7,7 @@ import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
-import { Creator, Entenda, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
+import { Creator, Entenda, ForWho, LiveDemo, QualIA, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { MessageCircle } from 'lucide-react';
@@ -255,7 +255,7 @@ function SpinningSeal() {
   return <div className="spin-seal" aria-label="7 dias de garantia"><svg viewBox="0 0 100 100" className="spin-ring" aria-hidden="true"><defs><path id="seal-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs><text><textPath href="#seal-circle" textLength="238">{text}</textPath></text></svg><span>7</span></div>;
 }
 const offerItems = [
-  ['Modo Editor: o editor dentro do seu ChatGPT', 'Você coloca no ChatGPT ou no Claude uma vez e ele passa a editar como um editor profissional: corta os erros, legenda, mostra na tela o que você explica.'],
+  ['Modo Editor: o editor dentro da sua IA', 'Você coloca no ChatGPT ou no Claude uma vez e ele passa a editar como um editor profissional: corta os erros, legenda, mostra na tela o que você explica.'],
   ['Videoaulas que te guiam do zero', 'Curtas, tela por tela: preparar o computador, colocar o Modo Editor na IA e editar o primeiro vídeo.'],
   ['Gerador de Pedido', 'Se não souber o que pedir, clica nas opções e ele escreve o pedido pra você.'],
   ['Suporte no WhatsApp', 'Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.'],
@@ -263,13 +263,13 @@ const offerItems = [
 ];
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><span className="eyebrow">Quanto custa?</span><h2>R$ {siteConfig.price}, <em>uma vez só.</em></h2><p>Sem mensalidade do nosso lado. Vídeos sem limite. Garantia de 7 dias.</p></div>
-    <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
+    <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT ou Claude, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
       <div className="offer-price"><p className="preco-rotulo">{siteConfig.priceAfterLaunch ? 'Preço de lançamento' : 'Pagamento único'}</p><div className="price"><sup>R$</sup><Odometro valor={siteConfig.price} de={siteConfig.priceAfterLaunch || siteConfig.price} /></div>{siteConfig.priceAfterLaunch > 0 && <p className="preco-depois">Depois do lançamento: R$ {siteConfig.priceAfterLaunch}</p>}<p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span><div className="bonus-card"><span className="bonus-card-tag"><Gift size={13} /> Bônus incluído</span><strong>O Arquivo Secreto do Roteiro</strong><p>Antes de gravar, a IA revisa o seu roteiro: gancho forte nos 3 primeiros segundos, fala clara e chamada final.</p><span className="bonus-card-gratis">Vem junto, sem pagar nada a mais</span></div></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
     {siteConfig.servico.ativo && siteConfig.whatsapp && <aside className="delegar reveal"><div><strong>Prefere delegar?</strong><p>Se você não quer editar, a nossa equipe edita por vídeo, no mesmo padrão desta página. Você manda a gravação e recebe pronto.</p></div><a className="delegar-link" href={linkServico()} target="_blank" rel="noopener noreferrer" onClick={() => { evento('Contact', { content_name: 'Edição por vídeo' }); eventoProprio('Servico_WhatsApp'); }}><MessageCircle size={15} /> Quero delegar</a></aside>}</section>;
 }
 const faqItems = [
-  ['O que exatamente eu estou comprando?', 'Um treinamento pronto pro seu ChatGPT ou Claude, mais as videoaulas pra colocar ele lá e editar o primeiro vídeo. Depois disso, o seu ChatGPT edita os seus vídeos: você grava, manda e pede em português. Não é um curso pra você aprender a editar e não é um programa pra instalar.'],
+  ['O que exatamente eu estou comprando?', 'Um treinamento pronto pro seu ChatGPT ou Claude, mais as videoaulas pra colocar ele lá e editar o primeiro vídeo. Depois disso, o seu ChatGPT ou Claude edita os seus vídeos: você grava, manda e pede em português. Não é um curso pra você aprender a editar e não é um programa pra instalar.'],
   ['Serve pra minha profissão?', 'Se você grava falando do seu trabalho, serve: saúde, estética, arquitetura, imóveis, aulas, consultoria, loja, igreja, conteúdo. Você explica como explica pro seu cliente e pede o que quer na tela.'],
   ['Dá pra mostrar na tela o que eu explico?', 'Dá. Título grande, lista, antes e depois, um objeto ou órgão em 3D, mapa, comparação de duas opções. Você pede em português e entra no tempo da sua fala.'],
   ['Não quero editar. Vocês editam pra mim?', 'Editamos. É a edição por vídeo: você manda a gravação pelo WhatsApp e recebe pronta, no mesmo padrão desta página. O valor é por vídeo e a gente passa na conversa.'],
@@ -395,6 +395,7 @@ function Index() {
           <CtaMeio texto="Qualquer um desses, a partir de uma gravação no celular e um pedido em português." />
         </section>
         <Entenda />
+        <QualIA />
         <ForWho destaque={nicho.publico} />
         <Testimonials />
         <section className="section container comparison-section" id="antes-depois">

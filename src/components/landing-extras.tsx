@@ -4,6 +4,7 @@ import {
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
+import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -146,9 +147,9 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <span className="eyebrow">Por que não basta usar o ChatGPT sozinho?</span>
-        <h2>Sem o Modo Editor, o ChatGPT <em>não sabe editar vídeo.</em></h2>
-        <p>Peça "edita esse vídeo" pro ChatGPT puro e ele devolve qualquer coisa, ou nada. Com o Modo Editor dentro dele, o vídeo sai com tudo isso. Toque no botão e compare.</p>
+        <span className="eyebrow">Por que não basta usar o ChatGPT ou o Claude sozinho?</span>
+        <h2>Sem o Modo Editor, a sua IA <em>não sabe editar vídeo.</em></h2>
+        <p>Peça "edita esse vídeo" pro ChatGPT ou pro Claude puro e ele devolve qualquer coisa, ou nada. Com o Modo Editor dentro, o vídeo sai com tudo isso. Toque no botão e compare.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -167,7 +168,7 @@ export function ModeSwitch() {
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
                 <span className="mode-check">{on ? <Check size={12} /> : '?'}</span>
-                <div><strong>{title}</strong><p>{on ? copy : 'o ChatGPT sozinho não faz'}</p></div>
+                <div><strong>{title}</strong><p>{on ? copy : 'a IA sozinha não faz'}</p></div>
               </li>
             ))}
           </ul>
@@ -291,7 +292,7 @@ export function WhatYouGet() {
       <div className="section-heading reveal">
         <span className="eyebrow">O que eu recebo?</span>
         <h2>Você entra hoje <em>e edita o primeiro vídeo hoje.</em></h2>
-        <p>Não é um curso de edição. É um passo a passo curto pra colocar o editor dentro do seu ChatGPT e usar ainda hoje.</p>
+        <p>Não é um curso de edição. É um passo a passo curto pra colocar o editor dentro do seu ChatGPT ou do seu Claude e usar ainda hoje.</p>
       </div>
       <div className="reveal"><div className="unbox">
         <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora</strong><small>o login da área de membros chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
@@ -299,7 +300,7 @@ export function WhatYouGet() {
           <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>1 · Videoaulas que te guiam do zero</strong><p>Curtas e tela por tela: como preparar o computador, como colocar o Modo Editor na sua IA e como editar o seu primeiro vídeo. Quem nunca mexeu com IA acompanha.</p></div></div>
           <div className="unbox-file principal">
             <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
-            <div><strong>2 · O Modo Editor <em>o editor dentro do seu ChatGPT</em></strong><p>Você coloca no ChatGPT ou no Claude uma vez, seguindo a aula. A partir daí ele edita como um editor profissional: corta os erros, legenda, coloca o título com a dúvida do cliente, mostra a ilustração, o 3D, o mapa ou o antes e depois na tela.</p></div>
+            <div><strong>2 · O Modo Editor <em>o editor dentro da sua IA</em></strong><p>Você coloca no ChatGPT ou no Claude uma vez, seguindo a aula. A partir daí ele edita como um editor profissional: corta os erros, legenda, coloca o título com a dúvida do cliente, mostra a ilustração, o 3D, o mapa ou o antes e depois na tela.</p></div>
           </div>
           <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>3 · Gerador de Pedido</strong><p>Se você não souber o que pedir, clica nas opções (legenda, título, o que mostrar na tela) e ele escreve o pedido pra você colar na IA. Dá até pra explicar por áudio.</p></div></div>
           <div className="unbox-file"><span className="unbox-icon"><Sparkles size={20} /></span><div><strong>4 · Suporte no WhatsApp</strong><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div></div>
@@ -312,21 +313,41 @@ export function WhatYouGet() {
 }
 
 
+/* ───────────── Qual IA eu vou usar? ───────────── */
+
+/** Tira a barreira "parece difícil": funciona nas duas IAs que a pessoa provavelmente já usa. */
+export function QualIA() {
+  return (
+    <section className="section container" id="qual-ia">
+      <div className="section-heading reveal">
+        <span className="eyebrow">Qual IA eu vou usar?</span>
+        <h2>A que você já usa: <em>ChatGPT ou Claude.</em></h2>
+        <p>O Modo Editor funciona nos dois. Se você já paga um deles, já tem tudo o que precisa. Se não, escolhe um e assina direto no site deles.</p>
+      </div>
+      <div className="reveal"><div className="ias">
+        <div className="ia-card"><LogoChatGPT /><div><strong>ChatGPT</strong><p>Plano Plus, da OpenAI. Você abre, coloca o Modo Editor uma vez e passa a pedir as edições por ali.</p></div></div>
+        <div className="ia-card"><LogoClaude /><div><strong>Claude</strong><p>Plano Pro, da Anthropic. Mesmo caminho: coloca o Modo Editor uma vez e pede as edições na conversa.</p></div></div>
+      </div>
+      <p className="ias-nota">A aula mostra tela por tela nos dois. Precisa de computador (Mac ou Windows) pra editar; o celular serve pra gravar.</p></div>
+    </section>
+  );
+}
+
 /* ───────────── Entenda em 30 segundos ───────────── */
 
 /** O que a pessoa está comprando, dito de uma vez, pra quem nunca ouviu falar de IA editando vídeo. */
 export function Entenda() {
   const passos = [
-    ['Você já tem o ChatGPT ou o Claude', 'No plano pago. É o mesmo que você usa pra tirar dúvida. Se ainda não tem, assina direto com eles.'],
-    ['Você coloca o Modo Editor nele, uma vez', 'É um treinamento pronto. Você segue a aula de 5 minutos e o seu ChatGPT passa a saber editar vídeo como um editor profissional: cortar os erros, legendar, colocar na tela o que você explica.'],
+    ['Você já tem o ChatGPT ou o Claude', 'Funciona nos dois, no plano pago. É o mesmo que você já usa pra tirar dúvida. Se ainda não tem nenhum, assina um deles direto no site.'],
+    ['Você coloca o Modo Editor nele, uma vez', 'É um treinamento pronto. Você segue a aula de 5 minutos e o seu ChatGPT ou Claude passa a saber editar vídeo como um editor profissional: cortar os erros, legendar, colocar na tela o que você explica.'],
     ['Pronto: você tem um editor de vídeo no seu negócio', 'Todo vídeo é assim: você grava no celular, manda pra ele e pede em português. Ele edita e devolve pronto pra postar. Não cobra por vídeo, não atrasa, não tira férias.'],
   ] as const;
   return (
     <section className="section container" id="entenda">
       <div className="section-heading reveal">
         <span className="eyebrow">Como isso funciona?</span>
-        <h2>É como contratar um editor de vídeo <em>que trabalha dentro do seu ChatGPT.</em></h2>
-        <p>Em três passos. Sem programa de edição, sem contratar ninguém.</p>
+        <h2>É como contratar um editor de vídeo <em>que trabalha dentro da sua IA.</em></h2>
+        <p>Funciona no ChatGPT e no Claude. Em três passos, sem programa de edição, sem contratar ninguém.</p>
       </div>
       <div className="reveal"><ol className="entenda">
         {passos.map(([t, c], i) => (

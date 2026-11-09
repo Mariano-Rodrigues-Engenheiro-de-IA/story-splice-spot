@@ -776,3 +776,12 @@ em { font-family: var(--font-editorial); font-weight: 400; }
   .exemplo:nth-child(even) .exemplo-cena { order: 0; }
   .exemplo h3 { font-size: 17px; } .exemplo dd { font-size: 12px; } .exemplo-quem { font-size: 11px; margin-bottom: 8px; }
 }
+
+/* ── 9/11: "Qual IA eu vou usar?" ── */
+.ias { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; max-width: 760px; margin: auto; }
+.ia-card { display: flex; gap: 14px; align-items: flex-start; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; box-shadow: var(--inner-glow); }
+.ia-card > svg, .ia-card > .marca-ia { flex: none; width: 40px; height: 40px; color: var(--foreground); }
+.ia-card strong { display: block; font-size: 16px; color: var(--foreground); }
+.ia-card p { font-size: 13px; line-height: 1.6; margin-top: 4px; }
+.ias-nota { text-align: center; font-size: 12px; margin: 16px auto 0; max-width: 560px; }
+@media (max-width: 760px) { .ias { grid-template-columns: minmax(0,1fr); } }
