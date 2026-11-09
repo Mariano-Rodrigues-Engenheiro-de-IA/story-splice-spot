@@ -11,7 +11,7 @@ import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
-import { MessageCircle, Laptop } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { Odometro } from '@/components/odometro';
 import { cliqueComprar, evento, eventoProprio, linkCheckout } from '@/lib/pixel';
 
@@ -42,7 +42,7 @@ function localDoBotao(el: HTMLElement) {
 }
 /** Botão de compra. Acima da oferta ele desce até a oferta (a pessoa vê o pacote, o bônus e a garantia antes de pagar);
  *  só o da oferta e o do fim da página abrem o checkout. */
-function PurchaseButton({ label = `Quero o Modo Editor · R$ ${siteConfig.price}`, className, destino = 'oferta' }: { label?: string; className?: string; destino?: 'oferta' | 'checkout' }) {
+function PurchaseButton({ label = 'Quero o Modo Editor', className, destino = 'oferta' }: { label?: string; className?: string; destino?: 'oferta' | 'checkout' }) {
   // o toque precisa de resposta: o botão afunda e mostra que o pagamento está abrindo
   const [abrindo, setAbrindo] = useState(false);
   useEffect(() => {
@@ -61,39 +61,6 @@ function CtaMeio({ texto }: { texto: string }) {
 /** Link do WhatsApp para a edição por vídeo (serviço). Conta como Contact no pixel. */
 function linkServico() {
   return `https://api.whatsapp.com/send?phone=${siteConfig.whatsapp}&text=${encodeURIComponent(siteConfig.servico.mensagem)}`;
-}
-/** As duas portas: comprar o Modo Editor e editar com a própria IA, ou pedir que a equipe edite por vídeo. */
-function DuasFormas() {
-  const s = siteConfig.servico;
-  return <section className="section container" id="duas-formas">
-    <div className="section-heading reveal"><span className="eyebrow">Duas formas de ter o vídeo pronto</span><h2>Você edita com a sua IA. <em>Ou a gente edita pra você.</em></h2><p>Os dois caminhos saem no mesmo padrão dos vídeos desta página. Escolha o que cabe na sua rotina.</p></div>
-    <div className="formas reveal">
-      <article className="forma forma-principal border-beam">
-        <span className="forma-tag"><Laptop size={13} /> Eu mesmo, com a minha IA</span>
-        <h3>Modo Editor</h3>
-        <p className="forma-preco"><sup>R$</sup>{siteConfig.price}<small>pagamento único</small></p>
-        <ul>
-          <li><CheckCircle2 size={15} />Vídeos sem limite: você paga uma vez e edita quantos quiser</li>
-          <li><CheckCircle2 size={15} />Pronto em minutos, no seu horário, sem depender de ninguém</li>
-          <li><CheckCircle2 size={15} />Videoaulas curtas, tela por tela, e suporte no WhatsApp</li>
-          <li><CheckCircle2 size={15} />Precisa de computador e da assinatura da sua IA (a partir de US$ 20/mês)</li>
-        </ul>
-        <PurchaseButton label={`Quero o Modo Editor · R$ ${siteConfig.price}`} />
-      </article>
-      {s.ativo && siteConfig.whatsapp && <article className="forma">
-        <span className="forma-tag"><MessageCircle size={13} /> Quero que editem pra mim</span>
-        <h3>Edição por vídeo</h3>
-        <p className="forma-preco forma-preco-texto">{s.precoPorVideo || 'Valor por vídeo no WhatsApp'}</p>
-        <ul>
-          <li><CheckCircle2 size={15} />Você grava no celular e manda a gravação pelo WhatsApp</li>
-          <li><CheckCircle2 size={15} />A equipe edita no padrão desta página: cortes, legenda, explicação na tela</li>
-          <li><CheckCircle2 size={15} />Sem computador, sem assinatura de IA, sem aprender nada</li>
-          <li><CheckCircle2 size={15} />Bom pra quem posta pouco ou quer ver o resultado antes de editar sozinho</li>
-        </ul>
-        <Button asChild variant="secondary" className="forma-botao"><a href={linkServico()} target="_blank" rel="noopener noreferrer" onClick={() => { evento('Contact', { content_name: 'Edição por vídeo' }); eventoProprio('Servico_WhatsApp'); }}><MessageCircle size={16} /> Pedir edição pelo WhatsApp</a></Button>
-      </article>}
-    </div>
-  </section>;
 }
 /** "Agora as suas aulas saem prontas": trecho de uma aula no formato de YouTube, editada no mesmo processo. */
 function Aulas() {
@@ -373,7 +340,7 @@ function Offer() {
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>Método completo de edição com IA, no ChatGPT e no Claude</p><ul className="offer-list">{offerItems.map(([title, copy]) => <li key={title}><CheckCircle2 /><div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
       <div className="offer-price"><p className="preco-rotulo">{siteConfig.priceAfterLaunch ? 'Preço de lançamento' : 'Pagamento único'}</p><div className="price"><sup>R$</sup><Odometro valor={siteConfig.price} de={siteConfig.priceAfterLaunch || siteConfig.price} /></div>{siteConfig.priceAfterLaunch > 0 && <p className="preco-depois">Depois do lançamento: R$ {siteConfig.priceAfterLaunch}</p>}<p>{siteConfig.installmentValue > 0 ? `à vista no PIX, ou em até 12x no cartão de ${brlCents(siteConfig.installmentValue)}` : 'à vista no PIX, ou parcelado no cartão'}</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print">PIX, cartão ou boleto · Compra segura</span><div className="bonus-card"><span className="bonus-card-tag"><Gift size={13} /> Bônus incluído</span><strong>O Arquivo Secreto do Roteiro</strong><p>Antes de gravar, a IA revisa o seu roteiro: gancho forte nos 3 primeiros segundos, fala clara e chamada final.</p><span className="bonus-card-gratis">Vem junto, sem pagar nada a mais</span></div></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
-    {siteConfig.servico.ativo && siteConfig.whatsapp && <p className="oferta-servico reveal">Prefere que a gente edite? <a href={linkServico()} target="_blank" rel="noopener noreferrer" onClick={() => { evento('Contact', { content_name: 'Edição por vídeo' }); eventoProprio('Servico_WhatsApp'); }}>Peça a edição por vídeo no WhatsApp</a>.</p>}</section>;
+    {siteConfig.servico.ativo && siteConfig.whatsapp && <aside className="delegar reveal"><div><strong>Prefere delegar?</strong><p>Se você não quer editar, a nossa equipe edita por vídeo, no mesmo padrão desta página. Você manda a gravação e recebe pronto.</p></div><a className="delegar-link" href={linkServico()} target="_blank" rel="noopener noreferrer" onClick={() => { evento('Contact', { content_name: 'Edição por vídeo' }); eventoProprio('Servico_WhatsApp'); }}><MessageCircle size={15} /> Quero delegar</a></aside>}</section>;
 }
 const faqItems = [
   ['Serve pra quem atende paciente ou cliente?', 'Serve, e é pra isso que ele foi afinado: psicólogo, dentista, nutricionista, fisioterapeuta, estética, arquiteto. Você grava explicando como explica no consultório e pede o que quer na tela. A IA monta e devolve.'],
@@ -407,7 +374,7 @@ function StickyBar() {
     window.addEventListener('scroll', update, { passive: true }); update();
     return () => { observer.disconnect(); window.removeEventListener('scroll', update); };
   }, []);
-  return <div className={`sticky-bar ${show ? 'on' : ''}`} aria-hidden={!show}><div><strong>R$ {siteConfig.price}</strong><p>Pagamento único · 7 dias de garantia</p></div><PurchaseButton label="Quero" className="sticky-button" /></div>;
+  return <div className={`sticky-bar ${show ? 'on' : ''}`} aria-hidden={!show}><div><strong>Modo Editor</strong><p>Pagamento único · 7 dias de garantia</p></div><PurchaseButton label="Quero" className="sticky-button" /></div>;
 }
 /** Botão flutuante do WhatsApp, igual ao do checkout: logo redondo no canto, para quem ficou com dúvida. */
 function WhatsAppButton() {
@@ -480,7 +447,7 @@ function Index() {
   return <div className="page">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#para-quem">Para quem é</a><a href="#duas-formas">Comprar ou contratar</a><a href="#como-funciona">Como funciona</a><a href="#oferta">Preço</a></nav></header>
+      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#para-quem">Para quem é</a><a href="#depoimentos">Quem usa</a><a href="#como-funciona">Como funciona</a><a href="#oferta">Preço</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />{nicho.selo}</div>
@@ -505,7 +472,6 @@ function Index() {
             <p className="fine-print">Números reais deste vídeo: {siteConfig.demo.rawLength} de gravação viraram {siteConfig.demo.editedLength}. Variam com cada gravação.</p>
           </div><Comparison />
         </section>
-        <DuasFormas />
         <section className="section container" id="como-funciona">
           <div className="section-heading reveal"><span className="eyebrow">Como funciona</span><h2>Em 3 passos. <em className="text-ready">O seu vídeo está pronto.</em></h2><p>É como mandar mensagem pra um editor. Só que o editor é a sua IA.</p></div>
           <div className="steps"><div className="step reveal"><div className="step-number">1</div><h3>Arraste o arquivo pra conversa</h3><p>Abra o ChatGPT ou o Claude e solte o arquivo Modo Editor. A IA avisa quando está pronta.</p><DropChat /></div><div className="step reveal"><div className="step-number">2</div><h3>Mande o vídeo e diga o que quer</h3><p>Envie a gravação e escreva o pedido em português, como se fosse pra um editor.</p><RequestChat /></div><div className="step reveal"><div className="step-number">3</div><h3>Volte com ele pronto.</h3><p>A edição acontece sozinha. Quando você volta, o vídeo está cortado, legendado e com a explicação na tela.</p><div className="ready-preview"><MiniClip className="ready-clip" src={siteConfig.videos.cenas.pronto} opts={{ scene: 'blue', offset: 2 }} /><span className="ready-tag ready-pulse">✓ Pronto</span><span className="away-tag">☕ você estava fora</span></div></div></div>
