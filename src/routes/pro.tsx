@@ -10,6 +10,7 @@ import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, QualIA, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-pro';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
+import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { MessageCircle } from 'lucide-react';
 import { Odometro } from '@/components/odometro';
 import { cliqueComprar, evento, eventoProprio, linkCheckout } from '@/lib/pixel';
@@ -339,7 +340,7 @@ function Pro() {
       <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#galeria">Exemplos</a><a href="#como-funciona">Como funciona</a><a href="#conta">Quanto custa por mês</a><a href="#oferta">Comprar</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          <div className="badge"><span className="record-dot" />{nicho.selo}</div>
+          <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
           <h1 id="hero-title" className="hero-titulo">{nicho.titulo[0]}<br /><em>{nicho.titulo[1]}</em></h1>
           <div className="hero-video">
             {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
