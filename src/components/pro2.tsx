@@ -64,9 +64,10 @@ const passos = [
 ];
 const pedido = 'Tira as pausas, põe legenda e mostra o dente quando eu falar do canal';
 
-/* Sininho de "deu certo" feito no próprio navegador (sem arquivo). O navegador só libera som depois que a pessoa
-   toca na página; até lá, fica em silêncio. */
+/* Efeitos sonoros do "Como funciona", feitos no próprio navegador (sem arquivo): tecla, tique da lista, sininho e vush.
+   O navegador só libera som depois que a pessoa toca na página (por exemplo, no vídeo); até lá, fica tudo em silêncio. */
 let audio: AudioContext | null = null;
+let ruido: AudioBuffer | null = null;
 function prepararSom() {
   if (typeof window === 'undefined' || audio) return;
   const liberar = () => {
@@ -78,19 +79,63 @@ function prepararSom() {
   };
   ['pointerdown', 'touchend', 'keydown'].forEach(e => window.addEventListener(e, liberar, { passive: true }));
 }
-function tocarSininho() {
-  const ctx = audio;
-  if (!ctx || ctx.state !== 'running') return;
-  const agora = ctx.currentTime;
-  [[1318.5, 0], [1760, 0.11]].forEach(([freq, atraso]) => {
-    const osc = ctx.createOscillator(); const ganho = ctx.createGain();
-    osc.type = 'sine'; osc.frequency.value = freq!;
-    ganho.gain.setValueAtTime(0, agora + atraso!);
-    ganho.gain.linearRampToValueAtTime(0.12, agora + atraso! + 0.012);
-    ganho.gain.exponentialRampToValueAtTime(0.0001, agora + atraso! + 0.5);
-    osc.connect(ganho).connect(ctx.destination);
-    osc.start(agora + atraso!); osc.stop(agora + atraso! + 0.55);
-  });
+function somPronto() { return audio && audio.state === 'running' ? audio : null; }
+function bufferRuido(ctx: AudioContext) {
+  if (!ruido) {
+    ruido = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.4), ctx.sampleRate);
+    const d = ruido.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+  }
+  return ruido;
+}
+/** nota curta com ataque rápido e queda suave */
+function nota(ctx: AudioContext, freq: number, quando: number, dur: number, vol: number, tipo: OscillatorType = 'sine', ate?: number) {
+  const osc = ctx.createOscillator(); const g = ctx.createGain();
+  osc.type = tipo; osc.frequency.setValueAtTime(freq, quando);
+  if (ate) osc.frequency.exponentialRampToValueAtTime(ate, quando + dur * 0.6);
+  g.gain.setValueAtTime(0, quando);
+  g.gain.linearRampToValueAtTime(vol, quando + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001, quando + dur);
+  osc.connect(g).connect(ctx.destination);
+  osc.start(quando); osc.stop(quando + dur + 0.02);
+}
+/** tecla de notebook: um estalinho de ruído filtrado, cada um um pouco diferente */
+function somTecla() {
+  const ctx = somPronto(); if (!ctx) return;
+  const t = ctx.currentTime;
+  const fonte = ctx.createBufferSource(); fonte.buffer = bufferRuido(ctx);
+  const filtro = ctx.createBiquadFilter(); filtro.type = 'bandpass'; filtro.frequency.value = 2600 + Math.random() * 1800; filtro.Q.value = 1.4;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.11, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+  fonte.connect(filtro).connect(g).connect(ctx.destination);
+  fonte.start(t, Math.random() * 0.3, 0.04);
+}
+/** tique de item concluído na lista */
+function somTique() {
+  const ctx = somPronto(); if (!ctx) return;
+  const t = ctx.currentTime;
+  nota(ctx, 880, t, 0.09, 0.07, 'sine', 1320);
+  nota(ctx, 1760, t + 0.035, 0.12, 0.035);
+}
+/** sininho de "deu certo" (instalou, vídeo pronto) */
+function somSininho() {
+  const ctx = somPronto(); if (!ctx) return;
+  const t = ctx.currentTime;
+  nota(ctx, 1318.5, t, 0.5, 0.11);
+  nota(ctx, 1760, t + 0.11, 0.6, 0.1);
+  nota(ctx, 2637, t + 0.11, 0.35, 0.025);
+}
+/** vush do cartão voando para dentro do notebook */
+function somVush() {
+  const ctx = somPronto(); if (!ctx) return;
+  const t = ctx.currentTime;
+  const fonte = ctx.createBufferSource(); fonte.buffer = bufferRuido(ctx); fonte.loop = true;
+  const filtro = ctx.createBiquadFilter(); filtro.type = 'bandpass'; filtro.Q.value = 0.9;
+  filtro.frequency.setValueAtTime(500, t); filtro.frequency.exponentialRampToValueAtTime(2400, t + 0.55);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.06, t + 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
+  fonte.connect(filtro).connect(g).connect(ctx.destination);
+  fonte.start(t); fonte.stop(t + 0.75);
 }
 
 export function ComoFunciona() {
@@ -111,9 +156,11 @@ export function ComoFunciona() {
   const [letras, setLetras] = useState(0);
   const [carga, setCarga] = useState(0);
   const [inst, setInst] = useState(0); // 0 chegando · 1 instalando · 2 instalado
-  const tocou = useRef(false);
+  // som só nas duas primeiras voltas cada vez que a seção aparece: chama a atenção sem virar barulho
+  const voltas = useRef(0);
   useEffect(() => { prepararSom(); }, []);
-  useEffect(() => { if (!naTela) tocou.current = false; }, [naTela]);
+  useEffect(() => { if (!naTela) voltas.current = 0; }, [naTela]);
+  const comSom = () => voltas.current < 2;
   // anda sozinho: instala o Modo Editor (~3,7 s, com sininho), digita o pedido (~2,1 s), carrega a edição (~3,1 s),
   // mostra o vídeo pronto no celular (4,2 s) e recomeça
   useEffect(() => {
@@ -121,12 +168,12 @@ export function ComoFunciona() {
     if (menosMovimento()) { setInst(2); setLetras(pedido.length); setCarga(100); return; }
     let id: number;
     if (passo === 0) {
-      if (inst === 0) id = window.setTimeout(() => setInst(1), 1250);
-      else if (inst === 1) id = window.setTimeout(() => { setInst(2); if (!tocou.current) { tocou.current = true; tocarSininho(); } }, 1100);
+      if (inst === 0) { if (comSom()) id = window.setTimeout(somVush, 380); id = window.setTimeout(() => setInst(1), 1250); }
+      else if (inst === 1) id = window.setTimeout(() => { setInst(2); if (comSom()) somSininho(); }, 1100);
       else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 1350);
-    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => setLetras(n => n + 1), 20) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
-    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => setCarga(c => Math.min(100, c + 4)), 110) : window.setTimeout(() => setPasso(3), 350);
-    else id = window.setTimeout(() => { setInst(0); setLetras(0); setPasso(0); }, 4200);
+    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => n + 1); if (comSom() && letras % 2 === 0) somTecla(); }, 26) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
+    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 4); if (comSom() && Math.floor(nova / 24) > Math.floor(carga / 24)) somTique(); setCarga(nova); }, 110) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 350);
+    else id = window.setTimeout(() => { voltas.current += 1; setInst(0); setLetras(0); setPasso(0); }, 4200);
     return () => window.clearTimeout(id);
   }, [naTela, passo, inst, letras, carga]);
   const irPara = (i: number) => { setPasso(i); setInst(i === 0 ? 0 : 2); setLetras(i <= 1 ? 0 : pedido.length); setCarga(i === 3 ? 100 : 0); };
@@ -135,7 +182,7 @@ export function ComoFunciona() {
   return (
     <section className="section container p2-como" id="como-funciona">
       <div className="section-heading reveal">
-        <h2>Como <em>funciona?</em></h2>
+        <h2>Como funciona a <em>edição com IA?</em></h2>
         <p>Você instala uma vez. Depois, é só mandar o vídeo e pedir.</p>
       </div>
       <div className="p2-como-corpo reveal" ref={caixa}>
