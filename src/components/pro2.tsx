@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
-import { NumberTicker } from '@/components/number-ticker';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
 
@@ -350,13 +349,8 @@ export function Segure() {
   return (
     <section className="section container p2-segure" id="antes-depois">
       <div className="section-heading reveal">
-        <h2>Veja como o seu vídeo <em>muda.</em></h2>
-        <div className="p2-relogio-linha" aria-label="Gravou às 10:00, pronto pra postar às 10:20">
-          <span>Gravou às <b>10:00</b></span>
-          <i aria-hidden="true">→</i>
-          <span className="pronto">Pronto às <b><NumberTicker value={20} duration={1800} format={v => `10:${String(Math.round(v)).padStart(2, '0')}`} /></b></span>
-        </div>
-        <p>Enquanto a IA editava, você trabalhava.</p>
+        <h2>Veja o poder da <em>edição com IA.</em></h2>
+        <p>Segure o dedo no vídeo para ver como ele foi gravado.</p>
       </div>
       <div className="reveal" ref={caixa}>
         <Celular className={`p2-cel-segure ${mostraBruto ? 'is-bruto' : ''}`}

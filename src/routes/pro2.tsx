@@ -58,8 +58,8 @@ function PurchaseButton({ label = 'Quero o Modo Editor', className, destino = 'o
 }
 
 /** Botão de compra no meio da página (um a cada duas seções, pra quem já decidiu não ter que rolar até a oferta). */
-function CtaMeio({ texto }: { texto: string }) {
-  return <div className="cta-meio reveal"><p>{texto}</p><PurchaseButton /><span className="purchase-note">Pagamento único · 7 dias de garantia</span></div>;
+function CtaMeio() {
+  return <div className="cta-meio reveal"><PurchaseButton /></div>;
 }
 
 /** Link do WhatsApp para a edição por vídeo (serviço). Conta como Contact no pixel. */
@@ -229,7 +229,7 @@ function Pro2() {
         <Saidas />
         <ComoFunciona />
         <Segure />
-        <div className="container"><CtaMeio texto="É assim que os vídeos desta página foram feitos." /></div>
+        <div className="container"><CtaMeio /></div>
         <Depoimentos />
         <QualIA2 />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />

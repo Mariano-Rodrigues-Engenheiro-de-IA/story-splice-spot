@@ -1277,3 +1277,13 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-relogio-linha > span.pronto b { color: var(--ready); }
 .pro2 .p2-relogio-linha > i { font-style: normal; font-size: 18px; color: var(--muted-foreground); }
 .pro2 .p2-segure .section-heading p { margin-top: 12px; font-weight: 600; color: var(--foreground); }
+/* botões de compra um pouco maiores, com uma pulsada leve para chamar o dedo (só scale: não mexe no espaço da página) */
+.pro2 .purchase-button { height: 54px; padding-inline: 32px; font-size: 17px; font-weight: 700; gap: 10px; }
+.pro2 .purchase-button svg { width: 18px; height: 18px; }
+.pro2 .botao-compra:not(.sticky-button) { animation: p2-pulsa 2.6s ease-in-out infinite; }
+.pro2 .sticky-bar .sticky-button { height: 50px; font-size: 18px; animation: p2-pulsa 2.6s ease-in-out infinite; }
+@keyframes p2-pulsa { 0%, 70%, 100% { scale: 1; } 35% { scale: 1.045; } }
+.pro2 .botao-compra:active, .pro2 .botao-compra.is-abrindo { animation: none; }
+@media (prefers-reduced-motion: reduce) { .pro2 .botao-compra { animation: none !important; } }
+.pro2 .cta-meio { margin-top: 36px; }
+.pro2 .p2-segure .section-heading h2 em { white-space: nowrap; }
