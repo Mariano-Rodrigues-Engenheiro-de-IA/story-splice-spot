@@ -22,6 +22,8 @@ export const siteConfig = {
         destaque: true,
       },
     ] as VideoTestimonial[],
+    /** Prints de WhatsApp de alunos (autorizados), em public/img/prints. Vazio = a parede de prints não aparece. */
+    prints: [] as string[],
   },
   /** Edição feita pela equipe, cobrada por vídeo. É a segunda porta da página: quem não quer editar fala no WhatsApp.
    *  `precoPorVideo` vazio = a página não mostra valor, só "peça o valor no WhatsApp". Ex.: 'a partir de R$ 60 por vídeo'. */
