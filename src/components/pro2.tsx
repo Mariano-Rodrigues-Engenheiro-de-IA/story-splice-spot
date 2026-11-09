@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Briefcase, CalendarClock, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, PanelLeft, Plus, Search, Shapes } from 'lucide-react';
+import { ArrowUp, Briefcase, CalendarClock, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, PanelLeft, Play, Plus, Search, Shapes } from 'lucide-react';
 import { NumberTicker } from '@/components/number-ticker';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
@@ -57,11 +57,41 @@ function Celular({ children, className = '', escura = true, ...resto }: React.HT
 /* ───────────── 1. Como funciona? (pedido e edição no notebook, vídeo pronto no celular; anda sozinho) ───────────── */
 
 const passos = [
+  { titulo: 'Instale o Modo Editor na sua IA', linha: 'Uma vez só, seguindo a aula.' },
   { titulo: 'Mande o vídeo e peça o que quer', linha: 'No ChatGPT ou no Claude, pelo computador.' },
   { titulo: 'A IA edita sozinha', linha: 'Você pode sair e ir trabalhar.' },
   { titulo: 'Receba pronto pra postar', linha: 'É só passar pro celular e postar.' },
 ];
 const pedido = 'Tira as pausas, põe legenda e mostra o dente quando eu falar do canal';
+
+/* Sininho de "deu certo" feito no próprio navegador (sem arquivo). O navegador só libera som depois que a pessoa
+   toca na página; até lá, fica em silêncio. */
+let audio: AudioContext | null = null;
+function prepararSom() {
+  if (typeof window === 'undefined' || audio) return;
+  const liberar = () => {
+    try {
+      const C = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      if (!audio && C) audio = new C();
+      void audio?.resume();
+    } catch { /* sem som */ }
+  };
+  ['pointerdown', 'touchend', 'keydown'].forEach(e => window.addEventListener(e, liberar, { passive: true }));
+}
+function tocarSininho() {
+  const ctx = audio;
+  if (!ctx || ctx.state !== 'running') return;
+  const agora = ctx.currentTime;
+  [[1318.5, 0], [1760, 0.11]].forEach(([freq, atraso]) => {
+    const osc = ctx.createOscillator(); const ganho = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.value = freq!;
+    ganho.gain.setValueAtTime(0, agora + atraso!);
+    ganho.gain.linearRampToValueAtTime(0.12, agora + atraso! + 0.012);
+    ganho.gain.exponentialRampToValueAtTime(0.0001, agora + atraso! + 0.5);
+    osc.connect(ganho).connect(ctx.destination);
+    osc.start(agora + atraso!); osc.stop(agora + atraso! + 0.55);
+  });
+}
 
 export function ComoFunciona() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
@@ -80,23 +110,33 @@ export function ComoFunciona() {
   }, []);
   const [letras, setLetras] = useState(0);
   const [carga, setCarga] = useState(0);
-  // anda sozinho: digita o pedido (~1,4 s), carrega a edição (~2,8 s), mostra o vídeo pronto no celular (4 s)
+  const [inst, setInst] = useState(0); // 0 chegando · 1 instalando · 2 instalado
+  const tocou = useRef(false);
+  useEffect(() => { prepararSom(); }, []);
+  useEffect(() => { if (!naTela) tocou.current = false; }, [naTela]);
+  // anda sozinho: instala o Modo Editor (~3,7 s, com sininho), digita o pedido (~2,1 s), carrega a edição (~3,1 s),
+  // mostra o vídeo pronto no celular (4,2 s) e recomeça
   useEffect(() => {
     if (!naTela) return;
-    if (menosMovimento()) { setLetras(pedido.length); setCarga(100); return; }
+    if (menosMovimento()) { setInst(2); setLetras(pedido.length); setCarga(100); return; }
     let id: number;
-    if (passo === 0) id = letras < pedido.length ? window.setTimeout(() => setLetras(n => n + 1), 20) : window.setTimeout(() => { setCarga(0); setPasso(1); }, 700);
-    else if (passo === 1) id = carga < 100 ? window.setTimeout(() => setCarga(c => Math.min(100, c + 4)), 110) : window.setTimeout(() => setPasso(2), 350);
-    else id = window.setTimeout(() => { setLetras(0); setPasso(0); }, 4200);
+    if (passo === 0) {
+      if (inst === 0) id = window.setTimeout(() => setInst(1), 1250);
+      else if (inst === 1) id = window.setTimeout(() => { setInst(2); if (!tocou.current) { tocou.current = true; tocarSininho(); } }, 1100);
+      else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 1350);
+    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => setLetras(n => n + 1), 20) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
+    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => setCarga(c => Math.min(100, c + 4)), 110) : window.setTimeout(() => setPasso(3), 350);
+    else id = window.setTimeout(() => { setInst(0); setLetras(0); setPasso(0); }, 4200);
     return () => window.clearTimeout(id);
-  }, [naTela, passo, letras, carga]);
-  const irPara = (i: number) => { setPasso(i); setLetras(i === 0 ? 0 : pedido.length); setCarga(i === 2 ? 100 : 0); };
+  }, [naTela, passo, inst, letras, carga]);
+  const irPara = (i: number) => { setPasso(i); setInst(i === 0 ? 0 : 2); setLetras(i <= 1 ? 0 : pedido.length); setCarga(i === 3 ? 100 : 0); };
+  const instalado = passo > 0 || inst === 2;
   const atual = passos[passo] ?? passos[0]!;
   return (
     <section className="section container p2-como" id="como-funciona">
       <div className="section-heading reveal">
         <h2>Como <em>funciona?</em></h2>
-        <p>Você coloca o Modo Editor no ChatGPT ou no Claude uma vez. Depois, todo vídeo é assim:</p>
+        <p>Você instala uma vez. Depois, é só mandar o vídeo e pedir.</p>
       </div>
       <div className="p2-como-corpo reveal" ref={caixa}>
         <ol className="p2-etapas" aria-label="Passos">
@@ -112,6 +152,8 @@ export function ComoFunciona() {
         <div className="p2-etapa-texto" key={passo}><strong>{passo + 1}. {atual.titulo}</strong><span>{atual.linha}</span></div>
         <div className={`p2-cena passo-${passo}`} ref={cena} style={{ height: Math.round(434 * escala + 92), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
           {/* MacBook Pro (devices.css, MIT) com a tela no estilo do chat do Claude: o pedido e a IA editando, sem mostrar o resultado */}
+          {passo === 0 && inst === 0 && <span className="p2-voa" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>}
+          <span className={`p2-instalado ${passo === 0 && inst === 2 ? 'on' : ''}`} aria-hidden={!(passo === 0 && inst === 2)}><Check size={14} /> Modo Editor instalado</span>
           <div className="p2-mac" aria-hidden="true">
             <div className="device device-macbook-pro" style={{ transform: `scale(${escala})` }}>
               <div className="device-frame">
@@ -132,35 +174,50 @@ export function ComoFunciona() {
                   <div className="p2-cl-main">
                     <div className="p2-cl-topo">
                       <span className="p2-cl-titulo">Vídeo do consultório <ChevronDown /></span>
-                      <span className="p2-cl-modo"><LogoChatGPT /><LogoClaude />Modo Editor ativo</span>
+                      <span className={`p2-cl-modo ${instalado ? '' : 'oculto'}`}><LogoChatGPT /><LogoClaude />Modo Editor ativo</span>
                       <span className="p2-cl-share">Compartilhar</span>
                     </div>
+                    {passo === 0 ? (
+                      <div className="p2-cl-inicio">
+                        <p className="p2-cl-saudacao"><LogoClaude />Boa tarde, Mariano</p>
+                        <div className="p2-cl-entrada p2-cl-entrada-inicio"><span className="p2-cl-placeholder">Como posso ajudar você hoje?</span><span className="p2-cl-barra"><Plus /><span className="p2-cl-modelo">Opus 5.5 <ChevronDown /></span><i><ArrowUp /></i></span></div>
+                        <div className={`p2-cl-instalando fase-${inst}`}>
+                          <span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>
+                          <div>
+                            <b>{inst === 2 ? 'Modo Editor instalado' : 'Instalando o Modo Editor…'}</b>
+                            <span className="p2-cl-carga"><i style={{ width: inst === 0 ? '0%' : '100%' }} /></span>
+                          </div>
+                          <span className="p2-cl-instalando-ok">{inst === 2 ? <Check /> : <Loader2 className="p2-girando" />}</span>
+                        </div>
+                      </div>
+                    ) : (
                     <div className="p2-cl-conversa">
                       <div className="p2-cl-coluna">
                         <div className="p2-cl-voce">
                           <span className="p2-cl-anexo"><img src={capa(siteConfig.videos.cenas.aoVivoBruto)} alt="" width={14} height={25} /><span><b>gravacao.mp4</b><small>MP4 · 2:14</small></span></span>
                           {letras > 0 && <p>{pedido.slice(0, letras)}{letras < pedido.length && <i className="caret" />}</p>}
                         </div>
-                        {passo >= 1 && (
+                        {passo >= 2 && (
                           <div className="p2-cl-ia">
-                            <p>{passo === 1 ? 'Combinado! Estou editando o seu vídeo agora.' : 'Pronto! O seu vídeo está editado e salvo na pasta.'}</p>
+                            <p>{passo === 2 ? 'Combinado! Estou editando o seu vídeo agora.' : 'Pronto! O seu vídeo está editado e salvo na pasta.'}</p>
                             <ul>
                               {['Ouvi a gravação inteira', 'Cortei as pausas e os erros', 'Coloquei a legenda', 'Coloquei o dente em 3D'].map((t, i) => {
-                                const feito = passo === 2 || carga >= (i + 1) * 24;
-                                const agora = passo === 1 && !feito && carga >= i * 24;
+                                const feito = passo === 3 || carga >= (i + 1) * 24;
+                                const agora = passo === 2 && !feito && carga >= i * 24;
                                 return <li key={t} className={feito ? 'ok' : agora ? 'agora' : ''}>{feito ? <Check /> : agora ? <Loader2 className="p2-girando" /> : <i />}{t}</li>;
                               })}
                             </ul>
-                            <span className="p2-cl-carga"><i style={{ width: `${passo === 1 ? carga : 100}%` }} /></span>
-                            <span className={`p2-cl-spark ${passo === 1 ? 'pensando' : ''}`}><LogoClaude /></span>
+                            <span className="p2-cl-carga"><i style={{ width: `${passo === 2 ? carga : 100}%` }} /></span>
+                            <span className={`p2-cl-spark ${passo === 2 ? 'pensando' : ''}`}><LogoClaude /></span>
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="p2-cl-entrada">
+                    )}
+                    {passo > 0 && <div className="p2-cl-entrada">
                       <span className="p2-cl-placeholder">Responder…</span>
                       <span className="p2-cl-barra"><Plus /><span className="p2-cl-modelo">Opus 5.5 <ChevronDown /></span><i><ArrowUp /></i></span>
-                    </div>
+                    </div>}
                   </div>
                 </div>
               </div>
@@ -171,7 +228,7 @@ export function ComoFunciona() {
           <div className="p2-cena-cel">
             <span className="p2-pronto"><Check size={14} /> Pronto pra postar</span>
             <Celular className="p2-cel-mini">
-              <VideoVivo src="/videos/cenas/dente.mp4" ativo={naTela && passo === 2} perto={naTela} label="Vídeo pronto, com o dente em 3D" />
+              <VideoVivo src="/videos/cenas/dente.mp4" ativo={naTela && passo === 3} perto={naTela} label="Vídeo pronto, com o dente em 3D" />
             </Celular>
           </div>
         </div>
