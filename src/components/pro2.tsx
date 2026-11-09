@@ -79,7 +79,12 @@ function prepararSom() {
   };
   ['pointerdown', 'touchend', 'keydown'].forEach(e => window.addEventListener(e, liberar, { passive: true }));
 }
-function somPronto() { return audio && audio.state === 'running' ? audio : null; }
+/** som liberado e nenhum vídeo tocando com som (o vídeo de vendas segue tocando quando a pessoa rola: a voz dele vem antes) */
+function somPronto() {
+  if (!audio || audio.state !== 'running') return null;
+  const videoComSom = Array.from(document.querySelectorAll('video')).some(v => !v.paused && !v.muted);
+  return videoComSom ? null : audio;
+}
 function bufferRuido(ctx: AudioContext) {
   if (!ruido) {
     ruido = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.4), ctx.sampleRate);
