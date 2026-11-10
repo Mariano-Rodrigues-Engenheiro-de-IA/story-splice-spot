@@ -1394,3 +1394,22 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* "Quero" só um pouco mais largo que antes (não ocupa o espaço todo) */
 @media (max-width: 760px) { .pro2 .sticky-bar .sticky-button { flex: none; width: 140px; max-width: none; } }
 @media (max-width: 374px) { .pro2 .sticky-bar .sticky-button { width: 124px; } }
+/* rodapé proporcional: WhatsApp maior; na barra, mais folga nas pontas, botão um pouco mais largo e menos vão no meio */
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { width: 54px; height: 54px; left: 20px; bottom: 11px; }
+  .pro2 .whats svg { width: 54px; height: 54px; }
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: 40px; }
+  .pro2 .sticky-bar { left: 86px; padding: 7px 14px 7px 18px; }
+  .pro2 .sticky-bar .sticky-button { width: 150px; }
+}
+@media (max-width: 374px) {
+  .pro2 .sticky-bar .sticky-button { width: 124px; }
+  .pro2 .sticky-bar { padding: 7px 12px 7px 14px; }
+}
+/* ícone do WhatsApp volta aos 48 px (só a barra muda) */
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { width: 48px; height: 48px; left: 22px; bottom: 14px; }
+  .pro2 .whats svg { width: 48px; height: 48px; }
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: 36px; }
+  .pro2 .sticky-bar { left: 82px; }
+}
