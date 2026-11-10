@@ -560,23 +560,32 @@ export function FaixasDepoimentos() {
   const azul = useRef<HTMLDivElement>(null);
   const branca = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    let quadro = 0;
-    const mover = () => {
-      cancelAnimationFrame(quadro);
-      quadro = requestAnimationFrame(() => {
-        for (const [el, sentido] of [[azul.current, 1], [branca.current, -1]] as const) {
-          if (!el) continue;
-          const metade = el.scrollWidth / 2;
-          if (!metade) continue;
-          const d = (window.scrollY * 0.45) % metade;
-          el.style.transform = `translate3d(${sentido === 1 ? -d : d - metade}px, 0, 0)`;
-        }
-      });
+    // as letras andam enquanto a pessoa rola, mas com velocidade-teto: rolar com força não dispara as fitas
+    const TETO = 150; // px por segundo, no máximo
+    let quadro = 0, antes = 0, ultimoY = window.scrollY, pos = 0, vel = 0;
+    const desenhar = () => {
+      for (const [el, sentido] of [[azul.current, 1], [branca.current, -1]] as const) {
+        if (!el) continue;
+        const metade = el.scrollWidth / 2;
+        if (!metade) continue;
+        const d = ((pos % metade) + metade) % metade;
+        el.style.transform = `translate3d(${(sentido === 1 ? -d : d - metade).toFixed(1)}px, 0, 0)`;
+      }
     };
-    mover();
-    window.addEventListener('scroll', mover, { passive: true });
-    window.addEventListener('resize', mover);
-    return () => { window.removeEventListener('scroll', mover); window.removeEventListener('resize', mover); cancelAnimationFrame(quadro); };
+    const passo = (agora: number) => {
+      const dt = Math.min(0.064, (agora - antes) / 1000); antes = agora;
+      const y = window.scrollY, delta = y - ultimoY; ultimoY = y;
+      const alvo = dt > 0 ? Math.max(-TETO, Math.min(TETO, (delta * 0.4) / dt)) : 0;
+      vel += (alvo - vel) * Math.min(1, dt * 6);
+      pos += vel * dt;
+      desenhar();
+      quadro = delta !== 0 || Math.abs(vel) > 1 ? requestAnimationFrame(passo) : 0;
+    };
+    const acordar = () => { if (!quadro && !menosMovimento()) { antes = performance.now(); quadro = requestAnimationFrame(passo); } };
+    desenhar();
+    window.addEventListener('scroll', acordar, { passive: true });
+    window.addEventListener('resize', desenhar);
+    return () => { window.removeEventListener('scroll', acordar); window.removeEventListener('resize', desenhar); cancelAnimationFrame(quadro); };
   }, []);
   const conteudo = [...texto, ...texto].map((p, i) => <span key={i}>{p}<i /></span>);
   return (
