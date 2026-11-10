@@ -1472,3 +1472,13 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @media (max-width: 374px) { .pro2 .p2-ias { column-gap: 36px; } .pro2 .p2-ia { padding-inline: 8px; } .pro2 .p2-ias-ou { font-size: 36px; } }
 /* "Prazer, eu sou o Mariano Rodrigues." numa linha só no celular: a fonte acompanha a largura da tela */
 @media (max-width: 760px) { .pro2 .produtor-texto h2 { white-space: nowrap; font-size: min(28px, calc((100vw - 40px) / 15.6)); } }
+/* garantia: selo grande e legível (anel em letra cheia, 7 em negrito dentro de um aro fino) e o texto mais para a direita */
+.pro2 .guarantee { grid-template-columns: 112px minmax(0, 1fr); gap: 18px; padding: 22px 18px; }
+.pro2 .spin-seal { width: 112px; height: 112px; }
+.pro2 .spin-ring text { fill: var(--ready); font-family: var(--font-sans); font-size: 9.4px; font-weight: 700; letter-spacing: 0; }
+.pro2 .spin-ring circle { fill: none; stroke: var(--ready); stroke-opacity: .4; stroke-width: 1; }
+.pro2 .spin-seal > span { position: relative; font-family: var(--font-sans); font-style: normal; font-weight: 800; font-size: 50px; line-height: 1; letter-spacing: -.04em; color: var(--foreground); transform: translate(-1px, 1px); }
+@media (min-width: 761px) { .pro2 .guarantee { grid-template-columns: 120px minmax(0, 1fr); gap: 24px; padding: 26px 34px; } .pro2 .spin-seal { width: 120px; height: 120px; } }
+/* balão "Dúvidas?" mais perto do ícone do WhatsApp */
+@media (max-width: 760px) { .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: 30px; bottom: calc(100% + 8px); } }
+.pro2 .guarantee p { text-wrap: pretty; }

@@ -69,7 +69,7 @@ function linkServico() {
 
 function SpinningSeal() {
   const text = '7 DIAS DE GARANTIA • REEMBOLSO TOTAL • ';
-  return <div className="spin-seal" aria-label="7 dias de garantia"><svg viewBox="0 0 100 100" className="spin-ring" aria-hidden="true"><defs><path id="seal-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs><text><textPath href="#seal-circle" textLength="238">{text}</textPath></text></svg><span>7</span></div>;
+  return <div className="spin-seal" aria-label="7 dias de garantia"><svg viewBox="0 0 100 100" className="spin-ring" aria-hidden="true"><defs><path id="seal-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs><circle cx="50" cy="50" r="31" /><text><textPath href="#seal-circle" textLength="238" lengthAdjust="spacing">{text}</textPath></text></svg><span>7</span></div>;
 }
 
 const offerItems = [
