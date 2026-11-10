@@ -1466,3 +1466,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* qual IA: "ou" inclinado entre os dois cartões */
 .pro2 .p2-ias { position: relative; }
 .pro2 .p2-ias-ou { position: absolute; z-index: 2; left: 50%; top: 50%; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: #fff; font-size: 17px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; transform: translate(-50%, -50%) rotate(-12deg); box-shadow: 0 0 0 5px var(--background), 0 10px 20px -10px rgba(10, 20, 40, .5); }
+/* "ou" só o texto, na fonte serifada itálica dos destaques, inclinado no vão entre os cartões */
+.pro2 .p2-ias { column-gap: 46px; }
+.pro2 .p2-ias-ou { width: auto; height: auto; border-radius: 0; background: none; box-shadow: none; color: var(--ready); font-family: var(--font-editorial); font-style: italic; font-weight: 400; font-size: 40px; line-height: 1; letter-spacing: 0; text-transform: none; transform: translate(-50%, -58%) rotate(-12deg); }
+@media (max-width: 374px) { .pro2 .p2-ias { column-gap: 36px; } .pro2 .p2-ia { padding-inline: 8px; } .pro2 .p2-ias-ou { font-size: 36px; } }
