@@ -12,6 +12,8 @@ export const siteConfig = {
   pro: {
     price: 97,
     checkoutUrl: 'https://pay.kiwify.com.br/xNp75vQ',
+    /** Parcela de 12x no cartão, lida no checkout da Kiwify em 9/11/2026 ("12x de R$ 10,03", parcelamento com acréscimo). 0 = some a linha. */
+    installmentValue: 10.03,
     /** Depoimentos em vídeo só da /pro (o com `destaque` vira a vitrine). Vídeo vazio = não aparece. */
     videoTestimonials: [
       {

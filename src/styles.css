@@ -1482,3 +1482,14 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* balão "Dúvidas?" mais perto do ícone do WhatsApp */
 @media (max-width: 760px) { .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: 30px; bottom: calc(100% + 8px); } }
 .pro2 .guarantee p { text-wrap: pretty; }
+/* oferta: ícone próprio e maior em cada item, sem bolinha */
+.pro2 .offer-list li { grid-template-columns: 26px minmax(0, 1fr); gap: 12px; align-items: start; }
+.pro2 .offer-list li > svg { width: 24px; height: 24px; margin-top: 0; color: var(--ready); stroke-width: 2; }
+.pro2 .offer-list li > svg.p2-icone-whats { width: 23px; height: 23px; color: #25d366; }
+/* preço: parcela real, pagamento único em destaque e "compra segura" numa linha só embaixo do botão */
+.pro2 .offer-price .p2-parcela { margin-top: 2px; font-size: 16px; color: var(--muted-foreground); max-width: none; }
+.pro2 .offer-price .p2-parcela strong { color: var(--foreground); font-weight: 700; }
+.pro2 .offer-price .p2-unico { margin-top: 6px; font-size: 15px; font-weight: 700; color: var(--ready); }
+.pro2 .offer-price .p2-seguro { display: inline-flex; align-items: center; gap: 4px; max-width: none; white-space: nowrap; font-size: 13px; }
+.pro2 .offer-price .p2-seguro svg { width: 13px; height: 13px; margin-left: 2px; }
+@media (max-width: 374px) { .pro2 .offer-price .p2-parcela { font-size: 15px; white-space: nowrap; } }
