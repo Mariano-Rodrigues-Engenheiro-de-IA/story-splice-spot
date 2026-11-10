@@ -1470,3 +1470,5 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-ias { column-gap: 46px; }
 .pro2 .p2-ias-ou { width: auto; height: auto; border-radius: 0; background: none; box-shadow: none; color: var(--ready); font-family: var(--font-editorial); font-style: italic; font-weight: 400; font-size: 40px; line-height: 1; letter-spacing: 0; text-transform: none; transform: translate(-50%, -58%) rotate(-12deg); }
 @media (max-width: 374px) { .pro2 .p2-ias { column-gap: 36px; } .pro2 .p2-ia { padding-inline: 8px; } .pro2 .p2-ias-ou { font-size: 36px; } }
+/* "Prazer, eu sou o Mariano Rodrigues." numa linha só no celular: a fonte acompanha a largura da tela */
+@media (max-width: 760px) { .pro2 .produtor-texto h2 { white-space: nowrap; font-size: min(28px, calc((100vw - 40px) / 15.6)); } }
