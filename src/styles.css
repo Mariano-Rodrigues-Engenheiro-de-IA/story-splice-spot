@@ -1364,3 +1364,9 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .sticky-bar .p2-barra-marca p { display: none; }
   .pro2 .sticky-bar .sticky-button { width: 112px; }
 }
+/* "Dúvidas?" coladinho em cima do ícone; a barra de compra começa um pouco mais à direita para não encostar */
+@media (max-width: 760px) {
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: -4px; bottom: calc(100% + 8px); }
+  .pro2 .whats .whats-rotulo::after { left: 17px; }
+  .pro2 .sticky-bar { left: 98px; }
+}
