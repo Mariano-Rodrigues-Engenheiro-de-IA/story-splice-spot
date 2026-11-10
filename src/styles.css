@@ -1336,3 +1336,14 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { gap: 5px; padding: 0 12px 0 5px; }
   .pro2 .whats svg { width: 32px; height: 32px; }
 }
+/* WhatsApp: a bolinha sozinha, como antes, e só o "Dúvidas?" num balãozinho branco ao lado */
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { width: auto; height: 42px; gap: 6px; padding: 0; background: none; border: 0; border-radius: 0; box-shadow: none; }
+  .pro2 .whats svg { width: 42px; height: 42px; filter: drop-shadow(0 6px 14px oklch(.23 .035 262 / .25)); }
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { padding: 5px 10px; border-radius: 99px; background: #fff; border: 1px solid var(--border); box-shadow: 0 8px 18px -10px rgba(10, 20, 40, .4); font-size: 13px; font-weight: 700; }
+}
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { height: 40px; gap: 5px; }
+  .pro2 .whats svg { width: 40px; height: 40px; }
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { padding: 4px 9px; font-size: 12px; }
+}
