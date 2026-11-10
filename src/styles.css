@@ -1301,3 +1301,18 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { left: 12px; bottom: 14px; width: 46px; height: 46px; }
   .pro2 .sticky-bar.on ~ .whats .whats-rotulo { display: none; }
 }
+/* barra: logo do Modo Editor ao lado do nome, botão Quero mais largo, WhatsApp com respiro da borda */
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { left: 18px; bottom: 15px; }
+  .pro2 .sticky-bar { left: 76px; right: 10px; padding: 7px 7px 7px 10px; }
+  .pro2 .p2-barra-marca { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .pro2 .p2-barra-marca .brand-icon { flex: none; width: 28px; height: 28px; border-radius: 9px; }
+  .pro2 .p2-barra-marca .brand-icon svg { width: 13px; height: 13px; }
+  .pro2 .p2-barra-marca > div { min-width: 0; }
+  .pro2 .p2-barra-marca strong, .pro2 .p2-barra-marca p { white-space: nowrap; }
+  .pro2 .sticky-bar .sticky-button { width: 132px; }
+}
+@media (max-width: 374px) {
+  .pro2 .sticky-bar .sticky-button { width: 112px; }
+  .pro2 .p2-barra-marca p { display: none; }
+}

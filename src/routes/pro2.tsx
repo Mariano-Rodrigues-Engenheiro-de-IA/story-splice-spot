@@ -148,7 +148,7 @@ function StickyBar() {
     window.addEventListener('scroll', update, { passive: true }); update();
     return () => { observer.disconnect(); window.removeEventListener('scroll', update); };
   }, []);
-  return <div className={`sticky-bar ${show ? 'on' : ''}`} aria-hidden={!show}><div><strong>Modo Editor</strong><p>7 dias de garantia</p></div><PurchaseButton label="Quero" className="sticky-button" /></div>;
+  return <div className={`sticky-bar ${show ? 'on' : ''}`} aria-hidden={!show}><div className="p2-barra-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span><div><strong>Modo Editor</strong><p>7 dias de garantia</p></div></div><PurchaseButton label="Quero" className="sticky-button" /></div>;
 }
 
 /** Botão flutuante do WhatsApp, igual ao do checkout: logo redondo no canto, para quem ficou com dúvida. */
