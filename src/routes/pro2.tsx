@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, Loader2, Play, MessageCircle, Clapperboard, MonitorPlay, MousePointerClick, Clock, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -85,10 +85,31 @@ const offerItems = [
   ['Acesso na hora', 'Liberado assim que o pagamento é aprovado. Você precisa de computador e do plano da sua IA.'],
 ];
 
+/** Linha da parcela com a mesma largura da linha do preço (do "R$" ao "à vista"): a letra se ajusta para as pontas baterem. */
+function LinhaDoPreco({ children }: { children: ReactNode }) {
+  const texto = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = texto.current;
+    const preco = el?.closest('.offer-price')?.querySelector<HTMLElement>('.price');
+    if (!el || !preco) return;
+    const ajustar = () => {
+      el.style.fontSize = '16px';
+      const alvo = preco.getBoundingClientRect().width, atual = el.getBoundingClientRect().width;
+      if (alvo > 0 && atual > 0) el.style.fontSize = `${Math.max(12, Math.min(22, (16 * alvo) / atual)).toFixed(2)}px`;
+    };
+    ajustar();
+    const ro = new ResizeObserver(ajustar);
+    ro.observe(preco);
+    document.fonts?.ready.then(ajustar);
+    return () => ro.disconnect();
+  }, []);
+  return <p className="p2-parcela"><span ref={texto}>{children}</span></p>;
+}
+
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><h2>Comece <em>hoje.</em></h2><p>Pagamento único. Vídeos sem limite. 7 dias de garantia.</p></div>
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT ou Claude, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy], i) => <li key={title}>{offerIcons[i]}<div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
-      <div className="offer-price"><p className="preco-rotulo">{siteConfig.priceAfterLaunch ? 'Preço de lançamento' : 'Pagamento único'}</p><div className="price"><sup>R$</sup><Odometro valor={siteConfig.pro.price} de={siteConfig.priceAfterLaunch || siteConfig.pro.price} /><span className="p2-avista">à vista</span></div><p className="p2-parcela">{siteConfig.pro.installmentValue > 0 ? <>ou <strong>12x de {brlCents(siteConfig.pro.installmentValue)}</strong> no cartão</> : 'ou parcelado no cartão'}</p><p className="p2-unico">Pagamento único</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print p2-seguro">PIX, cartão ou boleto · <Lock aria-hidden="true" /> Compra segura</span></div></div>
+      <div className="offer-price"><p className="preco-rotulo">{siteConfig.priceAfterLaunch ? 'Preço de lançamento' : 'Pagamento único'}</p><div className="price"><sup>R$</sup><Odometro valor={siteConfig.pro.price} de={siteConfig.priceAfterLaunch || siteConfig.pro.price} /><span className="p2-avista">à vista</span></div><LinhaDoPreco>{siteConfig.pro.installmentValue > 0 ? <>ou <strong>12x de {brlCents(siteConfig.pro.installmentValue)}</strong> no cartão</> : 'ou parcelado no cartão'}</LinhaDoPreco><p className="p2-unico">Pagamento único</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print p2-seguro">PIX, cartão ou boleto · <Lock aria-hidden="true" /> Compra segura</span></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
     {siteConfig.servico.ativo && siteConfig.whatsapp && <aside className="delegar reveal"><div><strong>Prefere delegar?</strong><p>A nossa equipe edita pra você. Manda a gravação e recebe pronto.</p></div><a className="delegar-link" href={linkServico()} target="_blank" rel="noopener noreferrer" onClick={() => { evento('Contact', { content_name: 'Edição por vídeo' }); eventoProprio('Servico_WhatsApp'); }}><MessageCircle size={15} /> Quero delegar</a></aside>}</section>;
 }

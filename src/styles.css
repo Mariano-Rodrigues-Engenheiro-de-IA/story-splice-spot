@@ -1495,3 +1495,6 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @media (max-width: 374px) { .pro2 .offer-price .p2-parcela { font-size: 15px; white-space: nowrap; } }
 /* "à vista" na mesma linha do 97 */
 .pro2 .offer-price .price .p2-avista { margin-left: 8px; font-size: 18px; font-weight: 600; color: var(--muted-foreground); letter-spacing: 0; vertical-align: baseline; white-space: nowrap; }
+/* parcela com a largura exata da linha do preço (a letra é ajustada no código) */
+.pro2 .offer-price .p2-parcela { white-space: nowrap; }
+.pro2 .offer-price .p2-parcela span { display: inline-block; }
