@@ -1391,3 +1391,6 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .sticky-bar .sticky-button { width: auto; flex: 1 1 auto; max-width: 190px; justify-content: center; }
 }
 @media (max-width: 374px) { .pro2 .sticky-bar .sticky-button { width: auto; } }
+/* "Quero" só um pouco mais largo que antes (não ocupa o espaço todo) */
+@media (max-width: 760px) { .pro2 .sticky-bar .sticky-button { flex: none; width: 140px; max-width: none; } }
+@media (max-width: 374px) { .pro2 .sticky-bar .sticky-button { width: 124px; } }
