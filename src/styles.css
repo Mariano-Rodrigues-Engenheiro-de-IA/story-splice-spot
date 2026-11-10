@@ -1472,3 +1472,8 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @media (max-width: 374px) { .pro2 .p2-ias { column-gap: 36px; } .pro2 .p2-ia { padding-inline: 8px; } .pro2 .p2-ias-ou { font-size: 36px; } }
 /* "Prazer, eu sou o Mariano Rodrigues." numa linha só no celular: a fonte acompanha a largura da tela */
 @media (max-width: 760px) { .pro2 .produtor-texto h2 { white-space: nowrap; font-size: min(28px, calc((100vw - 40px) / 15.6)); } }
+/* depoimentos por cima das fitas: o X fica atrás do topo dos vídeos e desce mais devagar que a página */
+.pro2 .p2-faixas-par { position: absolute; inset: 0; will-change: transform; }
+@supports (overflow: clip) { .pro2 .p2-faixas { overflow: visible; overflow-x: clip; } }
+.pro2 .p2-prova { position: relative; z-index: 3; margin-top: -80px; padding-top: 0; }
+@media (min-width: 761px) { .pro2 .p2-faixas { overflow: hidden; } }

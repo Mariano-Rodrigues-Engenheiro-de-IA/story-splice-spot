@@ -559,11 +559,19 @@ export function FaixasDepoimentos() {
   const texto = Array.from({ length: 6 }, () => palavras).flat();
   const azul = useRef<HTMLDivElement>(null);
   const branca = useRef<HTMLDivElement>(null);
+  const caixa = useRef<HTMLDivElement>(null);
+  const par = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let quadro = 0;
     const mover = () => {
       cancelAnimationFrame(quadro);
       quadro = requestAnimationFrame(() => {
+        // as fitas descem mais devagar que a página: os vídeos, que vêm logo abaixo, sobem por cima delas
+        if (caixa.current && par.current && !menosMovimento()) {
+          const r = caixa.current.getBoundingClientRect();
+          const y = Math.max(-16, Math.min(56, (window.innerHeight * 0.5 - (r.top + r.height / 2)) * 0.32));
+          par.current.style.transform = `translate3d(0, ${y.toFixed(1)}px, 0)`;
+        }
         for (const [el, sentido] of [[azul.current, 1], [branca.current, -1]] as const) {
           if (!el) continue;
           const metade = el.scrollWidth / 2;
@@ -580,9 +588,11 @@ export function FaixasDepoimentos() {
   }, []);
   const conteudo = [...texto, ...texto].map((p, i) => <span key={i}>{p}<i /></span>);
   return (
-    <div className="p2-faixas" aria-hidden="true">
-      <div className="p2-faixa p2-faixa-azul"><div className="p2-faixa-trilho" ref={azul}>{conteudo}</div></div>
-      <div className="p2-faixa p2-faixa-branca"><div className="p2-faixa-trilho" ref={branca}>{conteudo}</div></div>
+    <div className="p2-faixas" aria-hidden="true" ref={caixa}>
+      <div className="p2-faixas-par" ref={par}>
+        <div className="p2-faixa p2-faixa-azul"><div className="p2-faixa-trilho" ref={azul}>{conteudo}</div></div>
+        <div className="p2-faixa p2-faixa-branca"><div className="p2-faixa-trilho" ref={branca}>{conteudo}</div></div>
+      </div>
     </div>
   );
 }
