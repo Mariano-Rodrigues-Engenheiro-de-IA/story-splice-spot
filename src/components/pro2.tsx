@@ -103,23 +103,32 @@ function nota(ctx: AudioContext, freq: number, quando: number, dur: number, vol:
   osc.connect(g).connect(ctx.destination);
   osc.start(quando); osc.stop(quando + dur + 0.02);
 }
-/** tecla de notebook: um estalinho de ruído filtrado, cada um um pouco diferente */
+/** tecla de notebook: o estalinho agudo da tecla e o "toc" grave dela batendo, cada um um pouco diferente */
 function somTecla() {
   const ctx = somPronto(); if (!ctx) return;
   const t = ctx.currentTime;
-  const fonte = ctx.createBufferSource(); fonte.buffer = bufferRuido(ctx);
-  const filtro = ctx.createBiquadFilter(); filtro.type = 'bandpass'; filtro.frequency.value = 2600 + Math.random() * 1800; filtro.Q.value = 1.4;
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.11, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
-  fonte.connect(filtro).connect(g).connect(ctx.destination);
-  fonte.start(t, Math.random() * 0.3, 0.04);
+  const vol = 0.75 + Math.random() * 0.5;
+  const clique = ctx.createBufferSource(); clique.buffer = bufferRuido(ctx);
+  const agudo = ctx.createBiquadFilter(); agudo.type = 'highpass'; agudo.frequency.value = 3800 + Math.random() * 1200;
+  const g1 = ctx.createGain(); g1.gain.setValueAtTime(0.035 * vol, t); g1.gain.exponentialRampToValueAtTime(0.0001, t + 0.012);
+  clique.connect(agudo).connect(g1).connect(ctx.destination);
+  clique.start(t, Math.random() * 0.3, 0.02);
+  const toc = ctx.createBufferSource(); toc.buffer = bufferRuido(ctx);
+  const grave = ctx.createBiquadFilter(); grave.type = 'bandpass'; grave.frequency.value = 650 + Math.random() * 350; grave.Q.value = 2.2;
+  const g2 = ctx.createGain(); g2.gain.setValueAtTime(0.0001, t); g2.gain.linearRampToValueAtTime(0.09 * vol, t + 0.003); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+  toc.connect(grave).connect(g2).connect(ctx.destination);
+  toc.start(t, Math.random() * 0.3, 0.06);
 }
-/** tique de item concluído na lista */
-function somTique() {
+/** "blup" de pingo d'água: o Modo Editor caindo dentro da IA */
+function somGota() {
   const ctx = somPronto(); if (!ctx) return;
   const t = ctx.currentTime;
-  nota(ctx, 880, t, 0.09, 0.07, 'sine', 1320);
-  nota(ctx, 1760, t + 0.035, 0.12, 0.035);
+  const osc = ctx.createOscillator(); const g = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(420, t); osc.frequency.exponentialRampToValueAtTime(1500, t + 0.07);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.16, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+  osc.connect(g).connect(ctx.destination); osc.start(t); osc.stop(t + 0.18);
+  nota(ctx, 1900, t + 0.05, 0.12, 0.03);
 }
 /** sininho de "deu certo" (instalou, vídeo pronto) */
 function somSininho() {
@@ -128,18 +137,6 @@ function somSininho() {
   nota(ctx, 1318.5, t, 0.5, 0.11);
   nota(ctx, 1760, t + 0.11, 0.6, 0.1);
   nota(ctx, 2637, t + 0.11, 0.35, 0.025);
-}
-/** vush do cartão voando para dentro do notebook */
-function somVush() {
-  const ctx = somPronto(); if (!ctx) return;
-  const t = ctx.currentTime;
-  const fonte = ctx.createBufferSource(); fonte.buffer = bufferRuido(ctx); fonte.loop = true;
-  const filtro = ctx.createBiquadFilter(); filtro.type = 'bandpass'; filtro.Q.value = 0.9;
-  filtro.frequency.setValueAtTime(500, t); filtro.frequency.exponentialRampToValueAtTime(2400, t + 0.55);
-  const g = ctx.createGain();
-  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.06, t + 0.3); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
-  fonte.connect(filtro).connect(g).connect(ctx.destination);
-  fonte.start(t); fonte.stop(t + 0.75);
 }
 
 /** Passo 4: o celular rola um vídeo pronto a cada 2 s, como o Reels, cada um de uma profissão. */
@@ -194,7 +191,16 @@ export function ComoFunciona() {
   const voltas = useRef(0);
   useEffect(() => { prepararSom(); }, []);
   useEffect(() => { if (!naTela) voltas.current = 0; }, [naTela]);
-  const comSom = () => voltas.current < 2;
+  // e só com a cena do MacBook de fato na tela: passou rápido para a seção seguinte, os efeitos param na hora
+  const audivel = useRef(false);
+  useEffect(() => {
+    const el = cena.current;
+    if (!el || typeof IntersectionObserver === 'undefined') return;
+    const io = new IntersectionObserver(([e]) => { audivel.current = !!e && e.intersectionRatio >= 0.6; }, { threshold: [0, 0.6, 1] });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const comSom = () => voltas.current < 2 && audivel.current;
   // anda sozinho: instala o Modo Editor (~3,7 s, com sininho), digita o pedido (~2,1 s), carrega a edição (~3,1 s),
   // mostra o vídeo pronto no celular (4,2 s) e recomeça
   useEffect(() => {
@@ -202,11 +208,11 @@ export function ComoFunciona() {
     if (menosMovimento()) { setInst(2); setLetras(pedido.length); setCarga(100); return; }
     let id: number;
     if (passo === 0) {
-      if (inst === 0) { if (comSom()) id = window.setTimeout(somVush, 380); id = window.setTimeout(() => setInst(1), 1250); }
-      else if (inst === 1) id = window.setTimeout(() => { setInst(2); if (comSom()) somSininho(); }, 1100);
+      if (inst === 0) id = window.setTimeout(() => { setInst(1); if (comSom()) somGota(); }, 1250);
+      else if (inst === 1) id = window.setTimeout(() => setInst(2), 1100);
       else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 1350);
-    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => n + 1); if (comSom() && letras % 2 === 0) somTecla(); }, 26) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
-    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 4); if (comSom() && Math.floor(nova / 24) > Math.floor(carga / 24)) somTique(); setCarga(nova); }, 110) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 350);
+    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => n + 1); if (comSom() && letras % 3 === 0) somTecla(); }, 26) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
+    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 4); setCarga(nova); }, 110) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 350);
     else id = window.setTimeout(() => { voltas.current += 1; setInst(0); setLetras(0); setPasso(0); }, FEED.length * TEMPO_FEED + 300);
     return () => window.clearTimeout(id);
   }, [naTela, passo, inst, letras, carga]);

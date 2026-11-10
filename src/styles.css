@@ -1289,5 +1289,15 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-segure .section-heading h2 em { white-space: nowrap; }
 /* WhatsApp do outro lado da barra de compra, mais alto e com "Dúvidas?": ninguém confunde com o botão de comprar */
 .pro2 .whats { left: 16px; right: auto; }
-@media (max-width: 760px) { .pro2 .sticky-bar.on ~ .whats { bottom: 108px; } }
+
 .pro2 .whats-rotulo { position: absolute; left: calc(100% + 8px); top: 50%; transform: translateY(-50%); white-space: nowrap; padding: 6px 11px; border-radius: 99px; background: #fff; border: 1px solid var(--border); color: var(--foreground); font-size: 13px; font-weight: 700; box-shadow: 0 8px 18px -10px rgba(10, 20, 40, .4); }
+/* barra de compra fina e mais curta; o WhatsApp desce para o rodapé, do outro lado, na altura da barra */
+@media (max-width: 760px) {
+  .pro2 .sticky-bar { left: 68px; right: 10px; bottom: 10px; gap: 10px; padding: 7px 7px 7px 14px; border-radius: 14px; }
+  .pro2 .sticky-bar strong { font-size: 15px; line-height: 1.15; }
+  .pro2 .sticky-bar p { font-size: 12px; line-height: 1.2; margin: 0; }
+  .pro2 .sticky-bar .sticky-button { height: 40px; width: 116px; font-size: 16px; padding-inline: 18px; }
+  .pro2 .sticky-bar .sticky-button svg { right: 14px; width: 16px; height: 16px; }
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { left: 12px; bottom: 14px; width: 46px; height: 46px; }
+  .pro2 .sticky-bar.on ~ .whats .whats-rotulo { display: none; }
+}
