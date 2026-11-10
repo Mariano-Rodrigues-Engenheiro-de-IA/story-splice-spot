@@ -1381,3 +1381,13 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .sticky-bar { left: 78px; }
 }
 @media (prefers-reduced-motion: reduce) { .pro2 .whats .whats-rotulo.on { animation: none; } }
+/* ícone do WhatsApp maior; o "Quero" ocupa todo o espaço livre da barra */
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { width: 48px; height: 48px; left: 22px; bottom: 14px; }
+  .pro2 .whats svg { width: 48px; height: 48px; }
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: 36px; }
+  .pro2 .sticky-bar { left: 82px; }
+  .pro2 .sticky-bar .p2-barra-marca { flex: none; }
+  .pro2 .sticky-bar .sticky-button { width: auto; flex: 1 1 auto; max-width: 190px; justify-content: center; }
+}
+@media (max-width: 374px) { .pro2 .sticky-bar .sticky-button { width: auto; } }
