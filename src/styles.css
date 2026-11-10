@@ -1459,3 +1459,10 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .p2-modal-caixa video { display: block; width: 100%; max-height: 82svh; border-radius: 18px; background: #000; }
 .pro2 .p2-modal-print img { display: block; width: 100%; max-height: 86svh; object-fit: contain; border-radius: 14px; background: #fff; }
 .pro2 .p2-modal-fechar { position: absolute; top: -14px; right: -6px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #fff; color: var(--foreground); font-size: 26px; line-height: 1; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .5); }
+/* faixas: andam com a rolagem (não sozinhas) e bolinha no lugar da estrela */
+.pro2 .p2-faixa-trilho { animation: none !important; will-change: transform; }
+.pro2 .p2-faixa-trilho i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ready); font-size: 0; }
+.pro2 .p2-faixa-azul .p2-faixa-trilho i { background: #7fe3c4; }
+/* qual IA: "ou" inclinado entre os dois cartões */
+.pro2 .p2-ias { position: relative; }
+.pro2 .p2-ias-ou { position: absolute; z-index: 2; left: 50%; top: 50%; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; background: var(--primary); color: #fff; font-size: 17px; font-weight: 800; letter-spacing: .02em; text-transform: uppercase; transform: translate(-50%, -50%) rotate(-12deg); box-shadow: 0 0 0 5px var(--background), 0 10px 20px -10px rgba(10, 20, 40, .5); }

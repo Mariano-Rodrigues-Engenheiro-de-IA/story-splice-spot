@@ -493,6 +493,7 @@ export function QualIA2() {
       <div className="reveal">
         <div className="p2-ias">
           <div className="p2-ia"><LogoChatGPT /><div><strong>ChatGPT</strong><span>Plano Plus <b>pago</b></span></div></div>
+          <span className="p2-ias-ou" aria-hidden="true">ou</span>
           <div className="p2-ia"><LogoClaude /><div><strong>Claude</strong><span>Plano Pro <b>pago</b></span></div></div>
         </div>
         <p className="p2-ias-nota">Você edita no computador (Mac ou Windows). O celular serve pra gravar.</p>
@@ -552,16 +553,38 @@ function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }:
   );
 }
 
-/** Duas faixas cruzadas na diagonal, rolando em sentidos opostos: a quebra de gelo antes dos depoimentos. */
+/** Duas faixas cruzadas na diagonal que andam junto com a rolagem: rolou, elas andam (cada uma para um lado); parou, elas param. */
 export function FaixasDepoimentos() {
   const palavras = ['Depoimentos', 'Feedbacks', 'Quem já usou', 'Resultados reais'];
   const texto = Array.from({ length: 6 }, () => palavras).flat();
-  const faixa = (classe: string) => (
-    <div className={`p2-faixa ${classe}`}>
-      <div className="p2-faixa-trilho">{[...texto, ...texto].map((p, i) => <span key={i}>{p}<i>✦</i></span>)}</div>
+  const azul = useRef<HTMLDivElement>(null);
+  const branca = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    let quadro = 0;
+    const mover = () => {
+      cancelAnimationFrame(quadro);
+      quadro = requestAnimationFrame(() => {
+        for (const [el, sentido] of [[azul.current, 1], [branca.current, -1]] as const) {
+          if (!el) continue;
+          const metade = el.scrollWidth / 2;
+          if (!metade) continue;
+          const d = (window.scrollY * 0.45) % metade;
+          el.style.transform = `translate3d(${sentido === 1 ? -d : d - metade}px, 0, 0)`;
+        }
+      });
+    };
+    mover();
+    window.addEventListener('scroll', mover, { passive: true });
+    window.addEventListener('resize', mover);
+    return () => { window.removeEventListener('scroll', mover); window.removeEventListener('resize', mover); cancelAnimationFrame(quadro); };
+  }, []);
+  const conteudo = [...texto, ...texto].map((p, i) => <span key={i}>{p}<i /></span>);
+  return (
+    <div className="p2-faixas" aria-hidden="true">
+      <div className="p2-faixa p2-faixa-azul"><div className="p2-faixa-trilho" ref={azul}>{conteudo}</div></div>
+      <div className="p2-faixa p2-faixa-branca"><div className="p2-faixa-trilho" ref={branca}>{conteudo}</div></div>
     </div>
   );
-  return <div className="p2-faixas" aria-hidden="true">{faixa('p2-faixa-azul')}{faixa('p2-faixa-branca')}</div>;
 }
 
 type Depo = { src: string; cheio?: string; nome: string; papel: string; real: string; frase?: string; selo?: string };
