@@ -1347,3 +1347,20 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .whats svg { width: 40px; height: 40px; }
   .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { padding: 4px 9px; font-size: 12px; }
 }
+/* "Dúvidas?" vira balão de conversa acima do ícone, na diagonal, com a pontinha apontando para ele;
+   a barra de compra alarga para a esquerda e volta a ter a garantia e o botão largo */
+@media (max-width: 760px) {
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { width: 40px; height: 40px; overflow: visible; }
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { display: block; position: absolute; left: 24px; bottom: calc(100% + 20px); top: auto; transform: none; padding: 5px 10px; border-radius: 12px; background: #fff; border: 1px solid var(--border); box-shadow: 0 8px 18px -10px rgba(10, 20, 40, .45); font-size: 12px; font-weight: 700; white-space: nowrap; }
+  .pro2 .whats .whats-rotulo::after { content: ''; position: absolute; left: 9px; bottom: -6px; width: 10px; height: 10px; background: #fff; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transform: rotate(45deg); border-bottom-right-radius: 2px; }
+  .pro2 .sticky-bar { left: 70px; right: 18px; justify-content: space-between; }
+  .pro2 .sticky-bar .p2-barra-marca p { display: block; }
+  .pro2 .sticky-bar strong { font-size: 15px; }
+  .pro2 .sticky-bar .sticky-button { width: 128px; font-size: 16px; }
+}
+@media (max-width: 374px) {
+  .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { display: block; }
+  .pro2 .whats, .pro2 .sticky-bar.on ~ .whats { padding: 0; }
+  .pro2 .sticky-bar .p2-barra-marca p { display: none; }
+  .pro2 .sticky-bar .sticky-button { width: 112px; }
+}
