@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
+import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, MessageCircle, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
+import { eventoProprio } from '@/lib/pixel';
 
 /* Página /pro2 (9/11/2026, 2ª versão): tudo anda sozinho (nada de rolar para o lado nem rolagem presa),
    o celular tem proporção de celular de verdade e cada seção responde UMA pergunta do leigo. */
@@ -496,6 +497,138 @@ export function QualIA2() {
         </div>
         <p className="p2-ias-nota">Você edita no computador (Mac ou Windows). O celular serve pra gravar.</p>
       </div>
+    </section>
+  );
+}
+
+/* ───────────── Prova social: faixas cruzadas + carrossel de vídeos + carrossel de prints ───────────── */
+
+/** Esteira genérica: anda quadro a quadro, três voltas da lista (nunca acaba), para com o dedo, vídeo só toca à vista. */
+function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }: {
+  itens: T[]; velocidade?: number; reverso?: boolean; rotulo: string;
+  render: (item: T, i: number, estado: { copia: boolean; ativo: boolean; perto: boolean }) => React.ReactNode;
+}) {
+  const [caixa, naTela] = useNaTela<HTMLDivElement>('200px 0px');
+  const fila = useRef<HTMLOListElement>(null);
+  const posicao = useRef(0);
+  const parado = useRef(false);
+  const [visiveis, setVisiveis] = useState<number[]>([0, 1, 2]);
+  useEffect(() => {
+    const el = fila.current;
+    if (!el || !naTela) return;
+    let quadro = 0, antes = performance.now(), vistos = '';
+    const andar = (agora: number) => {
+      const dt = Math.min(64, agora - antes); antes = agora;
+      const filhos = el.children as HTMLCollectionOf<HTMLElement>;
+      const volta = (filhos[itens.length]?.offsetLeft ?? 0) - (filhos[0]?.offsetLeft ?? 0);
+      if (!parado.current && !menosMovimento() && volta > 0) {
+        posicao.current += ((reverso ? -1 : 1) * velocidade * dt) / 1000;
+        if (posicao.current >= volta) posicao.current -= volta;
+        if (posicao.current < 0) posicao.current += volta;
+      }
+      el.style.transform = `translate3d(${-posicao.current}px, 0, 0)`;
+      const largura = el.parentElement?.clientWidth ?? window.innerWidth;
+      const agoraVistos: number[] = [];
+      for (let i = 0; i < filhos.length; i++) {
+        const esq = filhos[i]!.offsetLeft - posicao.current;
+        if (esq + filhos[i]!.offsetWidth > -20 && esq < largura + 20) agoraVistos.push(i);
+      }
+      const chave = agoraVistos.join(',');
+      if (chave !== vistos) { vistos = chave; setVisiveis(agoraVistos); }
+      quadro = requestAnimationFrame(andar);
+    };
+    quadro = requestAnimationFrame(andar);
+    return () => cancelAnimationFrame(quadro);
+  }, [naTela, itens.length, reverso, velocidade]);
+  const soltar = () => { parado.current = false; };
+  const lista = Array.from({ length: 3 }, () => itens).flat();
+  return (
+    <div className="p2-esteira" ref={caixa} aria-label={rotulo}
+      onPointerDown={() => { parado.current = true; }} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}>
+      <ol className="p2-esteira-fila" ref={fila}>
+        {lista.map((item, i) => render(item, i, { copia: i >= itens.length, ativo: naTela && visiveis.includes(i), perto: naTela && visiveis.some(v => Math.abs(v - i) <= 1) }))}
+      </ol>
+    </div>
+  );
+}
+
+/** Duas faixas cruzadas na diagonal, rolando em sentidos opostos: a quebra de gelo antes dos depoimentos. */
+export function FaixasDepoimentos() {
+  const palavras = ['Depoimentos', 'Feedbacks', 'Quem já usou', 'Resultados reais'];
+  const texto = Array.from({ length: 6 }, () => palavras).flat();
+  const faixa = (classe: string) => (
+    <div className={`p2-faixa ${classe}`}>
+      <div className="p2-faixa-trilho">{[...texto, ...texto].map((p, i) => <span key={i}>{p}<i>✦</i></span>)}</div>
+    </div>
+  );
+  return <div className="p2-faixas" aria-hidden="true">{faixa('p2-faixa-azul')}{faixa('p2-faixa-branca')}</div>;
+}
+
+type Depo = { src: string; cheio?: string; nome: string; papel: string; real: string; frase?: string; selo?: string };
+const DEPOIMENTOS: Depo[] = [
+  { src: '/videos/depo-esteticista.mp4', nome: 'Karina Guimarães', papel: 'Esteticista', real: 'aluna real', selo: 'Depoimento', frase: 'Eu tava quebrando a cabeça com vídeo, com edição, e não conseguia. Resultados extraordinários.' },
+  { src: '/videos/karina-estria.mp4', nome: 'Karina Guimarães', papel: 'Esteticista', real: 'aluna real', selo: 'Vídeo que ela editou' },
+  { src: '/videos/pro2/professor-cassio.mp4', cheio: '/videos/pro2/professor-santo-expedito.mp4', nome: 'Professor Cássio', papel: 'Professor', real: 'aluno real', selo: 'Vídeo que ele editou' },
+  { src: '/videos/depo-isaque.mp4', nome: 'Isaque', papel: '', real: 'aluno real', selo: 'Depoimento', frase: 'Depois que eu deixei o primeiro vídeo do jeito que eu gostei, o segundo e o terceiro vieram com muito mais facilidade.' },
+];
+
+/** Vídeo em tela cheia, com som, aberto ao tocar num cartão. */
+function VideoAberto({ src, nome, fechar }: { src: string; nome: string; fechar: () => void }) {
+  useEffect(() => {
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') fechar(); };
+    window.addEventListener('keydown', esc);
+    document.body.style.overflow = 'hidden';
+    return () => { window.removeEventListener('keydown', esc); document.body.style.overflow = ''; };
+  }, [fechar]);
+  return (
+    <div className="p2-modal" role="dialog" aria-modal="true" aria-label={`Vídeo de ${nome}`} onClick={fechar}>
+      <div className="p2-modal-caixa" onClick={e => e.stopPropagation()}>
+        <video src={src} poster={capa(src)} controls autoPlay playsInline />
+        <button type="button" className="p2-modal-fechar" onClick={fechar} aria-label="Fechar o vídeo">×</button>
+      </div>
+    </div>
+  );
+}
+
+export function ProvaSocial({ prints }: { prints: { src: string; quem: string }[] }) {
+  const [aberto, setAberto] = useState<Depo | null>(null);
+  const [print, setPrint] = useState<string | null>(null);
+  const fechar = () => { setAberto(null); setPrint(null); };
+  return (
+    <section className="p2-prova" id="depoimentos">
+      <Esteira itens={DEPOIMENTOS} rotulo="Depoimentos em vídeo" render={(d, i, { copia, ativo, perto }) => (
+        <li key={i} className="p2-depo" aria-hidden={copia || undefined}>
+          <button type="button" className="p2-depo-tela" style={{ backgroundImage: `url(${capa(d.src)})` }}
+            onClick={() => { setAberto(d); eventoProprio('Depoimento_Play', { nome: d.nome }); }} aria-label={`Assistir: ${d.nome}, ${d.selo ?? ''}`}>
+            <VideoVivo src={d.src} ativo={ativo} perto={perto} label={d.nome} />
+            {d.selo && <span className="p2-depo-selo">{d.selo}</span>}
+            <span className="p2-depo-play"><Play /> Ouvir</span>
+          </button>
+          <strong>{d.nome}</strong>
+          <small>{d.papel ? `${d.papel} · ${d.real}` : d.real.charAt(0).toUpperCase() + d.real.slice(1)}</small>
+          {d.frase && <p>“{d.frase}”</p>}
+        </li>
+      )} />
+      {prints.length > 0 && (
+        <Esteira itens={prints} reverso velocidade={28} rotulo="Mensagens de alunos no WhatsApp" render={(pr, i, { copia }) => (
+          <li key={i} className="p2-print" aria-hidden={copia || undefined}>
+            <button type="button" onClick={() => setPrint(pr.src)} aria-label={`Ver a mensagem de ${pr.quem} maior`}>
+              <span className="p2-print-topo"><span className="p2-print-zap"><MessageCircle /></span><span><b>{pr.quem}</b><small>mensagem no WhatsApp</small></span></span>
+              <span className="p2-print-conversa"><img src={pr.src} alt={`Mensagem de ${pr.quem} no WhatsApp`} loading="lazy" decoding="async" /></span>
+              <span className="p2-print-selo"><Check /> Aluno real</span>
+            </button>
+          </li>
+        )} />
+      )}
+      {aberto && <VideoAberto src={aberto.cheio ?? aberto.src} nome={aberto.nome} fechar={fechar} />}
+      {print && (
+        <div className="p2-modal" role="dialog" aria-modal="true" aria-label="Mensagem de aluno" onClick={fechar}>
+          <div className="p2-modal-caixa p2-modal-print" onClick={e => e.stopPropagation()}>
+            <img src={print} alt="Mensagem de aluno no WhatsApp" />
+            <button type="button" className="p2-modal-fechar" onClick={fechar} aria-label="Fechar">×</button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

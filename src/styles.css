@@ -1413,3 +1413,49 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .whats .whats-rotulo, .pro2 .sticky-bar.on ~ .whats .whats-rotulo { left: 36px; }
   .pro2 .sticky-bar { left: 82px; }
 }
+
+/* ── prova social: faixas cruzadas na diagonal ── */
+.pro2 .p2-faixas { position: relative; height: 170px; margin: 60px 0 0; overflow: hidden; }
+.pro2 .p2-faixa { position: absolute; left: -12%; right: -12%; top: 50%; padding: 12px 0; overflow: hidden; white-space: nowrap; box-shadow: 0 14px 30px -18px rgba(10, 20, 40, .55); }
+.pro2 .p2-faixa-azul { background: var(--primary); color: #fff; transform: translateY(-50%) rotate(-8deg); z-index: 2; }
+.pro2 .p2-faixa-branca { background: #fff; color: var(--primary); border-block: 1px solid var(--border); transform: translateY(-50%) rotate(7deg); z-index: 1; }
+.pro2 .p2-faixa-trilho { display: inline-flex; width: max-content; animation: p2-faixa 26s linear infinite; }
+.pro2 .p2-faixa-branca .p2-faixa-trilho { animation-direction: reverse; animation-duration: 30s; }
+.pro2 .p2-faixa-trilho span { display: inline-flex; align-items: center; gap: 14px; padding-right: 14px; font-size: 18px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.pro2 .p2-faixa-trilho i { font-style: normal; font-size: 14px; color: var(--ready); }
+.pro2 .p2-faixa-azul .p2-faixa-trilho i { color: #7fe3c4; }
+@keyframes p2-faixa { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .pro2 .p2-faixa-trilho { animation: none; } }
+
+/* ── carrossel de depoimentos em vídeo ── */
+.pro2 .p2-prova { padding-top: 26px; }
+.pro2 .p2-prova .p2-esteira + .p2-esteira { margin-top: 26px; }
+.pro2 .p2-depo { flex: 0 0 min(200px, 50vw); display: flex; flex-direction: column; }
+.pro2 .p2-depo-tela { position: relative; display: block; width: 100%; aspect-ratio: 9 / 16; border: 0; padding: 0; border-radius: 20px; overflow: hidden; background: #0d1220 center / cover no-repeat; box-shadow: 0 22px 44px -26px rgba(10, 20, 40, .55); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.pro2 .p2-depo-tela .p2-video { position: absolute; inset: 0; background: transparent; pointer-events: none; }
+.pro2 .p2-depo-selo { position: absolute; z-index: 2; top: 10px; left: 10px; padding: 4px 9px; border-radius: 99px; background: rgba(255, 255, 255, .95); color: var(--foreground); font-size: 12px; font-weight: 800; }
+.pro2 .p2-depo-play { position: absolute; z-index: 2; left: 50%; bottom: 12px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border-radius: 99px; background: rgba(15, 18, 28, .85); color: #fff; font-size: 13px; font-weight: 700; white-space: nowrap; }
+.pro2 .p2-depo-play svg { width: 13px; height: 13px; fill: currentColor; }
+.pro2 .p2-depo strong { margin-top: 10px; font-size: 16px; color: var(--foreground); }
+.pro2 .p2-depo small { font-size: 13px; color: var(--ready); font-weight: 700; }
+.pro2 .p2-depo p { margin: 6px 0 0; font-size: 14px; line-height: 1.45; color: var(--muted-foreground); }
+
+/* ── carrossel de prints do WhatsApp ── */
+.pro2 .p2-print { flex: 0 0 min(250px, 66vw); align-self: flex-start; }
+.pro2 .p2-print button { display: flex; flex-direction: column; width: 100%; border: 1px solid var(--border); padding: 0; border-radius: 20px; overflow: hidden; background: #fff; text-align: left; cursor: zoom-in; box-shadow: 0 18px 36px -24px rgba(10, 20, 40, .5); -webkit-tap-highlight-color: transparent; }
+.pro2 .p2-print-topo { display: flex; align-items: center; gap: 9px; padding: 10px 12px; background: #fff; border-bottom: 1px solid var(--border); }
+.pro2 .p2-print-zap { flex: none; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: #25d366; color: #fff; }
+.pro2 .p2-print-zap svg { width: 16px; height: 16px; }
+.pro2 .p2-print-topo b { display: block; font-size: 14px; color: var(--foreground); }
+.pro2 .p2-print-topo small { display: block; font-size: 12px; color: var(--muted-foreground); }
+.pro2 .p2-print-conversa { display: block; padding: 12px 10px; background: #efeae2; }
+.pro2 .p2-print-conversa img { display: block; width: 100%; height: auto; border-radius: 10px; }
+.pro2 .p2-print-selo { display: flex; align-items: center; gap: 5px; padding: 8px 12px; font-size: 12px; font-weight: 800; color: var(--ready); background: #fff; }
+.pro2 .p2-print-selo svg { width: 14px; height: 14px; }
+
+/* ── vídeo / print aberto em tela cheia ── */
+.pro2 .p2-modal { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgba(8, 11, 18, .86); animation: p2-entra .25s both; }
+.pro2 .p2-modal-caixa { position: relative; width: min(420px, 100%); }
+.pro2 .p2-modal-caixa video { display: block; width: 100%; max-height: 82svh; border-radius: 18px; background: #000; }
+.pro2 .p2-modal-print img { display: block; width: 100%; max-height: 86svh; object-fit: contain; border-radius: 14px; background: #fff; }
+.pro2 .p2-modal-fechar { position: absolute; top: -14px; right: -6px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #fff; color: var(--foreground); font-size: 26px; line-height: 1; box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .5); }

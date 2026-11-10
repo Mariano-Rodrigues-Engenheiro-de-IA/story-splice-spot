@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { VslPlayer } from '@/components/vsl-player';
 import { Creator, useReveal } from '@/components/landing-pro';
-import { ComoFunciona, QualIA2, ResultadoCliente, Saidas, Segure } from '@/components/pro2';
+import { ComoFunciona, FaixasDepoimentos, ProvaSocial, QualIA2, Saidas, Segure } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
@@ -65,33 +65,6 @@ function CtaMeio() {
 /** Link do WhatsApp para a edição por vídeo (serviço). Conta como Contact no pixel. */
 function linkServico() {
   return `https://api.whatsapp.com/send?phone=${siteConfig.whatsapp}&text=${encodeURIComponent(siteConfig.servico.mensagem)}`;
-}
-
-function DepoVideo({ name, role, quote, video, destaque, resultado }: { name: string; role: string; quote: string; video: string; destaque?: boolean; resultado?: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  const [tocando, setTocando] = useState(false);
-  const tocar = () => { const v = ref.current; if (v) { v.controls = true; void v.play(); } };
-  return <figure className={`depo-video reveal ${destaque ? 'depo-vitrine' : ''}`}>
-    <figcaption>{quote && <blockquote>“{quote}”</blockquote>}<span><strong>{name}</strong> · {role}</span></figcaption>
-    <div className="depo-tela">
-      {/* só baixa o vídeo quando a pessoa aperta o play; a capa .webp tem poucos KB */}
-      <video ref={ref} src={video} poster={video.replace(/\.mp4$/, '.webp')} playsInline preload="none" aria-label={`Depoimento de ${name}`}
-        onPlay={() => { setTocando(true); eventoProprio('Depoimento_Play', { nome: name }); }} onPause={() => setTocando(false)} />
-      {!tocando && <button type="button" className="depo-play" onClick={tocar} aria-label={`Assistir o depoimento de ${name}`}><Play /></button>}
-    </div>
-    {resultado && <ResultadoCliente src={resultado} nome={name} />}
-  </figure>;
-}
-
-function Depoimentos() {
-  // só depoimentos com arquivo; o destaque (a esteticista) vem primeiro, como vitrine
-  const videos = [...siteConfig.pro.videoTestimonials, ...siteConfig.videoTestimonials].filter(v => v.video).sort((a, b) => Number(!!b.destaque) - Number(!!a.destaque));
-  const prints = siteConfig.pro.prints.filter(Boolean);
-  if (videos.length === 0 && prints.length === 0) return null;
-  return <section className="section container" id="depoimentos"><div className="section-heading reveal"><h2>Profissionais que já <em>editam com IA.</em></h2></div>
-    {videos.length > 0 && <div className="depo-videos">{videos.map(item => <DepoVideo key={item.video} {...item} />)}</div>}
-    {prints.length > 0 && <div className="p2-prints reveal">{prints.map(src => <img key={src} src={src} alt="Mensagem de aluno no WhatsApp" loading="lazy" decoding="async" />)}</div>}
-  </section>;
 }
 
 function SpinningSeal() {
@@ -252,7 +225,8 @@ function Pro2() {
         <ComoFunciona />
         <Segure />
         <div className="container"><CtaMeio /></div>
-        <Depoimentos />
+        <FaixasDepoimentos />
+        <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <QualIA2 />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
         <Offer />

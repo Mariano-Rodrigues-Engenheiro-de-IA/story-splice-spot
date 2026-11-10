@@ -23,8 +23,14 @@ export const siteConfig = {
         destaque: true,
       },
     ] as VideoTestimonial[],
-    /** Prints de WhatsApp de alunos (autorizados), em public/img/prints. Vazio = a parede de prints não aparece. */
-    prints: [] as string[],
+    /** Prints de WhatsApp de alunos (autorizados), recortados só nos balões, em public/img/prints (9/11/2026). Vazio = não aparece. */
+    prints: [
+      { src: '/img/prints/print-4.webp', quem: 'Rafael · nutricionista' },
+      { src: '/img/prints/print-1.webp', quem: 'Aluno do Modo Editor' },
+      { src: '/img/prints/print-5.webp', quem: 'Rafael · nutricionista' },
+      { src: '/img/prints/print-2.webp', quem: 'Profissional de marketing' },
+      { src: '/img/prints/print-3.webp', quem: 'Aluno do Modo Editor' },
+    ] as { src: string; quem: string }[],
   },
   /** Edição feita pela equipe, cobrada por vídeo. É a segunda porta da página: quem não quer editar fala no WhatsApp.
    *  `precoPorVideo` vazio = a página não mostra valor, só "peça o valor no WhatsApp". Ex.: 'a partir de R$ 60 por vídeo'. */
