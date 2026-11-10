@@ -1493,3 +1493,5 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .pro2 .offer-price .p2-seguro { display: inline-flex; align-items: center; gap: 4px; max-width: none; white-space: nowrap; font-size: 13px; }
 .pro2 .offer-price .p2-seguro svg { width: 13px; height: 13px; margin-left: 2px; }
 @media (max-width: 374px) { .pro2 .offer-price .p2-parcela { font-size: 15px; white-space: nowrap; } }
+/* "à vista" na mesma linha do 97 */
+.pro2 .offer-price .price .p2-avista { margin-left: 8px; font-size: 18px; font-weight: 600; color: var(--muted-foreground); letter-spacing: 0; vertical-align: baseline; white-space: nowrap; }
