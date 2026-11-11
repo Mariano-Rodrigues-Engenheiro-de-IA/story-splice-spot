@@ -274,7 +274,8 @@ export function RequestLibrary() {
 
 /* ───────────── O que você recebe ───────────── */
 
-export function WhatYouGet() {
+/** `suporte`: 4º cartão "Suporte no WhatsApp" (a oferta da /pro2 inclui). */
+export function WhatYouGet({ suporte = false }: { suporte?: boolean } = {}) {
   return (
     <section className="section container recebe2" id="recebe">
       <div className="section-heading reveal">
@@ -286,7 +287,7 @@ export function WhatYouGet() {
         <div className="recebe-janela-topo" aria-hidden="true"><i /><i /><i /><span><KeyRound size={12} /> Sua área de membros</span></div>
         <img src="/img/recebe/area-membros.webp" alt="Área de membros do Modo Editor, com os módulos Comece aqui, Prepare sua máquina e Seu primeiro vídeo" width={1284} height={978} loading="lazy" decoding="async" />
       </figure>
-      <div className="recebe-itens">
+      <div className={`recebe-itens ${suporte ? 'recebe-quatro' : ''}`}>
         <article className="recebe-item reveal recebe-principal">
           <div className="recebe-arte recebe-arte-editor" aria-hidden="true">
             <span className="recebe-ias recebe-ia-1"><LogoChatGPT /></span>
@@ -310,6 +311,18 @@ export function WhatYouGet() {
           </div>
           <div className="recebe-texto"><h3>Gerador de Pedido</h3><p>Não sabe o que pedir? Você clica nas opções (formato, estilo, legenda, efeitos, trilha) e ele escreve o pedido completo pra você colar na IA.</p></div>
         </article>
+        {suporte && (
+          <article className="recebe-item reveal">
+            <div className="recebe-arte recebe-arte-suporte" aria-hidden="true">
+              <div className="recebe-zap">
+                <div className="recebe-zap-topo"><span className="recebe-zap-foto">ME</span><span><b>Suporte Modo Editor</b><small>online</small></span></div>
+                <p className="recebe-zap-eu">Travei na instalação, me ajuda?</p>
+                <p className="recebe-zap-ele">Claro! Me manda um print da tela que eu te mostro o próximo passo.</p>
+              </div>
+            </div>
+            <div className="recebe-texto"><h3>Suporte no WhatsApp</h3><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div>
+          </article>
+        )}
       </div>
       <p className="recebe-rodape reveal"><span>Funciona no</span><b><LogoChatGPT /> ChatGPT</b><span>e no</span><b><LogoClaude /> Claude</b><small>plano pago, contratado à parte</small></p>
     </section>

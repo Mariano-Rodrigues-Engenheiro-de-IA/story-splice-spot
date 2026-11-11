@@ -448,7 +448,7 @@ export function Saidas({ titulo, sub, depois }: { titulo?: React.ReactNode; sub?
     <section className="section p2-saidas" id="exemplos" ref={secao}>
       <div className="container section-heading reveal">
         <h2>{titulo ?? <>Estilos de edição que você pode usar <em>no seu vídeo.</em></>}</h2>
-        {sub && <p>{sub}</p>}
+        {sub && (typeof sub === 'string' ? <p>{sub}</p> : sub)}
       </div>
       <div className="p2-esteira" aria-label="Exemplos de estilos de vídeo"
         onPointerDown={segurar} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}>
@@ -671,4 +671,22 @@ export function ProvaSocial({ prints }: { prints: { src: string; quem: string }[
       )}
     </section>
   );
+}
+
+/* ───────────── Faixa reta com o que a IA coloca no vídeo (as duas páginas) ───────────── */
+
+export const itensIA = ['Efeitos visuais e sonoros', 'Ilustrações realistas', 'Objetos em 3D', 'Motion design', 'Títulos animados'];
+/** Faixa reta que roda sem parar, de ponta a ponta (as frases se repetem sem emenda). */
+export function FaixaIA() {
+  const volta = [...itensIA, ...itensIA];
+  return (
+    <div className="galeria-ticker" aria-label={itensIA.join(', ')}>
+      <div className="galeria-ticker-trilho" aria-hidden="true">{[...volta, ...volta].map((t, i) => <span key={i}>{t}<i>✦</i></span>)}</div>
+    </div>
+  );
+}
+/** Título "Edição com IA / muito além de corte e legenda." + "A IA coloca no seu vídeo" + faixa + frase de apoio. */
+export const tituloAlemDoBasico = <>Edição com IA<br /><em>muito além de corte e legenda.</em></>;
+export function SubAlemDoBasico() {
+  return <><p className="galeria-intro">A IA coloca no seu vídeo</p><FaixaIA /><p className="galeria-apoio">Você só faz o pedido, em português, e vai fazer outra coisa.</p></>;
 }

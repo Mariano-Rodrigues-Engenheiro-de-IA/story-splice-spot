@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { VslPlayer } from '@/components/vsl-player';
 import { Creator, useReveal } from '@/components/landing-pro';
-import { ComoFunciona, Faixas, ProvaSocial, QualIA2, Saidas, Segure } from '@/components/pro2';
+import { ComoFunciona, Faixas, ProvaSocial, QualIA2, Saidas, Segure, SubAlemDoBasico, tituloAlemDoBasico } from '@/components/pro2';
+import { WhatYouGet } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
@@ -258,13 +259,14 @@ function Pro2() {
           <p className="hero-copy">{nicho.frase}</p>
         </section>
         <Faixas />
-        <Saidas />
+        <Saidas titulo={tituloAlemDoBasico} sub={<SubAlemDoBasico />} />
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ComoFunciona />
         <Segure />
         <div className="container"><CtaMeio /></div>
         <QualIA2 />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
+        <WhatYouGet suporte />
         <Offer />
         <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><h2>Dúvidas <em>frequentes.</em></h2></div><Accordion type="single" collapsible className="faq-list">{duvidas.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
         <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2 className="p2-fim-titulo"><span>Seu próximo vídeo pode sair hoje.</span><em>A decisão é sua.</em></h2><PurchaseButton destino="checkout" /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>

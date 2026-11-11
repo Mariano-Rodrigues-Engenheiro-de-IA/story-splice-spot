@@ -7,7 +7,7 @@ import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, Esteira, Faixas, ProvaSocial, QualIA2, VideoVivo } from '@/components/pro2';
+import { ComoFunciona, Esteira, Faixas, ProvaSocial, QualIA2, SubAlemDoBasico, VideoVivo } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -62,14 +62,6 @@ function Aulas() {
       <div className="aula-chips">{['Corte limpo, sem pausa', 'Zoom a cada corte', 'Ilustração ao lado', 'Palavra-chave na tela'].map(t => <span key={t}><CheckCircle2 size={14} />{t}</span>)}</div>
     </div>
   </section>;
-}
-/** O que a IA coloca no vídeo: uma faixa reta que roda sem parar, de ponta a ponta (as frases se repetem sem emenda). */
-const itensGaleria = ['Efeitos visuais e sonoros', 'Ilustrações realistas', 'Objetos em 3D', 'Motion design', 'Títulos animados'];
-function ItensGaleria() {
-  const volta = [...itensGaleria, ...itensGaleria];
-  return <div className="galeria-ticker" aria-label={itensGaleria.join(', ')}>
-    <div className="galeria-ticker-trilho" aria-hidden="true">{[...volta, ...volta].map((t, i) => <span key={i}>{t}<i>✦</i></span>)}</div>
-  </div>;
 }
 /** true enquanto o elemento está na tela (ou perto): animações e temporizadores só rodam quando alguém vê. */
 function useNaTela<T extends Element>() {
@@ -268,7 +260,7 @@ function Index() {
         </section>
         <Faixas />
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><p className="galeria-intro">A IA coloca no seu vídeo</p><ItensGaleria /><p className="galeria-apoio">Você só faz o pedido, em português, e vai fazer outra coisa.</p></div>
+          <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><SubAlemDoBasico /></div>
           <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
