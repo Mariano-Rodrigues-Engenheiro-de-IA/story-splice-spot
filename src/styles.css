@@ -1725,4 +1725,15 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .geral[data-faixa="amarela"] .p2-faixa-azul .p2-faixa-trilho i { background: #111; }
 .geral[data-faixa="amarela"] .p2-faixa-branca { background: #111; color: oklch(.87 .17 92); border-block: 1px solid oklch(.87 .17 92 / .6); }
 .geral[data-faixa="amarela"] .p2-faixa-branca .p2-faixa-trilho i { background: oklch(.87 .17 92); }
+/* 11/11: faixa da /pro2 no mesmo padrão da página escura (fina, letra 13 px leve e espaçada, ângulo fechado); só as cores mudam */
+.pro2 .p2-faixas { height: 108px; }
+.pro2 .p2-faixa { padding: 7px 0; }
+.pro2 .p2-faixa-trilho span { gap: 20px; padding-right: 20px; font-size: 13px; font-weight: 600; letter-spacing: .2em; }
+.pro2 .p2-faixa-trilho i { width: 5px; height: 5px; }
+.pro2 .p2-faixa-azul { transform: translateY(calc(-50% - 9px)) rotate(-4.5deg); }
+.pro2 .p2-faixa-branca { transform: translateY(calc(-50% + 9px)) rotate(4deg); }
+@media (min-width: 768px) {
+  .pro2 .p2-faixa-azul { transform: translateY(calc(-50% - 9px)) rotate(-2deg); }
+  .pro2 .p2-faixa-branca { transform: translateY(calc(-50% + 9px)) rotate(1.8deg); }
+}
 
