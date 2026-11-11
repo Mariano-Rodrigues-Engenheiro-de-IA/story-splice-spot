@@ -257,8 +257,9 @@ function Index() {
     <div className="hero-wrap">
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
           <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
+          {/* colada no vídeo: quem assiste olha para cima e já lê onde aquilo funciona */}
+          <p className="hero-funciona">Funciona no <b><LogoChatGPT /> ChatGPT</b> e no <b><LogoClaude /> Claude</b></p>
           <div className="hero-video">
             {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
           </div>
