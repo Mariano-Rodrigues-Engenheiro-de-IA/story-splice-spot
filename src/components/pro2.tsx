@@ -830,16 +830,18 @@ export function EditorIA() {
 
 /* ───────────── Veja a IA trabalhando (um editor de vídeo no MacBook e as etapas, uma por vez, com ✓) ───────────── */
 
+// todas as etapas com o mesmo tempo: os ✓ entram num ritmo constante (com tempos diferentes, a etapa longa parecia
+// travada e as curtas pareciam acontecer todas de uma vez)
 const ETAPAS_IA = [
-  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 450 },
-  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 550 },
-  { agora: 'Editando o vídeo', feito: 'Editado', ms: 1100 },
-  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 450 },
-  { agora: 'Finalizando', feito: 'Pronto', ms: 350 },
+  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 600 },
+  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 600 },
+  { agora: 'Editando o vídeo', feito: 'Editado', ms: 600 },
+  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 600 },
+  { agora: 'Finalizando', feito: 'Pronto', ms: 600 },
 ];
 const INICIO_ETAPA = ETAPAS_IA.reduce<number[]>((acc, _x, k) => [...acc, k === 0 ? 0 : acc[k - 1]! + ETAPAS_IA[k - 1]!.ms], []);
 const TOTAL_ETAPAS = ETAPAS_IA.reduce((s, x) => s + x.ms, 0);
-const SEGURA_PRONTO = 2400;
+const SEGURA_PRONTO = 2600;
 // trechos do vídeo na linha do tempo, em % da faixa: a gravação inteira e, depois da edição, mais curta e sem buracos
 const TRECHOS_TL = {
   inteiro: [[0, 24], [24, 20], [44, 22], [66, 16], [82, 18]],

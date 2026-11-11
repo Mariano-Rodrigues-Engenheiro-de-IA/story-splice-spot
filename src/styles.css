@@ -1917,7 +1917,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 /* ── 11/11: "Veja a IA trabalhando": as etapas em palavras grandes (tipo download) e um editor de vídeo no MacBook ── */
 :is(.pro2, .geral) .it-corpo { max-width: 620px; margin: 0 auto; }
 :is(.pro2, .geral) .it-status { max-width: 460px; margin: 0 auto 30px; text-align: center; }
-:is(.pro2, .geral) .it-palavra { display: inline-flex; align-items: center; gap: 10px; font-size: clamp(27px, 7.4vw, 40px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; color: var(--foreground); animation: it-entra .38s cubic-bezier(.2, .9, .3, 1.1) both; }
+:is(.pro2, .geral) .it-palavra { display: inline-flex; align-items: center; gap: 10px; font-size: clamp(27px, 7.4vw, 40px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; color: var(--foreground); animation: it-entra .22s cubic-bezier(.2, .9, .3, 1.1) both; }
 :is(.pro2, .geral) .it-status.final .it-palavra { color: var(--ready); }
 :is(.pro2, .geral) .it-palavra > svg { width: .85em; height: .85em; }
 :is(.pro2, .geral) .it-pontinhos { display: inline-flex; gap: 4px; align-self: flex-end; margin-bottom: .22em; }
