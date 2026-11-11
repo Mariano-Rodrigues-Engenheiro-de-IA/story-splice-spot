@@ -166,8 +166,8 @@ const galleryCopy: [string, string, string, string][] = [
 ];
 const gallery: [string, string, string, string][] = galleryCopy;
 /** Quando o meio de um vídeo passa embaixo da setinha do título, ela cutuca para baixo e esse vídeo brilha (contorno,
- *  reflexo e um leve aumento): uma cutucada por vídeo, na hora em que ele passa. Só com a galeria na tela, depois que a
- *  setinha terminou de se desenhar. */
+ *  reflexo e um leve aumento): uma cutucada por vídeo, na hora em que ele passa. Assim que a galeria aparece, ela já
+ *  cutuca o vídeo que estiver embaixo dela (não espera o próximo passar). */
 function CutucaVideo() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -176,7 +176,11 @@ function CutucaVideo() {
     if (!galeria || !seta) return;
     const antes = new WeakMap<HTMLElement, number>(); // onde estava o meio de cada vídeo na olhada anterior
     let ligado = false, id = 0, inicio = 0;
+    const ultima = new WeakMap<HTMLElement, number>(); // quando cada vídeo foi cutucado (nunca duas vezes seguidas)
     const cutuca = (card: HTMLElement) => {
+      const agora = performance.now();
+      if (agora - (ultima.get(card) ?? -1e9) < 2500) return;
+      ultima.set(card, agora);
       seta.classList.remove('cutuca'); void seta.getBoundingClientRect(); seta.classList.add('cutuca');
       window.setTimeout(() => {
         card.classList.remove('cutucado'); void card.offsetWidth; card.classList.add('cutucado');
@@ -197,7 +201,17 @@ function CutucaVideo() {
     };
     const io = new IntersectionObserver(([e]) => {
       const na = !!e?.isIntersecting;
-      if (na && !ligado) { ligado = true; inicio = window.setTimeout(() => { olha(); id = window.setInterval(olha, 60); }, 1700); }
+      if (na && !ligado) {
+        ligado = true;
+        inicio = window.setTimeout(() => {
+          // primeira cutucada na hora: o vídeo mais perto da setinha
+          const r = seta.getBoundingClientRect(), x = r.left + r.width / 2;
+          let alvo: HTMLElement | null = null, melhor = Infinity;
+          galeria.querySelectorAll<HTMLElement>('.gallery-card').forEach(c => { const rc = c.getBoundingClientRect(); const d = Math.abs(rc.left + rc.width / 2 - x); if (rc.right > 0 && rc.left < window.innerWidth && d < melhor) { melhor = d; alvo = c; } });
+          if (alvo) cutuca(alvo);
+          olha(); id = window.setInterval(olha, 60);
+        }, 250);
+      }
       if (!na && ligado) { ligado = false; window.clearTimeout(inicio); window.clearInterval(id); }
     }, { threshold: .35 });
     io.observe(galeria);
