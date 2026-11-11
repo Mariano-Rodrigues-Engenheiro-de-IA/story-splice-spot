@@ -2149,4 +2149,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 @media (max-width: 400px) { :is(.pro2, .geral) .ei-janela { height: 492px; } :is(.pro2, .geral) .ei-conversa { height: auto; } }
 /* folga embaixo igual à de cima, para o brilho do vídeo cutucado não ser cortado pela faixa */
 #galeria .p2-esteira-fila { padding-bottom: 18px; }
+/* borda dos vídeos da galeria normal: a capa (primeira imagem do vídeo) ficava por baixo da borda meio transparente e,
+   nos vídeos de fundo claro, o contorno parecia aceso; agora a capa fica só por dentro e a borda tem cor fixa */
+.geral #galeria .gallery-card { background-clip: padding-box; background-size: cover; background-position: center; border-color: oklch(.3 .01 286); background-color: oklch(.16 .006 286); }
 

@@ -349,7 +349,7 @@ function Index() {
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading reveal galeria-topo"><h2>Vídeos editados com o <em className="seta-ancora">Modo Editor<SetaCurva /></em></h2></div><CutucaVideo />
-          <Esteira itens={gallery} velocidade={56} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src, etiqueta], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><span className="gallery-tag">{etiqueta}</span><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
+          <Esteira itens={gallery} velocidade={78} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src, etiqueta], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><span className="gallery-tag">{etiqueta}</span><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ForWho />
