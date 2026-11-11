@@ -51,8 +51,8 @@ export const siteConfig = {
     /** true = dispara InitiateCheckout no clique do botão (aí desligue esse evento na Kiwify para não contar duas vezes). */
     initiateCheckoutNoBotao: false as boolean,
   },
-  /** Installment value for 12x on card, e.g. 6.93. 0 = installment line hidden. */
-  installmentValue: 0,
+  /** Parcela de 12x no cartão da página geral (R$ 67), lida no checkout da Kiwify em 11/11/2026 ("12x de R$ 6,93", parcelamento com acréscimo). 0 = some a linha. */
+  installmentValue: 6.93,
   /** ISO date when the bonus ends, e.g. '2026-11-01T23:59:00-03:00'. Empty = no countdown. */
   bonusEndsAt: '',
   videos: {

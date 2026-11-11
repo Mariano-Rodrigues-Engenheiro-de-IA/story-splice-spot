@@ -1846,10 +1846,12 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* ── oferta: o botão leva direto ao preço; no celular a ordem é preço -> garantia -> o que vem incluído ── */
 html:has(.geral) { scroll-padding-top: 0; }
 .geral #preco { scroll-margin-top: 14px; }
-.geral .offer-price .p2-seguro { gap: 5px; font-size: 14px; }
-.geral .offer-price .p2-seguro b { display: inline-flex; align-items: center; gap: 5px; font-weight: 650; color: var(--foreground); }
-.geral .offer-price .p2-seguro b svg { width: 16px; height: 16px; margin: 0; color: var(--ready); }
-.geral .offer-price .p2-seguro i { font-style: normal; margin: 0 3px; opacity: .55; }
+/* embaixo do botão: "Acesso vitalício" e "Pagamento único" lado a lado, na largura do botão (a letra se ajusta) */
+.geral .offer-price .offer-button { min-width: 240px; } /* no computador o botão ficava estreito e os dois selos não cabiam na largura dele */
+.geral .offer-price .p2-selos { margin: 0; max-width: none; white-space: nowrap; line-height: 1.3; }
+.geral .offer-price .p2-selos span { display: inline-flex; align-items: center; gap: 1.1em; }
+.geral .offer-price .p2-selos b { display: inline-flex; align-items: center; gap: .35em; font-weight: 600; color: var(--foreground); }
+.geral .offer-price .p2-selos svg { width: 1.15em; height: 1.15em; flex: none; color: var(--ready); }
 @media (max-width: 767px) {
   .geral .offer { display: flex; flex-direction: column; }
   .geral .offer-main { display: contents; }

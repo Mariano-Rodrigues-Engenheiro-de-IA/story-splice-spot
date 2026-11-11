@@ -1,13 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, CheckCircle2, Clapperboard, GripVertical, Infinity as Infinito, Loader2, Lock, MonitorPlay, MousePointerClick, Play, Volume2 } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clapperboard, GripVertical, Infinity as Infinito, Loader2, MonitorPlay, MousePointerClick, Play, Volume2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, Esteira, Faixas, ProvaSocial, QualIA2, SubAlemDoBasico, VideoVivo } from '@/components/pro2';
+import { ComoFunciona, Esteira, Faixas, LinhaAjustada, LinhaDoPreco, ProvaSocial, QualIA2, SubAlemDoBasico, VideoVivo } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -143,7 +143,7 @@ const offerItems = [
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><h2>Comece <em>hoje.</em></h2><p>Pagamento único. Vídeos sem limite. 7 dias de garantia.</p></div>
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT ou Claude, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy], i) => <li key={title}>{offerIcons[i]}<div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
-      <div className="offer-price" id="preco"><p className="preco-rotulo">{siteConfig.precoDe ? 'Preço de Black Friday' : 'Pagamento único'}</p>{siteConfig.precoDe > 0 && <p className="preco-de">de <s className="preco-riscado">R$ {siteConfig.precoDe}<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 33 C 30 27, 62 16, 97 6" pathLength={100} /></svg></s></p>}<div className="price"><sup>R$</sup><Odometro valor={siteConfig.price} de={siteConfig.precoDe || siteConfig.price} /><span className="p2-avista">à vista</span></div><p className="p2-parcela">{siteConfig.installmentValue > 0 ? <>ou <strong>12x de {brlCents(siteConfig.installmentValue)}</strong> no cartão</> : 'no PIX, ou parcelado no cartão'}</p><p className="p2-unico">Pagamento único</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print p2-seguro"><b><Infinito aria-hidden="true" /> Acesso vitalício</b><i aria-hidden="true">·</i><Lock aria-hidden="true" /> Compra segura</span></div></div>
+      <div className="offer-price" id="preco"><p className="preco-rotulo">{siteConfig.precoDe ? 'Preço de Black Friday' : 'Pagamento único'}</p>{siteConfig.precoDe > 0 && <p className="preco-de">de <s className="preco-riscado">R$ {siteConfig.precoDe}<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 33 C 30 27, 62 16, 97 6" pathLength={100} /></svg></s></p>}<div className="price"><sup>R$</sup><Odometro valor={siteConfig.price} de={siteConfig.precoDe || siteConfig.price} /><span className="p2-avista">à vista</span></div><LinhaDoPreco>{siteConfig.installmentValue > 0 ? <>ou <strong>12x de {brlCents(siteConfig.installmentValue)}</strong> no cartão</> : 'no PIX, ou parcelado no cartão'}</LinhaDoPreco><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><LinhaAjustada alvo=".offer-button" className="p2-selos" min={11} max={16}><b><Infinito aria-hidden="true" /> Acesso vitalício</b><b><CheckCircle2 aria-hidden="true" /> Pagamento único</b></LinhaAjustada></div></div>
       <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
     <Faixas sempre /></section>;
 }

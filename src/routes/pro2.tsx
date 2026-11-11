@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, Loader2, Play, MessageCircle, Clapperboard, MonitorPlay, MousePointerClick, Clock, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { VslPlayer } from '@/components/vsl-player';
 import { Creator, useReveal } from '@/components/landing-pro';
-import { ComoFunciona, Faixas, ProvaSocial, QualIA2, Saidas, Segure, SubAlemDoBasico, tituloAlemDoBasico } from '@/components/pro2';
+import { ComoFunciona, Faixas, LinhaDoPreco, ProvaSocial, QualIA2, Saidas, Segure, SubAlemDoBasico, tituloAlemDoBasico } from '@/components/pro2';
 import { WhatYouGet } from '@/components/landing-extras';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
@@ -85,27 +85,6 @@ const offerItems = [
   ['Suporte no WhatsApp', 'Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.'],
   ['Acesso na hora', 'Liberado assim que o pagamento é aprovado. Você precisa de computador e do plano da sua IA.'],
 ];
-
-/** Linha da parcela com a mesma largura da linha do preço (do "R$" ao "à vista"): a letra se ajusta para as pontas baterem. */
-function LinhaDoPreco({ children }: { children: ReactNode }) {
-  const texto = useRef<HTMLSpanElement>(null);
-  useEffect(() => {
-    const el = texto.current;
-    const preco = el?.closest('.offer-price')?.querySelector<HTMLElement>('.price');
-    if (!el || !preco) return;
-    const ajustar = () => {
-      el.style.fontSize = '16px';
-      const alvo = preco.getBoundingClientRect().width, atual = el.getBoundingClientRect().width;
-      if (alvo > 0 && atual > 0) el.style.fontSize = `${Math.max(12, Math.min(22, (16 * alvo) / atual)).toFixed(2)}px`;
-    };
-    ajustar();
-    const ro = new ResizeObserver(ajustar);
-    ro.observe(preco);
-    document.fonts?.ready.then(ajustar);
-    return () => ro.disconnect();
-  }, []);
-  return <p className="p2-parcela"><span ref={texto}>{children}</span></p>;
-}
 
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><h2>Comece <em>hoje.</em></h2><p>Pagamento único. Vídeos sem limite. 7 dias de garantia.</p></div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, MessageCircle, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
@@ -690,3 +690,33 @@ export const tituloAlemDoBasico = <>Edição com IA<br /><em>muito além de cort
 export function SubAlemDoBasico() {
   return <><p className="galeria-intro">A IA coloca no seu vídeo</p><FaixaIA /><p className="galeria-apoio">Você só faz o pedido, em português, e vai fazer outra coisa.</p></>;
 }
+
+/* ───────────── Linhas da oferta com a mesma largura de outro elemento (as duas páginas) ───────────── */
+
+/** Linha cuja letra se ajusta até as pontas baterem com outro elemento da oferta
+ *  (`alvo`: a linha do preço, do "R$" ao "à vista", ou o botão de compra). */
+export function LinhaAjustada({ children, alvo = '.price', className = 'p2-parcela', min = 12, max = 22 }: { children: ReactNode; alvo?: string; className?: string; min?: number; max?: number }) {
+  const texto = useRef<HTMLSpanElement>(null);
+  useEffect(() => {
+    const el = texto.current;
+    const referencia = el?.closest('.offer-price')?.querySelector<HTMLElement>(alvo);
+    if (!el || !referencia) return;
+    const ajustar = () => {
+      el.style.fontSize = '16px';
+      // offsetWidth: a medida sem o pulso do botão (a animação muda a escala, não o tamanho)
+      const largura = referencia.offsetWidth, atual = el.offsetWidth;
+      if (largura > 0 && atual > 0) el.style.fontSize = `${Math.max(min, Math.min(max, (16 * largura) / atual)).toFixed(2)}px`;
+    };
+    ajustar();
+    const ro = new ResizeObserver(ajustar);
+    ro.observe(referencia);
+    document.fonts?.ready.then(ajustar);
+    return () => ro.disconnect();
+  }, [alvo, min, max]);
+  return <p className={className}><span ref={texto}>{children}</span></p>;
+}
+/** Linha da parcela com a mesma largura da linha do preço. */
+export function LinhaDoPreco({ children }: { children: ReactNode }) {
+  return <LinhaAjustada>{children}</LinhaAjustada>;
+}
+
