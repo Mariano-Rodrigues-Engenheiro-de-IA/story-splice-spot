@@ -405,7 +405,8 @@ function CartaoEstilo({ src, titulo, profissao, emoji, real, copia, ativo, perto
   );
 }
 
-export function Saidas() {
+/** `titulo`/`sub`/`depois`: a página geral usa a mesma esteira com outro título e o "básico vem junto" embaixo. */
+export function Saidas({ titulo, sub, depois }: { titulo?: React.ReactNode; sub?: React.ReactNode; depois?: React.ReactNode } = {}) {
   const [secao, naTela] = useNaTela<HTMLElement>('200px 0px');
   const fila = useRef<HTMLOListElement>(null);
   const posicao = useRef(0);
@@ -446,7 +447,8 @@ export function Saidas() {
   return (
     <section className="section p2-saidas" id="exemplos" ref={secao}>
       <div className="container section-heading reveal">
-        <h2>Estilos de edição que você pode usar <em>no seu vídeo.</em></h2>
+        <h2>{titulo ?? <>Estilos de edição que você pode usar <em>no seu vídeo.</em></>}</h2>
+        {sub && <p>{sub}</p>}
       </div>
       <div className="p2-esteira" aria-label="Exemplos de estilos de vídeo"
         onPointerDown={segurar} onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={soltar} onContextMenu={e => e.preventDefault()}>
@@ -458,6 +460,7 @@ export function Saidas() {
         </ol>
       </div>
       <p className="p2-dica">{paradoTela ? 'Solte para continuar' : 'Toque e segure para parar'}</p>
+      {depois}
     </section>
   );
 }

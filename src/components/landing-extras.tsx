@@ -117,11 +117,11 @@ export function LiveDemo() {
 /* ───────────── Sem x com o Modo Editor ───────────── */
 
 const criteria = [
-  ['Cortes', 'silêncio, gaguejada e tomada repetida saem'],
+  ['Cortes', 'pausa, gaguejada e repetição saem'],
   ['Legenda', 'palavra por palavra, no tempo da fala'],
-  ['Zoom', 'aproxima quando você enfatiza'],
-  ['Fundo e cor', 'cenário e cor no padrão que você pedir'],
-  ['Trilha', 'baixinha por baixo da voz, efeito nos cortes'],
+  ['Ilustração', '3D, mapa ou desenho do que você fala'],
+  ['Cenário e cor', 'no padrão que você pedir'],
+  ['Conferência', 'assiste o vídeo antes de entregar'],
 ] as const;
 
 export function ModeSwitch() {
@@ -144,8 +144,8 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <h2>Por que não pedir <em>direto pra IA?</em></h2>
-        <p>Sem o Modo Editor, o ChatGPT ou o Claude adivinha como você quer o vídeo. Com ele, já começa sabendo.</p>
+        <h2>O mesmo pedido, <em>sem e com o Modo Editor.</em></h2>
+        <p>Sem o Modo Editor, o ChatGPT ou o Claude não sabe como você quer o vídeo e adivinha. Com ele, já começa sabendo.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
