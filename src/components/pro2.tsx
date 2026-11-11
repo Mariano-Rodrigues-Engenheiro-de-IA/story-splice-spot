@@ -558,9 +558,9 @@ function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }:
   );
 }
 
-/** Duas faixas cruzadas na diagonal que andam junto com a rolagem: rolou, elas andam (cada uma para um lado); parou, elas param. */
-export function FaixasDepoimentos() {
-  const palavras = ['Depoimentos', 'Feedbacks', 'Quem já usou', 'Resultados reais'];
+/** Duas faixas cruzadas na diagonal que andam junto com a rolagem: rolou, elas andam (cada uma para um lado); parou, elas param.
+ *  Ficam logo abaixo da primeira dobra, como divisória da oferta (11/11: Black Friday). */
+export function Faixas({ palavras = ['Black Friday', 'Oferta especial', 'Modo Black'] }: { palavras?: string[] } = {}) {
   const texto = Array.from({ length: 6 }, () => palavras).flat();
   const azul = useRef<HTMLDivElement>(null);
   const branca = useRef<HTMLDivElement>(null);
@@ -633,6 +633,7 @@ export function ProvaSocial({ prints }: { prints: { src: string; quem: string }[
   const fechar = () => { setAberto(null); setPrint(null); };
   return (
     <section className="p2-prova" id="depoimentos">
+      <div className="section container p2-prova-topo"><div className="section-heading reveal"><h2>Profissionais que já <em>editam com IA.</em></h2><p>Alunos reais do Modo Editor: o depoimento e o vídeo que eles editaram.</p></div></div>
       <Esteira itens={DEPOIMENTOS} rotulo="Depoimentos em vídeo" render={(d, i, { copia, ativo, perto }) => (
         <li key={i} className="p2-depo" aria-hidden={copia || undefined}>
           <button type="button" className="p2-depo-tela" style={{ backgroundImage: `url(${capa(d.src)})` }}

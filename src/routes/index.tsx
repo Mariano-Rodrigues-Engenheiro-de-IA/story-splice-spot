@@ -8,7 +8,7 @@ import { VslPlayer } from '@/components/vsl-player';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, FaixasDepoimentos, ProvaSocial, QualIA2 } from '@/components/pro2';
+import { ComoFunciona, Faixas, ProvaSocial, QualIA2 } from '@/components/pro2';
 import { OQueFaz } from '@/components/geral-faz';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
@@ -265,6 +265,7 @@ function Index() {
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado e pronto pra postar.</p>
         </section>
+        <Faixas />
         <section className="section container" id="galeria">
           <div className="section-heading reveal"><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada efeito abaixo foi a IA que fez, a partir de um pedido em português.</p></div>
           <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor" data-clip-grupo><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip grupo src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
@@ -282,7 +283,6 @@ function Index() {
         <OQueFaz />
         <LiveDemo />
         <Aulas />
-        <FaixasDepoimentos />
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <QualIA2 extra={<>Nada a mais por vídeo: <b>só o plano da sua IA</b>, a partir de US$ 20 por mês.</>} />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />

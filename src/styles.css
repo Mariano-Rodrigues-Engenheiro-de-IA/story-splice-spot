@@ -1712,3 +1712,8 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .geral .faz-selo { top: 22px; right: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { .geral .faz-zoom img, .geral .faz-mira, .geral .faz-enfase { animation: none; } }
+/* 11/11: faixas de oferta (Black Friday) logo abaixo da primeira dobra, nas duas páginas; depoimentos com título */
+:is(.pro2, .geral) .hero + .p2-faixas { margin-top: 40px; }
+:is(.pro2, .geral) .hero + .p2-faixas + .section { padding-top: 64px; }
+:is(.pro2, .geral) .p2-prova { padding-top: 0; }
+

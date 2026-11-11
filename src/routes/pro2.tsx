@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { VslPlayer } from '@/components/vsl-player';
 import { Creator, useReveal } from '@/components/landing-pro';
-import { ComoFunciona, FaixasDepoimentos, ProvaSocial, QualIA2, Saidas, Segure } from '@/components/pro2';
+import { ComoFunciona, Faixas, ProvaSocial, QualIA2, Saidas, Segure } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { nichoPorSlug } from '@/lib/nichos';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
@@ -256,11 +256,11 @@ function Pro2() {
           <p className="purchase-note">Pagamento único · 7 dias de garantia</p>
           <p className="hero-copy">{nicho.frase}</p>
         </section>
+        <Faixas />
         <Saidas />
         <ComoFunciona />
         <Segure />
         <div className="container"><CtaMeio /></div>
-        <FaixasDepoimentos />
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <QualIA2 />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
