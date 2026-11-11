@@ -532,7 +532,9 @@ export function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, re
         if (posicao.current >= volta) posicao.current -= volta;
         if (posicao.current < 0) posicao.current += volta;
       }
-      el.style.transform = `translate3d(${-posicao.current}px, 0, 0)`;
+      // anda em pixels inteiros da tela: em fração de pixel a borda fina dos cartões fica borrada e treme
+      const dpr = window.devicePixelRatio || 1;
+      el.style.transform = `translate3d(${-Math.round(posicao.current * dpr) / dpr}px, 0, 0)`;
       const largura = el.parentElement?.clientWidth ?? window.innerWidth;
       const agoraVistos: number[] = [];
       for (let i = 0; i < filhos.length; i++) {
