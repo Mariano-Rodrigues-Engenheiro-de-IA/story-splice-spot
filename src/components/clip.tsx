@@ -33,10 +33,11 @@ export function Clip({ src, preset = "pronto", opts, className = "", label, grup
     if (!src || !node) return;
     if (typeof IntersectionObserver === "undefined") return setCapa(true);
     const alvo = node.closest<HTMLElement>("[data-clip-grupo]") ?? node;
-    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) { setCapa(true); io.disconnect(); } }, { rootMargin: "900px 0px" });
+    // em grupo (antes e depois) o vídeo já baixa aqui, ~1 tela antes: quando a pessoa chega, ele começa na hora, sem tela cinza
+    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) { setCapa(true); if (grupo) setPerto(true); io.disconnect(); } }, { rootMargin: "900px 0px" });
     io.observe(alvo);
     return () => io.disconnect();
-  }, [src]);
+  }, [src, grupo]);
   useEffect(() => {
     const node = video.current;
     if (!src || !node) return;

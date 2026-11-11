@@ -108,8 +108,9 @@ function Comparison() {
     const start = Date.now();
     const timer = window.setInterval(() => {
       if (arrastando.current || Date.now() < parado.current) return;
-      const alvo = 50 + Math.sin((Date.now() - start) / 1500) * 34;
-      setPosition(p => p + (alvo - p) * 0.14);
+      // vaivém completo em ~3,5 s: quem passa rolando vê o antes e o depois
+      const alvo = 50 + Math.sin((Date.now() - start) / 560) * 34;
+      setPosition(p => p + (alvo - p) * 0.3);
     }, 33);
     return () => window.clearInterval(timer);
   }, [naTela]);
