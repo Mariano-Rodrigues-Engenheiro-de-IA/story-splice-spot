@@ -1552,11 +1552,18 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .geral .p2-claude { --ready: oklch(.55 .11 176); }
 .geral .p2-mac { filter: drop-shadow(0 26px 34px rgba(0, 0, 0, .55)); }
 /* faixas cruzadas: vermelha da marca e branca */
-.geral .p2-faixas { margin-top: 88px; }
-.geral .p2-faixa-azul { background: var(--primary-deep, oklch(.52 .2 26)); }
+/* faixas bem fechadinhas (cruzam quase paralelas), roxa e branca */
+.geral .p2-faixas { margin-top: 88px; height: 130px; }
+.geral .p2-faixa { padding: 10px 0; }
+.geral .p2-faixa-azul { background: oklch(.5 .21 295); color: #fff; transform: translateY(calc(-50% - 12px)) rotate(-4.5deg); }
 .geral .p2-faixa-azul .p2-faixa-trilho i { background: #fff; }
-.geral .p2-faixa-branca { color: oklch(.5 .2 26); }
-.geral .p2-faixa-branca .p2-faixa-trilho i { background: oklch(.5 .2 26); }
+.geral .p2-faixa-branca { background: #fff; color: oklch(.5 .21 295); transform: translateY(calc(-50% + 12px)) rotate(4deg); }
+.geral .p2-faixa-branca .p2-faixa-trilho i { background: oklch(.5 .21 295); }
+/* tela larga: o mesmo ângulo subiria demais nas pontas, então fecha mais */
+@media (min-width: 768px) {
+  .geral .p2-faixa-azul { transform: translateY(calc(-50% - 12px)) rotate(-2deg); }
+  .geral .p2-faixa-branca { transform: translateY(calc(-50% + 12px)) rotate(1.8deg); }
+}
 /* qual IA: cartões escuros com borda, "ou" verde */
 .geral .p2-ia { background: var(--card); }
 .geral .p2-ias-extra { max-width: 420px; margin: 18px auto 0; text-align: center; font-size: 16px; line-height: 1.5; font-weight: 600; color: var(--foreground); }
