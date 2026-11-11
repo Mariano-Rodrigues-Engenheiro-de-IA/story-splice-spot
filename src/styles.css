@@ -1750,7 +1750,18 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .geral .whats, .geral .sticky-bar.on ~ .whats { left: 22px; bottom: 14px; width: 48px; height: 48px; }
 }
 @media (max-width: 374px) { .geral .sticky-bar .sticky-button { width: 112px; } }
-/* preço de Black Friday: "de R$ 97" riscado em cima do R$ 67 */
-.geral .offer-price .preco-de { margin: 8px 0 -6px; font-size: 16px; color: var(--muted-foreground); }
-.geral .offer-price .preco-de s { color: var(--foreground); text-decoration-color: var(--primary); text-decoration-thickness: 2px; }
+/* preço de Black Friday: "de R$ 97" grande, riscado na diagonal como caneta; "por" colado no R$ 67 */
+.geral .offer-price .preco-de { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin: 12px 0 0; font-size: 18px; font-weight: 500; color: var(--muted-foreground); }
+.geral .preco-riscado { position: relative; display: inline-block; padding: 0 3px; text-decoration: none; font-size: 30px; font-weight: 650; letter-spacing: -.01em; color: oklch(1 0 0 / .8); }
+.geral .preco-riscado svg { position: absolute; left: -8%; top: -4%; width: 116%; height: 108%; overflow: visible; pointer-events: none; }
+.geral .preco-riscado path { fill: none; stroke: oklch(.63 .23 26); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 100; animation: preco-risca .55s .6s cubic-bezier(.6, 0, .3, 1) forwards; }
+@keyframes preco-risca { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .geral .preco-riscado path { stroke-dashoffset: 0; } }
+.geral .offer-price .price { margin-top: 0; }
+/* "por" em cima do "R$", os dois colados no 67 (em vez de soltos na linha) */
+.geral .offer-price .price .preco-moeda { display: inline-flex; flex-direction: column; align-items: flex-end; vertical-align: top; margin: .2em 6px 0 0; line-height: 1.05; letter-spacing: 0; }
+.geral .offer-price .price .preco-por { font-size: 17px; font-weight: 600; color: var(--muted-foreground); }
+.geral .offer-price .price .preco-rs { font-size: 22px; font-weight: 500; color: var(--foreground); }
+/* 11/11: as faixas de Black Friday também dentro da oferta, entre o preço e a garantia (as duas páginas) */
+:is(.pro2, .geral) .offer .p2-faixas { margin: 0; height: 96px; border-top: 1px solid var(--border); }
 
