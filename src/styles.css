@@ -2092,35 +2092,6 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .ei-entrada-mais { flex: none; width: 18px; height: 18px; }
 :is(.pro2, .geral) .ei-enviar { width: 30px; height: 30px; }
 @media (max-width: 400px) { :is(.pro2, .geral) .ei-conversa { height: 388px; padding: 13px 11px 8px; } :is(.pro2, .geral) .ei-ia-video { width: 118px; } }
-/* ChatGPT: tudo no cinza-escuro dele, cabeçalho sem faixa, balão #303030, botão de enviar branco */
-:is(.pro2, .geral) .ei-gpt { background: #212121; border-color: oklch(1 0 0 / .1); }
-:is(.pro2, .geral) .ei-gpt .ei-topo { background: #212121; border-bottom-color: transparent; color: #ececec; }
-:is(.pro2, .geral) .ei-gpt .ei-topo-nome .marca-ia, :is(.pro2, .geral) .ei-gpt .ei-ia-avatar .marca-ia { color: #ececec; }
-:is(.pro2, .geral) .ei-gpt .ei-ia-avatar { background: transparent; border: 1px solid oklch(1 0 0 / .18); }
-:is(.pro2, .geral) .ei-gpt .ei-entrada { background: #303030; border-color: transparent; border-radius: 24px; }
-:is(.pro2, .geral) .ei-gpt .ei-entrada-mais, :is(.pro2, .geral) .ei-gpt .ei-entrada-mic { color: #b4b4b4; }
-:is(.pro2, .geral) .ei-gpt .ei-anexo-ico { background: #0d6efd; }
-/* Claude: o creme dele, letra com serifa na resposta, balão bege, botão de enviar laranja */
-:is(.pro2, .geral) .ei-claude { background: #faf9f5; border-color: #e8e6dc; box-shadow: 0 40px 80px -40px rgba(217, 119, 87, .45), 0 0 0 6px oklch(1 0 0 / .04); }
-:is(.pro2, .geral) .ei-claude .ei-topo { background: #faf9f5; border-bottom-color: #ece9df; color: #1f1e1d; }
-:is(.pro2, .geral) .ei-claude .ei-topo-modo { background: oklch(.55 .11 176 / .12); color: oklch(.45 .1 176); }
-:is(.pro2, .geral) .ei-claude .ei-ola { color: #1f1e1d; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 21px; }
-:is(.pro2, .geral) .ei-claude .ei-anexo { background: #fff; border-color: #e8e6dc; color: #1f1e1d; }
-:is(.pro2, .geral) .ei-claude .ei-anexo small { color: #73726c; }
-:is(.pro2, .geral) .ei-claude .ei-anexo-ico { background: #d97757; }
-:is(.pro2, .geral) .ei-claude .ei-msg { background: #f0eee6; color: #1f1e1d; border-radius: 14px; }
-:is(.pro2, .geral) .ei-claude .ei-ia-avatar { background: transparent; }
-:is(.pro2, .geral) .ei-claude .ei-ia-avatar .marca-ia { width: 20px; height: 20px; }
-:is(.pro2, .geral) .ei-claude .ei-ia-corpo p { color: #1f1e1d; font-family: Georgia, 'Times New Roman', serif; font-size: 15px; }
-:is(.pro2, .geral) .ei-claude .ei-ia-carga { background: #ece9df; }
-:is(.pro2, .geral) .ei-claude .ei-ia-carga i { background: #d97757; }
-:is(.pro2, .geral) .ei-claude .ei-entrada { background: #fff; border-color: #e3e0d6; border-radius: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, .04); }
-:is(.pro2, .geral) .ei-claude .ei-entrada.escrevendo { border-color: #d97757; }
-:is(.pro2, .geral) .ei-claude .ei-entrada-texto { color: #1f1e1d; }
-:is(.pro2, .geral) .ei-claude .ei-entrada-texto .caret { background: #1f1e1d; }
-:is(.pro2, .geral) .ei-claude .ei-entrada-dica { color: #8f8d85; }
-:is(.pro2, .geral) .ei-claude .ei-entrada-mais, :is(.pro2, .geral) .ei-claude .ei-entrada-mic { color: #73726c; }
-:is(.pro2, .geral) .ei-claude .ei-enviar { background: #d97757; color: #fff; border-radius: 9px; }
 
 /* ── 11/11: galeria "Tudo editado por IA" com a setinha curva apontando para os vídeos e uma etiqueta em cada vídeo ── */
 .geral .galeria-topo h2 { position: relative; display: inline-block; }
@@ -2133,3 +2104,29 @@ html:has(.geral) { scroll-padding-top: 0; }
 .geral .galeria-topo .galeria-apoio { margin-top: 18px; }
 .geral .gallery-tag { position: absolute; z-index: 2; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 99px; background: oklch(.5 .21 295); color: #fff; font-size: 12.5px; font-weight: 800; letter-spacing: .01em; box-shadow: 0 8px 18px -8px rgba(0, 0, 0, .8); }
 .geral .gallery-tag::before { content: "✦"; font-size: 10px; opacity: .85; }
+/* ── 11/11 (v4): uma conversa só, no visual do chat do computador do "Como funciona": branca, balão claro,
+   verde do "Modo Editor ativo", letra de sistema; no topo as logos do ChatGPT e do Claude ── */
+:is(.pro2, .geral) .ei-janela { background: #fff; border: 1px solid rgba(0, 0, 0, .08); box-shadow: 0 40px 80px -40px oklch(.5 .21 295 / .5), 0 0 0 6px oklch(1 0 0 / .04); font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif; color: rgba(0, 0, 0, .9); }
+:is(.pro2, .geral) .ei-topo { background: #fff; border-bottom: 1px solid rgba(0, 0, 0, .07); color: rgba(0, 0, 0, .9); }
+:is(.pro2, .geral) .ei-topo-ias { display: inline-flex; align-items: center; gap: 6px; }
+:is(.pro2, .geral) .ei-topo-ias .marca-ia { width: 19px; height: 19px; margin: 0; color: #111; }
+:is(.pro2, .geral) .ei-topo-ias small { font-size: 12.5px; font-weight: 600; color: rgba(0, 0, 0, .5); }
+:is(.pro2, .geral) .ei-topo-modo { background: oklch(.55 .11 176 / .12); color: oklch(.45 .1 176); }
+:is(.pro2, .geral) .ei-ola { color: rgba(0, 0, 0, .88); font-weight: 600; }
+:is(.pro2, .geral) .ei-anexo { background: #fff; border: 1px solid rgba(0, 0, 0, .12); color: rgba(0, 0, 0, .9); }
+:is(.pro2, .geral) .ei-anexo small { color: rgba(0, 0, 0, .5); }
+:is(.pro2, .geral) .ei-anexo-ico { background: oklch(.55 .11 176); }
+:is(.pro2, .geral) .ei-msg { background: #f0efea; color: rgba(0, 0, 0, .9); border-radius: 14px; }
+:is(.pro2, .geral) .ei-ia-avatar { background: oklch(.55 .11 176 / .14); color: oklch(.5 .11 176); border: 0; }
+:is(.pro2, .geral) .ei-ia-avatar svg { width: 14px; height: 14px; }
+:is(.pro2, .geral) .ei-ia-corpo p { color: rgba(0, 0, 0, .88); }
+:is(.pro2, .geral) .ei-ia-carga { background: #eceae4; }
+:is(.pro2, .geral) .ei-ia-carga i { background: oklch(.55 .11 176); }
+:is(.pro2, .geral) .ei-entrada { background: #fff; border: 1px solid rgba(0, 0, 0, .14); border-radius: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, .05); }
+:is(.pro2, .geral) .ei-entrada.escrevendo { border-color: oklch(.55 .11 176 / .7); }
+:is(.pro2, .geral) .ei-entrada-texto { color: rgba(0, 0, 0, .9); }
+:is(.pro2, .geral) .ei-entrada-texto .caret { background: rgba(0, 0, 0, .8); }
+:is(.pro2, .geral) .ei-entrada-dica { color: rgba(0, 0, 0, .4); }
+:is(.pro2, .geral) .ei-entrada-mais, :is(.pro2, .geral) .ei-entrada-mic { color: rgba(0, 0, 0, .55); }
+:is(.pro2, .geral) .ei-enviar { background: var(--primary); color: #fff; }
+

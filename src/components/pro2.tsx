@@ -747,18 +747,18 @@ function MacBook({ escala, children }: { escala: number; children: ReactNode }) 
   );
 }
 
-/* ───────────── A IA agora é o seu editor de vídeo (a conversa com a cara do ChatGPT e do Claude, do básico ao avançado) ───────────── */
+/* ───────────── A IA agora é o seu editor de vídeo (a conversa no mesmo visual do chat do "Como funciona") ───────────── */
 
 const PEDIDOS_IA = [
-  { nivel: 'Básico', ia: 'gpt', texto: 'Corta onde eu errei e coloca legenda', video: '/videos/cenas/legenda.mp4' },
-  { nivel: 'Intermediário', ia: 'claude', texto: 'Troca o meu fundo por um cenário mais bonito', video: '/videos/galeria/cenario.mp4' },
-  { nivel: 'Avançado', ia: 'gpt', texto: 'Quando eu falar do coração, mostra ele em 3D batendo', video: '/videos/galeria/coracao.mp4' },
-  { nivel: 'Avançado', ia: 'claude', texto: 'Mostra no mapa, visto do satélite, a cidade que eu falar', video: '/videos/galeria/mapa.mp4' },
+  { nivel: 'Básico', texto: 'Corta onde eu errei e coloca legenda', video: '/videos/cenas/legenda.mp4' },
+  { nivel: 'Intermediário', texto: 'Troca o meu fundo por um cenário mais bonito', video: '/videos/galeria/cenario.mp4' },
+  { nivel: 'Avançado', texto: 'Quando eu falar do coração, mostra ele em 3D batendo', video: '/videos/galeria/coracao.mp4' },
+  { nivel: 'Avançado', texto: 'Mostra no mapa, visto do satélite, a cidade que eu falar', video: '/videos/galeria/mapa.mp4' },
 ] as const;
 const NIVEIS_IA = ['Básico', 'Intermediário', 'Avançado'];
 
-/** A conversa com a cara de verdade da IA: um pedido no ChatGPT, o seguinte no Claude (é onde o Modo Editor roda).
- *  O pedido é escrito na caixa de mensagem, vai para a conversa, a IA responde e o vídeo pronto aparece na resposta. */
+/** Uma conversa só, no mesmo visual do chat do computador do "Como funciona" (com as logos do ChatGPT e do Claude no
+ *  topo). O pedido é escrito na caixa de mensagem, vai para a conversa, a IA responde e o vídeo pronto aparece na resposta. */
 export function EditorIA() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
   const [i, setI] = useState(0);
@@ -775,8 +775,6 @@ export function EditorIA() {
     return () => window.clearTimeout(id);
   }, [naTela, fase, letras, p.texto.length]);
   const texto = p.texto.slice(0, letras);
-  const gpt = p.ia === 'gpt';
-  const Logo = gpt ? LogoChatGPT : LogoClaude;
   return (
     <section className="section container ei" id="pedidos">
       <div className="section-heading reveal">
@@ -785,13 +783,13 @@ export function EditorIA() {
       </div>
       <div className="ei-corpo reveal" ref={caixa}>
         <div className="ei-niveis" aria-hidden="true">{NIVEIS_IA.map(n => <span key={n} className={n === p.nivel ? 'on' : ''}>{n}</span>)}</div>
-        <div className={`ei-janela ${gpt ? 'ei-gpt' : 'ei-claude'}`} key={p.ia + i}>
+        <div className="ei-janela">
           <div className="ei-topo">
-            <span className="ei-topo-nome"><Logo />{gpt ? 'ChatGPT' : 'Claude'}<ChevronDown aria-hidden="true" /></span>
+            <span className="ei-topo-ias" aria-label="No ChatGPT ou no Claude"><LogoChatGPT /><small>ou</small><LogoClaude /></span>
             <span className="ei-topo-modo"><Check aria-hidden="true" /> Modo Editor ativo</span>
           </div>
           <div className="ei-conversa">
-            {fase === 0 && <p className="ei-ola">{!gpt && <LogoClaude />}{gpt ? 'Como posso ajudar?' : 'Como posso ajudar você hoje?'}</p>}
+            {fase === 0 && <p className="ei-ola">O que vamos editar hoje?</p>}
             {fase >= 1 && (
               <div className="ei-voce">
                 <span className="ei-anexo"><span className="ei-anexo-ico"><Film aria-hidden="true" /></span><span><b>gravacao.mp4</b><small>Vídeo · 1:48</small></span></span>
@@ -800,7 +798,7 @@ export function EditorIA() {
             )}
             {fase >= 1 && (
               <div className="ei-ia" key={`ia-${i}-${fase}`}>
-                <span className="ei-ia-avatar" aria-hidden="true"><Logo /></span>
+                <span className="ei-ia-avatar" aria-hidden="true"><Sparkles /></span>
                 <div className="ei-ia-corpo">
                   <p>{fase === 1 ? 'Combinado! Estou editando o seu vídeo.' : 'Pronto! Editei do jeito que você pediu.'}</p>
                   {fase === 1 ? <span className="ei-ia-carga" aria-hidden="true"><i /></span> : (
@@ -817,7 +815,7 @@ export function EditorIA() {
             {fase === 0 && <span className="ei-anexo ei-anexo-mini"><span className="ei-anexo-ico"><Film aria-hidden="true" /></span><span><b>gravacao.mp4</b></span></span>}
             <span className="ei-entrada-linha">
               <Plus className="ei-entrada-mais" aria-hidden="true" />
-              <span className="ei-entrada-texto" aria-live="polite">{fase === 0 && letras > 0 ? <>{texto}<i className="caret" /></> : <span className="ei-entrada-dica">{gpt ? 'Pergunte alguma coisa' : 'Responder ao Claude…'}</span>}</span>
+              <span className="ei-entrada-texto" aria-live="polite">{fase === 0 && letras > 0 ? <>{texto}<i className="caret" /></> : <span className="ei-entrada-dica">Pergunte qualquer coisa</span>}</span>
               <Mic className="ei-entrada-mic" aria-hidden="true" />
               <i className="ei-enviar" aria-hidden="true"><ArrowUp /></i>
             </span>
