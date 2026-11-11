@@ -164,35 +164,39 @@ const galleryCopy: [string, string, string, string][] = [
   ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4', 'Motion design'],
 ];
 const gallery: [string, string, string, string][] = galleryCopy;
-/** A cada 1,5 s a setinha do título cutuca para baixo e o vídeo que está embaixo dela brilha (contorno, reflexo e um
- *  leve aumento). Só roda com a galeria na tela, depois que a setinha terminou de se desenhar. */
+/** Quando o meio de um vídeo passa embaixo da setinha do título, ela cutuca para baixo e esse vídeo brilha (contorno,
+ *  reflexo e um leve aumento): uma cutucada por vídeo, na hora em que ele passa. Só com a galeria na tela, depois que a
+ *  setinha terminou de se desenhar. */
 function CutucaVideo() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const galeria = document.getElementById('galeria');
     const seta = galeria?.querySelector<SVGElement>('.seta-curva');
     if (!galeria || !seta) return;
+    const antes = new WeakMap<HTMLElement, number>(); // onde estava o meio de cada vídeo na olhada anterior
     let ligado = false, id = 0, inicio = 0;
-    const cutuca = () => {
+    const cutuca = (card: HTMLElement) => {
       seta.classList.remove('cutuca'); void seta.getBoundingClientRect(); seta.classList.add('cutuca');
       window.setTimeout(() => {
-        const x = seta.getBoundingClientRect().left + seta.getBoundingClientRect().width / 2;
-        let alvo: HTMLElement | null = null, melhor = Infinity;
-        galeria.querySelectorAll<HTMLElement>('.gallery-card').forEach(c => {
-          const r = c.getBoundingClientRect();
-          if (r.right < 0 || r.left > window.innerWidth) return;
-          const d = Math.abs(r.left + r.width / 2 - x);
-          if (d < melhor) { melhor = d; alvo = c; }
-        });
-        const card = alvo as HTMLElement | null;
-        if (!card) return;
         card.classList.remove('cutucado'); void card.offsetWidth; card.classList.add('cutucado');
         window.setTimeout(() => card.classList.remove('cutucado'), 1000);
-      }, 190);
+      }, 150);
+    };
+    const olha = () => {
+      const r = seta.getBoundingClientRect();
+      const x = r.left + r.width / 2;
+      galeria.querySelectorAll<HTMLElement>('.gallery-card').forEach(c => {
+        const rc = c.getBoundingClientRect();
+        const meio = rc.left + rc.width / 2;
+        const era = antes.get(c);
+        // cruzou a linha da setinha (indo para a esquerda, ou para a direita se a pessoa arrastar)
+        if (era !== undefined && ((era > x && meio <= x) || (era < x && meio >= x))) cutuca(c);
+        antes.set(c, meio);
+      });
     };
     const io = new IntersectionObserver(([e]) => {
       const na = !!e?.isIntersecting;
-      if (na && !ligado) { ligado = true; inicio = window.setTimeout(() => { cutuca(); id = window.setInterval(cutuca, 1500); }, 1700); }
+      if (na && !ligado) { ligado = true; inicio = window.setTimeout(() => { olha(); id = window.setInterval(olha, 60); }, 1700); }
       if (!na && ligado) { ligado = false; window.clearTimeout(inicio); window.clearInterval(id); }
     }, { threshold: .35 });
     io.observe(galeria);
