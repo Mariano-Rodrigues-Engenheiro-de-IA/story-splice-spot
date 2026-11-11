@@ -1796,7 +1796,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* faixa amarela do alto = cabeçalho da página: logo à esquerda, Modo Black à direita */
 .geral .barra-black { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 46px; padding: 0 max(24px, calc((100% - 1080px) / 2)); background: oklch(.87 .17 92); color: #111; text-decoration: none; }
 .geral .barra-black-marca { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
-.geral .barra-black .brand-icon { width: 24px; height: 24px; border-radius: 7px; box-shadow: 0 3px 8px -3px oklch(.45 .2 26 / .7); }
+.geral .barra-black .brand-icon { width: 24px; height: 24px; border-radius: 7px; color: #fff; box-shadow: 0 3px 8px -3px oklch(.45 .2 26 / .7); }
 .geral .barra-black .brand-icon svg { width: 11px; height: 11px; }
 .geral .barra-black .brand-dot { width: 8px; height: 8px; border-color: oklch(.87 .17 92); }
 .geral .barra-black-oferta { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; white-space: nowrap; }

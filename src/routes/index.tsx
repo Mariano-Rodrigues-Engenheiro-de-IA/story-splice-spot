@@ -251,8 +251,8 @@ function Index() {
     {/* faixa do alto: a logo à esquerda e o sinal de Black Friday à direita (sem preço: o preço fica na oferta);
         ela substitui o cabeçalho, e o toque em qualquer ponto leva até a oferta */}
     <a href="#oferta" className="barra-black" aria-label="Modo Editor. Modo Black: oferta de Black Friday. Ver o preço">
-      <span className="barra-black-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>
       <span className="barra-black-oferta" aria-hidden="true"><b>Modo Black</b><span className="barra-black-ponto" /><span className="barra-black-txt"><span className="barra-black-so-pc">Oferta de </span>Black Friday</span><span className="barra-black-ir">→</span></span>
+      <span className="barra-black-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>
     </a>
     <div className="hero-wrap">
       <main>
