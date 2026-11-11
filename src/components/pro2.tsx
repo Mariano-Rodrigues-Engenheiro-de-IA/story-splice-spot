@@ -685,10 +685,10 @@ export function FaixaIA() {
     </div>
   );
 }
-/** Título "Edição com IA / muito além de corte e legenda." + "A IA coloca no seu vídeo" + faixa + frase de apoio. */
+/** Faixa com o que a IA faz + frase de apoio "do básico ao avançado" (embaixo do título da galeria). */
 export const tituloAlemDoBasico = <>Edição com IA<br /><em>muito além de corte e legenda.</em></>;
 export function SubAlemDoBasico() {
-  return <><p className="galeria-intro">A IA coloca no seu vídeo</p><FaixaIA /><p className="galeria-apoio">Você só faz o pedido, em português, e vai fazer outra coisa.</p></>;
+  return <><FaixaIA /><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p></>;
 }
 
 /* ───────────── Linhas da oferta com a mesma largura de outro elemento (as duas páginas) ───────────── */

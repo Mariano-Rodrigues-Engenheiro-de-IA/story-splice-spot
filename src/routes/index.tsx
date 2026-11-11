@@ -117,17 +117,27 @@ function Comparison() {
   </div>;
 }
 /** Exemplos da galeria: trechos de criativos diferentes (sala escura com planta, estúdio com prateleiras,
- *  anatomia em 3D e o quadrinho do vídeo de vendas), para não parecer um vídeo só. */
+ *  anatomia em 3D, quadrinho do vídeo de vendas) e exemplos por profissão (dentista, personal, arquiteto, psicólogo),
+ *  alternando cenário de um cartão para o outro. */
 const galleryCopy: [string, string, string][] = [
   ['Ilustração do que você fala', 'mostra na tela o que eu estou explicando', '/videos/galeria/ilustracao.mp4'],
   ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/galeria/titulo.mp4'],
-  ['Explicação em 3D', 'mostra em 3D o que acontece no corpo', '/videos/galeria/esqueleto.mp4'],
-  ['Cenário novo', 'troca o meu fundo, sem pano verde', '/videos/galeria/cenario.mp4'],
-  ['Objeto 3D girando', 'coloca um objeto em 3D girando do meu lado', '/videos/galeria/objeto3d.mp4'],
-  ['Virou quadrinho', 'me transforma em personagem de HQ', '/videos/cenas/quadrinho.mp4'],
-  ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4'],
+  ['Dente em 3D', 'mostra em 3D o que acontece no dente', '/videos/cenas/dente.mp4'],
+  ['Coluna em 3D', 'mostra em 3D o que acontece na coluna', '/videos/galeria/esqueleto.mp4'],
+  ['Mapa de satélite', 'mostra no mapa o lugar que eu citar', '/videos/galeria/mapa.mp4'],
+  ['Músculo em 3D', 'mostra o músculo trabalhando no exercício', '/videos/pro2/personal-braco.mp4'],
   ['Gráfico que sobe', 'quando eu falar o número, mostra num gráfico', '/videos/galeria/grafico.mp4'],
-]
+  ['Sala em 3D', 'mostra a sala em 3D enquanto eu explico', '/videos/galeria/sala3d.mp4'],
+  ['Virou quadrinho', 'me transforma em personagem de HQ', '/videos/cenas/quadrinho.mp4'],
+  ['Desenho a lápis', 'desenha a história enquanto eu conto', '/videos/galeria/lapis.mp4'],
+  ['Objeto 3D girando', 'coloca um objeto em 3D girando do meu lado', '/videos/galeria/objeto3d.mp4'],
+  ['Coração em 3D', 'mostra o que a ansiedade faz no corpo', '/videos/galeria/coracao.mp4'],
+  ['Obra em 3D', 'mostra a casa sendo construída em 3D', '/videos/pro2/arquiteto-obra.mp4'],
+  ['Cenário novo', 'troca o meu fundo, sem pano verde', '/videos/galeria/cenario.mp4'],
+  ['Objeto 3D na mão', 'coloca um objeto em 3D na minha mão', '/videos/cenas/cerebro.mp4'],
+  ['Esquema animado', 'monta um esquema animado do que eu explico', '/videos/galeria/esquema.mp4'],
+  ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4'],
+];
 const gallery: [string, string, string][] = galleryCopy;
 function SpinningSeal() {
   const text = '7 DIAS DE GARANTIA • REEMBOLSO TOTAL • ';
@@ -279,7 +289,7 @@ function Index() {
         </section>
         <section className="section container" id="galeria">
           <div className="section-heading reveal galeria-topo"><h2>Veja exemplos de<br />vídeos <em>editados por IA.</em></h2><SubAlemDoBasico /></div>
-          <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
+          <Esteira itens={gallery} velocidade={56} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ForWho />
