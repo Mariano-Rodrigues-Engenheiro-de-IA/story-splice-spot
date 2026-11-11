@@ -229,6 +229,15 @@ function Pro2() {
   const nicho = nichoPorSlug(p);
   const duvidas = nicho.duvida ? [nicho.duvida, ...faqItems] : faqItems;
   const [progress, setProgress] = useState(0);
+  // a última palavra do título troca sozinha, como no "Vá treinar / almoçar…" da página geral
+  const verbos = nicho.verbos;
+  const [verbo, setVerbo] = useState(0);
+  useEffect(() => {
+    setVerbo(0);
+    if (!verbos?.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setInterval(() => setVerbo(n => (n + 1) % verbos.length), 2200);
+    return () => window.clearInterval(id);
+  }, [verbos]);
   useEffect(() => {
     const scroll = () => { const height = document.documentElement.scrollHeight - window.innerHeight; setProgress(height > 0 ? window.scrollY / height : 0); };
     window.addEventListener('scroll', scroll, { passive: true }); scroll();
@@ -241,7 +250,7 @@ function Pro2() {
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
-          <h1 id="hero-title" className="hero-titulo"><span>{nicho.titulo[0]}</span><em>{nicho.titulo[1]}</em></h1>
+          <h1 id="hero-title" className="hero-titulo"><span>{nicho.titulo[0]}</span><em>{verbos?.length ? <>enquanto você <span className="hero-verbo"><span key={verbo}>{verbos[verbo]}</span></span></> : nicho.titulo[1]}</em></h1>
           <div className="hero-video"><VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /></div>
           <div className="hero-cta"><PurchaseButton /></div>
           <p className="purchase-note">Pagamento único · 7 dias de garantia</p>

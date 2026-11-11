@@ -26,12 +26,15 @@ export type Nicho = {
   ideias: { pergunta: string; fala: string; tela: string }[];
   /** o que o conselho da profissão exige e como o Modo Editor respeita */
   regra: string;
+  /** /pro2: a última palavra do título troca sozinha ("enquanto você trabalha. / atende. / almoça."…) */
+  verbos?: string[];
 };
 
 export const nichoPadrao: Nicho = {
   slug: '',
   selo: 'Funciona no ChatGPT e no Claude',
   titulo: ['A IA edita seus vídeos', 'enquanto você trabalha.'],
+  verbos: ['trabalha.', 'atende.', 'almoça.', 'descansa.', 'vive.'],
   frase: 'Você grava no celular. O Modo Editor corta os erros, legenda e coloca na tela o que você explica. Volta pronto em minutos.',
   publico: '',
   galeriaPrimeiro: 'Explicação em 3D',
