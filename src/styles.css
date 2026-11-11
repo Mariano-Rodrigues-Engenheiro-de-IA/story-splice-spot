@@ -1726,4 +1726,46 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @keyframes galeria-ticker { to { transform: translateX(-50%); } }
 @media (max-width: 767px) { .geral .galeria-ticker-trilho span { font-size: 20px; } .geral .galeria-ticker-trilho i { margin: 0 16px; } .geral .galeria-ticker { padding: 12px 0; } }
 @media (prefers-reduced-motion: reduce) { .geral .galeria-ticker-trilho { animation: none; } }
+/* ── 11/11: "O que você vai receber?" com a área de membros real, as capas dos módulos e o Gerador de Pedido ── */
+.geral .recebe2 .section-heading { margin-bottom: 28px; }
+.geral .recebe-janela { max-width: 920px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid oklch(1 0 0 / .12); background: #0b0b0e; box-shadow: 0 40px 80px -40px oklch(.5 .21 295 / .55), 0 0 0 6px oklch(1 0 0 / .03); }
+.geral .recebe-janela-topo { display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; background: oklch(.17 .01 286); border-bottom: 1px solid oklch(1 0 0 / .08); }
+.geral .recebe-janela-topo i { width: 9px; height: 9px; border-radius: 50%; background: oklch(1 0 0 / .18); }
+.geral .recebe-janela-topo i:nth-child(1) { background: #ff5f57; } .geral .recebe-janela-topo i:nth-child(2) { background: #febc2e; } .geral .recebe-janela-topo i:nth-child(3) { background: #28c840; }
+.geral .recebe-janela-topo span { display: inline-flex; align-items: center; gap: 6px; margin-left: 10px; padding: 3px 12px; border-radius: 99px; background: oklch(1 0 0 / .06); font-size: 12px; color: var(--muted-foreground); }
+.geral .recebe-janela img { display: block; width: 100%; height: auto; }
+.geral .recebe-itens { max-width: 1040px; margin: 22px auto 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.geral .recebe-item { display: flex; flex-direction: column; gap: 16px; padding: 14px 14px 22px; border-radius: 22px; background: linear-gradient(180deg, oklch(.19 .012 286), oklch(.145 .006 286)); border: 1px solid var(--border); box-shadow: var(--inner-glow); }
+.geral .recebe-principal { border-color: oklch(.62 .19 295 / .55); box-shadow: 0 0 0 1px oklch(.62 .19 295 / .25), 0 30px 60px -40px oklch(.5 .21 295 / .8); }
+.geral .recebe-arte { position: relative; height: 210px; border-radius: 15px; overflow: hidden; background: radial-gradient(110% 90% at 50% 0%, oklch(.32 .09 295 / .6), transparent 65%), oklch(.115 .006 286); border: 1px solid oklch(1 0 0 / .06); }
+.geral .recebe-texto { padding: 0 6px; }
+.geral .recebe-texto h3 { margin: 0 0 6px; font-size: 20px; font-weight: 650; line-height: 1.2; color: var(--foreground); }
+.geral .recebe-texto p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted-foreground); }
+.geral .recebe-texto p b { color: var(--foreground); font-weight: 600; }
+.geral .recebe-tag { display: inline-block; margin-bottom: 8px; padding: 4px 10px; border-radius: 99px; background: oklch(.5 .21 295); color: #fff; font-size: 12px; font-weight: 700; }
+/* 1. o Modo Editor dentro do ChatGPT ou do Claude */
+.geral .recebe-arte-editor { display: flex; align-items: center; justify-content: center; gap: 22px; }
+.geral .recebe-marca { width: 78px; height: 78px; border-radius: 22px; box-shadow: 0 0 0 10px oklch(.63 .23 26 / .1), 0 22px 50px -10px oklch(.63 .23 26 / .7); }
+.geral .recebe-marca svg { width: 34px; height: 34px; }
+.geral .recebe-ias { width: 50px; height: 50px; border-radius: 15px; display: grid; place-items: center; background: oklch(1 0 0 / .95); color: #111; box-shadow: 0 14px 30px -14px rgba(0, 0, 0, .8); }
+.geral .recebe-ias svg { width: 28px; height: 28px; margin: 0; color: #111; }
+.geral .recebe-ia-1 { transform: rotate(-8deg) translateY(6px); } .geral .recebe-ia-2 { transform: rotate(8deg) translateY(6px); }
+.geral .recebe-ativo { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 6px 12px; border-radius: 99px; background: var(--ready); color: #04211a; font-size: 13px; font-weight: 700; }
+/* 2. as três capas dos módulos, em leque */
+.geral .recebe-arte-modulos { display: flex; align-items: center; justify-content: center; }
+.geral .recebe-arte-modulos img { width: 31%; height: auto; border-radius: 10px; border: 1px solid oklch(1 0 0 / .1); box-shadow: 0 18px 34px -14px rgba(0, 0, 0, .9); }
+.geral .recebe-arte-modulos img:nth-child(1) { transform: rotate(-7deg) translate(14px, 8px); }
+.geral .recebe-arte-modulos img:nth-child(2) { position: relative; z-index: 2; transform: translateY(-4px) scale(1.08); }
+.geral .recebe-arte-modulos img:nth-child(3) { transform: rotate(7deg) translate(-14px, 8px); }
+/* 3. o Gerador de verdade: as opções e o pedido pronto ao lado */
+.geral .recebe-arte-gerador img { position: absolute; left: 14px; top: 14px; width: 135%; max-width: none; border-radius: 10px; border: 1px solid oklch(1 0 0 / .1); }
+.geral .recebe-arte-gerador::after { content: ""; position: absolute; inset: auto 0 0 0; height: 60px; background: linear-gradient(transparent, oklch(.115 .006 286)); }
+.geral .recebe-rodape { margin: 22px auto 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 8px; font-size: 14px; color: var(--muted-foreground); }
+.geral .recebe-rodape b { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 99px; background: oklch(1 0 0 / .06); color: var(--foreground); font-weight: 600; }
+.geral .recebe-rodape b svg { width: 16px; height: 16px; }
+.geral .recebe-rodape small { width: 100%; text-align: center; font-size: 12px; }
+@media (max-width: 900px) {
+  .geral .recebe-itens { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .geral .recebe-arte { height: 200px; }
+}
 

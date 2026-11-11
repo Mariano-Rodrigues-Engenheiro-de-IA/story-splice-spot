@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Check, Clapperboard, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
+  ArrowUp, Check, Clapperboard, GraduationCap, KeyRound, Megaphone, Play, Power, Sparkles, Wallet,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
+import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -275,23 +276,42 @@ export function RequestLibrary() {
 
 export function WhatYouGet() {
   return (
-    <section className="section container" id="recebe">
+    <section className="section container recebe2" id="recebe">
       <div className="section-heading reveal">
         <h2>O que você <em>vai receber?</em></h2>
-        <p>Tudo pra editar o seu primeiro vídeo com IA ainda hoje, liberado na hora.</p>
+        <p>Acesso na hora: o login chega no seu e-mail assim que o pagamento é aprovado.</p>
       </div>
-      <div className="reveal"><div className="unbox">
-        <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora à área de membros</strong><small>o login chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
-        <div className="unbox-files">
-          <div className="unbox-file principal">
-            <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
-            <div><strong>Modo Editor <em>o coração</em></strong><p>O treinamento que transforma o seu ChatGPT ou Claude num editor de vídeo profissional: corta os erros e as pausas, legenda, coloca efeitos, ilustrações e trilha, e confere tudo antes de entregar.</p></div>
+      {/* a área de membros de verdade, numa janela de navegador */}
+      <figure className="recebe-janela reveal">
+        <div className="recebe-janela-topo" aria-hidden="true"><i /><i /><i /><span><KeyRound size={12} /> Sua área de membros</span></div>
+        <img src="/img/recebe/area-membros.webp" alt="Área de membros do Modo Editor, com os módulos Comece aqui, Prepare sua máquina e Seu primeiro vídeo" width={1284} height={978} loading="lazy" decoding="async" />
+      </figure>
+      <div className="recebe-itens">
+        <article className="recebe-item reveal recebe-principal">
+          <div className="recebe-arte recebe-arte-editor" aria-hidden="true">
+            <span className="recebe-ias recebe-ia-1"><LogoChatGPT /></span>
+            <span className="brand-icon recebe-marca"><Play /><span className="brand-dot" /></span>
+            <span className="recebe-ias recebe-ia-2"><LogoClaude /></span>
+            <span className="recebe-ativo"><Check size={14} /> Modo Editor ativo</span>
           </div>
-          <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>Videoaulas curtas</strong><p>Tutoriais direto ao ponto: preparar o computador, instalar o Modo Editor, montar o pedido e editar o seu primeiro vídeo, mostrado tela por tela.</p></div></div>
-          <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>Gerador de Pedido</strong><p>Você clica nas opções (estilo, legenda, efeitos, trilha) e ele monta o pedido completo pra IA. Dá até pra explicar em áudio.</p></div></div>
-        </div>
-        <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>plano pago, contratado à parte</small></div>
-      </div></div>
+          <div className="recebe-texto"><span className="recebe-tag">O principal</span><h3>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT ou Claude. Você instala uma vez e ele edita todos os seus vídeos: corta, legenda, coloca efeitos, ilustrações e trilha, e confere antes de entregar.</p></div>
+        </article>
+        <article className="recebe-item reveal">
+          <div className="recebe-arte recebe-arte-modulos" aria-hidden="true">
+            <img src="/img/recebe/modulo-01.webp" alt="" width={400} height={600} loading="lazy" decoding="async" />
+            <img src="/img/recebe/modulo-02.webp" alt="" width={400} height={600} loading="lazy" decoding="async" />
+            <img src="/img/recebe/modulo-03.webp" alt="" width={400} height={600} loading="lazy" decoding="async" />
+          </div>
+          <div className="recebe-texto"><h3>Videoaulas passo a passo</h3><p>Três módulos curtos: <b>Comece aqui</b>, <b>Prepare sua máquina</b> e <b>Seu primeiro vídeo</b>. Tela por tela, do zero até o vídeo pronto.</p></div>
+        </article>
+        <article className="recebe-item reveal">
+          <div className="recebe-arte recebe-arte-gerador" aria-hidden="true">
+            <img src="/img/recebe/gerador.webp" alt="" width={1100} height={839} loading="lazy" decoding="async" />
+          </div>
+          <div className="recebe-texto"><h3>Gerador de Pedido</h3><p>Não sabe o que pedir? Você clica nas opções (formato, estilo, legenda, efeitos, trilha) e ele escreve o pedido completo pra você colar na IA.</p></div>
+        </article>
+      </div>
+      <p className="recebe-rodape reveal"><span>Funciona no</span><b><LogoChatGPT /> ChatGPT</b><span>e no</span><b><LogoClaude /> Claude</b><small>plano pago, contratado à parte</small></p>
     </section>
   );
 }
