@@ -1869,4 +1869,9 @@ html:has(.geral) { scroll-padding-top: 0; }
 @media (max-width: 760px) { .geral #para-quem .publico { grid-template-columns: minmax(0, 1fr); gap: 10px; } .geral #para-quem .publico-item { flex-direction: row; gap: 14px; padding: 16px; } .geral #para-quem .publico-icon { width: 38px; height: 38px; } }
 /* frase de apoio da galeria: "Do básico ao avançado:" em destaque */
 :is(.pro2, .geral) .galeria-apoio b { font-weight: 650; color: var(--foreground); }
+/* ── 11/11: conversa de suporte mais baixa (só as duas mensagens) e oferta só com preço e garantia ── */
+/* celular (um cartão embaixo do outro): mais baixa; no computador ela divide a linha com o Gerador e fica da mesma altura */
+@media (max-width: 900px) { :is(.pro2, .geral) .recebe-arte.recebe-arte-suporte { height: 150px; } }
+.geral .offer { max-width: 560px; }
+.geral .offer-main { grid-template-columns: minmax(0, 1fr); }
 

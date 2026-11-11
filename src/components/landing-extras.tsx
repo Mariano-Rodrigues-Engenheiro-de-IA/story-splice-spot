@@ -318,7 +318,6 @@ export function WhatYouGet({ suporte = false }: { suporte?: boolean } = {}) {
           <article className="recebe-item reveal">
             <div className="recebe-arte recebe-arte-suporte" aria-hidden="true">
               <div className="recebe-zap">
-                <div className="recebe-zap-topo"><span className="recebe-zap-foto">ME</span><span><b>Suporte Modo Editor</b><small>online</small></span></div>
                 <p className="recebe-zap-eu">Travei na instalação, me ajuda?</p>
                 <p className="recebe-zap-ele">Claro! Me manda um print da tela que eu te mostro o próximo passo.</p>
               </div>
@@ -327,7 +326,6 @@ export function WhatYouGet({ suporte = false }: { suporte?: boolean } = {}) {
           </article>
         )}
       </div>
-      <p className="recebe-rodape reveal"><span>Funciona no</span><b><LogoChatGPT /> ChatGPT</b><span>e no</span><b><LogoClaude /> Claude</b><small>plano pago, contratado à parte</small></p>
     </section>
   );
 }
