@@ -149,7 +149,7 @@ const FEED = [
   { src: '/videos/pro2/fisio-coluna.mp4', profissao: 'Fisioterapeuta', emoji: '🦴' },
   { src: '/videos/pro2/arquiteto-obra.mp4', profissao: 'Arquiteto', emoji: '📐' },
 ];
-const TEMPO_FEED = 900;
+const TEMPO_FEED = 1100;
 function FeedCelular({ ativo, perto }: { ativo: boolean; perto: boolean }) {
   const [i, setI] = useState(0);
   useEffect(() => {
@@ -202,18 +202,18 @@ export function ComoFunciona() {
     return () => io.disconnect();
   }, []);
   const comSom = () => voltas.current < 2 && audivel.current;
-  // anda sozinho e rápido (quem rola a página vê os passos se completando em ~2,5 s): instala o Modo Editor (~0,9 s),
-  // digita o pedido (~0,5 s), carrega a edição (~0,6 s) e mostra os vídeos prontos no celular (0,9 s cada)
+  // anda sozinho e rápido (quem rola a página vê os passos se completando em ~3,8 s): instala o Modo Editor (~1,4 s),
+  // digita o pedido (~0,9 s), carrega a edição (~1 s) e mostra os vídeos prontos no celular (1,1 s cada)
   useEffect(() => {
     if (!naTela) return;
     if (menosMovimento()) { setInst(2); setLetras(pedido.length); setCarga(100); return; }
     let id: number;
     if (passo === 0) {
-      if (inst === 0) id = window.setTimeout(() => { setInst(1); if (comSom()) somGota(); }, 420);
-      else if (inst === 1) id = window.setTimeout(() => setInst(2), 260);
-      else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 220);
-    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => Math.min(pedido.length, n + 3)); if (comSom() && letras % 9 === 0) somTecla(); }, 16) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 120);
-    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 12.5); setCarga(nova); }, 60) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 120);
+      if (inst === 0) id = window.setTimeout(() => { setInst(1); if (comSom()) somGota(); }, 650);
+      else if (inst === 1) id = window.setTimeout(() => setInst(2), 400);
+      else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 350);
+    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => Math.min(pedido.length, n + 2)); if (comSom() && letras % 8 === 0) somTecla(); }, 22) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 250);
+    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 10); setCarga(nova); }, 80) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 250);
     else id = window.setTimeout(() => { voltas.current += 1; setInst(0); setLetras(0); setPasso(0); }, FEED.length * TEMPO_FEED + 300);
     return () => window.clearTimeout(id);
   }, [naTela, passo, inst, letras, carga]);
@@ -833,11 +833,11 @@ export function EditorIA() {
 // todas as etapas com o mesmo tempo: os ✓ entram num ritmo constante (com tempos diferentes, a etapa longa parecia
 // travada e as curtas pareciam acontecer todas de uma vez)
 const ETAPAS_IA = [
-  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 600 },
-  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 600 },
-  { agora: 'Editando o vídeo', feito: 'Editado', ms: 600 },
-  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 600 },
-  { agora: 'Finalizando', feito: 'Pronto', ms: 600 },
+  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 1000 },
+  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 1000 },
+  { agora: 'Editando o vídeo', feito: 'Editado', ms: 1000 },
+  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 1000 },
+  { agora: 'Finalizando', feito: 'Pronto', ms: 1000 },
 ];
 // trechos do vídeo na linha do tempo, em % da faixa: a gravação inteira e, depois da edição, mais curta e sem buracos
 const TRECHOS_TL = {
@@ -848,8 +848,8 @@ const TEXTOS_TL = [[1, 15], [22, 13], [40, 14], [59.5, 11], [74, 12]] as const;
 const EFEITOS_TL = [[6, 9, 'a'], [27, 11, 'b'], [45, 8, 'c'], [63, 10, 'a']] as const;
 const ONDA_TL = Array.from({ length: 64 }, (_, k) => (24 + Math.abs(Math.sin(k * 1.37) * Math.cos(k * 0.29)) * 70).toFixed(1));
 
-const PASSO_MS = 600; // cada etapa fica o mesmo tempo na tela
-const SEGURA_PRONTO = 2600;
+const PASSO_MS = 1000; // cada etapa fica 1 s na tela
+const SEGURA_PRONTO = 2800;
 
 /** A barra e a porcentagem "tipo download": só elas se redesenham a cada quadro; andam dentro da etapa da vez
  *  (de etapa×20 até etapa×20+20) e nunca pulam uma etapa, mesmo se o navegador engasgar. */

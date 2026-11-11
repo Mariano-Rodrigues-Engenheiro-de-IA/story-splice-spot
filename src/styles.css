@@ -950,10 +950,10 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .p2-etapa-barra i { display: block; height: 100%; width: 0; background: var(--ready); }
 :is(.pro2, .geral) .p2-etapas button.feito .p2-etapa-barra i { width: 100%; }
 :is(.pro2, .geral) .p2-etapas button.on .p2-etapa-barra i { animation: p2-encher linear forwards; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(1) button.on .p2-etapa-barra i { animation-duration: .9s; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(2) button.on .p2-etapa-barra i { animation-duration: .5s; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(3) button.on .p2-etapa-barra i { animation-duration: .6s; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(4) button.on .p2-etapa-barra i { animation-duration: 4.8s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(1) button.on .p2-etapa-barra i { animation-duration: 1.4s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(2) button.on .p2-etapa-barra i { animation-duration: .95s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(3) button.on .p2-etapa-barra i { animation-duration: 1.05s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(4) button.on .p2-etapa-barra i { animation-duration: 5.8s; }
 :is(.pro2, .geral) .p2-etapa-texto { text-align: center; min-height: 3.7em; display: flex; flex-direction: column; gap: 3px; animation: p2-entra .35s both; }
 :is(.pro2, .geral) .p2-etapa-texto strong { font-size: 20px; line-height: 1.25; color: var(--foreground); }
 :is(.pro2, .geral) .p2-etapa-texto span { font-size: 16px; color: var(--muted-foreground); }
@@ -1241,7 +1241,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .p2-cl-instalando-ok { flex: none; width: 13px; height: 13px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--ready); }
 :is(.pro2, .geral) .p2-cl-instalando.fase-1 .p2-cl-instalando-ok { background: transparent; color: var(--ready); }
 :is(.pro2, .geral) .p2-cl-instalando-ok svg { width: 8px; height: 8px; }
-:is(.pro2, .geral) .p2-voa { position: absolute; z-index: 5; left: 0; top: 0; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 14px; background: #fff; color: var(--foreground); font-size: 15px; font-weight: 800; white-space: nowrap; box-shadow: 0 16px 30px -12px rgba(10, 20, 40, .45); border: 1px solid var(--border); animation: p2-voa .42s cubic-bezier(.45, .05, .35, 1) both; pointer-events: none; }
+:is(.pro2, .geral) .p2-voa { position: absolute; z-index: 5; left: 0; top: 0; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 14px; background: #fff; color: var(--foreground); font-size: 15px; font-weight: 800; white-space: nowrap; box-shadow: 0 16px 30px -12px rgba(10, 20, 40, .45); border: 1px solid var(--border); animation: p2-voa .65s cubic-bezier(.45, .05, .35, 1) both; pointer-events: none; }
 :is(.pro2, .geral) .p2-voa .brand-icon { width: 28px; height: 28px; }
 @keyframes p2-voa {
   0% { left: 2%; top: -8px; transform: scale(.85); opacity: 0; }
