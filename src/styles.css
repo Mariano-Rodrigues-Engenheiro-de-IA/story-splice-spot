@@ -1711,4 +1711,9 @@ body:has(.pro) { background: oklch(.972 .006 85); }
    títulos, inclusive "editam com IA."); os botões continuam vermelhos. Roxo claro para ler bem no preto. */
 .geral .hero h1 em,
 .geral :is(.section-heading, .comparison-copy, .faq-intro, .produtor-texto, .lamp-content) h2 em { color: oklch(.76 .16 300); }
+/* vídeo de vendas na página escura: "Toque para ouvir" e os botões do player (pausa, continuar, barra) em roxo */
+.geral .vsl-som { background: oklch(.5 .21 295); }
+.geral .vsl-pausa-icone { background: oklch(.5 .21 295); box-shadow: 0 12px 50px oklch(.5 .21 295 / .45); }
+.geral .vsl-retomar button:not(.vsl-retomar-inicio) { background: oklch(.5 .21 295); }
+.geral .vsl-barra span { background: linear-gradient(90deg, oklch(.5 .21 295), oklch(.76 .16 300)); }
 
