@@ -1716,4 +1716,13 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .hero + .p2-faixas { margin-top: 40px; }
 :is(.pro2, .geral) .hero + .p2-faixas + .section { padding-top: 64px; }
 :is(.pro2, .geral) .p2-prova { padding-top: 0; }
+/* faixa de oferta na página escura: vermelha (a cor do botão) ou amarela (Black Friday) */
+.geral[data-faixa="vermelha"] .p2-faixa-azul { background: oklch(.58 .22 26); color: #fff; }
+.geral[data-faixa="vermelha"] .p2-faixa-azul .p2-faixa-trilho i { background: #fff; }
+.geral[data-faixa="vermelha"] .p2-faixa-branca { background: #fff; color: oklch(.52 .21 26); }
+.geral[data-faixa="vermelha"] .p2-faixa-branca .p2-faixa-trilho i { background: oklch(.52 .21 26); }
+.geral[data-faixa="amarela"] .p2-faixa-azul { background: oklch(.87 .17 92); color: #111; }
+.geral[data-faixa="amarela"] .p2-faixa-azul .p2-faixa-trilho i { background: #111; }
+.geral[data-faixa="amarela"] .p2-faixa-branca { background: #111; color: oklch(.87 .17 92); border-block: 1px solid oklch(.87 .17 92 / .6); }
+.geral[data-faixa="amarela"] .p2-faixa-branca .p2-faixa-trilho i { background: oklch(.87 .17 92); }
 

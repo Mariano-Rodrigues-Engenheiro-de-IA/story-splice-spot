@@ -250,7 +250,7 @@ function Index() {
     if (!video) return;
     video.muted = false; video.currentTime = 0; setSound(true); void video.play().catch(() => setSound(false));
   }
-  return <div className="page geral">
+  return <div className="page geral" data-faixa="amarela">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
     <div className="hero-wrap">
       <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#como-funciona">Como funciona</a><a href="#pedidos">Pedidos</a><a href="#depoimentos">Depoimentos</a><a href="#oferta">Preço</a></nav></header>
