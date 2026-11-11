@@ -1793,10 +1793,32 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .recebe-zap-eu { align-self: flex-end; background: #d9fdd3; }
 :is(.pro2, .geral) .recebe-zap-ele { align-self: flex-start; background: #fff; }
 /* barra fina de Black Friday no alto da página escura (as faixas cruzadas ficam só na oferta) */
-.geral .barra-black { position: relative; z-index: 3; display: flex; align-items: center; justify-content: center; gap: 10px; height: 38px; padding: 0 16px; background: oklch(.87 .17 92); color: #111; font-size: 13.5px; font-weight: 600; text-decoration: none; letter-spacing: .01em; }
-.geral .barra-black b { font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 12.5px; }
+/* faixa amarela do alto = cabeçalho da página: logo à esquerda, Modo Black à direita */
+.geral .barra-black { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 46px; padding: 0 max(24px, calc((100% - 1080px) / 2)); background: oklch(.87 .17 92); color: #111; text-decoration: none; }
+.geral .barra-black-marca { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 750; letter-spacing: -.01em; white-space: nowrap; }
+.geral .barra-black .brand-icon { width: 24px; height: 24px; border-radius: 7px; box-shadow: 0 3px 8px -3px oklch(.45 .2 26 / .7); }
+.geral .barra-black .brand-icon svg { width: 11px; height: 11px; }
+.geral .barra-black .brand-dot { width: 8px; height: 8px; border-color: oklch(.87 .17 92); }
+.geral .barra-black-oferta { display: inline-flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+.geral .barra-black-oferta b { font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 12.5px; }
 .geral .barra-black-ponto { width: 5px; height: 5px; border-radius: 50%; background: #111; }
 .geral .barra-black-ir { font-weight: 800; transition: transform .2s; }
 .geral .barra-black:hover .barra-black-ir { transform: translateX(3px); }
-@media (max-width: 767px) { .geral .hero-video { width: clamp(170px, calc((100svh - 352px) * .5625), 330px); } }
+@media (max-width: 767px) {
+  .geral .barra-black { height: 44px; padding: 0 14px; gap: 8px; }
+  .geral .barra-black-marca { gap: 7px; font-size: 13.5px; }
+  .geral .barra-black .brand-icon { width: 21px; height: 21px; border-radius: 6px; }
+  .geral .barra-black .brand-icon svg { width: 10px; height: 10px; }
+  .geral .barra-black .brand-dot { width: 7px; height: 7px; top: -2px; right: -2px; }
+  .geral .barra-black-oferta { gap: 6px; font-size: 13px; }
+  .geral .barra-black-oferta b { font-size: 11px; letter-spacing: .1em; }
+  .geral .barra-black-ponto { width: 4px; height: 4px; }
+  .geral .barra-black-so-pc { display: none; }
+  /* sem a linha do cabeçalho, o espaço volta para o vídeo */
+  .geral .hero { padding-top: 18px; }
+  .geral .hero-video { width: clamp(170px, calc((100svh - 304px) * .5625), 330px); }
+}
+@media (max-width: 350px) { .geral .barra-black-oferta b, .geral .barra-black-ponto { display: none; } }
+/* computador: o botão de compra cabe na primeira tela (800 de altura) */
+@media (min-width: 768px) { .geral .hero-video { width: clamp(200px, calc((100svh - 332px) * .5625), 290px); } }
 

@@ -248,10 +248,13 @@ function Index() {
   }
   return <div className="page geral" data-faixa="amarela">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
-    {/* sinal de Black Friday no alto da página (sem preço: o preço fica na oferta); toque leva até a oferta */}
-    <a href="#oferta" className="barra-black"><b>Modo Black</b><span className="barra-black-ponto" aria-hidden="true" />Oferta de Black Friday<span className="barra-black-ir" aria-hidden="true">→</span></a>
+    {/* faixa do alto: a logo à esquerda e o sinal de Black Friday à direita (sem preço: o preço fica na oferta);
+        ela substitui o cabeçalho, e o toque em qualquer ponto leva até a oferta */}
+    <a href="#oferta" className="barra-black" aria-label="Modo Editor. Modo Black: oferta de Black Friday. Ver o preço">
+      <span className="barra-black-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor</span>
+      <span className="barra-black-oferta" aria-hidden="true"><b>Modo Black</b><span className="barra-black-ponto" /><span className="barra-black-txt"><span className="barra-black-so-pc">Oferta de </span>Black Friday</span><span className="barra-black-ir">→</span></span>
+    </a>
     <div className="hero-wrap">
-      <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#como-funciona">Como funciona</a><a href="#pedidos">Pedidos</a><a href="#depoimentos">Depoimentos</a><a href="#oferta">Preço</a></nav></header>
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
