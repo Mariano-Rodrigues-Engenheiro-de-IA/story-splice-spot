@@ -1574,3 +1574,43 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 /* oferta: preço com "à vista" e garantia no selo grande */
 .geral .offer-price .preco-depois { margin-top: 4px; color: var(--muted-foreground); }
 .geral .guarantee { background: color-mix(in oklch, var(--ready) 6%, var(--background)); }
+
+/* ── 11/11 (2): refino seção por seção ── */
+/* barra de baixo: WhatsApp ao lado da barra de compra, não por cima do texto */
+@media (max-width: 767px) {
+  .geral .whats, .geral .sticky-bar.on ~ .whats { left: 14px; right: auto; bottom: 18px; width: 48px; height: 48px; }
+  .geral .sticky-bar { left: 72px; right: 12px; padding: 8px 8px 8px 14px; }
+  .geral .sticky-bar .sticky-button { width: 128px; }
+}
+/* antes e depois: no celular os números vêm depois do vídeo */
+.geral .stats-baixo { display: none; }
+@media (max-width: 767px) {
+  .geral .stats-topo { display: none; }
+  .geral .stats-baixo { display: block; text-align: center; }
+  .geral .stats-baixo .stats { margin-top: 0; }
+}
+/* pedidos: o vídeo pronto dentro do chat maior */
+@media (max-width: 760px) { .geral .ia-video { width: 128px; } }
+/* "por que não pedir direto": celular maior e lista de altura fixa (a página não pula quando liga/desliga) */
+@media (max-width: 767px) {
+  .geral .mode-body { grid-template-columns: 128px minmax(0, 1fr); gap: 16px; }
+}
+/* o que a IA faz: título mais forte, vídeos maiores */
+.geral .feature h3 { font-weight: 650; }
+@media (max-width: 767px) {
+  .geral .feature-art { height: 120px; }
+  .geral .feature-thumbnail { width: 92px; height: 164px; top: -2px; }
+  .geral .background-pair { height: 150px; }
+  .geral .background-pair .mini-clip { width: 84px; }
+}
+/* criador: "Prazer, eu sou o Mariano Rodrigues." numa linha no celular */
+@media (max-width: 760px) { .geral .produtor-texto h2 { white-space: nowrap; font-size: min(28px, calc((100vw - 40px) / 15.6)); } }
+/* o que você vai receber: ícone no alto do cartão, junto do título */
+.geral .unbox-file, .geral .unbox-mail { align-items: start; }
+.geral .unbox-mail > svg { margin-top: 2px; }
+.geral .unbox-file strong { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; line-height: 1.3; }
+.geral .unbox-file strong em { margin-left: 0; white-space: nowrap; }
+/* os dois textos de cada critério ocupam o mesmo lugar: ligar e desligar não muda a altura */
+.geral .mode-copy { display: grid; }
+.geral .mode-copy > span { grid-area: 1 / 1; opacity: 0; transition: opacity .3s; }
+.geral .mode-copy > span.vis { opacity: 1; }

@@ -164,7 +164,7 @@ export function ModeSwitch() {
             {criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
                 <span className="mode-check">{on ? <Check size={12} /> : '?'}</span>
-                <div><strong>{title}</strong><p>{on ? copy : 'a IA adivinha'}</p></div>
+                <div><strong>{title}</strong><p className="mode-copy"><span className={on ? 'vis' : ''} aria-hidden={!on}>{copy}</span><span className={on ? '' : 'vis'} aria-hidden={on}>a IA adivinha</span></p></div>
               </li>
             ))}
           </ul>
@@ -188,7 +188,7 @@ export function ForWho() {
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
-        <h2>A ideia você já tem. <em>Falta a edição sair.</em></h2>
+        <h2>A ideia você já tem.<br /><em>Falta a edição sair.</em></h2>
       </div>
       <div className="reveal"><div className="publico">
         {personas.map(p => (

@@ -81,6 +81,15 @@ function useNaTela<T extends Element>() {
   }, []);
   return [ref, visivel] as const;
 }
+/** min:ss (199 vira 3:19) */
+const minSeg = (v: number) => { const t = Math.round(v); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
+/** Os números reais do vídeo do antes e depois. No celular eles vêm depois do vídeo (primeiro a pessoa vê, depois lê). */
+function NumerosDemo() {
+  return <>
+    <div className="stats"><div className="stat"><strong><NumberTicker value={siteConfig.demo.cuts} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={siteConfig.demo.secondsSaved} format={minSeg} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+    <p className="fine-print">Números reais deste vídeo: {siteConfig.demo.rawLength} de gravação viraram {siteConfig.demo.editedLength}. Variam com cada gravação.</p>
+  </>;
+}
 function Comparison() {
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
@@ -297,9 +306,9 @@ function Index() {
         <ForWho />
         <section className="section container comparison-section" id="antes-depois">
           <div className="comparison-copy reveal"><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu da câmera. À direita, o que a IA devolveu: cortes, legenda, trilha e o mapa de satélite que desce até a cidade enquanto você explica.</p>
-            <div className="stats"><div className="stat"><strong><NumberTicker value={siteConfig.demo.cuts} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={siteConfig.demo.secondsSaved} format={v => `${Math.round(v)}s`} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
-            <p className="fine-print">Números reais deste vídeo: {siteConfig.demo.rawLength} de gravação viraram {siteConfig.demo.editedLength}. Variam com cada gravação.</p>
+            <div className="stats-topo"><NumerosDemo /></div>
           </div><Comparison />
+          <div className="stats-baixo reveal"><NumerosDemo /></div>
         </section>
         <ComoFunciona />
         <RequestLibrary />
