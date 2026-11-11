@@ -560,7 +560,7 @@ function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }:
 
 /** Duas faixas cruzadas na diagonal que andam junto com a rolagem: rolou, elas andam (cada uma para um lado); parou, elas param.
  *  Ficam logo abaixo da primeira dobra, como divisória da oferta (11/11: Black Friday). */
-export function Faixas({ palavras = ['Black Friday', 'Oferta especial', 'Modo Black'] }: { palavras?: string[] } = {}) {
+export function Faixas({ palavras = ['Modo Black Friday', 'Black'] }: { palavras?: string[] } = {}) {
   const texto = Array.from({ length: 6 }, () => palavras).flat();
   const azul = useRef<HTMLDivElement>(null);
   const branca = useRef<HTMLDivElement>(null);
