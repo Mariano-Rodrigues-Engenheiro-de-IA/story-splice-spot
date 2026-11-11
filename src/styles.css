@@ -1843,4 +1843,18 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .geral .hero-video { max-width: none; }
   .geral .hero-dobra { padding-top: 34px; }
 }
+/* ── oferta: o botão leva direto ao preço; no celular a ordem é preço -> garantia -> o que vem incluído ── */
+html:has(.geral) { scroll-padding-top: 0; }
+.geral #preco { scroll-margin-top: 14px; }
+.geral .offer-price .p2-seguro { gap: 5px; font-size: 14px; }
+.geral .offer-price .p2-seguro b { display: inline-flex; align-items: center; gap: 5px; font-weight: 650; color: var(--foreground); }
+.geral .offer-price .p2-seguro b svg { width: 16px; height: 16px; margin: 0; color: var(--ready); }
+.geral .offer-price .p2-seguro i { font-style: normal; margin: 0 3px; opacity: .55; }
+@media (max-width: 767px) {
+  .geral .offer { display: flex; flex-direction: column; }
+  .geral .offer-main { display: contents; }
+  .geral .offer-price { order: 1; }
+  .geral .offer .guarantee { order: 2; }
+  .geral .offer-details { order: 3; border-bottom: 0; border-top: 1px solid var(--border); }
+}
 
