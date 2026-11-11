@@ -1619,8 +1619,9 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .geral .mode-copy { display: grid; }
 .geral .mode-copy > span { grid-area: 1 / 1; opacity: 0; transition: opacity .3s; }
 .geral .mode-copy > span.vis { opacity: 1; }
-/* /pro2: a palavra que troca no fim do título ocupa sempre a largura da maior (a linha não balança) */
-.pro2 .hero h1.hero-titulo .hero-verbo { display: inline-grid; text-align: left; }
+/* /pro2: igual à página geral, "enquanto você" na letra do título e só a palavra que troca em itálico colorido;
+   ela ocupa sempre a largura da maior (a linha não balança) */
+.pro2 .hero h1.hero-titulo .hero-verbo { display: inline-grid; text-align: left; font-size: 1.13em; line-height: 1; }
 .pro2 .hero h1.hero-titulo .hero-verbo > span { grid-area: 1 / 1; animation: word-in .45s ease both; }
 .pro2 .hero h1.hero-titulo .hero-verbo::after { content: 'descansa.'; grid-area: 1 / 1; visibility: hidden; }
 /* "muito além de cortar e legendar": a esteira com subtítulo e a linha do básico embaixo */

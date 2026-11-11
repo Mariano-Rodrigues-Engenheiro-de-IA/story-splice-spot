@@ -250,7 +250,7 @@ function Pro2() {
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <div className="badge"><span className="record-dot" />Funciona no ChatGPT <LogoChatGPT /> e no Claude <LogoClaude /></div>
-          <h1 id="hero-title" className="hero-titulo"><span>{nicho.titulo[0]}</span><em>{verbos?.length ? <>enquanto você <span className="hero-verbo"><span key={verbo}>{verbos[verbo]}</span></span></> : nicho.titulo[1]}</em></h1>
+          <h1 id="hero-title" className="hero-titulo"><span>{nicho.titulo[0]}</span>{verbos?.length ? <span className="hero-linha2">enquanto você <em className="hero-verbo"><span key={verbo}>{verbos[verbo]}</span></em></span> : <em>{nicho.titulo[1]}</em>}</h1>
           <div className="hero-video"><VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /></div>
           <div className="hero-cta"><PurchaseButton /></div>
           <p className="purchase-note">Pagamento único · 7 dias de garantia</p>
