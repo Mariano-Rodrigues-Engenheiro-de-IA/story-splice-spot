@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, MessageCircle, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
-import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
+import { ArrowUp, Check, ChevronDown, ChevronRight, Fingerprint, FolderClosed, Loader2, Mic, PanelLeft, Play, Plus, Search, Shapes, Sparkles, SquarePen } from 'lucide-react';
+import { LogoChatGPT, LogoClaude, LogoWhatsApp } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
 import { eventoProprio } from '@/lib/pixel';
 
@@ -635,7 +635,7 @@ export function ProvaSocial({ prints }: { prints: { src: string; quem: string }[
   const fechar = () => { setAberto(null); setPrint(null); };
   return (
     <section className="p2-prova" id="depoimentos">
-      <div className="section container p2-prova-topo"><div className="section-heading reveal"><h2>Profissionais que já <em>editam com IA.</em></h2><p>Alunos reais do Modo Editor: o depoimento e o vídeo que eles editaram.</p></div></div>
+      <div className="section container p2-prova-topo"><div className="section-heading reveal"><h2>Profissionais que já <em>usam o Modo Editor.</em></h2><p>Alunos reais do Modo Editor: o depoimento e o vídeo que eles editaram.</p></div></div>
       <Esteira itens={DEPOIMENTOS} rotulo="Depoimentos em vídeo" render={(d, i, { copia, ativo, perto }) => (
         <li key={i} className="p2-depo" aria-hidden={copia || undefined}>
           <button type="button" className="p2-depo-tela" style={{ backgroundImage: `url(${capa(d.src)})` }}
@@ -653,7 +653,7 @@ export function ProvaSocial({ prints }: { prints: { src: string; quem: string }[
         <Esteira itens={prints} reverso velocidade={28} rotulo="Mensagens de alunos no WhatsApp" render={(pr, i, { copia }) => (
           <li key={i} className="p2-print" aria-hidden={copia || undefined}>
             <button type="button" onClick={() => setPrint(pr.src)} aria-label={`Ver a mensagem de ${pr.quem} maior`}>
-              <span className="p2-print-topo"><span className="p2-print-zap"><MessageCircle /></span><span><b>{pr.quem}</b><small>mensagem no WhatsApp</small></span></span>
+              <span className="p2-print-topo"><span className="p2-print-zap"><LogoWhatsApp /></span><span><b>{pr.quem}</b><small>mensagem no WhatsApp</small></span></span>
               <span className="p2-print-conversa"><img src={pr.src} alt={`Mensagem de ${pr.quem} no WhatsApp`} loading="lazy" decoding="async" /></span>
               <span className="p2-print-selo"><Check /> Aluno real</span>
             </button>

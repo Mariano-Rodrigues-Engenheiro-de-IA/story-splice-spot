@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Check, Clapperboard, GraduationCap, KeyRound, Megaphone, Play, Power, Sparkles, Wallet,
+  ArrowUp, Check, Clapperboard, GraduationCap, KeyRound, Megaphone, Play, Power, Presentation, Sparkles, Stethoscope, Users, Wallet,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
-import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
+import { LogoChatGPT, LogoClaude, LogoWhatsApp } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -179,17 +179,20 @@ export function ModeSwitch() {
 /* ───────────── Para quem é ───────────── */
 
 const personas = [
-  { icon: Clapperboard, title: 'Quem cria conteúdo', copy: 'Grava no domingo e só posta na quinta.' },
-  { icon: Megaphone, title: 'Quem anuncia', copy: 'Precisa de criativo novo toda semana.' },
-  { icon: GraduationCap, title: 'Quem ensina', copy: 'Tem aula gravada esperando edição.' },
-  { icon: Wallet, title: 'Quem paga editor', copy: 'Paga caro e ainda espera dias.' },
+  { icon: Stethoscope, title: 'Profissionais de consultório', copy: 'Psicólogo, nutricionista, dentista, fisio: você explica o seu trabalho e o vídeo sai pronto pra postar.' },
+  { icon: GraduationCap, title: 'Quem grava aula', copy: 'Professor e quem vende curso: a aula sai cortada, com legenda e o que você explica ilustrado na tela.' },
+  { icon: Megaphone, title: 'Quem faz anúncio', copy: 'Criativo novo toda semana, sem esperar editor e sem pagar por vídeo.' },
+  { icon: Presentation, title: 'Quem precisa de vídeo de vendas', copy: 'O vídeo da sua página e a apresentação do seu produto, editados do jeito que você pedir.' },
+  { icon: Clapperboard, title: 'Quem cria conteúdo', copy: 'Reels, YouTube e Stories: grava hoje e posta hoje.' },
+  { icon: Users, title: 'Social media e agência', copy: 'Entrega os vídeos dos clientes sem passar o dia na edição.' },
 ] as const;
 
 export function ForWho() {
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
-        <h2>A ideia você já tem.<br /><em>Falta a edição sair.</em></h2>
+        <h2>Para quem é o<br /><em>Modo Editor?</em></h2>
+        <p>Para quem precisa de vídeo bem editado e não tem tempo de editar.</p>
       </div>
       <div className="reveal"><div className="publico">
         {personas.map(p => (
@@ -320,7 +323,7 @@ export function WhatYouGet({ suporte = false }: { suporte?: boolean } = {}) {
                 <p className="recebe-zap-ele">Claro! Me manda um print da tela que eu te mostro o próximo passo.</p>
               </div>
             </div>
-            <div className="recebe-texto"><h3>Suporte no WhatsApp</h3><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div>
+            <div className="recebe-texto"><h3 className="recebe-h3-zap"><LogoWhatsApp /> Suporte no WhatsApp</h3><p>Travou na instalação ou no primeiro vídeo? Você fala com a gente e resolve.</p></div>
           </article>
         )}
       </div>

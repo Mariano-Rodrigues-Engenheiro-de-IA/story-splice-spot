@@ -116,15 +116,18 @@ function Comparison() {
     {!siteConfig.videos.raw && <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>}
   </div>;
 }
+/** Exemplos da galeria: trechos de criativos diferentes (sala escura com planta, estúdio com prateleiras,
+ *  anatomia em 3D e o quadrinho do vídeo de vendas), para não parecer um vídeo só. */
 const galleryCopy: [string, string, string][] = [
-  ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/cenas/titulo.mp4'],
+  ['Ilustração do que você fala', 'mostra na tela o que eu estou explicando', '/videos/galeria/ilustracao.mp4'],
+  ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/galeria/titulo.mp4'],
+  ['Explicação em 3D', 'mostra em 3D o que acontece no corpo', '/videos/galeria/esqueleto.mp4'],
+  ['Cenário novo', 'troca o meu fundo, sem pano verde', '/videos/galeria/cenario.mp4'],
+  ['Objeto 3D girando', 'coloca um objeto em 3D girando do meu lado', '/videos/galeria/objeto3d.mp4'],
   ['Virou quadrinho', 'me transforma em personagem de HQ', '/videos/cenas/quadrinho.mp4'],
-  ['Objeto 3D na mão', 'coloca um objeto em 3D na minha mão', '/videos/cenas/cerebro.mp4'],
-  ['Explicação em 3D', 'mostra em 3D o que eu estou explicando', '/videos/cenas/dente.mp4'],
-  ['Modo cinema', 'cor de cinema e faixas pretas', '/videos/cenas/cinema.mp4'],
-  ['Cenário novo', 'troca meu fundo, sem pano verde', '/videos/cenas/cenario.mp4'],
-  ['Legenda que acompanha', 'legenda palavra por palavra', '/videos/cenas/legenda.mp4'],
-];
+  ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4'],
+  ['Gráfico que sobe', 'quando eu falar o número, mostra num gráfico', '/videos/galeria/grafico.mp4'],
+]
 const gallery: [string, string, string][] = galleryCopy;
 function SpinningSeal() {
   const text = '7 DIAS DE GARANTIA • REEMBOLSO TOTAL • ';
@@ -275,7 +278,7 @@ function Index() {
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><SubAlemDoBasico /></div>
+          <div className="section-heading reveal galeria-topo"><h2>Veja exemplos de<br />vídeos <em>editados por IA.</em></h2><SubAlemDoBasico /></div>
           <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
