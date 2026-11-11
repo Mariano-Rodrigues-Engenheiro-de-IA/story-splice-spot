@@ -164,7 +164,7 @@ const galleryCopy: [string, string, string, string][] = [
   ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4', 'Motion design'],
 ];
 const gallery: [string, string, string, string][] = galleryCopy;
-/** Setinha curva ao lado do "IA" do título da galeria, apontando para os vídeos (desenha quando a seção aparece). */
+/** Setinha curva ao lado de "Modo Editor" no título da galeria, apontando para os vídeos (desenha quando a seção aparece). */
 function SetaCurva() {
   return <svg className="seta-curva" viewBox="0 0 30 44" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M3 6 C 18 2, 28 14, 22 36" pathLength={100} /><path d="M14 30 L22 38 L27 28" pathLength={100} />
@@ -308,7 +308,7 @@ function Index() {
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Tudo editado por <em>IA</em><SetaCurva /></h2><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p></div>
+          <div className="section-heading reveal galeria-topo"><h2>Vídeos editados com o <em className="seta-ancora">Modo Editor<SetaCurva /></em></h2><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p></div>
           <Esteira itens={gallery} velocidade={56} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src, etiqueta], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><span className="gallery-tag">{etiqueta}</span><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />

@@ -2094,7 +2094,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 @media (max-width: 400px) { :is(.pro2, .geral) .ei-conversa { height: 388px; padding: 13px 11px 8px; } :is(.pro2, .geral) .ei-ia-video { width: 118px; } }
 
 /* ── 11/11: galeria "Tudo editado por IA" com a setinha curva apontando para os vídeos e uma etiqueta em cada vídeo ── */
-.geral .galeria-topo h2 { position: relative; display: inline-block; }
+.geral .galeria-topo .seta-ancora { position: relative; white-space: nowrap; }
 .geral .seta-curva { position: absolute; left: 100%; top: .35em; width: .95em; height: 1.35em; margin-left: .08em; color: oklch(.76 .16 300); overflow: visible; }
 .geral .seta-curva path { stroke-dasharray: 100; stroke-dashoffset: 100; }
 .geral .reveal.in .seta-curva path { animation: seta-desenha .9s .35s cubic-bezier(.4, .1, .2, 1) forwards; }
