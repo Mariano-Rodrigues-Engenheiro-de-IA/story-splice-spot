@@ -63,6 +63,14 @@ function Aulas() {
     </div>
   </section>;
 }
+/** O que a IA coloca no vídeo: uma faixa reta que roda sem parar, de ponta a ponta (as frases se repetem sem emenda). */
+const itensGaleria = ['Efeitos visuais e sonoros', 'Ilustrações realistas', 'Objetos em 3D', 'Motion design', 'Títulos animados'];
+function ItensGaleria() {
+  const volta = [...itensGaleria, ...itensGaleria];
+  return <div className="galeria-ticker" aria-label={itensGaleria.join(', ')}>
+    <div className="galeria-ticker-trilho" aria-hidden="true">{[...volta, ...volta].map((t, i) => <span key={i}>{t}<i>✦</i></span>)}</div>
+  </div>;
+}
 /** true enquanto o elemento está na tela (ou perto): animações e temporizadores só rodam quando alguém vê. */
 function useNaTela<T extends Element>() {
   const ref = useRef<T>(null);
@@ -260,7 +268,7 @@ function Index() {
         </section>
         <Faixas />
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><p className="galeria-destaque">Efeitos visuais e sonoros, ilustrações realistas, objetos em 3D, motion design e títulos animados no seu vídeo.</p><p>Tudo a partir de um pedido em português, enquanto você faz outra coisa.</p></div>
+          <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><p className="galeria-intro">A IA coloca no seu vídeo</p><ItensGaleria /><p className="galeria-apoio">Você só faz o pedido, em português, e vai fazer outra coisa.</p></div>
           <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />

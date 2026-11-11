@@ -1716,4 +1716,14 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .geral .vsl-pausa-icone { background: oklch(.5 .21 295); box-shadow: 0 12px 50px oklch(.5 .21 295 / .45); }
 .geral .vsl-retomar button:not(.vsl-retomar-inicio) { background: oklch(.5 .21 295); }
 .geral .vsl-barra span { background: linear-gradient(90deg, oklch(.5 .21 295), oklch(.76 .16 300)); }
+/* "A IA coloca no seu vídeo" + os cinco itens em texto (separados por ponto), um acendendo por vez + a frase de apoio */
+.geral .galeria-topo .galeria-intro { margin: 16px auto 8px; font-size: 16px; color: var(--muted-foreground); }
+/* faixa reta que roda sem parar com o que a IA faz, de ponta a ponta da tela, bordas sumindo */
+.geral .galeria-ticker { width: 100vw; margin: 4px 0 0 calc(50% - 50vw); padding: 14px 0; overflow: hidden; border-block: 1px solid oklch(1 0 0 / .08); background: linear-gradient(90deg, oklch(.5 .21 295 / .06), oklch(.5 .21 295 / .16), oklch(.5 .21 295 / .06)); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.geral .galeria-ticker-trilho { display: inline-flex; width: max-content; animation: galeria-ticker 34s linear infinite; will-change: transform; }
+.geral .galeria-ticker-trilho span { display: inline-flex; align-items: center; white-space: nowrap; font-size: 24px; font-weight: 650; letter-spacing: -.01em; color: var(--foreground); }
+.geral .galeria-ticker-trilho i { margin: 0 22px; font-style: normal; font-size: 16px; color: oklch(.76 .16 300); }
+@keyframes galeria-ticker { to { transform: translateX(-50%); } }
+@media (max-width: 767px) { .geral .galeria-ticker-trilho span { font-size: 20px; } .geral .galeria-ticker-trilho i { margin: 0 16px; } .geral .galeria-ticker { padding: 12px 0; } }
+@media (prefers-reduced-motion: reduce) { .geral .galeria-ticker-trilho { animation: none; } }
 
