@@ -1707,4 +1707,8 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @media (prefers-reduced-motion: reduce) { .geral .botao-compra { animation: none !important; } }
 /* "muito além de corte e legenda." em vermelho, a cor da palavra que troca no topo ("Vá treinar.") */
 .geral .galeria-topo h2 em { color: var(--primary); }
+/* 11/11: destaque das frases em ROXO na página escura (a palavra que troca no topo e a parte em itálico de todos os
+   títulos, inclusive "editam com IA."); os botões continuam vermelhos. Roxo claro para ler bem no preto. */
+.geral .hero h1 em,
+.geral :is(.section-heading, .comparison-copy, .faq-intro, .produtor-texto, .lamp-content) h2 em { color: oklch(.76 .16 300); }
 
