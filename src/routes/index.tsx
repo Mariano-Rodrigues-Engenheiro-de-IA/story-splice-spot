@@ -89,23 +89,33 @@ function Comparison() {
   const [position, setPosition] = useState(50);
   const [touched, setTouched] = useState(false);
   const [box, naTela] = useNaTela<HTMLDivElement>();
+  const arrastando = useRef(false);
+  const tocou = useRef(false);
   // bruto e editado são o mesmo trecho: o lado bruto segue o tempo do editado para a linha comparar o mesmo instante
   useEffect(() => {
     if (!naTela) return;
     const timer = window.setInterval(() => {
       const [raw, edit] = Array.from(box.current?.querySelectorAll('video') ?? []);
-      if (raw && edit && !edit.paused && Math.abs(raw.currentTime - edit.currentTime) > 0.12) raw.currentTime = edit.currentTime;
-    }, 400);
+      if (raw && edit && !edit.paused && !raw.seeking && !edit.seeking && raw.readyState >= 3 && Math.abs(raw.currentTime - edit.currentTime) > 0.3) raw.currentTime = edit.currentTime;
+    }, 1500);
     return () => window.clearInterval(timer);
   }, [naTela, box]);
   useEffect(() => {
     if (touched || !naTela || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const start = Date.now();
-    const timer = window.setInterval(() => setPosition(50 + Math.sin((Date.now() - start) / 1600) * 25), 40);
+    // o balanço para no mesmo instante do primeiro toque (sem esperar a página redesenhar)
+    const timer = window.setInterval(() => { if (!arrastando.current && !tocou.current) setPosition(50 + Math.sin((Date.now() - start) / 1600) * 25); }, 40);
     return () => window.clearInterval(timer);
   }, [touched, naTela]);
+  const mover = (x: number) => {
+    const r = box.current?.getBoundingClientRect();
+    if (r && r.width > 0) setPosition(Math.min(100, Math.max(0, ((x - r.left) / r.width) * 100)));
+  };
   return <div className="comparison-wrap">
-    <div className="comparison" ref={box} data-clip-grupo>
+    <div className="comparison" ref={box} data-clip-grupo
+      onPointerDown={e => { tocou.current = true; setTouched(true); arrastando.current = true; mover(e.clientX); try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* sem captura, o arraste segue pelo próprio quadro */ } }}
+      onPointerMove={e => { if (arrastando.current) mover(e.clientX); }}
+      onPointerUp={() => { arrastando.current = false; }} onPointerCancel={() => { arrastando.current = false; }}>
       <div className="compare-raw"><Clip grupo src={siteConfig.videos.rawGeral} preset="bruto" opts={{ scene: 'green', offset: 1 }} label="Gravação bruta" /></div>
       <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Clip grupo src={siteConfig.videos.editedGeral} preset="pronto" opts={{ scene: 'green', offset: 1 }} label="Vídeo editado" /></div>
       <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>

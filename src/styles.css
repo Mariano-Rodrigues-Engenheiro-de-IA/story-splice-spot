@@ -1874,4 +1874,11 @@ html:has(.geral) { scroll-padding-top: 0; }
 @media (max-width: 900px) { :is(.pro2, .geral) .recebe-arte.recebe-arte-suporte { height: 150px; } }
 .geral .offer { max-width: 560px; }
 .geral .offer-main { grid-template-columns: minmax(0, 1fr); }
+/* antes e depois: o arraste é do quadro inteiro (pointer); a faixa nativa fica só para o teclado */
+.geral .comparison { cursor: ew-resize; user-select: none; -webkit-user-select: none; }
+.geral .comparison video { pointer-events: none; }
+.geral .compare-input { pointer-events: none; }
+/* topo da galeria: título -> frase de apoio -> faixa rolante, com respiro entre os três */
+:is(.pro2, .geral) .galeria-topo .galeria-apoio, :is(.pro2, .geral) .p2-saidas .galeria-apoio { margin: 16px auto 0; max-width: 560px; }
+:is(.pro2, .geral) .galeria-apoio + .galeria-ticker { margin-top: 26px; }
 

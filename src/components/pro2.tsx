@@ -685,10 +685,10 @@ export function FaixaIA() {
     </div>
   );
 }
-/** Faixa com o que a IA faz + frase de apoio "do básico ao avançado" (embaixo do título da galeria). */
+/** Embaixo do título da galeria: a frase "do básico ao avançado" e, depois dela, a faixa rolante com o que a IA faz. */
 export const tituloAlemDoBasico = <>Edição com IA<br /><em>muito além de corte e legenda.</em></>;
 export function SubAlemDoBasico() {
-  return <><FaixaIA /><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p></>;
+  return <><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p><FaixaIA /></>;
 }
 
 /* ───────────── Linhas da oferta com a mesma largura de outro elemento (as duas páginas) ───────────── */
