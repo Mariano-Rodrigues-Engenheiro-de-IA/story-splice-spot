@@ -2001,3 +2001,70 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .it-cabeca.varrendo::after { content: ""; position: absolute; top: 0; bottom: 0; right: 1px; width: 44px; background: linear-gradient(90deg, transparent, oklch(.76 .16 300 / .3)); }
 @keyframes it-surge { from { opacity: 0; transform: scaleY(.3); } }
 @media (prefers-reduced-motion: reduce) { :is(.pro2, .geral) .it-palavra, :is(.pro2, .geral) .it-pontinhos i, :is(.pro2, .geral) .it-clipe, :is(.pro2, .geral) .it-onda i { animation: none; } }
+/* a faixa do topo da galeria anda ao contrário dos vídeos (os vídeos vão para a esquerda, a faixa para a direita) */
+#galeria .galeria-ticker-trilho { animation-direction: reverse; }
+
+/* ── 11/11 (v2): "A IA agora é o seu editor de vídeo" como uma conversa grande e escura, sem MacBook ── */
+:is(.pro2, .geral) .ei-niveis { display: flex; justify-content: center; gap: 8px; margin: 0 auto 14px; }
+:is(.pro2, .geral) .ei-niveis span { padding: 6px 13px; border-radius: 99px; border: 1px solid oklch(1 0 0 / .14); font-size: 13px; font-weight: 700; color: var(--muted-foreground); transition: background .35s, color .35s, border-color .35s, transform .35s; }
+:is(.pro2, .geral) .ei-niveis span.on { background: oklch(.5 .21 295); border-color: oklch(.5 .21 295); color: #fff; transform: scale(1.05); }
+:is(.pro2, .geral) .ei-janela { width: min(460px, 100%); margin: 0 auto; border-radius: 20px; overflow: hidden; background: #212121; border: 1px solid oklch(1 0 0 / .1); box-shadow: 0 40px 80px -40px oklch(.5 .21 295 / .55), 0 0 0 6px oklch(1 0 0 / .03); text-align: left; }
+:is(.pro2, .geral) .ei-topo { display: flex; align-items: center; gap: 10px; padding: 11px 14px; background: #181818; border-bottom: 1px solid oklch(1 0 0 / .07); font-size: 13px; color: #ececec; }
+:is(.pro2, .geral) .ei-luzes { display: flex; gap: 5px; }
+:is(.pro2, .geral) .ei-luzes i { width: 9px; height: 9px; border-radius: 50%; background: #ff5f57; }
+:is(.pro2, .geral) .ei-luzes i:nth-child(2) { background: #febc2e; }
+:is(.pro2, .geral) .ei-luzes i:nth-child(3) { background: #28c840; }
+:is(.pro2, .geral) .ei-topo-nome { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+:is(.pro2, .geral) .ei-topo-nome svg { width: 15px; height: 15px; color: oklch(.76 .16 300); }
+:is(.pro2, .geral) .ei-topo-modo { margin-left: auto; display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 99px; background: oklch(.72 .13 172 / .16); color: oklch(.8 .13 172); font-size: 12px; font-weight: 700; white-space: nowrap; }
+:is(.pro2, .geral) .ei-topo-modo svg { width: 13px; height: 13px; }
+:is(.pro2, .geral) .ei-conversa { height: 476px; display: flex; flex-direction: column; justify-content: flex-end; gap: 14px; padding: 18px 16px 10px; overflow: hidden; }
+:is(.pro2, .geral) .ei-ola { margin: auto 0; text-align: center; font-size: 22px; font-weight: 700; color: #ececec; letter-spacing: -.01em; animation: it-entra .4s both; }
+:is(.pro2, .geral) .ei-voce { align-self: flex-end; max-width: 86%; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; animation: it-entra .35s both; }
+:is(.pro2, .geral) .ei-anexo { display: inline-flex; align-items: center; gap: 9px; padding: 7px 12px 7px 7px; border-radius: 12px; background: #2a2a2a; border: 1px solid oklch(1 0 0 / .08); color: #ececec; }
+:is(.pro2, .geral) .ei-anexo-ico { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; background: oklch(.5 .21 295); color: #fff; }
+:is(.pro2, .geral) .ei-anexo-ico svg { width: 16px; height: 16px; }
+:is(.pro2, .geral) .ei-anexo b { display: block; font-size: 13px; font-weight: 600; }
+:is(.pro2, .geral) .ei-anexo small { display: block; font-size: 12px; color: #9a9a9a; }
+:is(.pro2, .geral) .ei-msg { margin: 0; padding: 10px 14px; border-radius: 18px 18px 6px 18px; background: #303030; color: #ececec; font-size: 15.5px; line-height: 1.45; }
+:is(.pro2, .geral) .ei-ia { display: flex; align-items: flex-start; gap: 10px; animation: it-entra .35s both; }
+:is(.pro2, .geral) .ei-ia-avatar { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: oklch(.5 .21 295); color: #fff; }
+:is(.pro2, .geral) .ei-ia-avatar svg { width: 15px; height: 15px; }
+:is(.pro2, .geral) .ei-ia-corpo { min-width: 0; display: flex; flex-direction: column; gap: 9px; }
+:is(.pro2, .geral) .ei-ia-corpo p { margin: 3px 0 0; font-size: 15.5px; line-height: 1.45; color: #ececec; }
+:is(.pro2, .geral) .ei-ia-carga { display: block; width: 180px; height: 5px; border-radius: 99px; background: oklch(1 0 0 / .1); overflow: hidden; }
+:is(.pro2, .geral) .ei-ia-carga i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, oklch(.55 .21 295), oklch(.76 .16 300)); animation: ei-enche 1.8s ease-out forwards; }
+:is(.pro2, .geral) .ei-ia-video { position: relative; width: 150px; aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 0 0 1px oklch(1 0 0 / .1), 0 20px 34px -16px #000; animation: it-entra .45s both; }
+:is(.pro2, .geral) .ei-ia-video .p2-video { position: absolute; inset: 0; }
+:is(.pro2, .geral) .ei-ia-selo { position: absolute; left: 8px; top: 8px; display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 99px; background: oklch(.72 .13 172); color: #04211a; font-size: 12px; font-weight: 800; }
+:is(.pro2, .geral) .ei-ia-selo svg { width: 12px; height: 12px; }
+:is(.pro2, .geral) .ei-entrada { margin: 0 12px 12px; padding: 10px 10px 10px 14px; border-radius: 22px; background: #2f2f2f; border: 1px solid oklch(1 0 0 / .06); transition: border-color .3s; }
+:is(.pro2, .geral) .ei-entrada.escrevendo { border-color: oklch(.76 .16 300 / .55); }
+:is(.pro2, .geral) .ei-anexo-mini { margin-bottom: 8px; padding: 5px 10px 5px 5px; }
+:is(.pro2, .geral) .ei-anexo-mini .ei-anexo-ico { width: 24px; height: 24px; border-radius: 6px; }
+:is(.pro2, .geral) .ei-anexo-mini .ei-anexo-ico svg { width: 13px; height: 13px; }
+:is(.pro2, .geral) .ei-entrada-linha { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+:is(.pro2, .geral) .ei-entrada-texto { flex: 1; min-width: 0; font-size: 15.5px; line-height: 1.4; color: #ececec; }
+:is(.pro2, .geral) .ei-entrada-texto .caret { background: #ececec; }
+:is(.pro2, .geral) .ei-entrada-dica { color: #8e8e8e; }
+:is(.pro2, .geral) .ei-entrada-mic { flex: none; width: 18px; height: 18px; color: #b4b4b4; }
+:is(.pro2, .geral) .ei-enviar { flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: #ececec; color: #111; }
+:is(.pro2, .geral) .ei-enviar svg { width: 17px; height: 17px; }
+@media (max-width: 400px) { :is(.pro2, .geral) .ei-conversa { height: 458px; padding: 16px 12px 8px; } :is(.pro2, .geral) .ei-ia-video { width: 140px; } :is(.pro2, .geral) .ei-niveis span { padding: 5px 11px; font-size: 12.5px; } }
+
+/* ── 11/11 (v2): "Veja a IA trabalhando": a etapa da vez gira, as feitas viram ✓; a barra vai de 0 a 100 uma vez só ── */
+:is(.pro2, .geral) .it-palavra .it-girando { width: .72em; height: .72em; color: oklch(.76 .16 300); }
+:is(.pro2, .geral) .it-girando { animation: p2-gira 1s linear infinite; }
+:is(.pro2, .geral) .it-passos { list-style: none; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin: 18px 0 0; padding: 0; }
+:is(.pro2, .geral) .it-passos li { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+:is(.pro2, .geral) .it-passos li:not(:last-child)::after { content: ""; position: absolute; top: 14px; left: calc(50% + 17px); right: calc(-50% + 17px); height: 2px; border-radius: 99px; background: oklch(1 0 0 / .12); }
+:is(.pro2, .geral) .it-passos li.feito:not(:last-child)::after { background: var(--ready); }
+:is(.pro2, .geral) .it-passo-bola { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; border: 2px solid oklch(1 0 0 / .16); color: var(--muted-foreground); font-size: 12px; font-weight: 700; transition: background .3s, border-color .3s, color .3s, transform .3s; }
+:is(.pro2, .geral) .it-passo-bola svg { width: 15px; height: 15px; }
+:is(.pro2, .geral) .it-passos li.agora .it-passo-bola { border-color: oklch(.76 .16 300); color: oklch(.76 .16 300); }
+:is(.pro2, .geral) .it-passos li.feito .it-passo-bola { background: var(--ready); border-color: var(--ready); color: #04211a; animation: it-check .35s cubic-bezier(.2, .9, .3, 1.4); }
+:is(.pro2, .geral) .it-passo-nome { font-size: 12.5px; font-weight: 600; color: var(--muted-foreground); white-space: nowrap; }
+:is(.pro2, .geral) .it-passos li.agora .it-passo-nome { color: var(--foreground); }
+:is(.pro2, .geral) .it-passos li.feito .it-passo-nome { color: var(--ready); }
+@keyframes it-check { from { transform: scale(.6); } }
+@media (max-width: 400px) { :is(.pro2, .geral) .it-passo-nome { font-size: 11.5px; } }

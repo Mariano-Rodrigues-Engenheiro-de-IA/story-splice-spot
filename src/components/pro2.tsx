@@ -747,24 +747,7 @@ function MacBook({ escala, children }: { escala: number; children: ReactNode }) 
   );
 }
 
-/** Barra lateral do chat (o mesmo desenho do "Como funciona"). */
-function BarraChat() {
-  return (
-    <aside className="p2-cl-lado">
-      <div className="p2-cl-marca"><span className="p2-cl-marca-ico"><Sparkles /></span><span>Sua IA</span><PanelLeft /></div>
-      <span className="p2-cl-nav on"><SquarePen />Novo chat</span>
-      <span className="p2-cl-nav"><Search />Buscar chats</span>
-      <span className="p2-cl-nav"><FolderClosed />Projetos</span>
-      <span className="p2-cl-nav"><Shapes />Biblioteca</span>
-      <small className="p2-cl-grupo">Fixados <ChevronRight /></small>
-      <small className="p2-cl-grupo">Recentes <ChevronDown /></small>
-      {['Editar vídeo', 'Vídeo da semana', 'Legenda do Reels', 'Corte da aula de ontem', 'Vídeo explicativo', 'Vídeo do lançamento'].map((t, i) => <span key={t} className={`p2-cl-item ${i === 0 ? 'on' : ''}`}>{t}</span>)}
-      <span className="p2-cl-conta"><i>M</i>Mariano <em>· Pro</em><ChevronDown /></span>
-    </aside>
-  );
-}
-
-/* ───────────── A IA agora é o seu editor de vídeo (pedidos do básico ao avançado, no chat) ───────────── */
+/* ───────────── A IA agora é o seu editor de vídeo (uma conversa grande e legível, do básico ao avançado) ───────────── */
 
 const PEDIDOS_IA = [
   { nivel: 'Básico', texto: 'Corta onde eu errei e coloca legenda', video: '/videos/cenas/legenda.mp4' },
@@ -772,23 +755,23 @@ const PEDIDOS_IA = [
   { nivel: 'Avançado', texto: 'Quando eu falar do coração, mostra ele em 3D batendo', video: '/videos/galeria/coracao.mp4' },
   { nivel: 'Avançado', texto: 'Mostra no mapa, visto do satélite, a cidade que eu falar', video: '/videos/galeria/mapa.mp4' },
 ];
+const NIVEIS_IA = ['Básico', 'Intermediário', 'Avançado'];
 
-/** O pedido aparece sendo escrito (grande, legível, e o mesmo dentro do chat), a IA responde e o celular mostra o
- *  resultado; depois vem o próximo pedido, do básico ao avançado. */
+/** Diferente do MacBook do "Como funciona": aqui é a conversa em si, grande. O pedido é escrito na caixa de mensagem,
+ *  vai para a conversa, a IA responde e o vídeo pronto aparece dentro da resposta; depois vem o próximo nível. */
 export function EditorIA() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
-  const [cena, escala] = useEscalaMac();
   const [i, setI] = useState(0);
   const [letras, setLetras] = useState(0);
-  const [fase, setFase] = useState(0); // 0 escrevendo · 1 a IA editando · 2 pronto
+  const [fase, setFase] = useState(0); // 0 escrevendo · 1 enviado, a IA editando · 2 pronto
   const p = PEDIDOS_IA[i]!;
   useEffect(() => {
     if (!naTela) return;
     if (menosMovimento()) { setLetras(p.texto.length); setFase(2); return; }
     let id: number;
-    if (fase === 0) id = letras < p.texto.length ? window.setTimeout(() => setLetras(n => n + 1), 32) : window.setTimeout(() => setFase(1), 500);
-    else if (fase === 1) id = window.setTimeout(() => setFase(2), 1800);
-    else id = window.setTimeout(() => { setI(n => (n + 1) % PEDIDOS_IA.length); setLetras(0); setFase(0); }, 4800);
+    if (fase === 0) id = letras < p.texto.length ? window.setTimeout(() => setLetras(n => n + 1), 34) : window.setTimeout(() => setFase(1), 550);
+    else if (fase === 1) id = window.setTimeout(() => setFase(2), 1900);
+    else id = window.setTimeout(() => { setI(n => (n + 1) % PEDIDOS_IA.length); setLetras(0); setFase(0); }, 5200);
     return () => window.clearTimeout(id);
   }, [naTela, fase, letras, p.texto.length]);
   const texto = p.texto.slice(0, letras);
@@ -799,41 +782,43 @@ export function EditorIA() {
         <p className="ei-lead"><strong>Fale do seu jeito e ela edita pra você.</strong>Com o Modo Editor, a sua IA já sabe editar o seu vídeo do básico ao avançado: basta você pedir.</p>
       </div>
       <div className="ei-corpo reveal" ref={caixa}>
-        <div className="ei-balao">
-          <span className="ei-balao-topo"><span className="ei-balao-rotulo">Você pede, do seu jeito</span><span className={`ei-nivel ei-nivel-${i}`}>{p.nivel}</span></span>
-          <p aria-live="polite">“{texto}{fase === 0 ? <i className="caret" /> : '”'}</p>
-        </div>
-        <div className={`p2-cena ei-cena ${fase === 2 ? 'passo-3' : ''}`} ref={cena} style={{ height: Math.round(434 * escala + 108), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
-          <div className="p2-mac" aria-hidden="true">
-            <span className="p2-mac-ias"><LogoChatGPT /><small>ou</small><LogoClaude /></span>
-            <MacBook escala={escala}>
-              <div className="device-screen p2-claude">
-                <BarraChat />
-                <div className="p2-cl-main">
-                  <div className="p2-cl-topo"><span className="p2-cl-titulo">Editar vídeo <ChevronDown /></span><span className="p2-cl-modo"><Check />Modo Editor ativo</span><span className="p2-cl-share">Compartilhar</span></div>
-                  <div className="p2-cl-conversa">
-                    <div className="p2-cl-coluna">
-                      <div className="p2-cl-voce">
-                        <span className="p2-cl-anexo"><img src={capa(siteConfig.videos.cenas.aoVivoBruto)} alt="" width={14} height={25} /><span><b>gravacao.mp4</b><small>MP4 · 1:48</small></span></span>
-                        {letras > 0 && <p>{texto}{fase === 0 && <i className="caret" />}</p>}
-                      </div>
-                      {fase >= 1 && (
-                        <div className="p2-cl-ia" key={`${i}-${fase}`}>
-                          <p>{fase === 1 ? 'Combinado! Estou editando o seu vídeo.' : 'Pronto! Editei do jeito que você pediu.'}</p>
-                          <span className="p2-cl-carga"><i className={fase === 1 ? 'ei-enchendo' : 'ei-cheio'} /></span>
-                          <span className={`p2-cl-spark ${fase === 1 ? 'pensando' : ''}`}><Sparkles /></span>
-                        </div>
-                      )}
+        <div className="ei-niveis" aria-hidden="true">{NIVEIS_IA.map(n => <span key={n} className={n === p.nivel ? 'on' : ''}>{n}</span>)}</div>
+        <div className="ei-janela">
+          <div className="ei-topo">
+            <span className="ei-luzes" aria-hidden="true"><i /><i /><i /></span>
+            <span className="ei-topo-nome"><Sparkles aria-hidden="true" /> Sua IA</span>
+            <span className="ei-topo-modo"><Check aria-hidden="true" /> Modo Editor ativo</span>
+          </div>
+          <div className="ei-conversa">
+            {fase === 0 && <p className="ei-ola">O que vamos editar hoje?</p>}
+            {fase >= 1 && (
+              <div className="ei-voce" key={`v-${i}`}>
+                <span className="ei-anexo"><span className="ei-anexo-ico"><Film aria-hidden="true" /></span><span><b>gravacao.mp4</b><small>Vídeo · 1:48</small></span></span>
+                <p className="ei-msg">{p.texto}</p>
+              </div>
+            )}
+            {fase >= 1 && (
+              <div className="ei-ia" key={`ia-${i}-${fase}`}>
+                <span className="ei-ia-avatar" aria-hidden="true"><Sparkles /></span>
+                <div className="ei-ia-corpo">
+                  <p>{fase === 1 ? 'Combinado! Estou editando o seu vídeo.' : 'Pronto! Editei do jeito que você pediu.'}</p>
+                  {fase === 1 ? <span className="ei-ia-carga" aria-hidden="true"><i /></span> : (
+                    <div className="ei-ia-video">
+                      <VideoVivo key={p.video} src={p.video} ativo={naTela} perto={naTela} label={`Resultado do pedido: ${p.texto}`} />
+                      <span className="ei-ia-selo"><Check aria-hidden="true" /> {p.nivel}</span>
                     </div>
-                  </div>
-                  <div className="p2-cl-entrada"><span className="p2-cl-placeholder">Escreva sua mensagem…</span><span className="p2-cl-barra"><Plus /><Mic className="p2-cl-mic" /><i><ArrowUp /></i></span></div>
+                  )}
                 </div>
               </div>
-            </MacBook>
+            )}
           </div>
-          <div className="p2-cena-cel">
-            <span className="p2-pronto"><Check size={14} /> Pronto · {p.nivel}</span>
-            <Celular className="p2-cel-mini"><VideoVivo key={p.video} src={p.video} ativo={naTela && fase === 2} perto={naTela} label={`Resultado do pedido: ${p.texto}`} /></Celular>
+          <div className={`ei-entrada ${fase === 0 ? 'escrevendo' : ''}`}>
+            {fase === 0 && <span className="ei-anexo ei-anexo-mini"><span className="ei-anexo-ico"><Film aria-hidden="true" /></span><span><b>gravacao.mp4</b></span></span>}
+            <span className="ei-entrada-linha">
+              <span className="ei-entrada-texto" aria-live="polite">{fase === 0 && letras > 0 ? <>{texto}<i className="caret" /></> : <span className="ei-entrada-dica">Fale do seu jeito…</span>}</span>
+              <Mic className="ei-entrada-mic" aria-hidden="true" />
+              <i className="ei-enviar" aria-hidden="true"><ArrowUp /></i>
+            </span>
           </div>
         </div>
       </div>
@@ -841,15 +826,18 @@ export function EditorIA() {
   );
 }
 
-/* ───────────── Veja a IA trabalhando (um editor de vídeo no MacBook e as etapas em palavras grandes) ───────────── */
+/* ───────────── Veja a IA trabalhando (um editor de vídeo no MacBook e as etapas, uma por vez, com ✓) ───────────── */
 
 const ETAPAS_IA = [
-  { palavra: 'Recebendo o vídeo', ms: 2000 },
-  { palavra: 'Analisando o vídeo', ms: 2400 },
-  { palavra: 'Editando o vídeo', ms: 3800 },
-  { palavra: 'Prévia enviada', ms: 2200 },
-  { palavra: 'Vídeo finalizado', ms: 3000 },
+  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 1800 },
+  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 2300 },
+  { agora: 'Editando o vídeo', feito: 'Editado', ms: 3800 },
+  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 1900 },
+  { agora: 'Finalizando', feito: 'Pronto', ms: 1500 },
 ];
+const INICIO_ETAPA = ETAPAS_IA.reduce<number[]>((acc, _x, k) => [...acc, k === 0 ? 0 : acc[k - 1]! + ETAPAS_IA[k - 1]!.ms], []);
+const TOTAL_ETAPAS = ETAPAS_IA.reduce((s, x) => s + x.ms, 0);
+const SEGURA_PRONTO = 3600;
 // trechos do vídeo na linha do tempo, em % da faixa: a gravação inteira e, depois da edição, mais curta e sem buracos
 const TRECHOS_TL = {
   inteiro: [[0, 24], [24, 20], [44, 22], [66, 16], [82, 18]],
@@ -859,41 +847,35 @@ const TEXTOS_TL = [[1, 15], [22, 13], [40, 14], [59.5, 11], [74, 12]] as const;
 const EFEITOS_TL = [[6, 9, 'a'], [27, 11, 'b'], [45, 8, 'c'], [63, 10, 'a']] as const;
 const ONDA_TL = Array.from({ length: 64 }, (_, k) => (24 + Math.abs(Math.sin(k * 1.37) * Math.cos(k * 0.29)) * 70).toFixed(1));
 
-/** O que a pessoa precisa saber é o caminho (recebeu, analisou, editou, mandou a prévia, finalizou), não o método:
- *  por isso as etapas ficam em palavras grandes por fora e o editor por dentro não tem nome de técnica nenhuma. */
+/** O que a pessoa precisa ver é o caminho, não o método: cada etapa gira enquanto acontece e vira ✓ quando termina
+ *  (e fica marcada); a barra de cima anda uma vez só, de 0 a 100, pelo processo inteiro. */
 export function IATrabalhando() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
   const [cena, escala] = useEscalaMac();
-  const [etapa, setEtapa] = useState(0);
-  const [prog, setProg] = useState(0);
+  const [t, setT] = useState(0);
   useEffect(() => {
     if (!naTela) return;
-    if (menosMovimento()) { setEtapa(4); setProg(100); return; }
-    const total = ETAPAS_IA[etapa]!.ms;
+    if (menosMovimento()) { setT(TOTAL_ETAPAS); return; }
     const inicio = performance.now();
-    let fim = 0;
     const id = window.setInterval(() => {
-      const p = Math.min(100, ((performance.now() - inicio) / total) * 100);
-      setProg(p);
-      if (p >= 100) {
-        window.clearInterval(id);
-        fim = window.setTimeout(() => { setProg(0); setEtapa(e => (e + 1) % ETAPAS_IA.length); }, etapa === ETAPAS_IA.length - 1 ? 700 : 220);
-      }
+      const agora = performance.now() - inicio;
+      setT(agora % (TOTAL_ETAPAS + SEGURA_PRONTO));
     }, 50);
-    return () => { window.clearInterval(id); window.clearTimeout(fim); };
-  }, [naTela, etapa]);
-  const e = ETAPAS_IA[etapa]!;
-  const final = etapa === ETAPAS_IA.length - 1;
+    return () => window.clearInterval(id);
+  }, [naTela]);
+  const final = t >= TOTAL_ETAPAS;
+  const etapa = final ? ETAPAS_IA.length - 1 : Math.max(0, INICIO_ETAPA.findIndex((ini, k) => t >= ini && t < ini + ETAPAS_IA[k]!.ms));
+  const prog = final ? 100 : ((t - INICIO_ETAPA[etapa]!) / ETAPAS_IA[etapa]!.ms) * 100;
+  const pct = Math.min(100, Math.round((t / TOTAL_ETAPAS) * 100));
   const temClipe = etapa >= 1;
   const cortado = etapa > 2 || (etapa === 2 && prog > 18);
   const editadoNaTela = etapa > 2 || (etapa === 2 && prog > 80);
-  const apareceu = (inicio: number, passo: number) => (k: number) => etapa > 2 || (etapa === 2 && prog > inicio + k * passo);
+  const apareceu = (ini: number, passo: number) => (k: number) => etapa > 2 || (etapa === 2 && prog > ini + k * passo);
   const textoOn = apareceu(30, 9);
   const efeitoOn = apareceu(45, 10);
   const pecaOn = apareceu(25, 15);
   const propOn = apareceu(20, 14);
-  const cabeca = etapa === 0 ? 0 : final ? 88 : prog * 0.88;
-  const pct = final ? 100 : Math.round(prog);
+  const cabeca = etapa === 0 ? 0 : final ? 88 : etapa >= 3 ? 88 : prog * 0.88;
   return (
     <section className="section container it" id="ao-vivo">
       <div className="section-heading reveal">
@@ -902,9 +884,17 @@ export function IATrabalhando() {
       </div>
       <div className="it-corpo reveal" ref={caixa}>
         <div className={`it-status ${final ? 'final' : ''}`}>
-          <strong key={etapa} className="it-palavra" aria-live="polite">{e.palavra}{final ? <Check aria-hidden="true" /> : <span className="it-pontinhos" aria-hidden="true"><i /><i /><i /></span>}</strong>
+          <strong key={final ? 'fim' : etapa} className="it-palavra" aria-live="polite">
+            {final ? <>Vídeo pronto<Check aria-hidden="true" /></> : <><Loader2 className="it-girando" aria-hidden="true" />{ETAPAS_IA[etapa]!.agora}</>}
+          </strong>
           <div className="it-progresso" aria-hidden="true"><span className="it-barra"><i style={{ width: `${pct}%` }} /></span><span className="it-pct">{pct}%</span></div>
-          <ol className="it-etapas" aria-hidden="true">{ETAPAS_IA.map((x, k) => <li key={x.palavra} className={k < etapa || final ? 'feito' : k === etapa ? 'on' : ''} />)}</ol>
+          <ol className="it-passos" aria-hidden="true">
+            {ETAPAS_IA.map((x, k) => {
+              const feito = final || k < etapa;
+              const agora = !final && k === etapa;
+              return <li key={x.feito} className={feito ? 'feito' : agora ? 'agora' : ''}><span className="it-passo-bola">{feito ? <Check /> : agora ? <Loader2 className="it-girando" /> : k + 1}</span><span className="it-passo-nome">{x.feito}</span></li>;
+            })}
+          </ol>
         </div>
         <div className="it-cena" ref={cena} style={{ height: Math.round(434 * escala + 24), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
           <div className="p2-mac it-mac" aria-hidden="true">
@@ -919,7 +909,7 @@ export function IATrabalhando() {
                   <div className="it-ed-midia">
                     <span className="it-ed-aba"><Film />Mídia</span>
                     <div className="it-ed-pecas">
-                      <span className="it-peca it-peca-video" style={{ backgroundImage: `url(${capa(PAR.bruto)})` }}>{etapa === 0 && <i className="it-anel" style={{ ['--p' as string]: `${prog}%` }} />}</span>
+                      <span className="it-peca it-peca-video" style={{ backgroundImage: `url(${capa(PAR.bruto)})` }}>{etapa === 0 && !final && <i className="it-anel" style={{ ['--p' as string]: `${prog}%` }} />}</span>
                       {[Music, Box, Type].map((Icone, k) => <span key={k} className={`it-peca it-peca-${k} ${pecaOn(k) ? 'on' : ''}`}><Icone /></span>)}
                     </div>
                   </div>
@@ -927,7 +917,7 @@ export function IATrabalhando() {
                     <div className="it-ed-player">
                       <VideoVivo src={PAR.bruto} ativo={naTela && !editadoNaTela} perto={naTela} className={editadoNaTela ? 'it-some' : ''} />
                       <VideoVivo src={PAR.editado} ativo={naTela && editadoNaTela} perto={naTela && etapa >= 1} className={editadoNaTela ? '' : 'it-some'} />
-                      {etapa === 0 && <span className="it-ed-carregando"><Loader2 className="p2-girando" /></span>}
+                      {etapa === 0 && !final && <span className="it-ed-carregando"><Loader2 className="p2-girando" /></span>}
                     </div>
                   </div>
                   <div className="it-ed-props">
@@ -941,7 +931,7 @@ export function IATrabalhando() {
                   <div className="it-faixa"><span className="it-faixa-ico"><Type /></span><div className="it-pista">{TEXTOS_TL.map(([l, w], k) => <span key={k} className={`it-bloco it-texto ${textoOn(k) ? 'on' : ''}`} style={{ left: `${l}%`, width: `${w}%` }} />)}</div></div>
                   <div className="it-faixa"><span className="it-faixa-ico"><Music /></span><div className="it-pista it-onda">{temClipe && ONDA_TL.map((h, k) => <i key={k} style={{ height: `${h}%` }} />)}</div></div>
                   <div className="it-faixa"><span className="it-faixa-ico"><Sparkles /></span><div className="it-pista">{EFEITOS_TL.map(([l, w, c], k) => <span key={k} className={`it-bloco it-efeito-${c} ${efeitoOn(k) ? 'on' : ''}`} style={{ left: `${l}%`, width: `${w}%` }} />)}</div></div>
-                  <span className={`it-cabeca ${etapa === 1 ? 'varrendo' : ''}`} style={{ left: `calc(30px + (100% - 36px) * ${(cabeca / 100).toFixed(4)})` }} />
+                  <span className={`it-cabeca ${etapa === 1 && !final ? 'varrendo' : ''}`} style={{ left: `calc(30px + (100% - 36px) * ${(cabeca / 100).toFixed(4)})` }} />
                 </div>
               </div>
             </MacBook>

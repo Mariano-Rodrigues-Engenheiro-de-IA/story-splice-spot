@@ -62,10 +62,11 @@ export const siteConfig = {
     vslPoster: '/videos/vsl_capa.webp' as string,
     raw: '/videos/antes_mapa.mp4',
     edited: '/videos/depois_mapa.mp4',
-    /* antes e depois da página geral (/): criativo 10 de 11,3 a 26,8 s (sem cortes, o bruto e o final batem quadro a quadro):
-       parede branca e microfone x estúdio, título, objeto 3D girando, gráfico e passos */
-    rawGeral: '/videos/antes_estudio.mp4',
-    editedGeral: '/videos/depois_estudio.mp4',
+    /* antes e depois da página geral (/): criativo 08 (gravação de verdade, OBS 4K a 30 qps), de 11 a 26,5 s do final:
+       o "antes" é o bruto dos mesmos quadros pelo mapa de cortes (D:/criativo08/work/mapa.json), recortado em 9:16 sem
+       mexer na imagem; o "depois" é o final. Os criativos 09, 10 e 13 são do clone (HeyGen) e, sem som, pareciam lentos. */
+    rawGeral: '/videos/antes_c08.mp4',
+    editedGeral: '/videos/depois_c08.mp4',
     gallery: [] as string[],
     /** Cenas do vídeo de vendas espalhadas pela página (cada lugar com uma cena diferente). */
     cenas: {
@@ -82,9 +83,9 @@ export const siteConfig = {
   },
   /** Real numbers of the raw/edited pair above (shown in the stats and the live demo). Update when the videos change. */
   demo: { cuts: 68, rawLength: '5:09', editedLength: '1:50', secondsSaved: 199 },
-  /** Números reais do criativo 10 inteiro (40 s), o vídeo do antes e depois da página geral: palavras da legenda
-   *  palavra por palavra e efeitos sonoros (D:/criativo10/work/linha.json e som.json). */
-  demoGeral: { palavras: 139, efeitos: 96, duracao: '40 segundos' },
+  /** Números reais do criativo 08 inteiro, o vídeo do antes e depois da página geral (D:/criativo08/work/mapa.json):
+   *  26 emendas com corte; 157 s de gravação (2:37) viraram 85 s (1:25). */
+  demoGeral: { cortes: 26, segundosAMenos: 72, bruto: '2:37', final: '1:25' },
   /** Números reais do vídeo de vendas (gravação de 17/10/2026), usados na demonstração "ao vivo" com as cenas dele. */
   vslDemo: { cuts: 119, rawLength: '13:13', editedLength: '5:25' },
   /** Seção do produtor: foto em public/img. */

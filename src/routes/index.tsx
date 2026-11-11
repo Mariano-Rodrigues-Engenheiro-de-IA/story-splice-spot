@@ -77,20 +77,23 @@ function useNaTela<T extends Element>() {
   return [ref, visivel] as const;
 }
 /** Os números reais do vídeo do antes e depois. No celular eles vêm depois do vídeo (primeiro a pessoa vê, depois lê). */
+/** min:ss (72 vira 1:12) */
+const minSeg = (v: number) => { const t = Math.round(v); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
 function NumerosDemo() {
-  // números reais do vídeo do antes e depois (criativo 10 inteiro)
+  // números reais do vídeo do antes e depois (criativo 08 inteiro, gravação de verdade)
   const d = siteConfig.demoGeral;
   return <>
-    <div className="stats"><div className="stat"><strong><NumberTicker value={d.palavras} /></strong><p>palavras com legenda</p></div><div className="stat"><strong><NumberTicker value={d.efeitos} /></strong><p>efeitos sonoros no tempo certo</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
-    <p className="fine-print">Números reais deste vídeo: um anúncio de {d.duracao}, editado inteiro pela IA.</p>
+    <div className="stats"><div className="stat"><strong><NumberTicker value={d.cortes} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={d.segundosAMenos} format={minSeg} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+    <p className="fine-print">Números reais deste vídeo: {d.bruto} de gravação viraram {d.final}.</p>
   </>;
 }
 function Comparison() {
   const [position, setPosition] = useState(50);
-  const [touched, setTouched] = useState(false);
   const [box, naTela] = useNaTela<HTMLDivElement>();
+  // arraste: só vira arraste quando o dedo anda para o lado (para cima e para baixo é a página rolando)
+  const toque = useRef<{ x: number; y: number } | null>(null);
   const arrastando = useRef(false);
-  const tocou = useRef(false);
+  const parado = useRef(0); // até quando o balanço espera depois que a pessoa solta
   // bruto e editado são o mesmo trecho: o lado bruto segue o tempo do editado para a linha comparar o mesmo instante
   useEffect(() => {
     if (!naTela) return;
@@ -100,34 +103,49 @@ function Comparison() {
     }, 1500);
     return () => window.clearInterval(timer);
   }, [naTela, box]);
+  // a linha vai e volta o tempo todo mostrando o resultado; durante o arraste ela segue o dedo e, 2,5 s depois de
+  // soltar, volta a balançar sem pulo (vai deslizando até o balanço)
   useEffect(() => {
-    if (touched || !naTela || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!naTela || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const start = Date.now();
-    // o balanço para no mesmo instante do primeiro toque (sem esperar a página redesenhar)
-    const timer = window.setInterval(() => { if (!arrastando.current && !tocou.current) setPosition(50 + Math.sin((Date.now() - start) / 1600) * 25); }, 40);
+    const timer = window.setInterval(() => {
+      if (arrastando.current || Date.now() < parado.current) return;
+      const alvo = 50 + Math.sin((Date.now() - start) / 1500) * 34;
+      setPosition(p => p + (alvo - p) * 0.14);
+    }, 33);
     return () => window.clearInterval(timer);
-  }, [touched, naTela]);
+  }, [naTela]);
   const mover = (x: number) => {
     const r = box.current?.getBoundingClientRect();
     if (r && r.width > 0) setPosition(Math.min(100, Math.max(0, ((x - r.left) / r.width) * 100)));
   };
+  const soltar = () => { if (arrastando.current) parado.current = Date.now() + 2500; arrastando.current = false; toque.current = null; };
   return <div className="comparison-wrap">
     <div className="comparison" ref={box} data-clip-grupo
-      onPointerDown={e => { tocou.current = true; setTouched(true); arrastando.current = true; mover(e.clientX); try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* sem captura, o arraste segue pelo próprio quadro */ } }}
-      onPointerMove={e => { if (arrastando.current) mover(e.clientX); }}
-      onPointerUp={() => { arrastando.current = false; }} onPointerCancel={() => { arrastando.current = false; }}>
+      onPointerDown={e => { toque.current = { x: e.clientX, y: e.clientY }; if (e.pointerType === 'mouse') { arrastando.current = true; mover(e.clientX); } }}
+      onPointerMove={e => {
+        const t0 = toque.current;
+        if (!t0) return;
+        if (!arrastando.current) {
+          const dx = Math.abs(e.clientX - t0.x), dy = Math.abs(e.clientY - t0.y);
+          if (dx > 6 && dx > dy) { arrastando.current = true; try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* sem captura, o arraste segue pelo próprio quadro */ } }
+          else return;
+        }
+        mover(e.clientX);
+      }}
+      onPointerUp={soltar} onPointerCancel={soltar} onPointerLeave={e => { if (e.pointerType === 'mouse') soltar(); }}>
       <div className="compare-raw"><Clip grupo src={siteConfig.videos.rawGeral} preset="bruto" opts={{ scene: 'green', offset: 1 }} label="Gravação bruta" /></div>
       <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Clip grupo src={siteConfig.videos.editedGeral} preset="pronto" opts={{ scene: 'green', offset: 1 }} label="Vídeo editado" /></div>
       <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>
       <div className="compare-line" style={{ left: `${position}%` }}><span className="compare-handle"><GripVertical size={13} /></span></div>
-      <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
+      <input className="compare-input" type="range" min="0" max="100" value={Math.round(position)} aria-label="Comparar antes e depois" onChange={event => { parado.current = Date.now() + 4000; setPosition(Number(event.target.value)); }} />
     </div>
     <p className="compare-help">Arraste a linha para os lados</p>
     {!siteConfig.videos.rawGeral && <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>}
   </div>;
 }
 /** Exemplos da galeria: trechos de criativos diferentes (sala escura com planta, estúdio com prateleiras,
- *  anatomia em 3D, quadrinho do vídeo de vendas) e exemplos por profissão (dentista, personal, arquiteto, psicólogo),
+ *  anatomia em 3D) e exemplos por profissão (dentista, personal, arquiteto, psicólogo),
  *  alternando cenário de um cartão para o outro. */
 const galleryCopy: [string, string, string][] = [
   ['Ilustração do que você fala', 'mostra na tela o que eu estou explicando', '/videos/galeria/ilustracao.mp4'],
@@ -138,7 +156,6 @@ const galleryCopy: [string, string, string][] = [
   ['Músculo em 3D', 'mostra o músculo trabalhando no exercício', '/videos/pro2/personal-braco.mp4'],
   ['Gráfico que sobe', 'quando eu falar o número, mostra num gráfico', '/videos/galeria/grafico.mp4'],
   ['Sala em 3D', 'mostra a sala em 3D enquanto eu explico', '/videos/galeria/sala3d.mp4'],
-  ['Virou quadrinho', 'me transforma em personagem de HQ', '/videos/cenas/quadrinho.mp4'],
   ['Desenho a lápis', 'desenha a história enquanto eu conto', '/videos/galeria/lapis.mp4'],
   ['Objeto 3D girando', 'coloca um objeto em 3D girando do meu lado', '/videos/galeria/objeto3d.mp4'],
   ['Coração em 3D', 'mostra o que a ansiedade faz no corpo', '/videos/galeria/coracao.mp4'],
