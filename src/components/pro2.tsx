@@ -839,9 +839,6 @@ const ETAPAS_IA = [
   { agora: 'Enviando a prévia', feito: 'Prévia', ms: 600 },
   { agora: 'Finalizando', feito: 'Pronto', ms: 600 },
 ];
-const INICIO_ETAPA = ETAPAS_IA.reduce<number[]>((acc, _x, k) => [...acc, k === 0 ? 0 : acc[k - 1]! + ETAPAS_IA[k - 1]!.ms], []);
-const TOTAL_ETAPAS = ETAPAS_IA.reduce((s, x) => s + x.ms, 0);
-const SEGURA_PRONTO = 2600;
 // trechos do vídeo na linha do tempo, em % da faixa: a gravação inteira e, depois da edição, mais curta e sem buracos
 const TRECHOS_TL = {
   inteiro: [[0, 24], [24, 20], [44, 22], [66, 16], [82, 18]],
@@ -851,35 +848,50 @@ const TEXTOS_TL = [[1, 15], [22, 13], [40, 14], [59.5, 11], [74, 12]] as const;
 const EFEITOS_TL = [[6, 9, 'a'], [27, 11, 'b'], [45, 8, 'c'], [63, 10, 'a']] as const;
 const ONDA_TL = Array.from({ length: 64 }, (_, k) => (24 + Math.abs(Math.sin(k * 1.37) * Math.cos(k * 0.29)) * 70).toFixed(1));
 
+const PASSO_MS = 600; // cada etapa fica o mesmo tempo na tela
+const SEGURA_PRONTO = 2600;
+
+/** A barra e a porcentagem "tipo download": só elas se redesenham a cada quadro; andam dentro da etapa da vez
+ *  (de etapa×20 até etapa×20+20) e nunca pulam uma etapa, mesmo se o navegador engasgar. */
+function ProgressoIA({ etapa, final, ativo }: { etapa: number; final: boolean; ativo: boolean }) {
+  const [pct, setPct] = useState(0);
+  useEffect(() => {
+    if (final) { setPct(100); return; }
+    if (!ativo) return;
+    const inicio = performance.now();
+    let raf = 0;
+    const passo = () => {
+      const dentro = Math.min(1, (performance.now() - inicio) / PASSO_MS);
+      setPct(Math.round((etapa + dentro) * 20));
+      if (dentro < 1) raf = requestAnimationFrame(passo);
+    };
+    raf = requestAnimationFrame(passo);
+    return () => cancelAnimationFrame(raf);
+  }, [etapa, final, ativo]);
+  return <div className="it-progresso" aria-hidden="true"><span className="it-barra"><i style={{ width: `${pct}%` }} /></span><span className="it-pct">{pct}%</span></div>;
+}
+
 /** O que a pessoa precisa ver é o caminho, não o método: cada etapa gira enquanto acontece e vira ✓ quando termina
- *  (e fica marcada); a barra de cima anda uma vez só, de 0 a 100, pelo processo inteiro. */
+ *  (e fica marcada); a barra de cima anda de 0 a 100 uma vez só. Anda etapa por etapa (cada uma 0,6 s na tela, sem
+ *  pular nenhuma) e o editor só se redesenha quando a etapa muda; os movimentos de dentro são transições de CSS. */
 export function IATrabalhando() {
   const [caixa, naTela] = useNaTela<HTMLDivElement>('0px 0px 120px 0px');
   const [cena, escala] = useEscalaMac();
-  const [t, setT] = useState(0);
+  const [etapa, setEtapa] = useState(0);
+  const [final, setFinal] = useState(false);
+  const [ciclo, setCiclo] = useState(0);
   useEffect(() => {
     if (!naTela) return;
-    if (menosMovimento()) { setT(TOTAL_ETAPAS); return; }
-    const inicio = performance.now();
-    const id = window.setInterval(() => {
-      const agora = performance.now() - inicio;
-      setT(agora % (TOTAL_ETAPAS + SEGURA_PRONTO));
-    }, 50);
-    return () => window.clearInterval(id);
-  }, [naTela]);
-  const final = t >= TOTAL_ETAPAS;
-  const etapa = final ? ETAPAS_IA.length - 1 : Math.max(0, INICIO_ETAPA.findIndex((ini, k) => t >= ini && t < ini + ETAPAS_IA[k]!.ms));
-  const prog = final ? 100 : ((t - INICIO_ETAPA[etapa]!) / ETAPAS_IA[etapa]!.ms) * 100;
-  const pct = Math.min(100, Math.round((t / TOTAL_ETAPAS) * 100));
+    if (menosMovimento()) { setEtapa(ETAPAS_IA.length - 1); setFinal(true); return; }
+    const id = final
+      ? window.setTimeout(() => { setFinal(false); setEtapa(0); setCiclo(n => n + 1); }, SEGURA_PRONTO)
+      : window.setTimeout(() => { if (etapa < ETAPAS_IA.length - 1) setEtapa(etapa + 1); else setFinal(true); }, PASSO_MS);
+    return () => window.clearTimeout(id);
+  }, [naTela, etapa, final]);
   const temClipe = etapa >= 1;
-  const cortado = etapa > 2 || (etapa === 2 && prog > 18);
-  const editadoNaTela = etapa > 2 || (etapa === 2 && prog > 80);
-  const apareceu = (ini: number, passo: number) => (k: number) => etapa > 2 || (etapa === 2 && prog > ini + k * passo);
-  const textoOn = apareceu(30, 9);
-  const efeitoOn = apareceu(45, 10);
-  const pecaOn = apareceu(25, 15);
-  const propOn = apareceu(20, 14);
-  const cabeca = etapa === 0 ? 0 : final ? 88 : etapa >= 3 ? 88 : prog * 0.88;
+  const editando = etapa >= 2;
+  const editadoNaTela = etapa >= 3 || final;
+  const cabeca = final ? 88 : [0, 30, 88, 88, 88][etapa] ?? 0;
   return (
     <section className="section container it" id="ao-vivo">
       <div className="section-heading reveal">
@@ -891,7 +903,7 @@ export function IATrabalhando() {
           <strong key={final ? 'fim' : etapa} className="it-palavra" aria-live="polite">
             {final ? <>Vídeo pronto<Check aria-hidden="true" /></> : <><Loader2 className="it-girando" aria-hidden="true" />{ETAPAS_IA[etapa]!.agora}</>}
           </strong>
-          <div className="it-progresso" aria-hidden="true"><span className="it-barra"><i style={{ width: `${pct}%` }} /></span><span className="it-pct">{pct}%</span></div>
+          <ProgressoIA etapa={etapa} final={final} ativo={naTela} />
           <ol className="it-passos" aria-hidden="true">
             {ETAPAS_IA.map((x, k) => {
               const feito = final || k < etapa;
@@ -903,7 +915,7 @@ export function IATrabalhando() {
         <div className="it-cena" ref={cena} style={{ height: Math.round(434 * escala + 24), ['--mac-h' as string]: `${Math.round(434 * escala)}px` }}>
           <div className="p2-mac it-mac" aria-hidden="true">
             <MacBook escala={escala}>
-              <div className="device-screen it-ed">
+              <div className={`device-screen it-ed ${editando ? 'editando' : ''}`}>
                 <div className="it-ed-topo">
                   <span className="it-ed-luzes"><i /><i /><i /></span>
                   <span className="it-ed-nome"><span className="brand-icon"><Play /><span className="brand-dot" /></span>Modo Editor<em>gravacao.mp4</em></span>
@@ -913,29 +925,29 @@ export function IATrabalhando() {
                   <div className="it-ed-midia">
                     <span className="it-ed-aba"><Film />Mídia</span>
                     <div className="it-ed-pecas">
-                      <span className="it-peca it-peca-video" style={{ backgroundImage: `url(${capa(PAR.bruto)})` }}>{etapa === 0 && !final && <i className="it-anel" style={{ ['--p' as string]: `${prog}%` }} />}</span>
-                      {[Music, Box, Type].map((Icone, k) => <span key={k} className={`it-peca it-peca-${k} ${pecaOn(k) ? 'on' : ''}`}><Icone /></span>)}
+                      <span className="it-peca it-peca-video" style={{ backgroundImage: `url(${capa(PAR.bruto)})` }}>{etapa === 0 && !final && <i className="it-anel" />}</span>
+                      {[Music, Box, Type].map((Icone, k) => <span key={k} className={`it-peca it-peca-${k} ${editando ? 'on' : ''}`} style={{ transitionDelay: editando ? `${k * 110}ms` : '0ms' }}><Icone /></span>)}
                     </div>
                   </div>
                   <div className="it-ed-previa">
                     <div className="it-ed-player">
                       <VideoVivo src={PAR.bruto} ativo={naTela && !editadoNaTela} perto={naTela} className={editadoNaTela ? 'it-some' : ''} />
-                      <VideoVivo src={PAR.editado} ativo={naTela && editadoNaTela} perto={naTela && etapa >= 1} className={editadoNaTela ? '' : 'it-some'} />
+                      <VideoVivo src={PAR.editado} ativo={naTela && editadoNaTela} perto={naTela} className={editadoNaTela ? '' : 'it-some'} />
                       {etapa === 0 && !final && <span className="it-ed-carregando"><Loader2 className="p2-girando" /></span>}
                     </div>
                   </div>
                   <div className="it-ed-props">
                     <span className="it-ed-aba"><SlidersHorizontal />Ajustes</span>
-                    {[62, 38, 80, 54, 70].map((alvo, k) => <span key={k} className="it-prop"><i /><span><b style={{ width: `${propOn(k) ? alvo : 10}%` }} /></span></span>)}
+                    {[62, 38, 80, 54, 70].map((alvo, k) => <span key={k} className="it-prop"><i /><span><b style={{ width: `${editando ? alvo : 10}%`, transitionDelay: editando ? `${k * 80}ms` : '0ms' }} /></span></span>)}
                   </div>
                 </div>
                 <div className="it-ed-linha">
                   <div className="it-ed-regua">{Array.from({ length: 13 }, (_, k) => <i key={k} />)}</div>
-                  <div className="it-faixa"><span className="it-faixa-ico"><Film /></span><div className="it-pista">{temClipe && (cortado ? TRECHOS_TL.editado : TRECHOS_TL.inteiro).map(([l, w], k) => <span key={k} className="it-clipe" style={{ left: `${l}%`, width: `${w}%` }} />)}</div></div>
-                  <div className="it-faixa"><span className="it-faixa-ico"><Type /></span><div className="it-pista">{TEXTOS_TL.map(([l, w], k) => <span key={k} className={`it-bloco it-texto ${textoOn(k) ? 'on' : ''}`} style={{ left: `${l}%`, width: `${w}%` }} />)}</div></div>
+                  <div className="it-faixa"><span className="it-faixa-ico"><Film /></span><div className="it-pista">{temClipe && (editando ? TRECHOS_TL.editado : TRECHOS_TL.inteiro).map(([l, w], k) => <span key={k} className="it-clipe" style={{ left: `${l}%`, width: `${w}%` }} />)}</div></div>
+                  <div className="it-faixa"><span className="it-faixa-ico"><Type /></span><div className="it-pista">{TEXTOS_TL.map(([l, w], k) => <span key={k} className={`it-bloco it-texto ${editando ? 'on' : ''}`} style={{ left: `${l}%`, width: `${w}%`, transitionDelay: editando ? `${120 + k * 70}ms` : '0ms' }} />)}</div></div>
                   <div className="it-faixa"><span className="it-faixa-ico"><Music /></span><div className="it-pista it-onda">{temClipe && ONDA_TL.map((h, k) => <i key={k} style={{ height: `${h}%` }} />)}</div></div>
-                  <div className="it-faixa"><span className="it-faixa-ico"><Sparkles /></span><div className="it-pista">{EFEITOS_TL.map(([l, w, c], k) => <span key={k} className={`it-bloco it-efeito-${c} ${efeitoOn(k) ? 'on' : ''}`} style={{ left: `${l}%`, width: `${w}%` }} />)}</div></div>
-                  <span className={`it-cabeca ${etapa === 1 && !final ? 'varrendo' : ''}`} style={{ left: `calc(30px + (100% - 36px) * ${(cabeca / 100).toFixed(4)})` }} />
+                  <div className="it-faixa"><span className="it-faixa-ico"><Sparkles /></span><div className="it-pista">{EFEITOS_TL.map(([l, w, c], k) => <span key={k} className={`it-bloco it-efeito-${c} ${editando ? 'on' : ''}`} style={{ left: `${l}%`, width: `${w}%`, transitionDelay: editando ? `${260 + k * 70}ms` : '0ms' }} />)}</div></div>
+                  <span key={ciclo} className={`it-cabeca ${etapa === 1 && !final ? 'varrendo' : ''}`} style={{ left: `calc(30px + (100% - 36px) * ${(cabeca / 100).toFixed(4)})`, transitionDuration: `${PASSO_MS}ms` }} />
                 </div>
               </div>
             </MacBook>

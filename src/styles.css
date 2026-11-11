@@ -2148,4 +2148,8 @@ html:has(.geral) { scroll-padding-top: 0; }
 /* borda dos vídeos da galeria normal: a capa (primeira imagem do vídeo) ficava por baixo da borda meio transparente e,
    nos vídeos de fundo claro, o contorno parecia aceso; agora a capa fica só por dentro e a borda tem cor fixa */
 .geral #galeria .gallery-card { background-clip: padding-box; background-size: cover; background-position: center; border-color: oklch(.3 .01 286); background-color: oklch(.16 .006 286); }
+/* "Veja a IA trabalhando" anda etapa por etapa: o envio do vídeo vira um anel girando (sem depender de porcentagem) e a
+   agulha da linha do tempo desliza por CSS até o ponto da etapa */
+:is(.pro2, .geral) .it-anel::after { background: none; border: 2px solid rgba(255, 255, 255, .3); border-top-color: #fff; -webkit-mask: none; mask: none; animation: p2-gira .8s linear infinite; }
+:is(.pro2, .geral) .it-cabeca { transition-property: left; transition-timing-function: linear; }
 
