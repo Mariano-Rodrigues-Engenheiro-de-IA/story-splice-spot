@@ -1759,9 +1759,9 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @media (prefers-reduced-motion: reduce) { .geral .preco-riscado path { stroke-dashoffset: 0; } }
 .geral .offer-price .price { margin-top: 0; }
 /* "por" em cima do "R$", os dois colados no 67 (em vez de soltos na linha) */
-.geral .offer-price .price .preco-moeda { display: inline-flex; flex-direction: column; align-items: flex-end; vertical-align: top; margin: .2em 6px 0 0; line-height: 1.05; letter-spacing: 0; }
-.geral .offer-price .price .preco-por { font-size: 17px; font-weight: 600; color: var(--muted-foreground); }
-.geral .offer-price .price .preco-rs { font-size: 22px; font-weight: 500; color: var(--foreground); }
+.geral .offer-price .price .preco-moeda { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px; vertical-align: top; margin: .12em 8px 0 0; line-height: 1; letter-spacing: 0; }
+.geral .offer-price .price .preco-por { font-size: 22px; font-weight: 600; color: var(--muted-foreground); }
+.geral .offer-price .price .preco-rs { font-size: 22px; font-weight: 600; color: var(--foreground); }
 /* 11/11: as faixas de Black Friday também dentro da oferta, entre o preço e a garantia (as duas páginas) */
 :is(.pro2, .geral) .offer .p2-faixas { margin: 0; height: 96px; border-top: 1px solid var(--border); }
 
