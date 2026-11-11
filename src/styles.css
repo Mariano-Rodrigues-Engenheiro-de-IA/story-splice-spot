@@ -1814,17 +1814,33 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .geral .barra-black-oferta b { font-size: 11px; letter-spacing: .1em; }
   .geral .barra-black-ponto { width: 4px; height: 4px; }
   .geral .barra-black-so-pc { display: none; }
-  /* sem a linha do cabeçalho, o espaço volta para o vídeo */
-  .geral .hero { padding-top: 18px; }
-  .geral .hero-video { width: clamp(170px, calc((100svh - 274px) * .5625), 330px); }
 }
 @media (max-width: 350px) { .geral .barra-black-oferta b, .geral .barra-black-ponto { display: none; } }
-/* computador: o botão de compra cabe na primeira tela (800 de altura) */
-@media (min-width: 768px) { .geral .hero-video { width: clamp(200px, calc((100svh - 302px) * .5625), 290px); } }
-/* "Funciona no ChatGPT e no Claude": sai do alto e fica colada em cima do vídeo, em linha limpa (sem caixa) */
-.geral .hero h1 { margin: 6px 0 20px; }
-.geral .hero-funciona { margin: 0 0 10px; display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px; font-size: 15px; line-height: 1.3; color: oklch(.8 0 0); }
-.geral .hero-funciona b { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; color: var(--foreground); }
-.geral .hero-funciona .marca-ia { width: 18px; height: 18px; margin: 0; vertical-align: middle; }
-@media (max-width: 767px) { .geral .hero h1 { margin: 4px 0 16px; } .geral .hero-funciona { font-size: 14px; margin-bottom: 9px; } .geral .hero-funciona .marca-ia { width: 17px; height: 17px; } }
+/* ── primeira tela da página escura ──
+   --hv = largura do vídeo: cresce com a altura da tela até o botão encostar no fim dela.
+   Os respiros (faixa -> título, título -> frase) crescem junto com a tela; em tela muito alta,
+   o bloco inteiro fica no meio. A frase acompanha o vídeo: cabe entre as curvas da borda de cima. */
+.geral .hero { padding-top: 0; }
+.geral .hero-dobra { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.geral .hero-video { width: var(--hv); }
+.geral .hero h1 { margin: 0 0 var(--respiro-titulo); }
+/* a frase tem a largura do vídeo e mede pelo vídeo: cabe entre as curvas da borda de cima; vídeo estreito = "No ChatGPT e no Claude" */
+.geral .hero-funciona { width: var(--hv); margin: 0 0 10px; container-type: inline-size; display: flex; justify-content: center; line-height: 1.3; color: oklch(.8 0 0); }
+.geral .hf-linha { display: inline-flex; align-items: center; gap: .36em; white-space: nowrap; font-size: clamp(11.5px, calc((100cqw - 60px) / 19.4), 14px); }
+.geral .hf-curto { display: none; }
+.geral .hero-funciona b { display: inline-flex; align-items: center; gap: .32em; font-weight: 650; color: var(--foreground); }
+.geral .hero-funciona .marca-ia { width: 1.2em; height: 1.2em; margin: 0; vertical-align: middle; }
+@container (max-width: 280px) {
+  .geral .hf-longo { display: none; }
+  .geral .hf-curto { display: inline; }
+  .geral .hf-linha { font-size: clamp(11px, calc((100cqw - 54px) / 15), 13px); }
+}
+@media (max-width: 767px) {
+  .geral .hero { --respiro-topo: clamp(26px, 4.4svh, 56px); --respiro-titulo: clamp(20px, 3.2svh, 40px); --hv: clamp(170px, calc((92.4svh - 236px) * .5625), min(390px, 100vw - 40px)); }
+  .geral .hero-dobra { min-height: calc(100svh - 32px); padding: var(--respiro-topo) 0 14px; }
+}
+@media (min-width: 768px) {
+  .geral .hero { --respiro-titulo: 28px; --hv: clamp(200px, calc((100svh - 318px) * .5625), 300px); }
+  .geral .hero-dobra { padding-top: 34px; }
+}
 
