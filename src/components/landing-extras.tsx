@@ -119,7 +119,7 @@ export function LiveDemo() {
 const criteria = [
   ['Cortes', 'pausa, gaguejada e repetição saem'],
   ['Legenda', 'palavra por palavra, no tempo da fala'],
-  ['Ilustração', '3D, mapa ou desenho do que você fala'],
+  ['Ilustração', '3D, desenho ou gráfico do que você fala'],
   ['Cenário e cor', 'no padrão que você pedir'],
   ['Conferência', 'assiste o vídeo antes de entregar'],
 ] as const;
@@ -285,7 +285,7 @@ export function WhatYouGet() {
         <div className="unbox-files">
           <div className="unbox-file principal">
             <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
-            <div><strong>Modo Editor <em>o coração</em></strong><p>O treinamento que transforma o seu ChatGPT ou Claude num editor de vídeo profissional: corta os erros e as pausas, legenda, coloca zoom, efeitos e trilha, e confere tudo antes de entregar.</p></div>
+            <div><strong>Modo Editor <em>o coração</em></strong><p>O treinamento que transforma o seu ChatGPT ou Claude num editor de vídeo profissional: corta os erros e as pausas, legenda, coloca efeitos, ilustrações e trilha, e confere tudo antes de entregar.</p></div>
           </div>
           <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>Videoaulas curtas</strong><p>Tutoriais direto ao ponto: preparar o computador, instalar o Modo Editor, montar o pedido e editar o seu primeiro vídeo, mostrado tela por tela.</p></div></div>
           <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>Gerador de Pedido</strong><p>Você clica nas opções (estilo, legenda, efeitos, trilha) e ele monta o pedido completo pra IA. Dá até pra explicar em áudio.</p></div></div>

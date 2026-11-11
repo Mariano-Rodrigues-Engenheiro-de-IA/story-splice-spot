@@ -25,7 +25,7 @@ function useNaTela<T extends Element>(margem = '0px') {
 }
 
 /** Vídeo mudo em loop que só baixa quando `perto` e só toca quando `ativo`: no celular, um vídeo tocando por vez. */
-function VideoVivo({ src, ativo, perto, className = '', label, onRef }: { src: string; ativo: boolean; perto: boolean; className?: string; label?: string; onRef?: (v: HTMLVideoElement | null) => void }) {
+export function VideoVivo({ src, ativo, perto, className = '', label, onRef }: { src: string; ativo: boolean; perto: boolean; className?: string; label?: string; onRef?: (v: HTMLVideoElement | null) => void }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [carregar, setCarregar] = useState(false);
   useEffect(() => { if (perto) setCarregar(true); }, [perto]);
@@ -510,7 +510,7 @@ export function QualIA2({ extra }: { extra?: React.ReactNode } = {}) {
 /* ───────────── Prova social: faixas cruzadas + carrossel de vídeos + carrossel de prints ───────────── */
 
 /** Esteira genérica: anda quadro a quadro, três voltas da lista (nunca acaba), para com o dedo, vídeo só toca à vista. */
-function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }: {
+export function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }: {
   itens: T[]; velocidade?: number; reverso?: boolean; rotulo: string;
   render: (item: T, i: number, estado: { copia: boolean; ativo: boolean; perto: boolean }) => React.ReactNode;
 }) {
@@ -560,11 +560,13 @@ function Esteira<T>({ itens, velocidade = 34, reverso = false, rotulo, render }:
 
 /** Duas faixas cruzadas na diagonal que andam junto com a rolagem: rolou, elas andam (cada uma para um lado); parou, elas param.
  *  Ficam logo abaixo da primeira dobra, como divisória da oferta (11/11: Black Friday). */
-export function Faixas({ palavras = ['Modo Black', 'Black', 'Black Friday'] }: { palavras?: string[] } = {}) {
+/** `sempre`: as faixas rolam sozinhas o tempo todo (na oferta), em vez de andar só com a rolagem da página. */
+export function Faixas({ palavras = ['Modo Black', 'Black', 'Black Friday'], sempre = false }: { palavras?: string[]; sempre?: boolean } = {}) {
   const texto = Array.from({ length: 6 }, () => palavras).flat();
   const azul = useRef<HTMLDivElement>(null);
   const branca = useRef<HTMLDivElement>(null);
   useEffect(() => {
+    if (sempre) return; // rolam por CSS, sem depender da rolagem
     // as letras andam enquanto a pessoa rola, mas com velocidade-teto: rolar com força não dispara as fitas
     const TETO = 150; // px por segundo, no máximo
     let quadro = 0, antes = 0, ultimoY = window.scrollY, pos = 0, vel = 0;
@@ -591,10 +593,10 @@ export function Faixas({ palavras = ['Modo Black', 'Black', 'Black Friday'] }: {
     window.addEventListener('scroll', acordar, { passive: true });
     window.addEventListener('resize', desenhar);
     return () => { window.removeEventListener('scroll', acordar); window.removeEventListener('resize', desenhar); cancelAnimationFrame(quadro); };
-  }, []);
+  }, [sempre]);
   const conteudo = [...texto, ...texto].map((p, i) => <span key={i}>{p}<i /></span>);
   return (
-    <div className="p2-faixas" aria-hidden="true">
+    <div className={`p2-faixas ${sempre ? 'p2-faixas-sempre' : ''}`} aria-hidden="true">
       <div className="p2-faixa p2-faixa-azul"><div className="p2-faixa-trilho" ref={azul}>{conteudo}</div></div>
       <div className="p2-faixa p2-faixa-branca"><div className="p2-faixa-trilho" ref={branca}>{conteudo}</div></div>
     </div>

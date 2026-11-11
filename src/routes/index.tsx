@@ -5,11 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
-import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, Faixas, ProvaSocial, QualIA2 } from '@/components/pro2';
-import { OQueFaz } from '@/components/geral-faz';
+import { ComoFunciona, Esteira, Faixas, ProvaSocial, QualIA2, VideoVivo } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -121,17 +119,11 @@ function Comparison() {
 const galleryCopy: [string, string, string][] = [
   ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/cenas/titulo.mp4'],
   ['Virou quadrinho', 'me transforma em personagem de HQ', '/videos/cenas/quadrinho.mp4'],
-  ['Objeto 3D na mão', 'coloca um cérebro 3D na minha mão', '/videos/cenas/cerebro.mp4'],
-  ['Explicação em 3D', 'mostra o dente em corte enquanto explico', '/videos/cenas/dente.mp4'],
+  ['Objeto 3D na mão', 'coloca um objeto em 3D na minha mão', '/videos/cenas/cerebro.mp4'],
+  ['Explicação em 3D', 'mostra em 3D o que eu estou explicando', '/videos/cenas/dente.mp4'],
   ['Modo cinema', 'cor de cinema e faixas pretas', '/videos/cenas/cinema.mp4'],
   ['Cenário novo', 'troca meu fundo, sem pano verde', '/videos/cenas/cenario.mp4'],
-  ['Mapa de satélite', 'mostra a cidade no mapa', '/videos/cenas/mapa.mp4'],
   ['Legenda que acompanha', 'legenda palavra por palavra', '/videos/cenas/legenda.mp4'],
-];
-/** Look of each animated preview (only used if a card has no video). */
-const galleryLooks: ClipOpts[] = [
-  { impact: 'A IDEIA VEM PRIMEIRO', captions: false, scene: 'blue' }, { scene: 'studio' }, { scene: 'blue', captions: false }, { scene: 'green' },
-  { letterbox: true, scene: 'warm', captions: false }, { bgSwap: true }, { scene: 'blue' }, { scene: 'studio' },
 ];
 const gallery: [string, string, string][] = galleryCopy;
 function SpinningSeal() {
@@ -149,9 +141,9 @@ const offerItems = [
 function Offer() {
   return <section className="section container" id="oferta"><div className="section-heading reveal"><h2>Comece <em>hoje.</em></h2><p>Pagamento único. Vídeos sem limite. 7 dias de garantia.</p></div>
     <div className="offer border-beam beam-teal"><div className="offer-main"><div className="offer-details"><h3 className="offer-marca"><span className="brand-icon" aria-hidden="true"><Play /><span className="brand-dot" /></span>Modo Editor</h3><p>O editor de vídeo dentro do seu ChatGPT ou Claude, com as aulas pra começar hoje</p><ul className="offer-list">{offerItems.map(([title, copy], i) => <li key={title}>{offerIcons[i]}<div><strong>{title}</strong><p>{copy}</p></div></li>)}</ul></div>
-      <div className="offer-price"><p className="preco-rotulo">{siteConfig.precoDe ? 'Preço de Black Friday' : 'Pagamento único'}</p>{siteConfig.precoDe > 0 && <p className="preco-de">de <s className="preco-riscado">R$ {siteConfig.precoDe}<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 33 C 30 27, 62 16, 97 6" pathLength={100} /></svg></s></p>}<div className="price">{siteConfig.precoDe > 0 ? <span className="preco-moeda"><span className="preco-por">Por</span><span className="preco-rs">R$</span></span> : <sup>R$</sup>}<Odometro valor={siteConfig.price} de={siteConfig.precoDe || siteConfig.price} /><span className="p2-avista">à vista</span></div><p className="p2-parcela">{siteConfig.installmentValue > 0 ? <>ou <strong>12x de {brlCents(siteConfig.installmentValue)}</strong> no cartão</> : 'no PIX, ou parcelado no cartão'}</p><p className="p2-unico">Pagamento único</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print p2-seguro">PIX, cartão ou boleto · <Lock aria-hidden="true" /> Compra segura</span></div></div>
-      <Faixas />
-      <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div></section>;
+      <div className="offer-price"><p className="preco-rotulo">{siteConfig.precoDe ? 'Preço de Black Friday' : 'Pagamento único'}</p>{siteConfig.precoDe > 0 && <p className="preco-de">de <s className="preco-riscado">R$ {siteConfig.precoDe}<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="M3 33 C 30 27, 62 16, 97 6" pathLength={100} /></svg></s></p>}<div className="price"><sup>R$</sup><Odometro valor={siteConfig.price} de={siteConfig.precoDe || siteConfig.price} /><span className="p2-avista">à vista</span></div><p className="p2-parcela">{siteConfig.installmentValue > 0 ? <>ou <strong>12x de {brlCents(siteConfig.installmentValue)}</strong> no cartão</> : 'no PIX, ou parcelado no cartão'}</p><p className="p2-unico">Pagamento único</p><PurchaseButton label="Quero o Modo Editor" className="offer-button" destino="checkout" /><span className="fine-print p2-seguro">PIX, cartão ou boleto · <Lock aria-hidden="true" /> Compra segura</span></div></div>
+      <div className="guarantee"><SpinningSeal /><div><strong>Garantia de 7 dias</strong><p>Testou e não era pra você? Peça o reembolso dentro de 7 dias e receba tudo de volta.</p></div></div></div>
+    <Faixas sempre /></section>;
 }
 const faqItems = [
   ['O que exatamente eu estou comprando?', 'O Modo Editor, um treinamento pronto pro seu ChatGPT ou Claude, mais as videoaulas pra instalar e editar o primeiro vídeo e o Gerador de Pedido. Depois disso, a sua IA edita os seus vídeos: você grava, manda e pede em português.'],
@@ -264,16 +256,16 @@ function Index() {
           </div>
           <div className="hero-cta"><PurchaseButton /></div>
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
-          <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado e pronto pra postar.</p>
+          <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>
         <Faixas />
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Edição com IA:<br /><em>muito além de corte e legenda.</em></h2><p>A IA coloca no seu vídeo <strong>efeitos visuais e sonoros</strong>, <strong>motion design</strong>, <strong>objetos e anatomia em 3D</strong>, mapa de satélite, títulos animados atrás de você, gráficos, quadrinhos, cenário novo sem pano verde e cor de cinema. Tudo a partir de um pedido em português, enquanto você faz outra coisa.</p></div>
-          <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor" data-clip-grupo><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip grupo src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
+          <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><p className="galeria-destaque">Efeitos visuais e sonoros, ilustrações realistas, objetos em 3D, motion design e títulos animados no seu vídeo.</p><p>Tudo a partir de um pedido em português, enquanto você faz outra coisa.</p></div>
+          <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ForWho />
         <section className="section container comparison-section" id="antes-depois">
-          <div className="comparison-copy reveal"><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu da câmera. À direita, o que a IA devolveu: cortes, legenda, trilha e o mapa de satélite que desce até a cidade enquanto você explica.</p>
+          <div className="comparison-copy reveal"><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu da câmera. À direita, o que a IA devolveu: cortes, legenda, trilha e uma ilustração realista do que você está explicando.</p>
             <div className="stats-topo"><NumerosDemo /></div>
           </div><Comparison />
           <div className="stats-baixo reveal"><NumerosDemo /></div>
@@ -281,7 +273,6 @@ function Index() {
         <ComoFunciona />
         <RequestLibrary />
         <ModeSwitch />
-        <OQueFaz />
         <LiveDemo />
         <Aulas />
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />

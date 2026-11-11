@@ -1633,85 +1633,6 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .geral .basico li { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 99px; background: var(--card); border: 1px solid var(--border); font-size: 13.5px; color: var(--foreground); }
 .geral .basico li svg { color: var(--ready); }
 
-/* ── 11/11 (3): "Do corte ao 3D, a IA faz sozinha." (src/components/geral-faz.tsx) ── */
-.geral .faz-grade { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 1080px; margin: 0 auto; }
-.geral .faz-cartao { position: relative; display: flex; flex-direction: column; gap: 18px; padding: 14px 14px 22px; border-radius: 24px; background: linear-gradient(180deg, oklch(.19 .01 286), oklch(.145 .006 286)); border: 1px solid var(--border); box-shadow: var(--inner-glow), 0 30px 60px -42px rgba(0, 0, 0, .9); overflow: hidden; }
-.geral .faz-cartao.border-beam::after { border-radius: 23px; background: linear-gradient(180deg, oklch(.2 .02 295), oklch(.145 .008 290)); }
-.geral .faz-cartao.border-beam::before { background: conic-gradient(from 0deg, transparent 0 70%, oklch(.62 .2 295) 82%, oklch(.8 .12 300) 92%, transparent 100%); }
-.geral .faz-destaque { grid-column: span 2; }
-.geral .faz-largo { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 28px; }
-.geral .faz-largo .faz-arte { flex: 0 0 52%; }
-.geral .faz-texto { padding: 0 6px; }
-.geral .faz-texto h3 { margin: 0 0 6px; font-size: 20px; font-weight: 650; line-height: 1.2; letter-spacing: -.01em; color: var(--foreground); }
-.geral .faz-texto p { margin: 0; font-size: 15px; line-height: 1.55; color: var(--muted-foreground); }
-.geral .faz-selo { position: absolute; z-index: 3; top: 24px; right: 24px; padding: 5px 11px; border-radius: 99px; background: oklch(.5 .21 295); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: .02em; box-shadow: 0 10px 22px -10px oklch(.5 .21 295 / .9); }
-/* palco de cada peça: escuro, com luz roxa vindo de cima */
-.geral .faz-arte { position: relative; height: 210px; border-radius: 16px; overflow: hidden; background: radial-gradient(120% 90% at 50% -10%, oklch(.3 .07 295 / .55), transparent 62%), oklch(.115 .005 286); border: 1px solid oklch(1 0 0 / .06); }
-/* 1. a fala vira imagem: camadas que entram na hora da palavra */
-.geral .faz-fala { height: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
-.geral .faz-camadas { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.geral .faz-camadas li { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; background: oklch(1 0 0 / .04); border: 1px solid oklch(1 0 0 / .07); opacity: .45; transition: opacity .35s, transform .35s, background .35s, border-color .35s, box-shadow .35s; }
-.geral .faz-camadas li.feito { opacity: .85; }
-.geral .faz-camadas li.agora { opacity: 1; transform: translateX(4px); border-color: oklch(.65 .19 295 / .85); background: oklch(.5 .21 295 / .18); box-shadow: 0 0 0 4px oklch(.5 .21 295 / .12), 0 14px 30px -16px oklch(.5 .21 295 / .9); }
-.geral .faz-camada-ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: oklch(.5 .21 295 / .28); color: oklch(.88 .07 300); }
-.geral .faz-camada-ico svg { width: 18px; height: 18px; }
-.geral .faz-camada-nome { min-width: 0; font-size: 14.5px; font-weight: 600; color: var(--foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.geral .faz-camada-tempo { display: flex; align-items: center; font-family: var(--font-mono); font-size: 11px; color: var(--muted-foreground); }
-.geral .faz-camadas li.agora .faz-camada-tempo { color: oklch(.88 .07 300); }
-.geral .faz-camada-tempo svg { width: 15px; height: 15px; color: var(--ready); }
-.geral .faz-transcricao { padding: 10px 12px 12px; border-radius: 12px; background: oklch(0 0 0 / .35); border: 1px solid oklch(1 0 0 / .06); }
-.geral .faz-transcricao small { display: block; margin-bottom: 6px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-foreground); }
-.geral .faz-transcricao p { margin: 0; font-size: 14.5px; line-height: 1.6; color: oklch(1 0 0 / .32); }
-.geral .faz-transcricao span { transition: color .2s; }
-.geral .faz-transcricao span.dita { color: oklch(1 0 0 / .88); }
-.geral .faz-transcricao span.chave { text-decoration: underline; text-decoration-color: oklch(.65 .19 295 / .75); text-decoration-thickness: 2px; text-underline-offset: 4px; }
-.geral .faz-transcricao span.agora { color: #fff; }
-.geral .faz-transcricao span.chave.agora, .geral .faz-transcricao span.chave.dita { color: oklch(.88 .07 300); }
-/* 2 e 5. corte e trilha: as peças de antes, maiores e centradas no palco */
-.geral .faz-corte, .geral .faz-mix { padding: 34px 16px 30px; }
-.geral .faz-corte .corte-ok { font-size: 12px; bottom: -6px; }
-.geral .faz-corte .corte-tira i { font-size: 11px; color: #fff; }
-.geral .faz-mix .mix-linha b { font-size: 10px; }
-/* 3 e 4. telas com foto: legenda acendendo e zoom na ênfase */
-.geral .faz-tela img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
-.geral .faz-tela::after { content: ""; position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(0, 0, 0, .55)); }
-.geral .faz-legenda { position: absolute; z-index: 2; left: 0; right: 0; bottom: 22px; margin: 0; display: flex; justify-content: center; flex-wrap: wrap; gap: 0 7px; padding: 0 14px; font-weight: 800; font-size: 21px; line-height: 1.15; letter-spacing: .01em; color: #fff; text-shadow: 0 2px 0 rgba(0, 0, 0, .55), 0 0 14px rgba(0, 0, 0, .5); animation: word-in .3s ease both; }
-.geral .faz-legenda span { opacity: .55; transition: opacity .15s, color .15s, transform .15s; display: inline-block; }
-.geral .faz-legenda span.dita { opacity: 1; }
-.geral .faz-legenda span.agora { opacity: 1; color: oklch(.88 .17 95); transform: scale(1.12); }
-.geral .faz-zoom img { object-position: 50% 42%; animation: faz-zoom 4.2s cubic-bezier(.5, 0, .2, 1) infinite; transform-origin: 50% 40%; }
-@keyframes faz-zoom { 0%, 30% { transform: scale(1); } 42%, 78% { transform: scale(1.2); } 90%, 100% { transform: scale(1); } }
-.geral .faz-mira { position: absolute; z-index: 2; left: 50%; top: 46%; width: 64%; height: 64%; transform: translate(-50%, -50%); animation: faz-mira 4.2s cubic-bezier(.5, 0, .2, 1) infinite; }
-.geral .faz-mira i { position: absolute; width: 18px; height: 18px; border-color: #fff; border-style: solid; border-width: 0; opacity: .9; }
-.geral .faz-mira i:nth-child(1) { left: 0; top: 0; border-left-width: 2px; border-top-width: 2px; border-top-left-radius: 6px; }
-.geral .faz-mira i:nth-child(2) { right: 0; top: 0; border-right-width: 2px; border-top-width: 2px; border-top-right-radius: 6px; }
-.geral .faz-mira i:nth-child(3) { left: 0; bottom: 0; border-left-width: 2px; border-bottom-width: 2px; border-bottom-left-radius: 6px; }
-.geral .faz-mira i:nth-child(4) { right: 0; bottom: 0; border-right-width: 2px; border-bottom-width: 2px; border-bottom-right-radius: 6px; }
-@keyframes faz-mira { 0%, 22% { width: 64%; height: 64%; opacity: .95; } 36%, 80% { width: 92%; height: 92%; opacity: 0; } 92%, 100% { width: 64%; height: 64%; opacity: .95; } }
-.geral .faz-enfase { position: absolute; z-index: 3; left: 12px; top: 12px; padding: 5px 10px; border-radius: 99px; background: rgba(10, 10, 14, .78); color: #fff; font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; animation: faz-enfase 4.2s ease infinite; }
-@keyframes faz-enfase { 0%, 28% { background: rgba(10, 10, 14, .78); color: #fff; } 36%, 80% { background: oklch(.828 .149 176); color: #04211a; } 90%, 100% { background: rgba(10, 10, 14, .78); color: #fff; } }
-/* 6. a conferência: cada item marca na sua vez, e no fim o "Pronto" */
-.geral .faz-confere { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 18px; }
-.geral .faz-confere ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
-.geral .faz-confere li { display: flex; align-items: center; gap: 10px; font-size: 14.5px; font-weight: 500; color: oklch(1 0 0 / .4); transition: color .3s; }
-.geral .faz-confere li.ok { color: var(--foreground); }
-.geral .faz-confere li.agora { color: oklch(1 0 0 / .7); }
-.geral .faz-check { flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; border: 1.5px solid oklch(1 0 0 / .2); transition: background .3s, border-color .3s; }
-.geral .faz-confere li.agora .faz-check { border-color: var(--ready); }
-.geral .faz-confere li.ok .faz-check { background: var(--ready); border-color: var(--ready); color: #04211a; }
-.geral .faz-check svg { width: 14px; height: 14px; stroke-width: 3; }
-.geral .faz-pronto { display: inline-flex; align-items: center; gap: 6px; padding: 8px 13px; border-radius: 99px; background: oklch(1 0 0 / .06); color: oklch(1 0 0 / .35); font-weight: 700; font-size: 14px; transition: background .35s, color .35s, transform .35s; }
-.geral .faz-pronto svg { width: 16px; height: 16px; }
-.geral .faz-pronto.on { background: var(--ready); color: #04211a; transform: scale(1.06); }
-@media (max-width: 900px) {
-  .geral .faz-grade { grid-template-columns: minmax(0, 1fr); gap: 14px; }
-  .geral .faz-destaque, .geral .faz-largo { grid-column: auto; }
-  .geral .faz-largo { flex-direction: column; align-items: stretch; gap: 18px; }
-  .geral .faz-largo .faz-arte { flex: none; }
-  .geral .faz-confere { flex-direction: column; gap: 14px; }
-  .geral .faz-selo { top: 22px; right: 22px; }
-}
-@media (prefers-reduced-motion: reduce) { .geral .faz-zoom img, .geral .faz-mira, .geral .faz-enfase { animation: none; } }
 /* 11/11: faixas de oferta (Black Friday) logo abaixo da primeira dobra, nas duas páginas; depoimentos com título */
 :is(.pro2, .geral) .hero + .p2-faixas { margin-top: 40px; }
 :is(.pro2, .geral) .hero + .p2-faixas + .section { padding-top: 64px; }
@@ -1763,5 +1684,25 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 .geral .offer-price .price .preco-por { font-size: 22px; font-weight: 600; color: var(--muted-foreground); }
 .geral .offer-price .price .preco-rs { font-size: 22px; font-weight: 600; color: var(--foreground); }
 /* 11/11: as faixas de Black Friday também dentro da oferta, entre o preço e a garantia (as duas páginas) */
-:is(.pro2, .geral) .offer .p2-faixas { margin: 0; height: 96px; border-top: 1px solid var(--border); }
+/* ── 11/11 (5) ── */
+/* primeira seção: a frase do que a IA faz em destaque, a de apoio embaixo */
+.geral .galeria-topo .galeria-destaque { max-width: 560px; font-size: 18px; line-height: 1.45; font-weight: 600; color: var(--foreground); }
+.geral .galeria-topo .galeria-destaque + p { margin-top: 10px; }
+@media (max-width: 767px) { .geral .galeria-topo .galeria-destaque { font-size: 17px; max-width: 340px; } }
+/* galeria na esteira: a capa fica por baixo do vídeo, o cartão nunca aparece preto */
+.geral .p2-esteira-fila > .gallery-card { flex: 0 0 200px; background: #0d1220 center / cover no-repeat; }
+.geral .p2-esteira-fila > .gallery-card .p2-video { position: absolute; inset: 0; background: transparent; }
+.geral .p2-esteira-fila > .gallery-card .gallery-caption { z-index: 1; }
+@media (max-width: 767px) { .geral .p2-esteira-fila > .gallery-card { flex-basis: 170px; } }
+/* faixas da oferta: depois da garantia e rolando sozinhas o tempo todo */
+:is(.pro2, .geral) #oferta > .p2-faixas { width: 100vw; margin: 36px 0 0 calc(50% - 50vw); }
+:is(.pro2, .geral) .p2-faixas-sempre .p2-faixa-trilho { animation: p2-faixa 46s linear infinite !important; }
+:is(.pro2, .geral) .p2-faixas-sempre .p2-faixa-branca .p2-faixa-trilho { animation-direction: reverse !important; animation-duration: 52s !important; }
+@media (prefers-reduced-motion: reduce) { :is(.pro2, .geral) .p2-faixas-sempre .p2-faixa-trilho { animation: none !important; } }
+/* botões de compra pulsando (como na página clara), o da oferta com um brilho a mais */
+.geral .botao-compra:not(.sticky-button), .geral .sticky-bar .sticky-button { animation: p2-pulsa 2.6s ease-in-out infinite; }
+.geral .offer-button { animation: geral-pulsa-brilho 2.6s ease-in-out infinite !important; }
+@keyframes geral-pulsa-brilho { 0%, 70%, 100% { scale: 1; box-shadow: 0 0 0 0 oklch(.63 .23 26 / .55); } 35% { scale: 1.05; box-shadow: 0 0 0 14px oklch(.63 .23 26 / 0); } }
+.geral .botao-compra:active, .geral .botao-compra.is-abrindo { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .geral .botao-compra { animation: none !important; } }
 
