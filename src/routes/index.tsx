@@ -7,7 +7,7 @@ import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, ModeSwitch, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, EditorIA, Esteira, Faixas, IATrabalhando, LinhaAjustada, LinhaDoPreco, ProvaSocial, QualIA2, SubAlemDoBasico, VideoVivo } from '@/components/pro2';
+import { ComoFunciona, EditorIA, Esteira, Faixas, IATrabalhando, LinhaAjustada, LinhaDoPreco, ProvaSocial, QualIA2, VideoVivo } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -77,14 +77,12 @@ function useNaTela<T extends Element>() {
   return [ref, visivel] as const;
 }
 /** Os números reais do vídeo do antes e depois. No celular eles vêm depois do vídeo (primeiro a pessoa vê, depois lê). */
-/** min:ss (72 vira 1:12) */
-const minSeg = (v: number) => { const t = Math.round(v); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
 function NumerosDemo() {
-  // números reais do vídeo do antes e depois (criativo 08 inteiro, gravação de verdade)
+  // números reais do vídeo do antes e depois (criativo 10 inteiro)
   const d = siteConfig.demoGeral;
   return <>
-    <div className="stats"><div className="stat"><strong><NumberTicker value={d.cortes} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={d.segundosAMenos} format={minSeg} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
-    <p className="fine-print">Números reais deste vídeo: {d.bruto} de gravação viraram {d.final}.</p>
+    <div className="stats"><div className="stat"><strong><NumberTicker value={d.palavras} /></strong><p>palavras com legenda</p></div><div className="stat"><strong><NumberTicker value={d.efeitos} /></strong><p>efeitos sonoros no tempo certo</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+    <p className="fine-print">Números reais deste vídeo: um anúncio de {d.duracao}, editado inteiro pela IA.</p>
   </>;
 }
 function Comparison() {
@@ -147,25 +145,31 @@ function Comparison() {
 /** Exemplos da galeria: trechos de criativos diferentes (sala escura com planta, estúdio com prateleiras,
  *  anatomia em 3D) e exemplos por profissão (dentista, personal, arquiteto, psicólogo),
  *  alternando cenário de um cartão para o outro. */
-const galleryCopy: [string, string, string][] = [
-  ['Ilustração do que você fala', 'mostra na tela o que eu estou explicando', '/videos/galeria/ilustracao.mp4'],
-  ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/galeria/titulo.mp4'],
-  ['Dente em 3D', 'mostra em 3D o que acontece no dente', '/videos/cenas/dente.mp4'],
-  ['Coluna em 3D', 'mostra em 3D o que acontece na coluna', '/videos/galeria/esqueleto.mp4'],
-  ['Mapa de satélite', 'mostra no mapa o lugar que eu citar', '/videos/galeria/mapa.mp4'],
-  ['Músculo em 3D', 'mostra o músculo trabalhando no exercício', '/videos/pro2/personal-braco.mp4'],
-  ['Gráfico que sobe', 'quando eu falar o número, mostra num gráfico', '/videos/galeria/grafico.mp4'],
-  ['Sala em 3D', 'mostra a sala em 3D enquanto eu explico', '/videos/galeria/sala3d.mp4'],
-  ['Desenho a lápis', 'desenha a história enquanto eu conto', '/videos/galeria/lapis.mp4'],
-  ['Objeto 3D girando', 'coloca um objeto em 3D girando do meu lado', '/videos/galeria/objeto3d.mp4'],
-  ['Coração em 3D', 'mostra o que a ansiedade faz no corpo', '/videos/galeria/coracao.mp4'],
-  ['Obra em 3D', 'mostra a casa sendo construída em 3D', '/videos/pro2/arquiteto-obra.mp4'],
-  ['Cenário novo', 'troca o meu fundo, sem pano verde', '/videos/galeria/cenario.mp4'],
-  ['Objeto 3D na mão', 'coloca um objeto em 3D na minha mão', '/videos/cenas/cerebro.mp4'],
-  ['Esquema animado', 'monta um esquema animado do que eu explico', '/videos/galeria/esquema.mp4'],
-  ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4'],
+const galleryCopy: [string, string, string, string][] = [
+  ['Ilustração do que você fala', 'mostra na tela o que eu estou explicando', '/videos/galeria/ilustracao.mp4', 'Ilustração'],
+  ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/galeria/titulo.mp4', 'Frase grande'],
+  ['Dente em 3D', 'mostra em 3D o que acontece no dente', '/videos/cenas/dente.mp4', '3D'],
+  ['Coluna em 3D', 'mostra em 3D o que acontece na coluna', '/videos/galeria/esqueleto.mp4', 'Anatomia 3D'],
+  ['Mapa de satélite', 'mostra no mapa o lugar que eu citar', '/videos/galeria/mapa.mp4', 'Mapa'],
+  ['Músculo em 3D', 'mostra o músculo trabalhando no exercício', '/videos/pro2/personal-braco.mp4', 'Músculo 3D'],
+  ['Gráfico que sobe', 'quando eu falar o número, mostra num gráfico', '/videos/galeria/grafico.mp4', 'Gráfico'],
+  ['Sala em 3D', 'mostra a sala em 3D enquanto eu explico', '/videos/galeria/sala3d.mp4', 'Projeto 3D'],
+  ['Desenho a lápis', 'desenha a história enquanto eu conto', '/videos/galeria/lapis.mp4', 'Historinha'],
+  ['Objeto 3D girando', 'coloca um objeto em 3D girando do meu lado', '/videos/galeria/objeto3d.mp4', 'Objeto 3D'],
+  ['Coração em 3D', 'mostra o que a ansiedade faz no corpo', '/videos/galeria/coracao.mp4', 'Animação 3D'],
+  ['Obra em 3D', 'mostra a casa sendo construída em 3D', '/videos/pro2/arquiteto-obra.mp4', 'Obra em 3D'],
+  ['Cenário novo', 'troca o meu fundo, sem pano verde', '/videos/galeria/cenario.mp4', 'Troca de fundo'],
+  ['Objeto 3D na mão', 'coloca um objeto em 3D na minha mão', '/videos/cenas/cerebro.mp4', '3D na mão'],
+  ['Esquema animado', 'monta um esquema animado do que eu explico', '/videos/galeria/esquema.mp4', 'Passo a passo'],
+  ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4', 'Motion design'],
 ];
-const gallery: [string, string, string][] = galleryCopy;
+const gallery: [string, string, string, string][] = galleryCopy;
+/** Setinha curva ao lado do "IA" do título da galeria, apontando para os vídeos (desenha quando a seção aparece). */
+function SetaCurva() {
+  return <svg className="seta-curva" viewBox="0 0 30 44" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 6 C 18 2, 28 14, 22 36" pathLength={100} /><path d="M14 30 L22 38 L27 28" pathLength={100} />
+  </svg>;
+}
 function SpinningSeal() {
   const text = '7 DIAS DE GARANTIA • REEMBOLSO TOTAL • ';
   return <div className="spin-seal" aria-label="7 dias de garantia"><svg viewBox="0 0 100 100" className="spin-ring" aria-hidden="true"><defs><path id="seal-circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" /></defs><circle cx="50" cy="50" r="31" /><text><textPath href="#seal-circle" textLength="238" lengthAdjust="spacing">{text}</textPath></text></svg><span>7</span></div>;
@@ -304,8 +308,8 @@ function Index() {
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Veja exemplos de<br />vídeos <em>editados por IA.</em></h2><SubAlemDoBasico /></div>
-          <Esteira itens={gallery} velocidade={56} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
+          <div className="section-heading reveal galeria-topo"><h2>Tudo editado por <em>IA</em><SetaCurva /></h2><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p></div>
+          <Esteira itens={gallery} velocidade={56} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src, etiqueta], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><span className="gallery-tag">{etiqueta}</span><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ForWho />

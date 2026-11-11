@@ -2068,3 +2068,68 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .it-passos li.feito .it-passo-nome { color: var(--ready); }
 @keyframes it-check { from { transform: scale(.6); } }
 @media (max-width: 400px) { :is(.pro2, .geral) .it-passo-nome { font-size: 11.5px; } }
+
+/* ── 11/11 (v3): a conversa com a cara de verdade do ChatGPT (escuro) e do Claude (claro), menor ── */
+:is(.pro2, .geral) .ei-janela { width: min(380px, 100%); border-radius: 18px; animation: it-entra .4s both; }
+:is(.pro2, .geral) .ei-topo { padding: 10px 12px; gap: 8px; }
+:is(.pro2, .geral) .ei-topo-nome { gap: 6px; font-size: 15px; font-weight: 600; }
+:is(.pro2, .geral) .ei-topo-nome .marca-ia { width: 18px; height: 18px; margin: 0; }
+:is(.pro2, .geral) .ei-topo-nome > svg:last-child { width: 14px; height: 14px; opacity: .6; }
+:is(.pro2, .geral) .ei-topo-modo { font-size: 11.5px; padding: 3px 9px; }
+:is(.pro2, .geral) .ei-conversa { height: 392px; gap: 12px; padding: 14px 13px 8px; }
+:is(.pro2, .geral) .ei-ola { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 20px; }
+:is(.pro2, .geral) .ei-ola .marca-ia { width: 24px; height: 24px; margin: 0; }
+:is(.pro2, .geral) .ei-msg, :is(.pro2, .geral) .ei-ia-corpo p, :is(.pro2, .geral) .ei-entrada-texto { font-size: 14.5px; }
+:is(.pro2, .geral) .ei-anexo { padding: 6px 11px 6px 6px; gap: 8px; }
+:is(.pro2, .geral) .ei-anexo-ico { width: 28px; height: 28px; }
+:is(.pro2, .geral) .ei-anexo b { font-size: 12.5px; } :is(.pro2, .geral) .ei-anexo small { font-size: 11.5px; }
+:is(.pro2, .geral) .ei-ia-avatar { width: 26px; height: 26px; }
+:is(.pro2, .geral) .ei-ia-avatar .marca-ia { width: 16px; height: 16px; margin: 0; }
+:is(.pro2, .geral) .ei-ia-video { width: 122px; border-radius: 12px; }
+:is(.pro2, .geral) .ei-ia-selo { font-size: 11px; padding: 3px 8px; }
+:is(.pro2, .geral) .ei-entrada { margin: 0 10px 10px; padding: 8px 8px 8px 12px; }
+:is(.pro2, .geral) .ei-entrada-linha { gap: 9px; min-height: 30px; }
+:is(.pro2, .geral) .ei-entrada-mais { flex: none; width: 18px; height: 18px; }
+:is(.pro2, .geral) .ei-enviar { width: 30px; height: 30px; }
+@media (max-width: 400px) { :is(.pro2, .geral) .ei-conversa { height: 388px; padding: 13px 11px 8px; } :is(.pro2, .geral) .ei-ia-video { width: 118px; } }
+/* ChatGPT: tudo no cinza-escuro dele, cabeçalho sem faixa, balão #303030, botão de enviar branco */
+:is(.pro2, .geral) .ei-gpt { background: #212121; border-color: oklch(1 0 0 / .1); }
+:is(.pro2, .geral) .ei-gpt .ei-topo { background: #212121; border-bottom-color: transparent; color: #ececec; }
+:is(.pro2, .geral) .ei-gpt .ei-topo-nome .marca-ia, :is(.pro2, .geral) .ei-gpt .ei-ia-avatar .marca-ia { color: #ececec; }
+:is(.pro2, .geral) .ei-gpt .ei-ia-avatar { background: transparent; border: 1px solid oklch(1 0 0 / .18); }
+:is(.pro2, .geral) .ei-gpt .ei-entrada { background: #303030; border-color: transparent; border-radius: 24px; }
+:is(.pro2, .geral) .ei-gpt .ei-entrada-mais, :is(.pro2, .geral) .ei-gpt .ei-entrada-mic { color: #b4b4b4; }
+:is(.pro2, .geral) .ei-gpt .ei-anexo-ico { background: #0d6efd; }
+/* Claude: o creme dele, letra com serifa na resposta, balão bege, botão de enviar laranja */
+:is(.pro2, .geral) .ei-claude { background: #faf9f5; border-color: #e8e6dc; box-shadow: 0 40px 80px -40px rgba(217, 119, 87, .45), 0 0 0 6px oklch(1 0 0 / .04); }
+:is(.pro2, .geral) .ei-claude .ei-topo { background: #faf9f5; border-bottom-color: #ece9df; color: #1f1e1d; }
+:is(.pro2, .geral) .ei-claude .ei-topo-modo { background: oklch(.55 .11 176 / .12); color: oklch(.45 .1 176); }
+:is(.pro2, .geral) .ei-claude .ei-ola { color: #1f1e1d; font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: 21px; }
+:is(.pro2, .geral) .ei-claude .ei-anexo { background: #fff; border-color: #e8e6dc; color: #1f1e1d; }
+:is(.pro2, .geral) .ei-claude .ei-anexo small { color: #73726c; }
+:is(.pro2, .geral) .ei-claude .ei-anexo-ico { background: #d97757; }
+:is(.pro2, .geral) .ei-claude .ei-msg { background: #f0eee6; color: #1f1e1d; border-radius: 14px; }
+:is(.pro2, .geral) .ei-claude .ei-ia-avatar { background: transparent; }
+:is(.pro2, .geral) .ei-claude .ei-ia-avatar .marca-ia { width: 20px; height: 20px; }
+:is(.pro2, .geral) .ei-claude .ei-ia-corpo p { color: #1f1e1d; font-family: Georgia, 'Times New Roman', serif; font-size: 15px; }
+:is(.pro2, .geral) .ei-claude .ei-ia-carga { background: #ece9df; }
+:is(.pro2, .geral) .ei-claude .ei-ia-carga i { background: #d97757; }
+:is(.pro2, .geral) .ei-claude .ei-entrada { background: #fff; border-color: #e3e0d6; border-radius: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, .04); }
+:is(.pro2, .geral) .ei-claude .ei-entrada.escrevendo { border-color: #d97757; }
+:is(.pro2, .geral) .ei-claude .ei-entrada-texto { color: #1f1e1d; }
+:is(.pro2, .geral) .ei-claude .ei-entrada-texto .caret { background: #1f1e1d; }
+:is(.pro2, .geral) .ei-claude .ei-entrada-dica { color: #8f8d85; }
+:is(.pro2, .geral) .ei-claude .ei-entrada-mais, :is(.pro2, .geral) .ei-claude .ei-entrada-mic { color: #73726c; }
+:is(.pro2, .geral) .ei-claude .ei-enviar { background: #d97757; color: #fff; border-radius: 9px; }
+
+/* ── 11/11: galeria "Tudo editado por IA" com a setinha curva apontando para os vídeos e uma etiqueta em cada vídeo ── */
+.geral .galeria-topo h2 { position: relative; display: inline-block; }
+.geral .seta-curva { position: absolute; left: 100%; top: .35em; width: .95em; height: 1.35em; margin-left: .08em; color: oklch(.76 .16 300); overflow: visible; }
+.geral .seta-curva path { stroke-dasharray: 100; stroke-dashoffset: 100; }
+.geral .reveal.in .seta-curva path { animation: seta-desenha .9s .35s cubic-bezier(.4, .1, .2, 1) forwards; }
+.geral .reveal.in .seta-curva path + path { animation-delay: 1.1s; animation-duration: .3s; }
+@keyframes seta-desenha { to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .geral .seta-curva path { stroke-dashoffset: 0; animation: none !important; } }
+.geral .galeria-topo .galeria-apoio { margin-top: 18px; }
+.geral .gallery-tag { position: absolute; z-index: 2; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 99px; background: oklch(.5 .21 295); color: #fff; font-size: 12.5px; font-weight: 800; letter-spacing: .01em; box-shadow: 0 8px 18px -8px rgba(0, 0, 0, .8); }
+.geral .gallery-tag::before { content: "✦"; font-size: 10px; opacity: .85; }
