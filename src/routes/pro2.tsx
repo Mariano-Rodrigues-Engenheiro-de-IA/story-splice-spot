@@ -259,10 +259,10 @@ function Pro2() {
         </section>
         <Faixas />
         <Saidas />
+        <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ComoFunciona />
         <Segure />
         <div className="container"><CtaMeio /></div>
-        <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <QualIA2 />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
         <Offer />

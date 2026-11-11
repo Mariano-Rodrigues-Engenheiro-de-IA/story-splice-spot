@@ -263,6 +263,7 @@ function Index() {
           <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><p className="galeria-destaque">Efeitos visuais e sonoros, ilustrações realistas, objetos em 3D, motion design e títulos animados no seu vídeo.</p><p>Tudo a partir de um pedido em português, enquanto você faz outra coisa.</p></div>
           <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
+        <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ForWho />
         <section className="section container comparison-section" id="antes-depois">
           <div className="comparison-copy reveal"><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu da câmera. À direita, o que a IA devolveu: cortes, legenda, trilha e uma ilustração realista do que você está explicando.</p>
@@ -275,7 +276,6 @@ function Index() {
         <ModeSwitch />
         <LiveDemo />
         <Aulas />
-        <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <QualIA2 extra={<>Nada a mais por vídeo: <b>só o plano da sua IA</b>, a partir de US$ 20 por mês.</>} />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
         <WhatYouGet />
