@@ -125,7 +125,10 @@ const criteria = [
   ['Conferência', 'assiste o vídeo antes de entregar'],
 ] as const;
 
-export function ModeSwitch() {
+/** Só as palavras dos critérios (página geral): o vídeo fica maior e a lista vai para a direita. */
+const criteriosEnxutos = ['Corte', 'Legenda', 'Ilustração', 'Cenário', 'Conferência'];
+
+export function ModeSwitch({ enxuto = false }: { enxuto?: boolean } = {}) {
   // alterna sozinho entre a gravação crua e a editada; o toque no botão troca na hora e o ciclo continua
   const [on, setOn] = useState(false);
   const tela = useRef<HTMLDivElement>(null);
@@ -148,7 +151,7 @@ export function ModeSwitch() {
         <h2>O mesmo pedido, <em>sem e com o Modo Editor.</em></h2>
         <p>Sem o Modo Editor, o ChatGPT ou o Claude não sabe como você quer o vídeo e adivinha. Com ele, já começa sabendo.</p>
       </div>
-      <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
+      <div className="reveal"><div className={`mode ${on ? 'is-on' : ''} ${enxuto ? 'mode-enxuto' : ''}`}>
         <div className="mode-head">
           <div className="mode-request"><small>Seu pedido</small>“Edita esse vídeo e deixa bonito.”</div>
           <button type="button" className="mode-toggle" role="switch" aria-checked={on} onClick={() => setOn(v => !v)}>
@@ -162,7 +165,10 @@ export function ModeSwitch() {
             <span className={`live-badge ${on ? 'done' : ''}`}>{on ? '✓ Editado' : '● Cru'}</span>
           </div>
           <ul className="mode-list">
-            {criteria.map(([title, copy], i) => (
+            {enxuto && criteriosEnxutos.map((t, i) => (
+              <li key={t} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}><span className="mode-check">{on ? <Check size={12} /> : '?'}</span><strong>{t}</strong></li>
+            ))}
+            {!enxuto && criteria.map(([title, copy], i) => (
               <li key={title} style={{ transitionDelay: on ? `${i * 90}ms` : '0ms' }}>
                 <span className="mode-check">{on ? <Check size={12} /> : '?'}</span>
                 <div><strong>{title}</strong><p className="mode-copy"><span className={on ? 'vis' : ''} aria-hidden={!on}>{copy}</span><span className={on ? '' : 'vis'} aria-hidden={on}>a IA adivinha</span></p></div>

@@ -6,8 +6,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import { NumberTicker } from '@/components/number-ticker';
-import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, Esteira, Faixas, LinhaAjustada, LinhaDoPreco, ProvaSocial, QualIA2, SubAlemDoBasico, VideoVivo } from '@/components/pro2';
+import { Creator, ForWho, ModeSwitch, WhatYouGet, useReveal } from '@/components/landing-extras';
+import { ComoFunciona, EditorIA, Esteira, Faixas, IATrabalhando, LinhaAjustada, LinhaDoPreco, ProvaSocial, QualIA2, SubAlemDoBasico, VideoVivo } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -299,9 +299,9 @@ function Index() {
           <div className="stats-baixo reveal"><NumerosDemo /></div>
         </section>
         <ComoFunciona />
-        <RequestLibrary />
-        <ModeSwitch />
-        <LiveDemo />
+        <EditorIA />
+        <ModeSwitch enxuto />
+        <IATrabalhando />
         <Aulas />
         <QualIA2 extra={<>Nada a mais por vídeo: <b>só o plano da sua IA</b>, a partir de US$ 20 por mês.</>} />
         <Creator name={siteConfig.creator.name} photo={siteConfig.creator.photo} />
