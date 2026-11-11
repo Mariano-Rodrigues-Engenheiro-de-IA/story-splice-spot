@@ -1736,4 +1736,21 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .pro2 .p2-faixa-azul { transform: translateY(calc(-50% - 9px)) rotate(-2deg); }
   .pro2 .p2-faixa-branca { transform: translateY(calc(-50% + 9px)) rotate(1.8deg); }
 }
+/* ── 11/11 (4): página escura ── */
+/* primeira seção: os nomes do que a IA faz em branco no meio do texto (lê de relance, sem virar lista) */
+.geral .galeria-topo p { max-width: 620px; }
+.geral .galeria-topo p strong { color: var(--foreground); font-weight: 600; }
+/* barra fixa e WhatsApp com as medidas da página clara; barra branca com botão vermelho, que se destaca do preto */
+@media (max-width: 767px) {
+  .geral .sticky-bar { left: 82px; right: 18px; bottom: 10px; gap: 10px; padding: 7px 14px 7px 18px; border-radius: 14px; background: #fff; border: 1px solid oklch(0 0 0 / .08); box-shadow: 0 14px 34px -12px rgba(0, 0, 0, .75); }
+  .geral .sticky-bar strong { font-size: 15px; line-height: 1.15; color: oklch(.2 .01 286); }
+  .geral .sticky-bar p { margin: 0; font-size: 12px; line-height: 1.2; color: oklch(.45 .012 286); }
+  .geral .sticky-bar .sticky-button { width: 132px; height: 40px; font-size: 16px; }
+  .geral .sticky-bar strong, .geral .sticky-bar p { white-space: nowrap; }
+  .geral .whats, .geral .sticky-bar.on ~ .whats { left: 22px; bottom: 14px; width: 48px; height: 48px; }
+}
+@media (max-width: 374px) { .geral .sticky-bar .sticky-button { width: 112px; } }
+/* preço de Black Friday: "de R$ 97" riscado em cima do R$ 67 */
+.geral .offer-price .preco-de { margin: 8px 0 -6px; font-size: 16px; color: var(--muted-foreground); }
+.geral .offer-price .preco-de s { color: var(--foreground); text-decoration-color: var(--primary); text-decoration-thickness: 2px; }
 

@@ -41,6 +41,8 @@ export const siteConfig = {
     precoPorVideo: '' as string,
     mensagem: 'Oi! Quero saber como funciona a edição por vídeo feita por vocês.',
   },
+  /** Página geral (/): preço "de" riscado da Black Friday (11/11/2026); o preço gira dele até `price`. 0 = sem. */
+  precoDe: 97,
   /** Preço depois do lançamento (o preço da oferta gira dele até `price`). 0 = sem preço de depois. */
   priceAfterLaunch: 197,
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
