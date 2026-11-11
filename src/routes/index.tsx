@@ -164,6 +164,42 @@ const galleryCopy: [string, string, string, string][] = [
   ['Título e logos em 3D', 'título animado e as logos em 3D do meu lado', '/videos/galeria/logos3d.mp4', 'Motion design'],
 ];
 const gallery: [string, string, string, string][] = galleryCopy;
+/** A cada 1,5 s a setinha do título cutuca para baixo e o vídeo que está embaixo dela brilha (contorno, reflexo e um
+ *  leve aumento). Só roda com a galeria na tela, depois que a setinha terminou de se desenhar. */
+function CutucaVideo() {
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const galeria = document.getElementById('galeria');
+    const seta = galeria?.querySelector<SVGElement>('.seta-curva');
+    if (!galeria || !seta) return;
+    let ligado = false, id = 0, inicio = 0;
+    const cutuca = () => {
+      seta.classList.remove('cutuca'); void seta.getBoundingClientRect(); seta.classList.add('cutuca');
+      window.setTimeout(() => {
+        const x = seta.getBoundingClientRect().left + seta.getBoundingClientRect().width / 2;
+        let alvo: HTMLElement | null = null, melhor = Infinity;
+        galeria.querySelectorAll<HTMLElement>('.gallery-card').forEach(c => {
+          const r = c.getBoundingClientRect();
+          if (r.right < 0 || r.left > window.innerWidth) return;
+          const d = Math.abs(r.left + r.width / 2 - x);
+          if (d < melhor) { melhor = d; alvo = c; }
+        });
+        const card = alvo as HTMLElement | null;
+        if (!card) return;
+        card.classList.remove('cutucado'); void card.offsetWidth; card.classList.add('cutucado');
+        window.setTimeout(() => card.classList.remove('cutucado'), 1000);
+      }, 190);
+    };
+    const io = new IntersectionObserver(([e]) => {
+      const na = !!e?.isIntersecting;
+      if (na && !ligado) { ligado = true; inicio = window.setTimeout(() => { cutuca(); id = window.setInterval(cutuca, 1500); }, 1700); }
+      if (!na && ligado) { ligado = false; window.clearTimeout(inicio); window.clearInterval(id); }
+    }, { threshold: .35 });
+    io.observe(galeria);
+    return () => { io.disconnect(); window.clearTimeout(inicio); window.clearInterval(id); };
+  }, []);
+  return null;
+}
 /** Setinha curva ao lado de "Modo Editor" no título da galeria, apontando para os vídeos (desenha quando a seção aparece). */
 function SetaCurva() {
   return <svg className="seta-curva" viewBox="0 0 30 44" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -308,7 +344,7 @@ function Index() {
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal galeria-topo"><h2>Vídeos editados com o <em className="seta-ancora">Modo Editor<SetaCurva /></em></h2><p className="galeria-apoio"><b>Do básico ao avançado:</b> de um vídeo simples, com corte e legenda, a um vídeo super editado, com 3D e motion design.</p></div>
+          <div className="section-heading reveal galeria-topo"><h2>Vídeos editados com o <em className="seta-ancora">Modo Editor<SetaCurva /></em></h2></div><CutucaVideo />
           <Esteira itens={gallery} velocidade={56} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src, etiqueta], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><span className="gallery-tag">{etiqueta}</span><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
         </section>
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />

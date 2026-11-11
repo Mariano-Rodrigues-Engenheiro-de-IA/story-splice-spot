@@ -2100,10 +2100,19 @@ html:has(.geral) { scroll-padding-top: 0; }
 .geral .reveal.in .seta-curva path { animation: seta-desenha .9s .35s cubic-bezier(.4, .1, .2, 1) forwards; }
 .geral .reveal.in .seta-curva path + path { animation-delay: 1.1s; animation-duration: .3s; }
 @keyframes seta-desenha { to { stroke-dashoffset: 0; } }
-/* depois de desenhada, a setinha dá uma cutucada para baixo a cada 1,5 s (meio segundo de movimento, um segundo parada) */
-.geral .reveal.in .seta-curva { animation: seta-cutuca 1.5s 1.6s ease-in-out infinite; }
-@keyframes seta-cutuca { 0%, 34%, 100% { transform: translateY(0); } 14% { transform: translateY(.2em); } }
-@media (prefers-reduced-motion: reduce) { .geral .seta-curva path { stroke-dashoffset: 0; animation: none !important; } .geral .reveal.in .seta-curva { animation: none; } }
+/* a setinha cutuca para baixo (quem dispara é o CutucaVideo, junto com o brilho do vídeo embaixo dela) */
+.geral .seta-curva.cutuca { animation: seta-cutuca .5s ease-in-out; }
+@keyframes seta-cutuca { 0%, 100% { transform: translateY(0); } 38% { transform: translateY(.3em); } }
+/* o vídeo cutucado brilha: contorno roxo, luz em volta, um reflexo passando e um leve aumento */
+.geral .gallery-card.cutucado { animation: card-brilho .95s ease-out; }
+.geral .gallery-card.cutucado::after { content: ""; position: absolute; z-index: 3; inset: 0; pointer-events: none; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .38) 48%, transparent 66%); animation: card-reflexo .8s ease-out forwards; }
+@keyframes card-brilho {
+  0% { box-shadow: 0 0 0 0 oklch(.76 .16 300 / 0); filter: brightness(1); transform: scale(1); }
+  22% { box-shadow: inset 0 0 0 3px oklch(.8 .15 300), inset 0 0 34px oklch(.6 .2 295 / .55), 0 0 22px 4px oklch(.6 .2 295 / .8); filter: brightness(1.2); transform: scale(1.03); }
+  100% { box-shadow: 0 0 0 0 oklch(.76 .16 300 / 0); filter: brightness(1); transform: scale(1); }
+}
+@keyframes card-reflexo { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+@media (prefers-reduced-motion: reduce) { .geral .seta-curva path { stroke-dashoffset: 0; animation: none !important; } }
 .geral .galeria-topo .galeria-apoio { margin-top: 18px; }
 .geral .gallery-tag { position: absolute; z-index: 2; left: 10px; top: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 99px; background: oklch(.5 .21 295); color: #fff; font-size: 12.5px; font-weight: 800; letter-spacing: .01em; box-shadow: 0 8px 18px -8px rgba(0, 0, 0, .8); }
 .geral .gallery-tag::before { content: "✦"; font-size: 10px; opacity: .85; }
@@ -2138,4 +2147,6 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .ei-conversa { flex: 1 1 auto; height: auto; min-height: 0; }
 :is(.pro2, .geral) .ei-topo, :is(.pro2, .geral) .ei-entrada { flex: none; }
 @media (max-width: 400px) { :is(.pro2, .geral) .ei-janela { height: 492px; } :is(.pro2, .geral) .ei-conversa { height: auto; } }
+/* folga embaixo igual à de cima, para o brilho do vídeo cutucado não ser cortado pela faixa */
+#galeria .p2-esteira-fila { padding-bottom: 18px; }
 
