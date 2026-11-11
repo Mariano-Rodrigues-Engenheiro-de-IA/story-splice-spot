@@ -76,13 +76,13 @@ function useNaTela<T extends Element>() {
   }, []);
   return [ref, visivel] as const;
 }
-/** min:ss (199 vira 3:19) */
-const minSeg = (v: number) => { const t = Math.round(v); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`; };
 /** Os números reais do vídeo do antes e depois. No celular eles vêm depois do vídeo (primeiro a pessoa vê, depois lê). */
 function NumerosDemo() {
+  // números reais do vídeo do antes e depois (criativo 10 inteiro)
+  const d = siteConfig.demoGeral;
   return <>
-    <div className="stats"><div className="stat"><strong><NumberTicker value={siteConfig.demo.cuts} /></strong><p>pausas e erros cortados</p></div><div className="stat"><strong><NumberTicker value={siteConfig.demo.secondsSaved} format={minSeg} /></strong><p>a menos no vídeo final</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
-    <p className="fine-print">Números reais deste vídeo: {siteConfig.demo.rawLength} de gravação viraram {siteConfig.demo.editedLength}. Variam com cada gravação.</p>
+    <div className="stats"><div className="stat"><strong><NumberTicker value={d.palavras} /></strong><p>palavras com legenda</p></div><div className="stat"><strong><NumberTicker value={d.efeitos} /></strong><p>efeitos sonoros no tempo certo</p></div><div className="stat"><strong>0</strong><p>programas de edição abertos</p></div></div>
+    <p className="fine-print">Números reais deste vídeo: um anúncio de {d.duracao}, editado inteiro pela IA.</p>
   </>;
 }
 function Comparison() {
@@ -106,14 +106,14 @@ function Comparison() {
   }, [touched, naTela]);
   return <div className="comparison-wrap">
     <div className="comparison" ref={box} data-clip-grupo>
-      <div className="compare-raw"><Clip grupo src={siteConfig.videos.raw} preset="bruto" opts={{ scene: 'green', offset: 1 }} label="Gravação bruta" /></div>
-      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Clip grupo src={siteConfig.videos.edited} preset="pronto" opts={{ scene: 'green', offset: 1 }} label="Vídeo editado" /></div>
+      <div className="compare-raw"><Clip grupo src={siteConfig.videos.rawGeral} preset="bruto" opts={{ scene: 'green', offset: 1 }} label="Gravação bruta" /></div>
+      <div className="compare-edit" style={{ clipPath: `inset(0 0 0 ${position}%)` }}><Clip grupo src={siteConfig.videos.editedGeral} preset="pronto" opts={{ scene: 'green', offset: 1 }} label="Vídeo editado" /></div>
       <div className="compare-labels"><span>BRUTO</span><span>EDITADO</span></div>
       <div className="compare-line" style={{ left: `${position}%` }}><span className="compare-handle"><GripVertical size={13} /></span></div>
       <input className="compare-input" type="range" min="0" max="100" value={position} aria-label="Comparar antes e depois" onPointerDown={() => setTouched(true)} onKeyDown={() => setTouched(true)} onChange={event => { setTouched(true); setPosition(Number(event.target.value)); }} />
     </div>
     <p className="compare-help">Arraste a linha para os lados</p>
-    {!siteConfig.videos.raw && <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>}
+    {!siteConfig.videos.rawGeral && <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>}
   </div>;
 }
 /** Exemplos da galeria: trechos de criativos diferentes (sala escura com planta, estúdio com prateleiras,
@@ -294,7 +294,7 @@ function Index() {
         <ProvaSocial prints={siteConfig.pro.prints.filter(Boolean)} />
         <ForWho />
         <section className="section container comparison-section" id="antes-depois">
-          <div className="comparison-copy reveal"><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu da câmera. À direita, o que a IA devolveu: cortes, legenda, trilha e uma ilustração realista do que você está explicando.</p>
+          <div className="comparison-copy reveal"><h2>Arraste. <em>É o mesmo vídeo.</em></h2><p>À esquerda, a gravação do jeito que saiu da câmera. À direita, o que a IA devolveu: cenário novo, título atrás de você, objeto em 3D girando, gráfico e legenda.</p>
             <div className="stats-topo"><NumerosDemo /></div>
           </div><Comparison />
           <div className="stats-baixo reveal"><NumerosDemo /></div>
