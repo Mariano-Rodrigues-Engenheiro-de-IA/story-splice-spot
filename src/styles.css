@@ -2129,4 +2129,10 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .ei-entrada-dica { color: rgba(0, 0, 0, .4); }
 :is(.pro2, .geral) .ei-entrada-mais, :is(.pro2, .geral) .ei-entrada-mic { color: rgba(0, 0, 0, .55); }
 :is(.pro2, .geral) .ei-enviar { background: var(--primary); color: #fff; }
+/* a janela da conversa tem altura fixa: enquanto o pedido é digitado, a caixa de mensagem cresce (anexo + duas linhas)
+   para dentro da conversa, que nessa hora está vazia, e a página não pula */
+:is(.pro2, .geral) .ei-janela { display: flex; flex-direction: column; height: 496px; }
+:is(.pro2, .geral) .ei-conversa { flex: 1 1 auto; height: auto; min-height: 0; }
+:is(.pro2, .geral) .ei-topo, :is(.pro2, .geral) .ei-entrada { flex: none; }
+@media (max-width: 400px) { :is(.pro2, .geral) .ei-janela { height: 492px; } :is(.pro2, .geral) .ei-conversa { height: auto; } }
 
