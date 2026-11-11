@@ -161,13 +161,19 @@ const faqItems = [
   ['Como recebo o acesso?', 'O login da área de membros chega no seu e-mail assim que o pagamento é aprovado. No PIX e no cartão é na hora.'],
   ['E se eu não gostar?', 'Você tem 7 dias de garantia. Pede o reembolso e recebe 100% do valor de volta.'],
 ];
+/** true quando o fim dos depoimentos já passou pela tela: antes disso não aparece nenhum botão de compra
+ *  (a pessoa vê o vídeo, os exemplos e os depoimentos antes de poder ir para o preço). */
+function passouDepoimentos() {
+  const d = document.getElementById('depoimentos');
+  return !!d && d.getBoundingClientRect().bottom < window.innerHeight;
+}
 function StickyBar() {
   const [show, setShow] = useState(false);
   useEffect(() => {
     let offerVisible = false, fimVisivel = false;
     const offer = document.getElementById('oferta');
     const fim = document.querySelector('.lamp');
-    const update = () => setShow(window.scrollY > 700 && !offerVisible && !fimVisivel);
+    const update = () => setShow(passouDepoimentos() && !offerVisible && !fimVisivel);
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.target === offer) { offerVisible = entry.isIntersecting; if (offerVisible) eventoProprio('ViuOferta'); }
       else fimVisivel = entry.isIntersecting;
@@ -182,10 +188,10 @@ function StickyBar() {
 }
 /** Botão flutuante do WhatsApp, igual ao do checkout: logo redondo no canto, para quem ficou com dúvida. */
 function WhatsAppButton() {
-  // no topo ele ficaria em cima do botão de compra e da linha de garantia: só aparece depois que a pessoa rola um pouco
+  // entra junto com a barra fixa de compra: só depois dos depoimentos
   const [on, setOn] = useState(false);
   useEffect(() => {
-    const ver = () => setOn(window.scrollY > 450);
+    const ver = () => setOn(passouDepoimentos());
     ver(); window.addEventListener('scroll', ver, { passive: true });
     return () => window.removeEventListener('scroll', ver);
   }, []);
@@ -257,7 +263,8 @@ function Index() {
     <div className="hero-wrap">
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          {/* primeira tela: o bloco ocupa a altura da tela e fica no meio dela; o vídeo cresce até onde cabe */}
+          {/* primeira tela: título, frase e vídeo, sem botão de compra (a ideia é a pessoa assistir e rolar, não pular para o preço);
+              o bloco ocupa a altura da tela e o vídeo cresce até onde cabe */}
           <div className="hero-dobra">
           <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
           {/* colada no vídeo: quem assiste olha para cima e já lê onde aquilo funciona */}
@@ -265,8 +272,6 @@ function Index() {
           <div className="hero-video">
             {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
           </div>
-          <div className="hero-cta"><PurchaseButton /></div>
-          <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
           </div>
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>

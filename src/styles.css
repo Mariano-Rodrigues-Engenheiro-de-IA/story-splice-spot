@@ -1835,11 +1835,12 @@ body:has(.pro) { background: oklch(.972 .006 85); }
   .geral .hf-linha { gap: .3em; font-size: clamp(11px, calc((100cqw - 52px) / 16), 13.5px); }
 }
 @media (max-width: 767px) {
-  .geral .hero { --respiro-topo: clamp(26px, 4.4svh, 56px); --respiro-titulo: clamp(20px, 3.2svh, 40px); --hv: clamp(170px, calc((92.4svh - 236px) * .5625), min(390px, 100vw - 40px)); }
+  .geral .hero { --respiro-topo: clamp(26px, 4.4svh, 56px); --respiro-titulo: clamp(20px, 3.2svh, 40px); --hv: clamp(170px, calc((92.4svh - 150px) * .5625), min(390px, 100vw - 40px)); }
   .geral .hero-dobra { min-height: calc(100svh - 32px); padding: var(--respiro-topo) 0 14px; }
 }
 @media (min-width: 768px) {
-  .geral .hero { --respiro-titulo: 28px; --hv: clamp(200px, calc((100svh - 318px) * .5625), 300px); }
+  .geral .hero { --respiro-titulo: 28px; --hv: clamp(200px, calc((100svh - 250px) * .5625), 320px); }
+  .geral .hero-video { max-width: none; }
   .geral .hero-dobra { padding-top: 34px; }
 }
 
