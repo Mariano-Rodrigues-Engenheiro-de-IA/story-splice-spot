@@ -8,7 +8,7 @@ import { VslPlayer } from '@/components/vsl-player';
 import type { ClipOpts } from '@/lib/clip-renderer';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, LiveDemo, ModeSwitch, RequestLibrary, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, FaixasDepoimentos, ProvaSocial, QualIA2, Saidas } from '@/components/pro2';
+import { ComoFunciona, FaixasDepoimentos, ProvaSocial, QualIA2 } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -117,7 +117,7 @@ function Comparison() {
     {!siteConfig.videos.raw && <p className="illustration-note">Prévia ilustrativa · demonstração em vídeo em breve</p>}
   </div>;
 }
-/** O básico que vem em todo vídeo, embaixo da esteira do "muito além de cortar e legendar". */
+/** O básico que vem em todo vídeo, embaixo da vitrine de efeitos ("muito além de cortar e legendar"). */
 const basico = ['Cortes sem pausa e sem erro', 'Legenda palavra por palavra', 'Zoom nas partes fortes', 'Trilha e efeitos'];
 const galleryCopy: [string, string, string][] = [
   ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/cenas/titulo.mp4'],
@@ -127,7 +127,6 @@ const galleryCopy: [string, string, string][] = [
   ['Modo cinema', 'cor de cinema e faixas pretas', '/videos/cenas/cinema.mp4'],
   ['Cenário novo', 'troca meu fundo, sem pano verde', '/videos/cenas/cenario.mp4'],
   ['Mapa de satélite', 'mostra a cidade no mapa', '/videos/cenas/mapa.mp4'],
-  ['Legenda que acompanha', 'legenda palavra por palavra', '/videos/cenas/legenda.mp4'],
 ];
 /** Look of each animated preview (only used if a card has no video). */
 const galleryLooks: ClipOpts[] = [
@@ -267,8 +266,9 @@ function Index() {
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado e pronto pra postar.</p>
         </section>
         <section className="section container" id="galeria">
-          <div className="section-heading reveal"><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Cada efeito abaixo foi a IA que fez, a partir de um pedido em português.</p></div>
+          <div className="section-heading reveal"><h2>Gravei, pedi <em>e fui fazer outra coisa.</em></h2><p>Muito além de cortar e legendar: cada efeito abaixo foi a IA que fez, a partir de um pedido em português.</p></div>
           <div className="marquee" tabIndex={0} aria-label="Exemplos de vídeos feitos com o Modo Editor" data-clip-grupo><div className="marquee-track">{[...gallery, ...gallery].map(([title, request, src], i) => <div className="gallery-card" key={i} aria-hidden={i >= gallery.length}><Clip grupo src={src} opts={{ ...galleryLooks[i % galleryLooks.length], offset: 1.4 + (i % galleryLooks.length) * 0.9 }} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></div>)}</div></div>
+          <div className="basico reveal"><p>E o básico vem sempre junto:</p><ul>{basico.map(t => <li key={t}><CheckCircle2 size={15} />{t}</li>)}</ul></div>
         </section>
         <ForWho />
         <section className="section container comparison-section" id="antes-depois">
@@ -280,9 +280,6 @@ function Index() {
         <ComoFunciona />
         <RequestLibrary />
         <ModeSwitch />
-        <Saidas titulo={<>Muito além de<br /><em>cortar e legendar.</em></>}
-          sub="Enquanto você explica, a IA coloca na tela o que você está falando: 3D, mapa, desenho, cenário novo."
-          depois={<div className="container basico reveal"><p>E o básico vem sempre junto:</p><ul>{basico.map(t => <li key={t}><CheckCircle2 size={15} />{t}</li>)}</ul></div>} />
         <LiveDemo />
         <Aulas />
         <FaixasDepoimentos />
