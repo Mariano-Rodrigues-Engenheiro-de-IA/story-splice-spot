@@ -1705,4 +1705,6 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 @keyframes geral-pulsa-brilho { 0%, 70%, 100% { scale: 1; box-shadow: 0 0 0 0 oklch(.63 .23 26 / .55); } 35% { scale: 1.05; box-shadow: 0 0 0 14px oklch(.63 .23 26 / 0); } }
 .geral .botao-compra:active, .geral .botao-compra.is-abrindo { animation: none !important; }
 @media (prefers-reduced-motion: reduce) { .geral .botao-compra { animation: none !important; } }
+/* "muito além de corte e legenda." em vermelho, a cor da palavra que troca no topo ("Vá treinar.") */
+.geral .galeria-topo h2 em { color: var(--primary); }
 
