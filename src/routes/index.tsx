@@ -248,6 +248,8 @@ function Index() {
   }
   return <div className="page geral" data-faixa="amarela">
     <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
+    {/* sinal de Black Friday no alto da página (sem preço: o preço fica na oferta); toque leva até a oferta */}
+    <a href="#oferta" className="barra-black"><b>Modo Black</b><span className="barra-black-ponto" aria-hidden="true" />Oferta de Black Friday<span className="barra-black-ir" aria-hidden="true">→</span></a>
     <div className="hero-wrap">
       <header className="site-header container"><Brand /><nav className="nav" aria-label="Seções da página"><a href="#como-funciona">Como funciona</a><a href="#pedidos">Pedidos</a><a href="#depoimentos">Depoimentos</a><a href="#oferta">Preço</a></nav></header>
       <main>
@@ -261,7 +263,6 @@ function Index() {
           <p className="purchase-note">Pagamento único · Acesso na hora · 7 dias de garantia</p>
           <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
         </section>
-        <Faixas />
         <section className="section container" id="galeria">
           <div className="section-heading reveal galeria-topo"><h2>Edição com IA<br /><em>muito além de corte e legenda.</em></h2><SubAlemDoBasico /></div>
           <Esteira itens={gallery} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />

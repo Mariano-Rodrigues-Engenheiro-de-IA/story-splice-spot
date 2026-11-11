@@ -1792,4 +1792,11 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .recebe-zap p { margin: 0; max-width: 85%; padding: 7px 10px; border-radius: 10px; font-size: 13px; line-height: 1.35; color: #111; box-shadow: 0 1px 1px rgba(0, 0, 0, .12); }
 :is(.pro2, .geral) .recebe-zap-eu { align-self: flex-end; background: #d9fdd3; }
 :is(.pro2, .geral) .recebe-zap-ele { align-self: flex-start; background: #fff; }
+/* barra fina de Black Friday no alto da página escura (as faixas cruzadas ficam só na oferta) */
+.geral .barra-black { position: relative; z-index: 3; display: flex; align-items: center; justify-content: center; gap: 10px; height: 38px; padding: 0 16px; background: oklch(.87 .17 92); color: #111; font-size: 13.5px; font-weight: 600; text-decoration: none; letter-spacing: .01em; }
+.geral .barra-black b { font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 12.5px; }
+.geral .barra-black-ponto { width: 5px; height: 5px; border-radius: 50%; background: #111; }
+.geral .barra-black-ir { font-weight: 800; transition: transform .2s; }
+.geral .barra-black:hover .barra-black-ir { transform: translateX(3px); }
+@media (max-width: 767px) { .geral .hero-video { width: clamp(170px, calc((100svh - 352px) * .5625), 330px); } }
 
