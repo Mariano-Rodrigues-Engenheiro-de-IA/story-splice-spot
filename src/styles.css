@@ -950,10 +950,10 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .p2-etapa-barra i { display: block; height: 100%; width: 0; background: var(--ready); }
 :is(.pro2, .geral) .p2-etapas button.feito .p2-etapa-barra i { width: 100%; }
 :is(.pro2, .geral) .p2-etapas button.on .p2-etapa-barra i { animation: p2-encher linear forwards; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(1) button.on .p2-etapa-barra i { animation-duration: 3.7s; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(2) button.on .p2-etapa-barra i { animation-duration: 2.55s; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(3) button.on .p2-etapa-barra i { animation-duration: 3.1s; }
-:is(.pro2, .geral) .p2-etapas li:nth-child(4) button.on .p2-etapa-barra i { animation-duration: 10.3s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(1) button.on .p2-etapa-barra i { animation-duration: .9s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(2) button.on .p2-etapa-barra i { animation-duration: .5s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(3) button.on .p2-etapa-barra i { animation-duration: .6s; }
+:is(.pro2, .geral) .p2-etapas li:nth-child(4) button.on .p2-etapa-barra i { animation-duration: 4.8s; }
 :is(.pro2, .geral) .p2-etapa-texto { text-align: center; min-height: 3.7em; display: flex; flex-direction: column; gap: 3px; animation: p2-entra .35s both; }
 :is(.pro2, .geral) .p2-etapa-texto strong { font-size: 20px; line-height: 1.25; color: var(--foreground); }
 :is(.pro2, .geral) .p2-etapa-texto span { font-size: 16px; color: var(--muted-foreground); }
@@ -1237,11 +1237,11 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .p2-cl-instalando > div { flex: 1; min-width: 0; }
 :is(.pro2, .geral) .p2-cl-instalando b { display: block; font-size: 7px; font-weight: 600; }
 :is(.pro2, .geral) .p2-cl-instalando .p2-cl-carga { width: 100%; margin-top: 4px; }
-:is(.pro2, .geral) .p2-cl-instalando .p2-cl-carga i { transition: width 1.05s ease-out; background: var(--ready); }
+:is(.pro2, .geral) .p2-cl-instalando .p2-cl-carga i { transition: width .35s ease-out; background: var(--ready); }
 :is(.pro2, .geral) .p2-cl-instalando-ok { flex: none; width: 13px; height: 13px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--ready); }
 :is(.pro2, .geral) .p2-cl-instalando.fase-1 .p2-cl-instalando-ok { background: transparent; color: var(--ready); }
 :is(.pro2, .geral) .p2-cl-instalando-ok svg { width: 8px; height: 8px; }
-:is(.pro2, .geral) .p2-voa { position: absolute; z-index: 5; left: 0; top: 0; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 14px; background: #fff; color: var(--foreground); font-size: 15px; font-weight: 800; white-space: nowrap; box-shadow: 0 16px 30px -12px rgba(10, 20, 40, .45); border: 1px solid var(--border); animation: p2-voa 1.25s cubic-bezier(.45, .05, .35, 1) both; pointer-events: none; }
+:is(.pro2, .geral) .p2-voa { position: absolute; z-index: 5; left: 0; top: 0; display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px 8px 8px; border-radius: 14px; background: #fff; color: var(--foreground); font-size: 15px; font-weight: 800; white-space: nowrap; box-shadow: 0 16px 30px -12px rgba(10, 20, 40, .45); border: 1px solid var(--border); animation: p2-voa .42s cubic-bezier(.45, .05, .35, 1) both; pointer-events: none; }
 :is(.pro2, .geral) .p2-voa .brand-icon { width: 28px; height: 28px; }
 @keyframes p2-voa {
   0% { left: 2%; top: -8px; transform: scale(.85); opacity: 0; }
@@ -1264,7 +1264,7 @@ body:has(.pro) { background: oklch(.972 .006 85); }
 :is(.pro2, .geral) .p2-etapa-textos > .p2-etapa-texto { grid-area: 1 / 1; min-height: 0; opacity: 0; transform: translateY(6px); transition: none; animation: none; }
 :is(.pro2, .geral) .p2-etapa-textos > .p2-etapa-texto.on { opacity: 1; transform: none; transition: opacity .3s .05s, transform .3s .05s; }
 /* passo 4: o celular rola os vídeos prontos como o Reels, um por profissão */
-:is(.pro2, .geral) .p2-feed { position: absolute; inset: 0; transition: transform .5s cubic-bezier(.3, .9, .3, 1); }
+:is(.pro2, .geral) .p2-feed { position: absolute; inset: 0; transition: transform .35s cubic-bezier(.3, .9, .3, 1); }
 :is(.pro2, .geral) .p2-feed-item { position: absolute; left: 0; right: 0; height: 100%; }
 :is(.pro2, .geral) .p2-feed-item > .p2-video { position: absolute; inset: 0; }
 :is(.pro2, .geral) .p2-feed-tag { position: absolute; z-index: 2; left: 50%; bottom: 10px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; padding: 4px 9px; border-radius: 99px; background: rgba(255, 255, 255, .95); color: var(--foreground); font-size: 12px; font-weight: 800; box-shadow: 0 6px 14px -8px rgba(0, 0, 0, .5); }
@@ -1979,7 +1979,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .it-prop { display: grid; grid-template-columns: 9px minmax(0, 1fr); align-items: center; gap: 5px; }
 :is(.pro2, .geral) .it-prop > i { width: 9px; height: 9px; border-radius: 2px; background: #2c2c35; }
 :is(.pro2, .geral) .it-prop > span { height: 3px; border-radius: 99px; background: #2c2c35; overflow: hidden; }
-:is(.pro2, .geral) .it-prop b { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, oklch(.55 .2 295), oklch(.76 .16 300)); transition: width .8s cubic-bezier(.3, .8, .3, 1); }
+:is(.pro2, .geral) .it-prop b { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, oklch(.55 .2 295), oklch(.76 .16 300)); transition: width .4s cubic-bezier(.3, .8, .3, 1); }
 :is(.pro2, .geral) .it-ed-linha { flex: none; height: 132px; position: relative; display: flex; flex-direction: column; gap: 4px; padding: 4px 6px 6px; background: #141418; }
 :is(.pro2, .geral) .it-ed-regua { flex: none; height: 9px; margin-left: 24px; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: .5px solid #2b2b34; }
 :is(.pro2, .geral) .it-ed-regua i { width: .6px; height: 4px; background: #4b4b56; }
@@ -1987,7 +1987,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .it-faixa-ico { display: grid; place-items: center; border-radius: 3px; background: #1d1d24; }
 :is(.pro2, .geral) .it-faixa-ico svg { width: 8px; height: 8px; color: #8a8a96; }
 :is(.pro2, .geral) .it-pista { position: relative; border-radius: 3px; background: #1a1a20; overflow: hidden; }
-:is(.pro2, .geral) .it-clipe { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; background: linear-gradient(180deg, oklch(.56 .15 255), oklch(.45 .15 255)); box-shadow: inset 0 0 0 .6px rgba(255, 255, 255, .25); transition: left .6s cubic-bezier(.3, .8, .3, 1), width .6s cubic-bezier(.3, .8, .3, 1); animation: it-surge .45s both; }
+:is(.pro2, .geral) .it-clipe { position: absolute; top: 2px; bottom: 2px; border-radius: 3px; background: linear-gradient(180deg, oklch(.56 .15 255), oklch(.45 .15 255)); box-shadow: inset 0 0 0 .6px rgba(255, 255, 255, .25); transition: left .35s cubic-bezier(.3, .8, .3, 1), width .35s cubic-bezier(.3, .8, .3, 1); animation: it-surge .3s both; }
 :is(.pro2, .geral) .it-bloco { position: absolute; top: 3px; bottom: 3px; border-radius: 3px; opacity: 0; transform: scaleX(.2); transform-origin: left; transition: opacity .3s, transform .4s cubic-bezier(.2, .9, .3, 1.2); }
 :is(.pro2, .geral) .it-bloco.on { opacity: 1; transform: none; }
 :is(.pro2, .geral) .it-texto { background: oklch(.6 .2 295); }
@@ -2033,7 +2033,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .ei-ia-corpo { min-width: 0; display: flex; flex-direction: column; gap: 9px; }
 :is(.pro2, .geral) .ei-ia-corpo p { margin: 3px 0 0; font-size: 15.5px; line-height: 1.45; color: #ececec; }
 :is(.pro2, .geral) .ei-ia-carga { display: block; width: 180px; height: 5px; border-radius: 99px; background: oklch(1 0 0 / .1); overflow: hidden; }
-:is(.pro2, .geral) .ei-ia-carga i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, oklch(.55 .21 295), oklch(.76 .16 300)); animation: ei-enche 1.8s ease-out forwards; }
+:is(.pro2, .geral) .ei-ia-carga i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, oklch(.55 .21 295), oklch(.76 .16 300)); animation: ei-enche .85s ease-out forwards; }
 :is(.pro2, .geral) .ei-ia-video { position: relative; width: 150px; aspect-ratio: 9 / 16; border-radius: 14px; overflow: hidden; background: #000; box-shadow: 0 0 0 1px oklch(1 0 0 / .1), 0 20px 34px -16px #000; animation: it-entra .45s both; }
 :is(.pro2, .geral) .ei-ia-video .p2-video { position: absolute; inset: 0; }
 :is(.pro2, .geral) .ei-ia-selo { position: absolute; left: 8px; top: 8px; display: inline-flex; align-items: center; gap: 4px; padding: 4px 9px; border-radius: 99px; background: oklch(.72 .13 172); color: #04211a; font-size: 12px; font-weight: 800; }

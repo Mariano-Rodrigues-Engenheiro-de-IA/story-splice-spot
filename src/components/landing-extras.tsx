@@ -134,7 +134,7 @@ export function ModeSwitch({ enxuto = false }: { enxuto?: boolean } = {}) {
   const tela = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (reduced()) return;
-    const id = window.setTimeout(() => setOn(v => !v), on ? 4500 : 3000);
+    const id = window.setTimeout(() => setOn(v => !v), on ? 2600 : 1300);
     return () => window.clearTimeout(id);
   }, [on]);
   // só o vídeo que está à mostra toca: o escondido fica pausado para não gastar o celular à toa

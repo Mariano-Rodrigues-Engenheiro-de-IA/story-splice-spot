@@ -149,7 +149,7 @@ const FEED = [
   { src: '/videos/pro2/fisio-coluna.mp4', profissao: 'Fisioterapeuta', emoji: '🦴' },
   { src: '/videos/pro2/arquiteto-obra.mp4', profissao: 'Arquiteto', emoji: '📐' },
 ];
-const TEMPO_FEED = 2000;
+const TEMPO_FEED = 900;
 function FeedCelular({ ativo, perto }: { ativo: boolean; perto: boolean }) {
   const [i, setI] = useState(0);
   useEffect(() => {
@@ -202,18 +202,18 @@ export function ComoFunciona() {
     return () => io.disconnect();
   }, []);
   const comSom = () => voltas.current < 2 && audivel.current;
-  // anda sozinho: instala o Modo Editor (~3,7 s, com sininho), digita o pedido (~2,1 s), carrega a edição (~3,1 s),
-  // mostra o vídeo pronto no celular (4,2 s) e recomeça
+  // anda sozinho e rápido (quem rola a página vê os passos se completando em ~2,5 s): instala o Modo Editor (~0,9 s),
+  // digita o pedido (~0,5 s), carrega a edição (~0,6 s) e mostra os vídeos prontos no celular (0,9 s cada)
   useEffect(() => {
     if (!naTela) return;
     if (menosMovimento()) { setInst(2); setLetras(pedido.length); setCarga(100); return; }
     let id: number;
     if (passo === 0) {
-      if (inst === 0) id = window.setTimeout(() => { setInst(1); if (comSom()) somGota(); }, 1250);
-      else if (inst === 1) id = window.setTimeout(() => setInst(2), 1100);
-      else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 1350);
-    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => n + 1); if (comSom() && letras % 3 === 0) somTecla(); }, 26) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 700);
-    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 4); setCarga(nova); }, 110) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 350);
+      if (inst === 0) id = window.setTimeout(() => { setInst(1); if (comSom()) somGota(); }, 420);
+      else if (inst === 1) id = window.setTimeout(() => setInst(2), 260);
+      else id = window.setTimeout(() => { setLetras(0); setPasso(1); }, 220);
+    } else if (passo === 1) id = letras < pedido.length ? window.setTimeout(() => { setLetras(n => Math.min(pedido.length, n + 3)); if (comSom() && letras % 9 === 0) somTecla(); }, 16) : window.setTimeout(() => { setCarga(0); setPasso(2); }, 120);
+    else if (passo === 2) id = carga < 100 ? window.setTimeout(() => { const nova = Math.min(100, carga + 12.5); setCarga(nova); }, 60) : window.setTimeout(() => { setPasso(3); if (comSom()) somSininho(); }, 120);
     else id = window.setTimeout(() => { voltas.current += 1; setInst(0); setLetras(0); setPasso(0); }, FEED.length * TEMPO_FEED + 300);
     return () => window.clearTimeout(id);
   }, [naTela, passo, inst, letras, carga]);
@@ -771,9 +771,9 @@ export function EditorIA() {
     if (!naTela) return;
     if (menosMovimento()) { setLetras(p.texto.length); setFase(2); return; }
     let id: number;
-    if (fase === 0) id = letras < p.texto.length ? window.setTimeout(() => setLetras(n => n + 1), 34) : window.setTimeout(() => setFase(1), 550);
-    else if (fase === 1) id = window.setTimeout(() => setFase(2), 1900);
-    else id = window.setTimeout(() => { setI(n => (n + 1) % PEDIDOS_IA.length); setLetras(0); setFase(0); }, 5200);
+    if (fase === 0) id = letras < p.texto.length ? window.setTimeout(() => setLetras(n => Math.min(p.texto.length, n + 2)), 16) : window.setTimeout(() => setFase(1), 180);
+    else if (fase === 1) id = window.setTimeout(() => setFase(2), 900);
+    else id = window.setTimeout(() => { setI(n => (n + 1) % PEDIDOS_IA.length); setLetras(0); setFase(0); }, 3200);
     return () => window.clearTimeout(id);
   }, [naTela, fase, letras, p.texto.length]);
   const texto = p.texto.slice(0, letras);
@@ -831,15 +831,15 @@ export function EditorIA() {
 /* ───────────── Veja a IA trabalhando (um editor de vídeo no MacBook e as etapas, uma por vez, com ✓) ───────────── */
 
 const ETAPAS_IA = [
-  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 1800 },
-  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 2300 },
-  { agora: 'Editando o vídeo', feito: 'Editado', ms: 3800 },
-  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 1900 },
-  { agora: 'Finalizando', feito: 'Pronto', ms: 1500 },
+  { agora: 'Recebendo o vídeo', feito: 'Recebido', ms: 450 },
+  { agora: 'Analisando o vídeo', feito: 'Analisado', ms: 550 },
+  { agora: 'Editando o vídeo', feito: 'Editado', ms: 1100 },
+  { agora: 'Enviando a prévia', feito: 'Prévia', ms: 450 },
+  { agora: 'Finalizando', feito: 'Pronto', ms: 350 },
 ];
 const INICIO_ETAPA = ETAPAS_IA.reduce<number[]>((acc, _x, k) => [...acc, k === 0 ? 0 : acc[k - 1]! + ETAPAS_IA[k - 1]!.ms], []);
 const TOTAL_ETAPAS = ETAPAS_IA.reduce((s, x) => s + x.ms, 0);
-const SEGURA_PRONTO = 3600;
+const SEGURA_PRONTO = 2400;
 // trechos do vídeo na linha do tempo, em % da faixa: a gravação inteira e, depois da edição, mais curta e sem buracos
 const TRECHOS_TL = {
   inteiro: [[0, 24], [24, 20], [44, 22], [66, 16], [82, 18]],
