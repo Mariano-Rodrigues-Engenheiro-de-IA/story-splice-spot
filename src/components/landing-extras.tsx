@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowUp, Check, Clapperboard, FileText, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
+  ArrowUp, Check, Clapperboard, GraduationCap, KeyRound, Megaphone, MonitorPlay, Play, Power, Sparkles, Wallet, WandSparkles,
 } from 'lucide-react';
 import { Clip } from '@/components/clip';
 import { siteConfig } from '@/lib/site-config';
@@ -61,7 +61,6 @@ export function LiveDemo() {
   return (
     <section className="section container" id="ao-vivo">
       <div className="section-heading reveal">
-        <span className="eyebrow">Editando ao vivo</span>
         <h2>Veja a IA <em>trabalhando.</em></h2>
         <p>Uma gravação comum entra. Em cinco passos, sai um vídeo pronto, sem você abrir programa nenhum.</p>
       </div>
@@ -145,9 +144,8 @@ export function ModeSwitch() {
   return (
     <section className="section container" id="diferenca">
       <div className="section-heading reveal">
-        <span className="eyebrow">A diferença</span>
-        <h2>Mesma IA. <em>Outro resultado.</em></h2>
-        <p>Sozinha, a IA chuta como você quer o vídeo. Com o Modo Editor, ela já começa sabendo.</p>
+        <h2>Por que não pedir <em>direto pra IA?</em></h2>
+        <p>Sem o Modo Editor, o ChatGPT ou o Claude adivinha como você quer o vídeo. Com ele, já começa sabendo.</p>
       </div>
       <div className="reveal"><div className={`mode ${on ? 'is-on' : ''}`}>
         <div className="mode-head">
@@ -190,7 +188,6 @@ export function ForWho() {
   return (
     <section className="section container" id="para-quem">
       <div className="section-heading reveal">
-        <span className="eyebrow">Para quem é</span>
         <h2>A ideia você já tem. <em>Falta a edição sair.</em></h2>
       </div>
       <div className="reveal"><div className="publico">
@@ -233,7 +230,6 @@ export function RequestLibrary() {
   return (
     <section className="section container" id="pedidos">
       <div className="section-heading reveal">
-        <span className="eyebrow">Exemplos de pedido</span>
         <h2>Escreva como <em>você fala.</em></h2>
         <p>Nada de termo técnico: você manda a gravação e pede, como numa conversa. Se preferir, o Gerador de Pedido monta o pedido pra você.</p>
       </div>
@@ -281,20 +277,18 @@ export function WhatYouGet() {
   return (
     <section className="section container" id="recebe">
       <div className="section-heading reveal">
-        <span className="eyebrow">O que você recebe</span>
-        <h2>Não é só um arquivo. <em>É o caminho inteiro.</em></h2>
-        <p>Você entra na área de membros e encontra tudo pra editar o seu primeiro vídeo com IA ainda hoje.</p>
+        <h2>O que você <em>vai receber?</em></h2>
+        <p>Tudo pra editar o seu primeiro vídeo com IA ainda hoje, liberado na hora.</p>
       </div>
       <div className="reveal"><div className="unbox">
         <div className="unbox-mail"><KeyRound size={18} /><div><strong>Acesso na hora à área de membros</strong><small>o login chega no seu e-mail assim que o pagamento é aprovado</small></div></div>
         <div className="unbox-files">
           <div className="unbox-file principal">
             <span className="unbox-icon unbox-marca" aria-hidden="true"><span className="brand-icon"><Play /><span className="brand-dot" /></span></span>
-            <div><strong>Modo Editor <em>o coração</em></strong><p>O arquivo que transforma o seu ChatGPT ou Claude num editor de vídeo profissional: corta os erros e as pausas, legenda, coloca zoom, efeitos e trilha, e confere tudo antes de entregar.</p></div>
+            <div><strong>Modo Editor <em>o coração</em></strong><p>O treinamento que transforma o seu ChatGPT ou Claude num editor de vídeo profissional: corta os erros e as pausas, legenda, coloca zoom, efeitos e trilha, e confere tudo antes de entregar.</p></div>
           </div>
           <div className="unbox-file"><span className="unbox-icon"><MonitorPlay size={20} /></span><div><strong>Videoaulas curtas</strong><p>Tutoriais direto ao ponto: preparar o computador, instalar o Modo Editor, montar o pedido e editar o seu primeiro vídeo, mostrado tela por tela.</p></div></div>
           <div className="unbox-file"><span className="unbox-icon"><WandSparkles size={20} /></span><div><strong>Gerador de Pedido</strong><p>Você clica nas opções (estilo, legenda, efeitos, trilha) e ele monta o pedido completo pra IA. Dá até pra explicar em áudio.</p></div></div>
-          <div className="unbox-file bonus"><span className="unbox-icon"><FileText size={20} /></span><div><strong>O Arquivo Secreto do Roteiro <em>bônus</em></strong><p>Antes de gravar, a IA revisa o seu roteiro: gancho forte, fala clara e chamada final.</p></div></div>
         </div>
         <div className="unbox-works"><span>Funciona no</span><b>ChatGPT</b><span>e no</span><b>Claude</b><small>plano pago, contratado à parte</small></div>
       </div></div>
@@ -313,7 +307,6 @@ export function Creator({ name, photo }: { name: string; photo: string }) {
         <span className="produtor-tag"><i className="record-dot" />Criador do Modo Editor</span>
       </div>
       <div className="produtor-texto reveal">
-        <span className="eyebrow">Quem está por trás</span>
         <h2>Prazer, eu sou o <em>{name}.</em></h2>
         <p className="produtor-cargo">Creator e estrategista de IA</p>
         <p>Empreendo desde 2021 e, nesse tempo todo, nunca parei de produzir conteúdo. Sempre estive ativo na internet, e todo vídeo esbarrava no mesmo problema: ou eu editava na mão, ou pagava um editor e ficava esperando.</p>

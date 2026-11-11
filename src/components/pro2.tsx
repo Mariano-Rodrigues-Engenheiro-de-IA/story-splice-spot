@@ -483,7 +483,8 @@ export function ResultadoCliente({ src, nome }: { src: string; nome: string }) {
 
 /* ───────────── Qual IA você vai usar? ───────────── */
 
-export function QualIA2() {
+/** `extra`: uma linha a mais embaixo (a página geral diz que não paga nada a mais por vídeo). */
+export function QualIA2({ extra }: { extra?: React.ReactNode } = {}) {
   return (
     <section className="section container" id="qual-ia">
       <div className="section-heading reveal">
@@ -497,6 +498,7 @@ export function QualIA2() {
           <div className="p2-ia"><LogoClaude /><div><strong>Claude</strong><span>Plano Pro <b>pago</b></span></div></div>
         </div>
         <p className="p2-ias-nota">Você edita no computador (Mac ou Windows). O celular serve pra gravar.</p>
+        {extra && <p className="p2-ias-extra">{extra}</p>}
       </div>
     </section>
   );
