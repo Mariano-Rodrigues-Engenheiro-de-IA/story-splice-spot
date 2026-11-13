@@ -1,0 +1,789 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Mapa do Barbeiro Educador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: uma coluna de leitura de até 720px; preços em tabela com pontilhado, como a tabela de preços na parede da barbearia; perguntas no fim, com barra de progresso fixa embaixo */
+:root {
+  --bg: #f2f3f5;
+  --surface: #ffffff;
+  --ink: #16181b;
+  --muted: #59606a;
+  --line: #d6d9de;
+  --accent: #a3292b;
+  --accent-soft: #f8e5e4;
+  --on-accent: #ffffff;
+  --pole: #1e3a6e;
+  --display: 'Archivo', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111215; --surface: #1a1c20; --ink: #eceef1; --muted: #a4abb4; --line: #2e3238;
+    --accent: #e8615f; --accent-soft: #3a2122; --on-accent: #1b0c0c; --pole: #7d9be0;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111215; --surface: #1a1c20; --ink: #eceef1; --muted: #a4abb4; --line: #2e3238;
+  --accent: #e8615f; --accent-soft: #3a2122; --on-accent: #1b0c0c; --pole: #7d9be0;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.pole { height: 8px; background: repeating-linear-gradient(-45deg, var(--accent) 0 8px, var(--surface) 8px 16px, var(--pole) 16px 24px, var(--surface) 24px 32px); }
+.wrap { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 48px; }
+header.topo { padding-block: 32px 28px; display: grid; gap: 16px; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0; }
+h1, h2, h3 { font-family: var(--display); font-stretch: 78%; font-weight: 800; line-height: 1.08; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(34px, 8.5vw, 54px); }
+h2 { font-size: clamp(26px, 6vw, 34px); }
+h3 { font-size: 21px; font-stretch: 85%; font-weight: 700; }
+p { margin: 0; max-width: 65ch; }
+.lead { font-size: 18px; }
+.nota { font-size: 14px; color: var(--muted); }
+a { color: var(--accent); }
+.acoes { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 22px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font: inherit; font-weight: 600; text-decoration: none; border: 0; cursor: pointer; }
+.btn.sec { background: transparent; color: var(--ink); border: 1.5px solid var(--line); }
+.btn:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+section { padding-block: 36px; border-top: 1px solid var(--line); display: grid; gap: 18px; }
+.rotulo { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0; }
+.cabeca { display: grid; gap: 8px; }
+ul.pontos { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 65ch; }
+ul.pontos li::marker { color: var(--accent); }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.card.destaque { border: 2px solid var(--accent); background: var(--accent-soft); }
+.card .faixa { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.card .quem { font-size: 15px; }
+.card .obs { font-size: 14px; color: var(--muted); }
+.card.destaque .obs { color: var(--ink); font-weight: 600; }
+.selo { justify-self: start; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--on-accent); background: var(--accent); padding: 3px 8px; border-radius: 4px; }
+.grupo { display: grid; gap: 10px; }
+.lista { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.item { padding: 14px 16px; border-top: 1px solid var(--line); display: grid; gap: 4px; min-width: 0; }
+.item:first-child { border-top: 0; }
+.item .linha1 { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; align-items: baseline; }
+.item .linha1 strong { font-size: 16px; }
+.preco { font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 17px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.item p { font-size: 15px; color: var(--muted); }
+.parede { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 6px 16px; }
+.degrau { padding: 14px 0; border-top: 1px dashed var(--line); display: grid; gap: 6px; }
+.degrau:first-child { border-top: 0; }
+.degrau h3 { font-size: 19px; }
+.linha { display: flex; align-items: baseline; gap: 8px; font-size: 15px; }
+.linha .nome { color: var(--muted); }
+.linha .pont { flex: 1 1 16px; min-width: 16px; border-bottom: 2px dotted var(--line); transform: translateY(-4px); }
+.linha .valor { font-family: var(--display); font-stretch: 85%; font-weight: 700; font-size: 17px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.linha.sug .nome, .linha.sug .valor { color: var(--accent); }
+.linha.sug .pont { border-bottom-color: var(--accent); opacity: .5; }
+.tabela-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 600; }
+td.num, th.num { text-align: right; }
+.ficha { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; display: grid; grid-template-columns: minmax(96px, 150px) 1fr; }
+.ficha dt, .ficha dd { margin: 0; padding: 12px 16px; border-top: 1px solid var(--line); }
+.ficha dt { font-weight: 600; }
+.ficha dd { min-width: 0; }
+.ficha dt:first-of-type, .ficha dd:first-of-type { border-top: 0; }
+@media (max-width: 480px) {
+  .ficha { grid-template-columns: 1fr; }
+  .ficha dd { border-top: 0; padding-top: 0; }
+  .ficha dt:first-of-type { border-top: 0; }
+}
+ol.aulas { margin: 0; padding-left: 26px; display: grid; gap: 6px; }
+ol.aulas li::marker { font-family: var(--display); font-weight: 700; color: var(--accent); }
+.bio { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 2px; font-size: 15px; max-width: 420px; }
+.bio .handle { font-weight: 700; }
+.bio .link { color: var(--pole); font-weight: 600; }
+.checks { display: grid; gap: 4px; }
+.checks h3 { margin-top: 10px; }
+.check { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+.check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); flex: 0 0 auto; }
+.check span { min-width: 0; }
+/* perguntas */
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px 16px; display: grid; gap: 14px; min-width: 0; }
+.q h3 { font-family: var(--body); font-stretch: 100%; font-size: 17px; font-weight: 700; line-height: 1.35; }
+.q h3 .n { font-family: var(--display); font-stretch: 85%; font-weight: 800; color: var(--accent); margin-right: 6px; }
+.q .ajuda { font-size: 14px; color: var(--muted); margin-top: -8px; }
+.tag { display: inline-block; font-family: var(--body); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: 2px; }
+.bloco-titulo { padding-top: 10px; }
+label.campo { display: grid; gap: 6px; font-size: 14px; color: var(--muted); font-weight: 500; min-width: 0; }
+input[type=text], input[type=number], textarea { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1.5px solid var(--line); border-radius: 8px; padding: 12px; width: 100%; box-sizing: border-box; min-width: 0; }
+textarea { min-height: 96px; resize: vertical; }
+input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.duplo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 420px) { .duplo { grid-template-columns: 1fr; } }
+.unidade { display: grid; gap: 8px; }
+.unidade > span { font-size: 14px; font-weight: 600; }
+.opcoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.opcoes label { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--bg); font-size: 15px; cursor: pointer; }
+.opcoes input { accent-color: var(--accent); width: 18px; height: 18px; margin: 0; }
+.opcoes label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.opcoes label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.perguntas-lista { display: grid; gap: 14px; }
+.barra { position: sticky; bottom: 0; z-index: 5; background: var(--bg); border-top: 1px solid var(--line); padding: 12px 0 calc(12px + env(safe-area-inset-bottom, 0px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.barra .prog { font-weight: 600; font-variant-numeric: tabular-nums; }
+.medidor { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; width: 100%; }
+.medidor div { height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+@media (prefers-reduced-motion: reduce) { .medidor div { transition: none; } }
+.envio { background: var(--surface); border: 2px solid var(--accent); border-radius: 12px; padding: 18px 16px; display: grid; gap: 14px; }
+#resumo-texto { min-height: 220px; font-size: 14px; }
+.status { font-size: 14px; font-weight: 600; min-height: 1.4em; }
+.fontes { font-size: 14px; color: var(--muted); display: grid; gap: 8px; }
+.fontes ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+footer { padding-top: 24px; border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<div class="pole" aria-hidden="true"></div>
+<div class="wrap">
+
+<header class="topo">
+  <p class="eyebrow">Análise de mercado · 13 de novembro de 2026</p>
+  <h1>Onde você entra no mercado de educação para barbeiros</h1>
+  <p class="lead">Mapeamos quem já vende curso, mentoria e evento para barbeiro no Brasil: o que vende, quanto cobra, quanto tempo dura a entrega, como posta no Instagram e quem está anunciando. No fim estão as perguntas que só você pode responder.</p>
+  <div class="acoes">
+    <a class="btn" href="#perguntas">Responder as perguntas</a>
+    <a class="btn sec" href="#resumo">Ler a análise</a>
+  </div>
+</header>
+
+<section id="resumo">
+  <div class="cabeca">
+    <p class="rotulo">Resumo</p>
+    <h2>O que a pesquisa mostrou</h2>
+  </div>
+  <ul class="pontos">
+    <li><strong>O seu lugar é ensinar o barbeiro da cadeira a faturar mais por cliente.</strong> E você tem uma prova que ninguém no mercado mostra: o mesmo método numa barbearia de periferia e numa de bairro nobre.</li>
+    <li><strong>Os grandes vendem para o dono que já fatura alto.</strong> Seu Elias, Podium, Jurandir e Molima ensinam gestão e crescimento, de R$ 850 a R$ 10 mil. Quem ensina corte vende barato. Ticket médio na cadeira é a frente menos disputada.</li>
+    <li><strong>Os concorrentes mais próximos</strong> são o Cadeira Lucrativa (Jurandir), o Venda Como Barbeiro (Abner Parente, R$ 497) e um módulo dentro do pacote do Seu Elias. Nenhum fala com o barbeiro de periferia, e nenhum mostra ticket de antes e depois.</li>
+    <li><strong>Primeiro produto sugerido:</strong> curso gravado de 10 aulas, R$ 297 na primeira turma e R$ 497 depois.</li>
+    <li><strong>O que falta para fechar são os seus números.</strong> Sem o ticket médio de antes e depois, o curso não tem promessa. Por isso as perguntas no fim.</li>
+  </ul>
+</section>
+
+<section id="mercado">
+  <div class="cabeca">
+    <p class="rotulo">O mercado</p>
+    <h2>Seis frentes disputam o barbeiro</h2>
+    <p>A menos disputada é justamente a que você domina: vender mais para o cliente que já está sentado na cadeira.</p>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>Técnica e visagismo</h3>
+      <span class="faixa">R$ 12,99/mês a R$ 2.997</span>
+      <span class="quem">Juarez Leite, Marcony, Mateus Mattos, Thagner Ramos, Vitor Correia, Agno, Babu</span>
+      <span class="obs">Negócio só aparece como bônus</span>
+    </div>
+    <div class="card">
+      <h3>Gestão e crescimento do dono</h3>
+      <span class="faixa">R$ 397 a R$ 10 mil</span>
+      <span class="quem">Seu Elias, Podium, Rapha, Jurandir, Molima, Toledo</span>
+      <span class="obs">Fala com quem já tem equipe</span>
+    </div>
+    <div class="card">
+      <h3>Atrair cliente e Instagram</h3>
+      <span class="faixa">R$ 30 a R$ 500</span>
+      <span class="quem">Adri Barbeiro, Anderson Matias, e-books e guias</span>
+      <span class="obs">Separado da venda na cadeira</span>
+    </div>
+    <div class="card destaque">
+      <span class="selo">Onde você entra</span>
+      <h3>Ticket médio na cadeira</h3>
+      <span class="faixa">R$ 47,90 a R$ 497</span>
+      <span class="quem">Jurandir (Cadeira Lucrativa), Abner Parente, Ayrton Alexander, Luã Bandeira</span>
+      <span class="obs">Ninguém mostra ticket de antes e depois</span>
+    </div>
+    <div class="card">
+      <h3>Escolas presenciais</h3>
+      <span class="faixa">R$ 897 a R$ 3.827</span>
+      <span class="quem">Senac, Brado Barber, escolas independentes</span>
+      <span class="obs">Ensinam a cortar, não a vender</span>
+    </div>
+    <div class="card">
+      <h3>Eventos e sistemas</h3>
+      <span class="faixa">Ingressos de R$ 50 a R$ 697</span>
+      <span class="quem">Barber Week, Beauty Fair, Trinks, Cash Barber, AppBarber</span>
+      <span class="obs">Palco e canal de parceria</span>
+    </div>
+  </div>
+  <p class="nota">Público não falta: a atividade de cabeleireiros e barbearias tem 942 mil estabelecimentos ativos na Receita, e a beleza abriu 236 mil negócios em 2025. O preço de cabeleireiro e barbeiro subiu 8,05% no IPCA de 2025, quase o dobro da inflação.</p>
+</section>
+
+<section id="players">
+  <div class="cabeca">
+    <p class="rotulo">Quem vende</p>
+    <h2>O que cada um vende e quanto cobra</h2>
+    <p class="nota">Preços das páginas de venda em 13/11/2026, perto da Black Friday.</p>
+  </div>
+
+  <div class="grupo">
+    <h3>Gestão e venda: a concorrência direta</h3>
+    <div class="lista">
+      <div class="item"><div class="linha1"><strong>Seu Elias (Barber Day)</strong><span class="preco">R$ 1.467</span></div><p>12 barbearias e 1,1 milhão de seguidores. Curso online de gestão em 6 pilares, mais de 10 h, lives, 1 ano de acesso. Também vende um curso básico de gestão em 10 aulas (preço não divulgado), mentoria de cerca de 12 meses e consultoria de R$ 10 mil.</p></div>
+      <div class="item"><div class="linha1"><strong>Podium e Cash Barber (Lincohn Agner)</strong><span class="preco">R$ 397 a R$ 1.997</span></div><p>Sistema de gestão com cursos a partir de R$ 300 por mês. Imersão presencial de 2 dias em Curitiba, com módulo de serviços extras e vendas.</p></div>
+      <div class="item"><div class="linha1"><strong>Rapha (@oraphaensina)</strong><span class="preco">R$ 850 a R$ 950</span></div><p>263 mil seguidores. Mentoria presencial de 1 dia, cerca de 12 h, sobre finanças, pessoas e processos.</p></div>
+      <div class="item"><div class="linha1"><strong>Jurandir Silva</strong><span class="preco">Só pelo WhatsApp</span></div><p>112 mil seguidores e 14 unidades. Mentoria O Sócio e o curso Cadeira Lucrativa, que ensina a vender produto na finalização. Vende por comentário no Instagram, sem preço público.</p></div>
+      <div class="item"><div class="linha1"><strong>Marcos Molima</strong><span class="preco">Só pelo WhatsApp</span></div><p>Rede própria de 10 a 11 unidades. Mentoria só para quem já fatura mais de R$ 30 mil por mês.</p></div>
+      <div class="item"><div class="linha1"><strong>Guilherme Toledo</strong><span class="preco">Ingresso</span></div><p>141 mil seguidores. Imersão de gestão em 22 e 23/11, para quem fatura mais de R$ 15 mil e tem 2 barbeiros ou mais.</p></div>
+      <div class="item"><div class="linha1"><strong>Abner Parente (Venda Como Barbeiro)</strong><span class="preco">R$ 497</span></div><p>Mais de 40 aulas sobre vendas e ticket médio. A página não diz quem ele é nem mostra resultado.</p></div>
+      <div class="item"><div class="linha1"><strong>Gilvan Silva (Universidade GS)</strong><span class="preco">R$ 597</span></div><p>Técnica, serviços extras, vendas e captação em 6 módulos, 1 ano de acesso. O único que fala com "barbearia de bairro".</p></div>
+      <div class="item"><div class="linha1"><strong>Cursos de entrada</strong><span class="preco">R$ 47,90 a R$ 199,99</span></div><p>Luã Bandeira (serviços extras, 5 aulas), Caval com o Instituto Embelleze (R$ 97), Adri Barbeiro (Instagram e Google, R$ 97), Ayrton Alexander (vendas, R$ 127,90).</p></div>
+    </div>
+  </div>
+
+  <div class="grupo">
+    <h3>Técnica e visagismo</h3>
+    <div class="lista">
+      <div class="item"><div class="linha1"><strong>Juarez Leite</strong><span class="preco">R$ 2.997</span></div><p>Curso de visagismo com mais de 36 h. Mentoria de 6 meses anunciada a R$ 15 mil. Vende precificação e posicionamento premium junto com a técnica.</p></div>
+      <div class="item"><div class="linha1"><strong>Marcony Visagista e Mateus Mattos</strong><span class="preco">R$ 1.497 a R$ 1.997</span></div><p>Formações de visagismo com 1 ano de acesso, prometendo cobrar mais e fidelizar.</p></div>
+      <div class="item"><div class="linha1"><strong>Thagner Ramos, Vitor Correia</strong><span class="preco">R$ 197 a R$ 397</span></div><p>Cursos de corte e química, com um módulo de gestão ou de "lotar a agenda".</p></div>
+      <div class="item"><div class="linha1"><strong>Agno Black Red, Babu</strong><span class="preco">R$ 12,99 a R$ 37,90/mês</span></div><p>Escolas online por assinatura, com centenas de aulas de técnica.</p></div>
+    </div>
+  </div>
+
+  <div class="grupo">
+    <h3>Escolas e eventos</h3>
+    <div class="lista">
+      <div class="item"><div class="linha1"><strong>Senac e escolas presenciais</strong><span class="preco">R$ 897 a R$ 3.827</span></div><p>Curso de barbeiro de 48 a 180 h. Nenhum tem módulo forte de venda.</p></div>
+      <div class="item"><div class="linha1"><strong>Barber Week</strong><span class="preco">15 e 16/11</span></div><p>Expo Center Norte, São Paulo. Teve 25 mil visitantes em 2025, com congresso a partir de R$ 597. Tem palestras de faturamento, redes sociais e carreira.</p></div>
+      <div class="item"><div class="linha1"><strong>Congressos e imersões regionais</strong><span class="preco">R$ 215 a R$ 697</span></div><p>Beauty Fair, Barber Pro Nordeste, Barber Week Tour. É o palco onde barbeiro vira educador.</p></div>
+    </div>
+  </div>
+
+  <div class="grupo">
+    <h3>Quanto tempo dura a entrega</h3>
+    <div class="parede">
+      <div class="linha"><span class="nome">Curso gravado</span><span class="pont"></span><span class="valor">1 ano de acesso</span></div>
+      <div class="linha"><span class="nome">Imersão ou workshop</span><span class="pont"></span><span class="valor">1 a 2 dias</span></div>
+      <div class="linha"><span class="nome">Mentoria</span><span class="pont"></span><span class="valor">3 a 12 meses</span></div>
+      <div class="linha"><span class="nome">Comunidade ou escola</span><span class="pont"></span><span class="valor">mensal</span></div>
+    </div>
+    <p class="nota">Garantia de 7 dias e certificado são o padrão. Acesso vitalício é raro.</p>
+  </div>
+</section>
+
+<section id="instagram">
+  <div class="cabeca">
+    <p class="rotulo">Instagram</p>
+    <h2>Como eles se comunicam</h2>
+    <p>Quem vende para barbeiro posta de 4 a 7 vezes por semana, quase só Reels, falando para a câmera. A bio sempre traz um número do próprio negócio.</p>
+  </div>
+  <div class="tabela-wrap">
+    <table>
+      <thead><tr><th>Perfil</th><th class="num">Seguidores</th><th class="num">Posts por semana</th></tr></thead>
+      <tbody>
+        <tr><td>@seuelias</td><td class="num">1,1 mi</td><td class="num">~2,5</td></tr>
+        <tr><td>@luanamarall</td><td class="num">223 mil</td><td class="num">~6</td></tr>
+        <tr><td>@brunobritobarber</td><td class="num">219 mil</td><td class="num">~20</td></tr>
+        <tr><td>@adribarbeiro</td><td class="num">176 mil</td><td class="num">~7</td></tr>
+        <tr><td>@eutoledooficial</td><td class="num">141 mil</td><td class="num">~14</td></tr>
+        <tr><td>@jurandirsilvar</td><td class="num">112 mil</td><td class="num">~20</td></tr>
+        <tr><td>@lincohnagner</td><td class="num">90 mil</td><td class="num">~5</td></tr>
+        <tr><td>@marcos.molima</td><td class="num">24 mil</td><td class="num">~4</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <ul class="pontos">
+    <li><strong>O número vem antes de tudo.</strong> Unidades, faturamento ou alunos na bio e no texto do anúncio.</li>
+    <li><strong>A pessoa fala para a câmera,</strong> de selfie, no carro ou na barbearia, com legenda grande. Carrossel é minoria.</li>
+    <li><strong>Os destaques viram vitrine:</strong> Alunos, Depoimentos, Mentoria, Quem sou.</li>
+    <li><strong>O link da bio vai direto para a venda</strong> ou para a aplicação da mentoria, nunca para a barbearia.</li>
+  </ul>
+  <p class="nota">Coleta de 13/11/2026, com as datas dos 6 posts mais recentes de cada perfil, sem contar os fixados.</p>
+</section>
+
+<section id="anuncios">
+  <div class="cabeca">
+    <p class="rotulo">Anúncios</p>
+    <h2>Quem está anunciando agora</h2>
+    <p>O anúncio que domina é vídeo da própria pessoa falando para a câmera, com o faturamento dela no gancho, vendendo gestão para o dono.</p>
+  </div>
+  <div class="parede">
+    <div class="linha"><span class="nome">Seu Elias (Black Friday)</span><span class="pont"></span><span class="valor">~490 ativos</span></div>
+    <div class="linha"><span class="nome">Jurandir Silva</span><span class="pont"></span><span class="valor">~51 ativos</span></div>
+    <div class="linha"><span class="nome">Adri Barbeiro</span><span class="pont"></span><span class="valor">~41 ativos</span></div>
+    <div class="linha"><span class="nome">Guilherme Toledo</span><span class="pont"></span><span class="valor">~21 ativos</span></div>
+    <div class="linha"><span class="nome">Marco Visagismo</span><span class="pont"></span><span class="valor">~19 ativos</span></div>
+    <div class="linha"><span class="nome">Marcos Molima</span><span class="pont"></span><span class="valor">~14 ativos</span></div>
+    <div class="linha"><span class="nome">Luan Amaral, Mileno Rocha</span><span class="pont"></span><span class="valor">~11 cada</span></div>
+  </div>
+  <ul class="pontos">
+    <li><strong>Eles filtram o dono rico</strong> ("se já fatura R$ 20 mil", "para quem fatura mais de R$ 80 mil"). Ninguém chama o barbeiro da cadeira nem o dono pequeno.</li>
+    <li><strong>Os anúncios que duram são simples:</strong> uma pessoa, uma promessa, um pedido. Um deles está no ar desde agosto de 2024.</li>
+    <li><strong>O destino acompanha o preço.</strong> Curso barato vai direto para a página de vendas; mentoria vai para WhatsApp ou aplicação; lançamento vai para grupo e aula ao vivo.</li>
+    <li><strong>Até o fim de novembro o anúncio fica caro,</strong> com todo mundo em Black Friday. O seu anúncio pago fica para depois.</li>
+  </ul>
+  <p class="nota">Levantado na Biblioteca de Anúncios do Meta em 13/11/2026. Ela não mostra quanto cada um gasta.</p>
+</section>
+
+<section id="precos">
+  <div class="cabeca">
+    <p class="rotulo">Escada de preços</p>
+    <h2>Quanto o mercado cobra e quanto sugerimos</h2>
+    <p>Entre R$ 200 e R$ 497 não achamos nenhum curso de negócio para barbeiro. É ali que o seu entra.</p>
+  </div>
+  <div class="parede">
+    <div class="degrau">
+      <h3>1. Curso gravado</h3>
+      <div class="linha"><span class="nome">Mercado</span><span class="pont"></span><span class="valor">R$ 47,90 a R$ 1.467</span></div>
+      <div class="linha sug"><span class="nome">Sugestão</span><span class="pont"></span><span class="valor">R$ 297, depois R$ 497</span></div>
+    </div>
+    <div class="degrau">
+      <h3>2. Workshop presencial</h3>
+      <div class="linha"><span class="nome">Mercado</span><span class="pont"></span><span class="valor">R$ 215 a R$ 1.997</span></div>
+      <div class="linha sug"><span class="nome">Sugestão</span><span class="pont"></span><span class="valor">R$ 497 a R$ 997</span></div>
+    </div>
+    <div class="degrau">
+      <h3>3. Mentoria</h3>
+      <div class="linha"><span class="nome">Mercado</span><span class="pont"></span><span class="valor">R$ 4.497 a R$ 15 mil</span></div>
+      <div class="linha sug"><span class="nome">Sugestão (em grupo)</span><span class="pont"></span><span class="valor">R$ 1.997 a R$ 2.997</span></div>
+    </div>
+  </div>
+  <p class="nota">O mercado parcela em até 12x. R$ 297 viram cerca de R$ 30 por mês, menos que um corte: a mediana é R$ 40 numa amostra de 6 capitais.</p>
+</section>
+
+<section id="curso">
+  <div class="cabeca">
+    <p class="rotulo">Sugestão</p>
+    <h2>O curso que sugerimos</h2>
+    <p>Um curso gravado de 10 aulas que ensina o barbeiro da cadeira a faturar mais com o mesmo cliente e a trazer cliente novo do bairro, com a prova das suas duas barbearias.</p>
+  </div>
+  <dl class="ficha">
+    <dt>Para quem</dt><dd>Barbeiro comissionado, autônomo e dono de 1 a 3 cadeiras. É o público que os grandes deixam de fora.</dd>
+    <dt>Promessa</dt><dd>Faturar mais com o mesmo cliente: de R$ [antes] para R$ [depois] por atendimento. O número sai das suas respostas.</dd>
+    <dt>Prova</dt><dd>O ticket médio das duas unidades e o depoimento dos barbeiros da sua equipe. Periferia e bairro nobre respondem ao "no meu bairro não funciona".</dd>
+    <dt>Formato</dt><dd>10 aulas de 10 a 20 minutos, gravadas na barbearia, com exemplo real na cadeira.</dd>
+    <dt>Preço</dt><dd>R$ 297 na primeira turma (12x de cerca de R$ 30) e R$ 497 depois.</dd>
+    <dt>Entrega</dt><dd>1 ano de acesso, garantia de 7 dias e certificado, como quase todos os concorrentes.</dd>
+    <dt>Bônus</dt><dd>Cardápio de serviços e combos editável, roteiro de oferta para deixar na bancada e planilha de ticket médio.</dd>
+    <dt>Nome</dt><dd>Opções: "Do Corte ao Combo", "Cliente Vale Mais" ou "Método" + o seu nome. Cadeira Lucrativa, Barbearia Lucrativa e Venda Como Barbeiro já existem.</dd>
+  </dl>
+
+  <div class="grupo">
+    <h3>Esqueleto das 10 aulas</h3>
+    <p class="nota">É só um ponto de partida. A ordem e o conteúdo final vêm do seu método.</p>
+    <ol class="aulas">
+      <li>A conta da cadeira: por que faturar mais por cliente vale mais do que lotar a agenda</li>
+      <li>Quanto você fatura por cliente hoje e onde o dinheiro escapa</li>
+      <li>O cardápio: serviços e combos que somam no mesmo atendimento</li>
+      <li>A conversa na cadeira: oferecer sem empurrar</li>
+      <li>Produto na finalização</li>
+      <li>Preço: quando e como subir sem perder cliente</li>
+      <li>Fazer o cliente voltar antes</li>
+      <li>Trazer cliente novo do bairro: indicação, Google e WhatsApp</li>
+      <li>Periferia e bairro nobre: o que muda e o que é igual</li>
+      <li>Plano de 30 dias e como medir o resultado</li>
+    </ol>
+  </div>
+
+  <div class="grupo">
+    <h3>Depois do curso</h3>
+    <ul class="pontos">
+      <li><strong>Workshop dentro das suas barbearias:</strong> um dia, metade numa unidade e metade na outra, de 15 a 20 vagas. Ninguém oferece ver duas realidades no mesmo dia.</li>
+      <li><strong>Mentoria em grupo:</strong> 3 meses, encontros a cada 15 dias, para dono de 1 a 3 cadeiras, quando já houver alunos com resultado.</li>
+      <li><strong>Palestras e parcerias:</strong> palco em eventos e programas como o da Trinks, que paga a educadores 50% da mensalidade nos 4 primeiros meses de cada barbearia indicada.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="perfil">
+  <div class="cabeca">
+    <p class="rotulo">Seu Instagram</p>
+    <h2>Seu perfil de educador</h2>
+    <p>O perfil com o seu nome passa a falar só com barbeiro. Os perfis da barbearia e do estúdio continuam falando com cliente e viram a prova viva do método.</p>
+  </div>
+  <ul class="pontos">
+    <li>Se o seu perfil pessoal já mostra o seu dia a dia na barbearia, ele vira o perfil de educador.</li>
+    <li>Se ele é de família e amigos, a gente abre um novo, no modelo "@[seunome]ensina", como fez o Rapha.</li>
+    <li>O perfil que hoje fala com cliente não vira o de educador: misturar os dois públicos confunde os dois.</li>
+  </ul>
+  <div class="grupo">
+    <h3>Modelo de bio</h3>
+    <div class="bio" aria-label="Modelo de bio">
+      <span class="handle">@seuperfil</span>
+      <span>Barbeiro desde 2018 | 2 barbearias e 2 estúdios</span>
+      <span>Te ensino a faturar mais por cliente, na periferia ou no bairro nobre</span>
+      <span class="link">Entre na lista do curso</span>
+    </div>
+  </div>
+  <div class="grupo">
+    <h3>O que postar, 5 Reels por semana</h3>
+    <div class="lista">
+      <div class="item"><strong>Números da cadeira</strong><p>Ticket médio, a conta do mês, quanto vale um cliente.</p></div>
+      <div class="item"><strong>As duas barbearias</strong><p>A mesma oferta na periferia e no bairro nobre: o que muda na conversa.</p></div>
+      <div class="item"><strong>Como oferecer</strong><p>O que você fala quando o cliente senta, o cardápio, o produto na finalização.</p></div>
+      <div class="item"><strong>Atrair cliente</strong><p>Como você traz cliente novo em cada bairro: indicação, Google, WhatsApp.</p></div>
+    </div>
+    <p class="nota">Você falando para a câmera, com legenda grande, gravado dentro das suas barbearias. O cenário já é a prova.</p>
+  </div>
+</section>
+
+<section id="passos">
+  <div class="cabeca">
+    <p class="rotulo">Primeiros passos</p>
+    <h2>O que fazer a partir de hoje</h2>
+    <p class="nota">Pode ir marcando aqui: fica salvo neste aparelho.</p>
+  </div>
+  <div class="checks">
+    <h3>Hoje</h3>
+    <label class="check"><input type="checkbox" id="p-h1"><span>Responder as perguntas abaixo e mandar para a gente.</span></label>
+    <label class="check"><input type="checkbox" id="p-h2"><span>Tirar print do ticket médio das duas unidades, de antes e de agora, no sistema de agenda ou no caixa.</span></label>
+    <label class="check"><input type="checkbox" id="p-h3"><span>Escolher o perfil de educador e trocar a bio pelo modelo acima.</span></label>
+    <label class="check"><input type="checkbox" id="p-h4"><span>Criar um grupo de WhatsApp para a lista de espera e colocar o link na bio.</span></label>
+    <label class="check"><input type="checkbox" id="p-h5"><span>Gravar o primeiro vídeo, de 1 minuto, na barbearia: quem você é, desde quando corta, as duas unidades e o que vai ensinar.</span></label>
+    <label class="check"><input type="checkbox" id="p-h6"><span>Se estiver em São Paulo ou perto: a Barber Week é neste domingo e segunda (15 e 16/11). Vale ir para ver as palestras de faturamento, conhecer barbeiros e gravar conteúdo.</span></label>
+    <h3>Próximos 7 dias</h3>
+    <label class="check"><input type="checkbox" id="p-s1"><span>Postar 5 Reels, um de cada assunto acima e mais um da sua história.</span></label>
+    <label class="check"><input type="checkbox" id="p-s2"><span>Gravar o depoimento de 2 ou 3 barbeiros da sua equipe: quanto faziam por cliente antes e quanto fazem hoje.</span></label>
+    <label class="check"><input type="checkbox" id="p-s3"><span>Escrever as etapas do seu método. Elas viram o roteiro das 10 aulas.</span></label>
+    <label class="check"><input type="checkbox" id="p-s4"><span>Escolher o nome do curso.</span></label>
+    <h3>Até meados de dezembro</h3>
+    <label class="check"><input type="checkbox" id="p-d1"><span>Gravar as 10 aulas. A edição fica com a nossa equipe.</span></label>
+    <label class="check"><input type="checkbox" id="p-d2"><span>Abrir conta na plataforma de venda e montar a página do curso.</span></label>
+    <label class="check"><input type="checkbox" id="p-d3"><span>Manter 5 Reels por semana e acompanhar quantos barbeiros entram na lista.</span></label>
+    <label class="check"><input type="checkbox" id="p-d4"><span>Marcar a data da aula ao vivo e da abertura da primeira turma.</span></label>
+  </div>
+</section>
+
+<section id="perguntas">
+  <div class="cabeca">
+    <p class="rotulo">Sua vez</p>
+    <h2>Perguntas para você</h2>
+    <p>Responda do seu jeito, pode ser curto. O que não souber, deixe em branco. Suas respostas ficam salvas neste aparelho enquanto você preenche. No fim, é só mandar para a gente pelo WhatsApp.</p>
+  </div>
+
+  <div class="perguntas-lista">
+    <h3 class="bloco-titulo">Você e os seus perfis</h3>
+
+    <div class="q" data-n="1" data-titulo="Nome e cidade" role="group" aria-labelledby="q1-t">
+      <h3 id="q1-t"><span class="n">1</span>Seu nome e a cidade das barbearias</h3>
+      <div class="duplo">
+        <label class="campo">Nome<input type="text" id="q1-nome" data-label="Nome" autocomplete="name"></label>
+        <label class="campo">Cidade<input type="text" id="q1-cidade" data-label="Cidade"></label>
+      </div>
+    </div>
+
+    <div class="q" data-n="2" data-titulo="Perfis no Instagram" role="group" aria-labelledby="q2-t">
+      <h3 id="q2-t"><span class="n">2</span>O @ de cada perfil e quantos seguidores ele tem <span class="tag">Importante</span></h3>
+      <div class="duplo">
+        <label class="campo">@ da barbearia<input type="text" id="q2-barb" data-label="@ da barbearia" autocapitalize="off"></label>
+        <label class="campo">Seguidores<input type="text" id="q2-barb-s" data-label="Seguidores da barbearia" inputmode="numeric"></label>
+      </div>
+      <div class="duplo">
+        <label class="campo">@ do estúdio<input type="text" id="q2-est" data-label="@ do estúdio" autocapitalize="off"></label>
+        <label class="campo">Seguidores<input type="text" id="q2-est-s" data-label="Seguidores do estúdio" inputmode="numeric"></label>
+      </div>
+      <div class="duplo">
+        <label class="campo">@ pessoal<input type="text" id="q2-pes" data-label="@ pessoal" autocapitalize="off"></label>
+        <label class="campo">Seguidores<input type="text" id="q2-pes-s" data-label="Seguidores do pessoal" inputmode="numeric"></label>
+      </div>
+      <div class="duplo">
+        <label class="campo">@ de negócio<input type="text" id="q2-neg" data-label="@ de negócio" autocapitalize="off"></label>
+        <label class="campo">Seguidores<input type="text" id="q2-neg-s" data-label="Seguidores do perfil de negócio" inputmode="numeric"></label>
+      </div>
+    </div>
+
+    <div class="q" data-n="3" data-titulo="O que é o estúdio" role="group" aria-labelledby="q3-t">
+      <h3 id="q3-t"><span class="n">3</span>O que é o estúdio?</h3>
+      <div class="opcoes" data-label="Tipo de estúdio" role="radiogroup">
+        <label><input type="radio" name="q3" id="q3-a" value="Tatuagem">Tatuagem</label>
+        <label><input type="radio" name="q3" id="q3-b" value="Estética">Estética</label>
+        <label><input type="radio" name="q3" id="q3-c" value="Barbearia premium de cadeira única">Barbearia premium de cadeira única</label>
+        <label><input type="radio" name="q3" id="q3-d" value="Outro">Outro</label>
+      </div>
+      <label class="campo">Se for outro, conte o que é<input type="text" id="q3-outro" data-label="Outro tipo de estúdio"></label>
+    </div>
+
+    <h3 class="bloco-titulo">A prova do seu método</h3>
+
+    <div class="q" data-n="4" data-titulo="Ticket médio antes e depois" role="group" aria-labelledby="q4-t">
+      <h3 id="q4-t"><span class="n">4</span>Quanto cada cliente gastava antes do seu método e quanto gasta hoje <span class="tag">Importante</span></h3>
+      <p class="ajuda">É o ticket médio: o total do dia dividido pelo número de clientes.</p>
+      <div class="unidade">
+        <span>Unidade da periferia</span>
+        <div class="duplo">
+          <label class="campo">Antes (R$)<input type="text" id="q4-per-antes" data-label="Periferia, antes (R$)" inputmode="decimal"></label>
+          <label class="campo">Hoje (R$)<input type="text" id="q4-per-hoje" data-label="Periferia, hoje (R$)" inputmode="decimal"></label>
+        </div>
+      </div>
+      <div class="unidade">
+        <span>Unidade do bairro nobre</span>
+        <div class="duplo">
+          <label class="campo">Antes (R$)<input type="text" id="q4-nob-antes" data-label="Bairro nobre, antes (R$)" inputmode="decimal"></label>
+          <label class="campo">Hoje (R$)<input type="text" id="q4-nob-hoje" data-label="Bairro nobre, hoje (R$)" inputmode="decimal"></label>
+        </div>
+      </div>
+      <label class="campo">Em quanto tempo mudou?<input type="text" id="q4-tempo" data-label="Em quanto tempo mudou"></label>
+      <div class="opcoes" data-label="Tem print do sistema ou do caixa">
+        <label><input type="checkbox" id="q4-print" value="Sim, tenho print">Tenho print do sistema ou do caixa</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="5" data-titulo="Faturamento e equipe" role="group" aria-labelledby="q5-t">
+      <h3 id="q5-t"><span class="n">5</span>Quanto cada unidade fatura por mês, mais ou menos, e quem trabalha com você</h3>
+      <div class="duplo">
+        <label class="campo">Periferia (R$ por mês)<input type="text" id="q5-per" data-label="Faturamento da periferia (R$/mês)" inputmode="decimal"></label>
+        <label class="campo">Bairro nobre (R$ por mês)<input type="text" id="q5-nob" data-label="Faturamento do bairro nobre (R$/mês)" inputmode="decimal"></label>
+      </div>
+      <label class="campo">Quantos barbeiros trabalham com você?<input type="text" id="q5-barbeiros" data-label="Barbeiros na equipe" inputmode="numeric"></label>
+      <div class="opcoes" data-label="Como eles trabalham" role="radiogroup" aria-label="Como eles trabalham">
+        <label><input type="radio" name="q5" id="q5-a" value="Comissão">Comissão</label>
+        <label><input type="radio" name="q5" id="q5-b" value="Aluguel de cadeira">Aluguel de cadeira</label>
+        <label><input type="radio" name="q5" id="q5-c" value="Salário">Salário</label>
+        <label><input type="radio" name="q5" id="q5-d" value="Misto">Misto</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="6" data-titulo="O que o método vende a mais" role="group" aria-labelledby="q6-t">
+      <h3 id="q6-t"><span class="n">6</span>O que o seu método vende a mais na cadeira?</h3>
+      <div class="opcoes" data-label="Serviços e produtos a mais">
+        <label><input type="checkbox" id="q6-a" value="Barba">Barba</label>
+        <label><input type="checkbox" id="q6-b" value="Sobrancelha">Sobrancelha</label>
+        <label><input type="checkbox" id="q6-c" value="Pigmentação">Pigmentação</label>
+        <label><input type="checkbox" id="q6-d" value="Hidratação ou tratamento">Hidratação ou tratamento</label>
+        <label><input type="checkbox" id="q6-e" value="Química ou platinado">Química ou platinado</label>
+        <label><input type="checkbox" id="q6-f" value="Produto de prateleira">Produto de prateleira</label>
+        <label><input type="checkbox" id="q6-g" value="Plano mensal">Plano mensal</label>
+      </div>
+      <label class="campo">Outro ou detalhe<input type="text" id="q6-outro" data-label="Outro ou detalhe"></label>
+      <div class="opcoes" data-label="Tem clube de assinatura" role="radiogroup" aria-label="Tem clube de assinatura">
+        <label><input type="radio" name="q6c" id="q6-s" value="Sim">Tenho clube de assinatura</label>
+        <label><input type="radio" name="q6c" id="q6-n" value="Não">Não tenho</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="7" data-titulo="Como traz cliente novo" role="group" aria-labelledby="q7-t">
+      <h3 id="q7-t"><span class="n">7</span>Como você traz cliente novo hoje?</h3>
+      <div class="opcoes" data-label="Canais">
+        <label><input type="checkbox" id="q7-a" value="Instagram">Instagram</label>
+        <label><input type="checkbox" id="q7-b" value="Google">Google</label>
+        <label><input type="checkbox" id="q7-c" value="Indicação">Indicação</label>
+        <label><input type="checkbox" id="q7-d" value="Parcerias no bairro">Parcerias no bairro</label>
+        <label><input type="checkbox" id="q7-e" value="Anúncio pago">Anúncio pago</label>
+        <label><input type="checkbox" id="q7-f" value="WhatsApp">WhatsApp</label>
+      </div>
+      <label class="campo">Quantos clientes novos entram por mês, mais ou menos?<input type="text" id="q7-novos" data-label="Clientes novos por mês" inputmode="numeric"></label>
+    </div>
+
+    <h3 class="bloco-titulo">A sua história</h3>
+
+    <div class="q" data-n="8" data-titulo="Experiência ensinando" role="group" aria-labelledby="q8-t">
+      <h3 id="q8-t"><span class="n">8</span>Você já ensinou alguém?</h3>
+      <p class="ajuda">Treinou os seus barbeiros, deu palestra, ajudou colega a abrir barbearia.</p>
+      <textarea id="q8-texto" data-label="Já ensinou" aria-labelledby="q8-t"></textarea>
+      <div class="opcoes" data-label="Barbeiro topa gravar depoimento" role="radiogroup" aria-label="Algum barbeiro que aplicou o método topa gravar depoimento?">
+        <span class="nota" style="width:100%">Algum barbeiro que aplicou o método topa gravar depoimento?</span>
+        <label><input type="radio" name="q8" id="q8-s" value="Sim">Sim</label>
+        <label><input type="radio" name="q8" id="q8-t2" value="Talvez">Talvez</label>
+        <label><input type="radio" name="q8" id="q8-n" value="Não">Não</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="9" data-titulo="Contar a história periferia e bairro nobre" role="group" aria-labelledby="q9-t">
+      <h3 id="q9-t"><span class="n">9</span>Você topa contar que tem uma unidade na periferia e outra em bairro nobre?</h3>
+      <p class="ajuda">É o seu maior diferencial, mas a decisão de mostrar é sua.</p>
+      <div class="opcoes" data-label="Resposta" role="radiogroup" aria-labelledby="q9-t">
+        <label><input type="radio" name="q9" id="q9-s" value="Sim">Sim</label>
+        <label><input type="radio" name="q9" id="q9-c" value="Quero conversar antes">Quero conversar antes</label>
+        <label><input type="radio" name="q9" id="q9-n" value="Prefiro não">Prefiro não</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="10" data-titulo="Como avisar barbeiros" role="group" aria-labelledby="q10-t">
+      <h3 id="q10-t"><span class="n">10</span>Por onde dá para avisar barbeiros do curso?</h3>
+      <p class="ajuda">Grupos de WhatsApp, fornecedores, distribuidores, colegas de evento.</p>
+      <textarea id="q10-texto" data-label="Onde avisar" aria-labelledby="q10-t"></textarea>
+    </div>
+
+    <h3 class="bloco-titulo">O lançamento</h3>
+
+    <div class="q" data-n="11" data-titulo="Tempo para gravar" role="group" aria-labelledby="q11-t">
+      <h3 id="q11-t"><span class="n">11</span>Quantas horas por semana você consegue gravar?</h3>
+      <label class="campo">Horas por semana<input type="text" id="q11-horas" data-label="Horas por semana" inputmode="numeric"></label>
+      <div class="opcoes" data-label="Quem grava" role="radiogroup" aria-label="Quem grava">
+        <label><input type="radio" name="q11" id="q11-a" value="Gravo sozinho">Gravo sozinho</label>
+        <label><input type="radio" name="q11" id="q11-b" value="Tenho alguém da equipe">Tenho alguém da equipe</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="12" data-titulo="Verba de anúncio" role="group" aria-labelledby="q12-t">
+      <h3 id="q12-t"><span class="n">12</span>Quanto pode investir em anúncio no primeiro mês?</h3>
+      <label class="campo">Valor (R$)<input type="text" id="q12-valor" data-label="Verba no primeiro mês (R$)" inputmode="decimal"></label>
+    </div>
+
+    <div class="q" data-n="13" data-titulo="Preço e primeira turma" role="group" aria-labelledby="q13-t">
+      <h3 id="q13-t"><span class="n">13</span>Que preço você imagina para o curso?</h3>
+      <label class="campo">Preço que você imagina (R$)<input type="text" id="q13-preco" data-label="Preço que imagina (R$)" inputmode="decimal"></label>
+      <div class="opcoes" data-label="Topa primeira turma ao vivo antes de gravar tudo" role="radiogroup" aria-label="Topa abrir uma primeira turma com aulas ao vivo antes de gravar tudo?">
+        <span class="nota" style="width:100%">Topa abrir uma primeira turma com aulas ao vivo antes de gravar tudo?</span>
+        <label><input type="radio" name="q13" id="q13-s" value="Sim">Sim</label>
+        <label><input type="radio" name="q13" id="q13-e" value="Quero entender melhor">Quero entender melhor</label>
+        <label><input type="radio" name="q13" id="q13-n" value="Não">Não</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="14" data-titulo="Mês mais fraco" role="group" aria-labelledby="q14-t">
+      <h3 id="q14-t"><span class="n">14</span>Em que mês a cadeira costuma esvaziar?</h3>
+      <p class="ajuda">É quando o barbeiro mais sente falta de cliente, e o melhor momento para abrir a turma.</p>
+      <label class="campo">Mês ou meses<input type="text" id="q14-mes" data-label="Mês mais fraco"></label>
+    </div>
+
+    <div class="q" data-n="15" data-titulo="Empresa e plataforma" role="group" aria-labelledby="q15-t">
+      <h3 id="q15-t"><span class="n">15</span>Você já tem empresa aberta e conta em plataforma de venda?</h3>
+      <div class="opcoes" data-label="Empresa" role="radiogroup" aria-label="Empresa">
+        <label><input type="radio" name="q15a" id="q15-cnpj" value="CNPJ">CNPJ</label>
+        <label><input type="radio" name="q15a" id="q15-mei" value="MEI">MEI</label>
+        <label><input type="radio" name="q15a" id="q15-nada" value="Ainda não">Ainda não</label>
+      </div>
+      <div class="opcoes" data-label="Plataforma" aria-label="Plataforma">
+        <label><input type="checkbox" id="q15-hot" value="Hotmart">Hotmart</label>
+        <label><input type="checkbox" id="q15-kiw" value="Kiwify">Kiwify</label>
+        <label><input type="checkbox" id="q15-edu" value="Eduzz">Eduzz</label>
+        <label><input type="checkbox" id="q15-nen" value="Nenhuma">Nenhuma</label>
+      </div>
+    </div>
+
+    <div class="q" data-n="16" data-titulo="Algo mais" role="group" aria-labelledby="q16-t">
+      <h3 id="q16-t"><span class="n">16</span>Tem algo que a gente não perguntou e você acha importante?</h3>
+      <textarea id="q16-texto" data-label="Comentário" aria-labelledby="q16-t"></textarea>
+    </div>
+
+    <div class="envio" id="enviar">
+      <h3>Mandar as respostas</h3>
+      <p class="nota">Confira o texto abaixo. Depois toque em Enviar pelo WhatsApp e escolha a nossa conversa, ou copie e cole onde preferir.</p>
+      <textarea id="resumo-texto" readonly aria-label="Suas respostas em texto"></textarea>
+      <div class="acoes">
+        <a class="btn" id="whats" href="https://wa.me/" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+        <button class="btn sec" type="button" id="copiar">Copiar respostas</button>
+      </div>
+      <p class="status" id="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="barra">
+    <span class="prog" id="progresso">0 de 16 respondidas</span>
+    <a class="btn" href="#enviar">Ir para o envio</a>
+    <div class="medidor" aria-hidden="true"><div id="medidor"></div></div>
+  </div>
+</section>
+
+<footer class="fontes">
+  <p>Pesquisa feita em 13/11/2026 com páginas de venda, a Biblioteca de Anúncios do Meta e perfis públicos do Instagram. Preços mudam, principalmente na Black Friday.</p>
+  <ul>
+    <li><a href="https://business.barberday.online/" target="_blank" rel="noopener">Barber Day Business</a> · <a href="https://gestao.barberday.online/" target="_blank" rel="noopener">curso de gestão em 10 aulas</a> · <a href="https://diariodocomercio.com.br/negocios/grupo-seu-elias-faturamento/" target="_blank" rel="noopener">Diário do Comércio</a></li>
+    <li><a href="https://sistemacashbarber.com.br/" target="_blank" rel="noopener">Cash Barber</a> · <a href="https://upsell.sistemacashbarber.com.br/upsell-imersao-10x/" target="_blank" rel="noopener">Imersão 10x</a> · <a href="https://www.sympla.com.br/evento/gestao-de-barbearia-mentoria-com-o-rapha/2411548" target="_blank" rel="noopener">Mentoria do Rapha</a></li>
+    <li><a href="https://molima.com.br/ceo-de-barbearia/" target="_blank" rel="noopener">CEO de Barbearia</a> · <a href="https://hotmart.com/pt-br/marketplace/produtos/venda-como-barbeiro/S78308567V" target="_blank" rel="noopener">Venda Como Barbeiro</a> · <a href="https://universidadegs.com.br/" target="_blank" rel="noopener">Universidade GS</a> · <a href="https://cursos.educaembelleze.com/barbeiro-seja-o-dono/" target="_blank" rel="noopener">Barbeiro Empreendedor</a></li>
+    <li><a href="https://visageducation.com/formacaovisagista/" target="_blank" rel="noopener">Visage Education</a> · <a href="https://abrindojogo.com" target="_blank" rel="noopener">Abrindo o Jogo</a> · <a href="https://vitorcorreiabarber.com" target="_blank" rel="noopener">Creative Barber</a> · <a href="https://segredodobarbeironline.com/planos/" target="_blank" rel="noopener">Segredo do Barbeiro</a> · <a href="https://babuacademy.com.br" target="_blank" rel="noopener">Babu Academy</a></li>
+    <li><a href="https://eventos.barberweek.com.br/palestrantes/" target="_blank" rel="noopener">Barber Week 2026</a> · <a href="https://abcdoabc.com.br/barber-week-encerra-recorde-25-mil-visitantes-sp/" target="_blank" rel="noopener">Barber Week 2025</a> · <a href="https://cursos.ce.senac.br/produto/barbeiro-centro-tarde-2026-07-691/" target="_blank" rel="noopener">Senac CE</a> · <a href="https://portal.sc.senac.br/curso/140051/barbeiro" target="_blank" rel="noopener">Senac SC</a></li>
+    <li><a href="https://www.facebook.com/ads/library/" target="_blank" rel="noopener">Biblioteca de Anúncios do Meta</a> · <a href="https://sistema.trinks.com/programa-de-parceria" target="_blank" rel="noopener">Parceria Trinks</a></li>
+    <li><a href="https://oportunidados.com.br/cnae/9602501-cabeleireiros-manicure-e-pedicure" target="_blank" rel="noopener">Estabelecimentos ativos</a> · <a href="https://agenciasebrae.com.br/cultura-empreendedora/a-cada-hora-27-negocios-de-beleza-sao-abertos-no-pais-crescimento-foi-de-185-em-2025/" target="_blank" rel="noopener">Agência Sebrae</a> · <a href="https://www.infomoney.com.br/?p=3175826" target="_blank" rel="noopener">IPCA 2025</a> · <a href="https://irrivio.com/blog/tabela-de-precos-barbearia-brasil" target="_blank" rel="noopener">Preços de barbearia</a></li>
+  </ul>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  var KEY = 'mapa-barbeiro-educador-v1';
+  var campos = function () { return Array.prototype.slice.call(document.querySelectorAll('input, textarea')).filter(function (el) { return el.id && el.id !== 'resumo-texto'; }); };
+
+  function salvar() {
+    try {
+      var dados = {};
+      campos().forEach(function (el) {
+        dados[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+      });
+      localStorage.setItem(KEY, JSON.stringify(dados));
+    } catch (e) {}
+  }
+
+  function carregar() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return;
+      var dados = JSON.parse(raw);
+      Object.keys(dados).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!dados[id]; else el.value = dados[id];
+      });
+    } catch (e) {}
+  }
+
+  function montar() {
+    var qs = Array.prototype.slice.call(document.querySelectorAll('.q'));
+    var feitas = 0;
+    var partes = ['Respostas para a análise de mercado (barbeiro educador)', ''];
+    qs.forEach(function (q) {
+      var linhas = [];
+      q.querySelectorAll('[data-label]').forEach(function (el) {
+        var label = el.getAttribute('data-label');
+        if (el.matches('input[type=text], textarea')) {
+          var v = el.value.trim();
+          if (v) linhas.push(label + ': ' + v);
+        } else {
+          var marcados = Array.prototype.slice.call(el.querySelectorAll('input:checked')).map(function (i) { return i.value; });
+          if (marcados.length) linhas.push(label + ': ' + marcados.join(', '));
+        }
+      });
+      if (linhas.length) feitas++;
+      partes.push(q.getAttribute('data-n') + '. ' + q.getAttribute('data-titulo'));
+      partes.push(linhas.length ? linhas.map(function (l) { return '- ' + l; }).join('\n') : '- (sem resposta)');
+      partes.push('');
+    });
+    var texto = partes.join('\n').trim();
+    document.getElementById('resumo-texto').value = texto;
+    document.getElementById('progresso').textContent = feitas + ' de ' + qs.length + ' respondidas';
+    document.getElementById('medidor').style.width = Math.round(feitas / qs.length * 100) + '%';
+    document.getElementById('whats').href = 'https://wa.me/?text=' + encodeURIComponent(texto);
+    return texto;
+  }
+
+  function aoMudar() { salvar(); montar(); }
+  document.addEventListener('input', aoMudar);
+  document.addEventListener('change', aoMudar);
+
+  document.getElementById('copiar').addEventListener('click', function () {
+    var texto = montar();
+    var status = document.getElementById('status');
+    var area = document.getElementById('resumo-texto');
+    function selecionar() {
+      area.focus();
+      area.select();
+      status.textContent = 'Selecionei o texto. Use o Copiar do celular e cole no WhatsApp.';
+    }
+    try {
+      navigator.clipboard.writeText(texto).then(function () {
+        status.textContent = 'Respostas copiadas. Agora é só colar no WhatsApp.';
+      }, selecionar);
+    } catch (e) { selecionar(); }
+  });
+
+  Array.prototype.slice.call(document.querySelectorAll('a[href^="#"]')).forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var alvo = document.getElementById(a.getAttribute('href').slice(1));
+      if (!alvo) return;
+      e.preventDefault();
+      var calmo = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      alvo.scrollIntoView({ behavior: calmo ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  carregar();
+  montar();
+})();
+</script>
+</body>
+</html>
