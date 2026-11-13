@@ -166,14 +166,14 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
   };
 
   return (
-    <div className="vsl" ref={caixa} onContextMenu={e => e.preventDefault()}>
+    <div className="vsl" ref={caixa} data-som={fase === 'mudo' || fase === 'retomar' ? 'nao' : 'sim'} onContextMenu={e => e.preventDefault()}>
       <video ref={ref} src={src} poster={poster} autoPlay muted loop playsInline preload="auto" onClick={cliqueNoVideo} disablePictureInPicture controlsList="nodownload noplaybackrate nofullscreen" />
 
       {fase === 'mudo' && (
         <button type="button" className="vsl-som" onClick={() => tocarComSom(0)} aria-label="Ativar o som do vídeo">
           <span className="vsl-som-topo">Seu vídeo já começou</span>
           <span className="vsl-som-icone"><VolumeX /></span>
-          <span className="vsl-som-acao">Toque para ouvir</span>
+          <span className="vsl-som-acao">Clique para ouvir</span>
         </button>
       )}
 
