@@ -4,7 +4,7 @@ import { siteConfig } from '@/lib/site-config';
 import { BotoesKiwify, Duvidas, ListaOferta, MidiaClone, Modulos, brl, useScriptKiwify } from '@/components/clone-oferta';
 
 /* /ultima-chance: o downsell do Modo Clone. Quem clica em "não" no /obrigado cai aqui (o script da Kiwify traz o token
-   da compra), com o mesmo curso por um preço menor. No "não" daqui, vai para a área de membros. */
+   da compra), com o mesmo curso por um preço menor (R$ 67 contra R$ 97). No "não" daqui, vai para a área de membros. */
 export const Route = createFileRoute('/ultima-chance')({
   head: () => ({ meta: [
     { title: 'Última oportunidade · Modo Clone' },
@@ -25,7 +25,7 @@ function UltimaChance() {
     <main className="clone-col">
       <section className="clone-topo" aria-labelledby="clone-titulo">
         <p className="clone-espera">Espera, antes de ir para o seu acesso</p>
-        <h1 id="clone-titulo">Leve o Modo Clone pela <em>metade do preço.</em></h1>
+        <h1 id="clone-titulo">Leve o Modo Clone por <em>{brl(price)}.</em></h1>
         <p className="clone-sub">É o mesmo mini curso, com as mesmas 3 aulas, para você criar o seu clone e gerar o seu primeiro vídeo com ele. Muda só o preço, e ele vale só nesta página.</p>
         <MidiaClone vsl={vsl} poster={vslPoster} />
       </section>
@@ -37,7 +37,7 @@ function UltimaChance() {
           <strong>{brl(price)}</strong>
           <span>pagamento único</span>
         </div>
-        <BotoesKiwify codigo={kiwifyCodigo} textoSim="Sim, quero pela metade do preço" textoNao="Não, obrigado. Quero ir para o meu acesso." evento="Downsell_Clone" />
+        <BotoesKiwify codigo={kiwifyCodigo} textoSim={`Sim, quero por ${brl(price)}`} textoNao="Não, obrigado. Quero ir para o meu acesso." evento="Downsell_Clone" />
         <ListaOferta />
       </section>
 
@@ -45,7 +45,7 @@ function UltimaChance() {
       <Duvidas />
 
       <section className="clone-fim">
-        <p className="clone-fim-frase">O mesmo Modo Clone. <em>Pela metade.</em></p>
+        <p className="clone-fim-frase">O mesmo Modo Clone. <em>Por {brl(price)}.</em></p>
         <a href="#oferta" className="clone-sim clone-sim-sobe">Quero por {brl(price)} <ArrowUp aria-hidden="true" /></a>
       </section>
     </main>

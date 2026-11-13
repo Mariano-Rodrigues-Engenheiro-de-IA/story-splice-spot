@@ -52,10 +52,10 @@ export const siteConfig = {
    *  "Página de obrigado e upsell" → gerador de upsell → Copiar HTML): em id="kiwify-upsell-trigger-XXXXXXX", vai só o XXXXXXX.
    *  Vazio = o botão de aceitar ainda não compra. O preço daqui tem que ser o mesmo da oferta na Kiwify.
    *  `vsl`: o vídeo de vendas (em public/videos), quando for gravado. Vazio = aparece a capa do Modo Clone.
-   *  13/11/2026: preços provisórios (ele ainda vai decidir). O código antigo sIdHoBB era de uma oferta de R$ 47 sem downsell. */
+   *  Preços decididos por ele em 13/11/2026: upsell R$ 97 e downsell R$ 67. O código antigo sIdHoBB era de uma oferta de R$ 47 sem downsell. */
   clone: {
-    upsell: { price: 90, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
-    downsell: { price: 45, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
+    upsell: { price: 97, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
+    downsell: { price: 67, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
     downsellUrl: '/ultima-chance',
   },
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
