@@ -89,17 +89,13 @@ function CartaoClone({ v, deitado, copia, ativo, perto }: { v: VideoClone; deita
  *  aulas deitados). O gatilho (ideia dele, 13/11): o clone é a peça que falta para quem já comprou o Modo Editor. */
 export function GaleriaClone() {
   return <section className="clone-secao clone-galeria" aria-labelledby="clone-galeria-titulo">
+    {/* título só em texto (pedido dele, 13/11): 1ª linha "Modo Clone + Modo Editor" com o + grande e deitado, 2ª "= Combo perfeito" */}
     <div className="clone-secao-topo">
-      <div className="clone-combo" role="img" aria-label="Modo Clone mais Modo Editor é igual ao combo perfeito">
-        <span className="clone-combo-pecas">
-          <span className="clone-combo-peca"><img src="/img/clone/icone.webp" width={26} height={26} alt="" />Modo Clone</span>
-          <b aria-hidden="true">+</b>
-          <span className="clone-combo-peca"><span className="clone-combo-editor"><Play /></span>Modo Editor</span>
-        </span>
-        <span className="clone-combo-fim"><b aria-hidden="true">=</b> combo perfeito</span>
-      </div>
-      <h2 id="clone-galeria-titulo">O meu clone gravou todos estes vídeos.<br /> <em>O Modo Editor editou todos.</em></h2>
-      <p>Você já tem a peça que edita. Faltava a peça que grava.</p>
+      <h2 id="clone-galeria-titulo" className="clone-combo" aria-label="Modo Clone mais Modo Editor: combo perfeito">
+        <span className="clone-combo-soma" aria-hidden="true"><span>Modo Clone</span><i>+</i><span>Modo Editor</span></span>
+        <span className="clone-combo-total" aria-hidden="true"><i>=</i> Combo perfeito</span>
+      </h2>
+      <p>Você já tem a peça que edita, falta a peça que grava.</p>
     </div>
     <Esteira itens={anuncios} velocidade={45} rotulo="Anúncios gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} {...e} />} />
     <Esteira itens={longos} velocidade={45} reverso rotulo="Aulas e vídeo do YouTube gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} deitado {...e} />} />
