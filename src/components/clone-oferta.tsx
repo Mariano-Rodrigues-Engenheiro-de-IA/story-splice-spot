@@ -85,13 +85,21 @@ function CartaoClone({ v, deitado, copia, ativo, perto }: { v: VideoClone; deita
   </li>;
 }
 
-/** A prova: vários vídeos que o clone já gravou, em duas esteiras (anúncios em pé; YouTube e aulas deitados). */
+/** A prova: vários vídeos que o clone já gravou e o Modo Editor editou, em duas esteiras (anúncios em pé; YouTube e
+ *  aulas deitados). O gatilho (ideia dele, 13/11): o clone é a peça que falta para quem já comprou o Modo Editor. */
 export function GaleriaClone() {
   return <section className="clone-secao clone-galeria" aria-labelledby="clone-galeria-titulo">
     <div className="clone-secao-topo">
-      <span className="clone-rotulo">Veja o clone em ação</span>
-      <h2 id="clone-galeria-titulo">O meu clone já gravou <em>tudo isso.</em></h2>
-      <p>Anúncios, aulas e vídeo para o YouTube. Eu só escrevi o texto, e ele falou com o meu rosto e a minha voz.</p>
+      <div className="clone-combo" role="img" aria-label="Modo Clone mais Modo Editor é igual ao combo perfeito">
+        <span className="clone-combo-pecas">
+          <span className="clone-combo-peca"><img src="/img/clone/icone.webp" width={26} height={26} alt="" />Modo Clone</span>
+          <b aria-hidden="true">+</b>
+          <span className="clone-combo-peca"><span className="clone-combo-editor"><Play /></span>Modo Editor</span>
+        </span>
+        <span className="clone-combo-fim"><b aria-hidden="true">=</b> combo perfeito</span>
+      </div>
+      <h2 id="clone-galeria-titulo">O meu clone gravou todos estes vídeos.<br /> <em>O Modo Editor editou todos.</em></h2>
+      <p>Você já tem a peça que edita. Faltava a peça que grava.</p>
     </div>
     <Esteira itens={anuncios} velocidade={45} rotulo="Anúncios gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} {...e} />} />
     <Esteira itens={longos} velocidade={45} reverso rotulo="Aulas e vídeo do YouTube gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} deitado {...e} />} />

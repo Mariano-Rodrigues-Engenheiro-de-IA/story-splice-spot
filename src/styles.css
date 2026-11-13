@@ -2320,6 +2320,16 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-rotulo { display: inline-block; margin-bottom: 10px; color: var(--roxo-claro); font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .clone-secao h2 { margin: 0 auto; max-width: 500px; font-size: clamp(27px, 7vw, 36px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
 .clone-secao-topo p { margin: 12px auto 0; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.55; text-wrap: pretty; }
+/* gatilho do combo: Modo Clone + Modo Editor = combo perfeito (o clone é a peça que faltava para quem já comprou o editor) */
+.clone-combo { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 18px; }
+.clone-combo-pecas { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.clone-combo-pecas > b, .clone-combo-fim > b { color: var(--roxo-claro); font-size: 22px; font-weight: 800; line-height: 1; }
+.clone-combo-peca { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px 6px 6px; border-radius: 99px; background: oklch(.2 .03 295); border: 1px solid oklch(.76 .16 300 / .35); color: var(--foreground); font-size: 14px; font-weight: 700; white-space: nowrap; }
+.clone-combo-peca img { border-radius: 7px; }
+.clone-combo-editor { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 7px; background: var(--roxo); color: #fff; }
+.clone-combo-editor svg { width: 13px; height: 13px; margin-left: 2px; fill: currentColor; }
+.clone-combo-fim { display: inline-flex; align-items: center; gap: 8px; padding: 7px 16px; border-radius: 99px; background: linear-gradient(90deg, oklch(.5 .21 295), oklch(.6 .2 310)); color: #fff; font-size: 15px; font-weight: 800; letter-spacing: .01em; text-transform: uppercase; box-shadow: 0 10px 30px -12px oklch(.5 .21 295 / .9); }
+.clone-combo-fim > b { color: #fff; font-size: 18px; }
 /* a esteira das cenas ocupa a largura toda da tela, como a galeria da página principal */
 .clone-galeria .p2-esteira { margin-inline: calc(50% - 50vw); }
 .clone-galeria .p2-esteira-fila { padding-top: 4px; padding-bottom: 18px; }
