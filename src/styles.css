@@ -2330,3 +2330,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-pagina .clone-oferta .kiwify-upsell-inline-label { color: var(--muted-foreground) !important; font-size: 13px !important; font-weight: 600 !important; text-align: center !important; }
 .clone-pagina .clone-oferta .kiwify-upsell-inline-select { color: var(--foreground) !important; background-color: var(--card) !important; border: 1px solid oklch(.76 .16 300 / .35) !important; border-radius: 12px !important; font-family: var(--font-sans) !important; }
 .clone-pagina .clone-oferta .kiwify-upsell-inline-select option { color: #111; }
+/* /ultima-chance (downsell): faixa de aviso e o preço "de" riscado */
+.clone-ultima { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; background: oklch(.55 .17 55); color: #1a0f00; font-size: 14px; line-height: 1.35; text-align: center; }
+.clone-ultima svg { flex: none; width: 18px; height: 18px; }
+.clone-preco-de { margin-bottom: 6px; color: var(--muted-foreground); font-size: 16px; }

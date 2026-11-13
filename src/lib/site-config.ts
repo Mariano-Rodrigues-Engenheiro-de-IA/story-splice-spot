@@ -45,16 +45,18 @@ export const siteConfig = {
   precoDe: 97,
   /** Preço depois do lançamento (o preço da oferta gira dele até `price`). 0 = sem preço de depois. */
   priceAfterLaunch: 197,
-  /** Página de obrigado (/obrigado): a Kiwify manda para cá depois da compra aprovada do Modo Editor, e ela oferece o Modo Clone.
-   *  `kiwifyCodigo`: o código do upsell gerado na Kiwify (Produtos → Modo Editor → Configurações → "Página de obrigado e upsell" →
-   *  gerador de upsell → Copiar HTML). No HTML ele aparece em id="kiwify-upsell-trigger-XXXXXXX"; aqui vai só o XXXXXXX.
-   *  Gerado em 13/11/2026: Modo Clone, oferta de R$ 37, aceitar e recusar levam para a área de membros. Vazio = o botão não compra.
-   *  `vsl`: o vídeo de vendas do clone, quando for gravado (em public/videos). Vazio = aparece a capa do Modo Clone. */
+  /** Pós-compra do Modo Editor (upsell e downsell do Modo Clone, com 1 clique da Kiwify).
+   *  /obrigado (upsell): a Kiwify manda para cá depois da compra aprovada. No "não", vai para `downsellUrl`.
+   *  /ultima-chance (downsell): o mesmo curso por um preço menor. No "não", vai para a área de membros.
+   *  `kiwifyCodigo`: o código de cada oferta no gerador de upsell da Kiwify (Produtos → Modo Editor → Configurações →
+   *  "Página de obrigado e upsell" → gerador de upsell → Copiar HTML): em id="kiwify-upsell-trigger-XXXXXXX", vai só o XXXXXXX.
+   *  Vazio = o botão de aceitar ainda não compra. O preço daqui tem que ser o mesmo da oferta na Kiwify.
+   *  `vsl`: o vídeo de vendas (em public/videos), quando for gravado. Vazio = aparece a capa do Modo Clone.
+   *  13/11/2026: preços provisórios (ele ainda vai decidir). O código antigo sIdHoBB era de uma oferta de R$ 47 sem downsell. */
   clone: {
-    price: 37,
-    kiwifyCodigo: 'sIdHoBB' as string,
-    vsl: '' as string,
-    vslPoster: '' as string,
+    upsell: { price: 90, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
+    downsell: { price: 45, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
+    downsellUrl: '/ultima-chance',
   },
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
   pixel: {
