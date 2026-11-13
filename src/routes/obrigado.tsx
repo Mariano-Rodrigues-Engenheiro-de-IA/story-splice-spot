@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@/lib/site-config';
-import { BotoesKiwify, ComoFunciona, Duvidas, Fecho, GaleriaClone, MidiaClone, Modulos, Progresso, brl, useScriptKiwify } from '@/components/clone-oferta';
+import { BotoesKiwify, Custo, Duvidas, EuEClone, Fecho, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useScriptKiwify } from '@/components/clone-oferta';
 
 /* /obrigado: a página de obrigado do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify).
    A Kiwify manda para cá depois da compra aprovada. No "não", o script da Kiwify leva para o downsell (/ultima-chance).
@@ -32,9 +32,15 @@ function Obrigado() {
           textoNao="Não, obrigado. Prefiro continuar gravando todos os meus vídeos." />
       </section>
 
+      {/* página rica e diferente da principal (pedido dele, 13/11), com ideias de fora: lado a lado real x clone, roteiro que
+          vira fala (HeyGen), anatomia (Tavus), 1 gravação que vira muitos vídeos (Codrops), recibo do custo (lacuna do mercado) */}
       <GaleriaClone />
-      <ComoFunciona />
+      <EuEClone />
+      <VoceEscreve />
+      <PorDentro />
+      <UmaGravacao />
       <Modulos />
+      <Custo />
       <Duvidas />
       <Fecho preco={price} frase={<>Grave uma vez. <em>Depois, é só escrever.</em></>} textoBotao={`Quero o Modo Clone por ${brl(price)}`} />
     </main>

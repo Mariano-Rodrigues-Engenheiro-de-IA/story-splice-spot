@@ -57,6 +57,15 @@ export const siteConfig = {
     upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '' as string, vslPoster: '' as string },
     downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, vsl: '' as string, vslPoster: '' as string },
     downsellUrl: '/ultima-chance',
+    /** "Pergunte ao clone" na /obrigado: cada dúvida respondida pelo próprio clone em vídeo 9:16 (public/videos/clone, com a
+     *  capa .webp ao lado). Vídeo vazio = a pergunta não aparece; nenhuma com vídeo = a página mostra as dúvidas em texto.
+     *  Os roteiros para gerar estão em modo-clone-kiwify/PERGUNTE-AO-CLONE.txt. */
+    perguntas: [
+      { pergunta: 'Preciso de câmera boa?', video: '' },
+      { pergunta: 'Fica com a minha voz?', video: '' },
+      { pergunta: 'Preciso pagar a ferramenta?', video: '' },
+      { pergunta: 'Quanto tempo eu tenho que gravar?', video: '' },
+    ] as { pergunta: string; video: string }[],
   },
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
   pixel: {
