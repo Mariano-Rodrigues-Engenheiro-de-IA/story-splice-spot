@@ -24,7 +24,7 @@ function Obrigado() {
     <main className="clone-col">
       <section className="clone-topo" id="oferta" aria-labelledby="clone-titulo">
         <p className="clone-espera"><b>Espere!</b> Seu pedido ainda não está completo</p>
-        <h1 id="clone-titulo">Agora, o seu clone <em>grava por você.</em></h1>
+        <h1 id="clone-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Agora, o seu clone</span> <span className="clone-t-forte">grava por você.</span></h1>
         <p className="clone-sub">Você escreve o texto. Ele fala com o seu rosto e a sua voz.</p>
         <MidiaClone vsl={vsl} poster={vslPoster} />
         <BotoesKiwify codigo={kiwifyCodigo} downsellUrl={siteConfig.clone.downsellUrl} evento="Upsell_Clone"

@@ -89,13 +89,11 @@ function CartaoClone({ v, deitado, copia, ativo, perto }: { v: VideoClone; deita
  *  aulas deitados). O gatilho (ideia dele, 13/11): o clone é a peça que falta para quem já comprou o Modo Editor. */
 export function GaleriaClone() {
   return <section className="clone-secao clone-galeria" aria-labelledby="clone-galeria-titulo">
-    {/* título só em texto (pedido dele, 13/11): 1ª linha "Modo Clone + Modo Editor" com o + grande e deitado, 2ª "= Combo perfeito" */}
+    {/* 13/11: ele trocou o "Modo Clone + Modo Editor = combo perfeito" (quem acabou de comprar pode nem saber o que é o
+        Modo Editor) por este título, na mesma tipografia grande: linha fina itálica + linha forte em roxo */}
     <div className="clone-secao-topo">
-      <h2 id="clone-galeria-titulo" className="clone-combo" aria-label="Modo Clone mais Modo Editor: combo perfeito">
-        <span className="clone-combo-soma" aria-hidden="true"><span>Modo Clone</span><i>+</i><span>Modo Editor</span></span>
-        <span className="clone-combo-total" aria-hidden="true"><i>=</i> Combo perfeito</span>
-      </h2>
-      <p>Você já tem a peça que edita, falta a peça que grava.</p>
+      <h2 id="clone-galeria-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Vídeos gerados</span> <span className="clone-t-forte">pelo meu clone</span></h2>
+      <p>Anúncios, aulas e vídeo para o YouTube. Eu só escrevi o texto, e ele falou com o meu rosto e a minha voz.</p>
     </div>
     <Esteira itens={anuncios} velocidade={45} rotulo="Anúncios gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} {...e} />} />
     <Esteira itens={longos} velocidade={45} reverso rotulo="Aulas e vídeo do YouTube gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} deitado {...e} />} />

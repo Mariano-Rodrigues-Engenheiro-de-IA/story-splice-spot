@@ -2285,7 +2285,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-topo h1 em, .clone-secao h2 em, .clone-fim-frase em { color: var(--roxo-claro); }
 .clone-sub { margin: 0 auto 16px; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.45; text-wrap: balance; }
 .clone-sub s { color: oklch(.7 .02 286); }
-.clone-video { position: relative; width: clamp(200px, calc((100svh - 318px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
+.clone-video { position: relative; width: clamp(180px, calc((100svh - 334px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
 /* /ultima-chance: título maior (preço riscado + preço novo), então o vídeo desconta mais altura para o botão continuar à vista */
 .clone-downsell .clone-topo h1 { font-size: clamp(25px, 6.8vw, 38px); }
 .clone-downsell .clone-video { width: clamp(200px, calc((100svh - 350px) * .5625), 340px); }
@@ -2320,12 +2320,11 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-rotulo { display: inline-block; margin-bottom: 10px; color: var(--roxo-claro); font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
 .clone-secao h2 { margin: 0 auto; max-width: 500px; font-size: clamp(27px, 7vw, 36px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
 .clone-secao-topo p { margin: 12px auto 0; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.55; text-wrap: pretty; }
-/* título do combo, só texto: "Modo Clone + Modo Editor" na fonte editorial com o + grande e deitado; embaixo "= Combo perfeito" */
-.clone-secao h2.clone-combo { display: flex; flex-direction: column; align-items: center; gap: 2px; max-width: none; }
-.clone-combo-soma { display: flex; align-items: center; justify-content: center; gap: .12em; font-family: var(--font-editorial); font-style: italic; font-weight: 400; font-size: clamp(32px, 9.2vw, 56px); line-height: 1.05; letter-spacing: -.01em; white-space: nowrap; }
-.clone-combo-soma i { display: inline-block; margin: 0 .04em; color: var(--roxo-claro); font-family: var(--font-sans); font-style: normal; font-weight: 300; font-size: 1.5em; line-height: .8; transform: rotate(-14deg) translateY(-.02em); }
-.clone-combo-total { display: inline-flex; align-items: baseline; gap: .28em; font-size: clamp(32px, 9.2vw, 56px); font-weight: 800; line-height: 1.1; letter-spacing: -.03em; background: linear-gradient(90deg, oklch(.76 .16 300), oklch(.66 .22 300) 60%, oklch(.72 .18 320)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.clone-combo-total i { font-style: normal; font-weight: 400; }
+/* títulos grandes (h1 do topo e título dos vídeos): linha fina na fonte editorial itálica + linha forte em roxo, do mesmo
+   tamanho; ele aprovou essa tipografia em 13/11 ("bate o olho e não tem como não saber") */
+.clone-pagina .clone-titulo-grande { display: flex; flex-direction: column; align-items: center; gap: 2px; max-width: none; font-size: clamp(32px, 9.2vw, 56px); }
+.clone-t-fina { display: block; color: var(--foreground); font-family: var(--font-editorial); font-style: italic; font-weight: 400; font-size: 1em; line-height: 1.05; letter-spacing: -.01em; }
+.clone-t-forte { display: block; font-size: 1em; font-weight: 800; line-height: 1.12; letter-spacing: -.03em; background: linear-gradient(90deg, oklch(.76 .16 300), oklch(.66 .22 300) 60%, oklch(.72 .18 320)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 /* a esteira das cenas ocupa a largura toda da tela, como a galeria da página principal */
 .clone-galeria .p2-esteira { margin-inline: calc(50% - 50vw); }
 .clone-galeria .p2-esteira-fila { padding-top: 4px; padding-bottom: 18px; }
