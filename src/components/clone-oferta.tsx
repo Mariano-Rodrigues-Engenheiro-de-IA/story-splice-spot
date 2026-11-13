@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Check, Clapperboard, Megaphone, PenLine, Presentation, ShieldCheck, Sparkles, Video } from 'lucide-react';
+import { Check, Clapperboard, Megaphone, PenLine, Play, Presentation, ShieldCheck, Sparkles, Video } from 'lucide-react';
 import { VslPlayer } from '@/components/vsl-player';
 import { eventoProprio } from '@/lib/pixel';
 
@@ -24,11 +24,11 @@ export function useScriptKiwify(codigo: string, pagina: string) {
   }, [codigo, pagina]);
 }
 
-/** O vídeo de vendas (quando existir) ou a capa do Modo Clone. */
+/** O vídeo de vendas, no mesmo player da página principal. Sem vídeo ainda: só a moldura, esperando o arquivo. */
 export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
   return vsl
     ? <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>
-    : <img className="clone-capa" src="/img/clone/capa.webp" width={1280} height={720} alt="Modo Clone: você escreve, o clone fala" />;
+    : <div className="clone-video clone-moldura" aria-label="Vídeo de apresentação do Modo Clone"><span className="clone-moldura-play" aria-hidden="true"><Play /></span></div>;
 }
 
 /** O botão de aceitar e o de recusar, dentro da caixa que o script da Kiwify lê. */

@@ -2334,3 +2334,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-ultima { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; background: oklch(.55 .17 55); color: #1a0f00; font-size: 14px; line-height: 1.35; text-align: center; }
 .clone-ultima svg { flex: none; width: 18px; height: 18px; }
 .clone-preco-de { margin-bottom: 6px; color: var(--muted-foreground); font-size: 16px; }
+/* moldura do vídeo de vendas do clone, vazia até o vídeo chegar (mesmo formato 9:16 do player da página principal) */
+.clone-moldura { display: grid; place-items: center; background: radial-gradient(80% 60% at 50% 40%, oklch(.5 .21 295 / .28), transparent 70%), linear-gradient(180deg, oklch(.17 .03 295), oklch(.11 .01 290)); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .6); }
+.clone-moldura-play { display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; background: oklch(.5 .21 295 / .9); border: 2px solid rgba(255,255,255,.6); color: #fff; }
+.clone-moldura-play svg { width: 32px; height: 32px; margin-left: 4px; fill: currentColor; }
