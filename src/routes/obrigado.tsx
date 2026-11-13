@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ArrowUp, CircleCheck } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
-import { BotoesKiwify, ComoFunciona, Duvidas, ListaOferta, MidiaClone, Modulos, Usos, brl, useScriptKiwify } from '@/components/clone-oferta';
+import { BotoesKiwify, ComoFunciona, Duvidas, Fecho, GaleriaClone, MidiaClone, Modulos, Progresso, brl, useScriptKiwify } from '@/components/clone-oferta';
 
 /* /obrigado: a página de obrigado do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify).
-   A Kiwify manda para cá depois da compra aprovada. No "não", o script da Kiwify leva para o downsell (/ultima-chance). */
+   A Kiwify manda para cá depois da compra aprovada. No "não", o script da Kiwify leva para o downsell (/ultima-chance).
+   Primeira dobra: só o progresso, o aviso, o vídeo e os dois botões. O resto fica para quem rolar. */
 export const Route = createFileRoute('/obrigado')({
   head: () => ({ meta: [
     { title: 'Compra aprovada · Modo Editor' },
@@ -19,33 +19,24 @@ function Obrigado() {
   useScriptKiwify(kiwifyCodigo, 'obrigado');
 
   return <div className="page geral clone-pagina">
-    <div className="clone-aprovado" role="status"><CircleCheck aria-hidden="true" /><span><b>Compra aprovada!</b> O acesso ao Modo Editor chega no seu e-mail.</span></div>
+    <Progresso passo={2} />
 
     <main className="clone-col">
-      <section className="clone-topo" aria-labelledby="clone-titulo">
-        <p className="clone-espera">Espera, antes de ir para o seu acesso</p>
-        <h1 id="clone-titulo">A edição você já resolveu. Agora, <em>o seu clone grava por você.</em></h1>
-        <p className="clone-sub">Você escreve o texto, o seu clone fala com o seu rosto e a sua voz, e o Modo Editor edita. Sem ligar a câmera.</p>
+      <section className="clone-topo" id="oferta" aria-labelledby="clone-titulo">
+        <p className="clone-espera"><b>Espere!</b> Seu pedido ainda não está completo</p>
+        <h1 id="clone-titulo">Agora, o seu clone <em>grava por você.</em></h1>
+        <p className="clone-sub">Você escreve o texto. Ele fala com o seu rosto e a sua voz.</p>
         <MidiaClone vsl={vsl} poster={vslPoster} />
+        <BotoesKiwify codigo={kiwifyCodigo} downsellUrl={siteConfig.clone.downsellUrl} evento="Upsell_Clone"
+          textoSim={<>Sim, quero o Modo Clone por {brl(price)}</>}
+          textoNao="Não, obrigado. Prefiro continuar gravando todos os meus vídeos." />
       </section>
 
-      <section className="clone-oferta" id="oferta" aria-labelledby="clone-oferta-titulo">
-        <div className="clone-oferta-marca"><img src="/img/clone/icone.webp" width={44} height={44} alt="" /><h2 id="clone-oferta-titulo">Modo Clone</h2></div>
-        <p className="clone-oferta-desc">Um mini curso direto ao ponto: em 3 aulas, você cria o seu clone e gera o seu primeiro vídeo com ele.</p>
-        <div className="clone-preco"><strong>{brl(price)}</strong><span>pagamento único</span></div>
-        <BotoesKiwify codigo={kiwifyCodigo} downsellUrl={siteConfig.clone.downsellUrl} textoSim="Sim, quero o Modo Clone" textoNao="Não, obrigado. Quero ir para o meu acesso." evento="Upsell_Clone" />
-        <ListaOferta />
-      </section>
-
+      <GaleriaClone />
       <ComoFunciona />
       <Modulos />
-      <Usos />
       <Duvidas />
-
-      <section className="clone-fim">
-        <p className="clone-fim-frase">Grave uma vez. <em>Depois, é só escrever.</em></p>
-        <a href="#oferta" className="clone-sim clone-sim-sobe">Quero o Modo Clone por {brl(price)} <ArrowUp aria-hidden="true" /></a>
-      </section>
+      <Fecho preco={price} frase={<>Grave uma vez. <em>Depois, é só escrever.</em></>} textoBotao={`Quero o Modo Clone por ${brl(price)}`} />
     </main>
 
     <footer className="clone-rodape">Modo Editor · Modo Clone</footer>

@@ -2261,80 +2261,113 @@ html:has(.geral) { scroll-padding-top: 0; }
 :is(.pro2, .geral) .it-ed[data-etapa="0"] .it-cabeca { transition: none; }
 @media (prefers-reduced-motion: reduce) { :is(.pro2, .geral) .it.rodando * { animation-play-state: paused; } }
 
-/* ── /obrigado: página de obrigado do Modo Editor que oferece o Modo Clone (upsell de 1 clique da Kiwify) ── */
-.clone-pagina { --roxo: oklch(.5 .21 295); --roxo-claro: oklch(.76 .16 300); min-height: 100vh; background: radial-gradient(120% 60% at 50% 0%, oklch(.5 .21 295 / .22), transparent 60%), var(--background); }
-.clone-aprovado { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; background: oklch(.42 .12 150 / .9); color: #fff; font-size: 14px; line-height: 1.35; text-align: center; }
-.clone-aprovado svg { flex: none; width: 18px; height: 18px; }
+/* ── /obrigado e /ultima-chance: pós-compra do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify) ──
+   Primeira dobra igual à da página principal: o vídeo cresce com a altura da tela e o botão fica logo abaixo dele. */
+.clone-pagina { --roxo: oklch(.5 .21 295); --roxo-claro: oklch(.76 .16 300); --ambar: oklch(.8 .15 75); min-height: 100vh; overflow-x: clip; background: radial-gradient(120% 50% at 50% 0%, oklch(.5 .21 295 / .22), transparent 60%), var(--background); }
 .clone-col { width: min(560px, 100%); margin: 0 auto; padding: 0 16px 40px; }
-.clone-topo { padding: 22px 0 4px; text-align: center; }
-.clone-espera { display: inline-block; margin: 0 0 14px; padding: 6px 12px; border-radius: 99px; background: oklch(.5 .21 295 / .18); border: 1px solid oklch(.76 .16 300 / .35); color: var(--roxo-claro); font-size: 13px; font-weight: 600; letter-spacing: .01em; }
-.clone-topo h1 { margin: 0 0 12px; font-size: clamp(28px, 7.4vw, 40px); line-height: 1.08; letter-spacing: -.02em; font-weight: 700; }
+
+/* faixa do topo: compra aprovada + passo do pedido */
+.clone-progresso { width: min(560px, 100%); margin: 0 auto; padding: 12px 16px 0; }
+.clone-progresso p { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 8px; font-size: 13.5px; line-height: 1.2; }
+.clone-progresso p svg { flex: none; width: 17px; height: 17px; color: oklch(.78 .17 150); }
+.clone-progresso p b { color: oklch(.86 .13 150); font-weight: 700; }
+.clone-progresso p span { color: var(--muted-foreground); }
+.clone-progresso p span::before { content: "·"; margin: 0 6px 0 2px; }
+.clone-progresso-barra { height: 5px; border-radius: 99px; background: oklch(1 0 0 / .09); overflow: hidden; }
+.clone-progresso-barra i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, oklch(.6 .17 150), var(--roxo) 55%, var(--roxo-claro)); }
+
+/* primeira dobra */
+.clone-topo { padding: 16px 0 0; text-align: center; scroll-margin-top: 8px; }
+.clone-espera { display: inline-block; margin: 0 0 12px; padding: 6px 13px; border-radius: 99px; background: oklch(.5 .21 295 / .18); border: 1px solid oklch(.76 .16 300 / .4); color: var(--roxo-claro); font-size: 13.5px; font-weight: 600; letter-spacing: .01em; }
+.clone-espera b { color: #fff; font-weight: 800; }
+.clone-espera-ultima { background: oklch(.8 .15 75 / .12); border-color: oklch(.8 .15 75 / .45); color: var(--ambar); }
+.clone-topo h1 { margin: 0 auto 8px; max-width: 520px; font-size: clamp(27px, 7.6vw, 40px); line-height: 1.08; letter-spacing: -.02em; font-weight: 700; text-wrap: balance; }
 .clone-topo h1 em, .clone-secao h2 em, .clone-fim-frase em { color: var(--roxo-claro); }
-.clone-sub { margin: 0 auto 20px; max-width: 460px; color: var(--muted-foreground); font-size: 16px; line-height: 1.55; }
-.clone-capa { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid oklch(.76 .16 300 / .25); box-shadow: 0 24px 60px -24px oklch(.5 .21 295 / .55); }
-.clone-video { position: relative; width: min(100%, 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .25); }
-.clone-oferta { margin: 18px 0 8px; padding: 20px 18px 18px; border-radius: 22px; background: linear-gradient(180deg, oklch(.2 .04 295), oklch(.15 .02 290)); border: 1px solid oklch(.76 .16 300 / .3); box-shadow: 0 30px 70px -30px oklch(.5 .21 295 / .6); text-align: center; scroll-margin-top: 16px; }
-.clone-oferta-marca { display: flex; align-items: center; justify-content: center; gap: 10px; }
-.clone-oferta-marca img { border-radius: 11px; }
-.clone-oferta-marca h2 { margin: 0; font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
-.clone-oferta-desc { margin: 8px auto 14px; max-width: 420px; color: var(--muted-foreground); font-size: 15px; line-height: 1.5; }
-.clone-oferta-lista { display: grid; gap: 8px; margin: 18px auto 14px; padding-top: 16px; border-top: 1px solid var(--border); padding: 0; max-width: 380px; list-style: none; text-align: left; }
-.clone-oferta-lista li { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.4; }
-.clone-oferta-lista svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--roxo-claro); }
-.clone-preco { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
-.clone-preco strong { font-size: 44px; line-height: 1; font-weight: 800; letter-spacing: -.02em; }
-.clone-preco span { margin-top: 4px; color: var(--muted-foreground); font-size: 14px; }
-.clone-sim { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 56px; padding: 14px 18px; border: 0; border-radius: 14px; background: var(--roxo); color: #fff; font: inherit; font-size: 18px; font-weight: 700; cursor: pointer; text-decoration: none; box-shadow: 0 14px 40px -12px oklch(.5 .21 295 / .8); animation: clone-pulsa 2s ease-in-out infinite; -webkit-tap-highlight-color: transparent; transition: filter .12s ease; }
+.clone-sub { margin: 0 auto 16px; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.45; text-wrap: balance; }
+.clone-sub s { color: oklch(.7 .02 286); }
+.clone-video { position: relative; width: clamp(200px, calc((100svh - 318px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
+/* /ultima-chance: título maior (preço riscado + preço novo), então o vídeo desconta mais altura para o botão continuar à vista */
+.clone-downsell .clone-topo h1 { font-size: clamp(25px, 6.8vw, 38px); }
+.clone-downsell .clone-video { width: clamp(200px, calc((100svh - 350px) * .5625), 340px); }
+/* moldura do vídeo de vendas do clone, vazia até o vídeo chegar (mesmo formato 9:16 do player da página principal) */
+.clone-moldura { display: grid; place-items: center; background: radial-gradient(80% 60% at 50% 40%, oklch(.5 .21 295 / .28), transparent 70%), linear-gradient(180deg, oklch(.17 .03 295), oklch(.11 .01 290)); }
+.clone-moldura-play { display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; background: oklch(.5 .21 295 / .9); border: 2px solid rgba(255,255,255,.6); color: #fff; }
+.clone-moldura-play svg { width: 32px; height: 32px; margin-left: 4px; fill: currentColor; }
+
+/* botões (os da Kiwify e o do fecho) */
+.clone-kiwify { display: flex; flex-direction: column; width: min(100%, 420px); margin: 16px auto 0; }
+.clone-sim { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; min-height: 58px; padding: 14px 16px; border: 0; border-radius: 14px; background: var(--roxo); color: #fff; font: inherit; font-size: 17px; font-weight: 700; line-height: 1.2; cursor: pointer; text-decoration: none; box-shadow: 0 14px 40px -12px oklch(.5 .21 295 / .8); animation: clone-pulsa 1.6s ease-in-out infinite; -webkit-tap-highlight-color: transparent; transition: filter .12s ease; }
 .clone-sim:active { filter: brightness(1.15); transform: scale(.98); }
-.clone-sim svg { width: 20px; height: 20px; }
-@keyframes clone-pulsa { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025); } }
-.clone-nao { display: block; width: 100%; margin-top: 14px; padding: 6px; border: 0; background: none; color: var(--muted-foreground); font: inherit; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.clone-sim svg { flex: none; width: 20px; height: 20px; }
+@keyframes clone-pulsa { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+.clone-nao { display: block; width: 100%; margin-top: 12px; padding: 6px; border: 0; background: none; color: var(--muted-foreground); font: inherit; font-size: 14px; line-height: 1.4; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 /* o script da Kiwify pinta os botões dele com !important (azul, 8px, Open Sans): aqui o roxo da página volta, com seletor mais forte */
-.clone-pagina .clone-kiwify[data-upsell-url] { padding: 0 !important; --kiwify-upsell-accept-bg: oklch(.5 .21 295); --kiwify-upsell-accept-color: #fff; --kiwify-upsell-decline-color: var(--muted-foreground); --kiwify-upsell-font: var(--font-sans); --kiwify-upsell-width: 100%; }
-.clone-pagina .clone-kiwify [id^=kiwify-upsell-trigger] { max-width: 100% !important; min-height: 56px !important; padding: 14px 18px !important; border-radius: 14px !important; font-family: var(--font-sans) !important; font-size: 18px !important; font-weight: 700 !important; box-shadow: 0 14px 40px -12px oklch(.5 .21 295 / .8) !important; }
-.clone-pagina .clone-kiwify [id^=kiwify-upsell-cancel-trigger] { max-width: 100% !important; margin-top: 14px !important; font-family: var(--font-sans) !important; font-size: 14px !important; font-weight: 400 !important; color: var(--muted-foreground) !important; text-underline-offset: 3px; }
-.clone-garantia { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 10px 0 0; color: var(--muted-foreground); font-size: 13px; }
-.clone-garantia svg { flex: none; width: 16px; height: 16px; color: var(--roxo-claro); }
-.clone-secao { padding-top: 40px; }
-.clone-secao h2 { margin: 0 0 18px; text-align: center; font-size: clamp(26px, 6.6vw, 34px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; }
+.clone-pagina .clone-kiwify[data-upsell-url] { display: flex !important; flex-direction: column !important; padding: 0 !important; --kiwify-upsell-accept-bg: oklch(.5 .21 295); --kiwify-upsell-accept-color: #fff; --kiwify-upsell-decline-color: var(--muted-foreground); --kiwify-upsell-font: var(--font-sans); --kiwify-upsell-width: 100%; }
+.clone-pagina .clone-kiwify [id^=kiwify-upsell-trigger] { order: 1; max-width: 100% !important; min-height: 58px !important; padding: 14px 16px !important; border-radius: 14px !important; font-family: var(--font-sans) !important; font-size: 17px !important; font-weight: 700 !important; line-height: 1.2 !important; box-shadow: 0 14px 40px -12px oklch(.5 .21 295 / .8) !important; }
+.clone-pagina .clone-kiwify [id^=kiwify-upsell-cancel-trigger] { order: 3; max-width: 100% !important; margin-top: 12px !important; font-family: var(--font-sans) !important; font-size: 14px !important; font-weight: 400 !important; line-height: 1.4 !important; color: var(--muted-foreground) !important; text-decoration: underline !important; text-underline-offset: 3px; }
+/* a caixa de parcelas que o script da Kiwify coloca acima do botão (vem branca, com letra escura e Open Sans): vai para baixo dele,
+   para o botão ficar colado no vídeo */
+.clone-pagina .clone-kiwify > [id^=kiwify-upsell-inline-] { order: 2; }
+.clone-pagina .clone-kiwify .kiwify-upsell-inline { width: 100% !important; max-width: 100% !important; margin: 12px auto 0 !important; font-family: var(--font-sans) !important; }
+.clone-pagina .clone-kiwify .kiwify-upsell-inline-field { margin-bottom: 0 !important; }
+.clone-pagina .clone-kiwify .kiwify-upsell-inline-label { color: var(--muted-foreground) !important; font-size: 13px !important; font-weight: 600 !important; text-align: center !important; }
+.clone-pagina .clone-kiwify .kiwify-upsell-inline-select { color: var(--foreground) !important; background-color: var(--card) !important; border: 1px solid oklch(.76 .16 300 / .35) !important; border-radius: 12px !important; font-family: var(--font-sans) !important; }
+.clone-pagina .clone-kiwify .kiwify-upsell-inline-select option { color: #111; }
+
+/* seções */
+.clone-secao { padding-top: 60px; }
+.clone-secao-topo { margin-bottom: 22px; text-align: center; }
+.clone-rotulo { display: inline-block; margin-bottom: 10px; color: var(--roxo-claro); font-size: 12.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.clone-secao h2 { margin: 0 auto; max-width: 500px; font-size: clamp(27px, 7vw, 36px); line-height: 1.1; font-weight: 700; letter-spacing: -.02em; text-wrap: balance; }
+.clone-secao-topo p { margin: 12px auto 0; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.55; text-wrap: pretty; }
+/* a esteira das cenas ocupa a largura toda da tela, como a galeria da página principal */
+.clone-galeria .p2-esteira { margin-inline: calc(50% - 50vw); }
+.clone-galeria .p2-esteira-fila { padding-top: 4px; padding-bottom: 18px; }
+.clone-cena { flex: 0 0 172px; }
+.clone-cena-video { position: relative; aspect-ratio: 9 / 16; overflow: hidden; border-radius: 16px; border: 1px solid oklch(.3 .01 286); background: oklch(.16 .006 286) center / cover no-repeat; background-clip: padding-box; }
+.clone-cena-video .p2-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: transparent; }
+.clone-pagina .clone-cena-video .gallery-tag { top: auto; bottom: 10px; } /* no alto, ela tapava a ilustração */
+.clone-cena-legenda { margin: 10px 2px 0; }
+.clone-cena-legenda strong { display: block; margin-bottom: 3px; font-size: 14.5px; }
+.clone-cena-legenda span { display: block; color: oklch(.82 .02 290); font-family: var(--font-editorial); font-style: italic; font-size: 16px; line-height: 1.25; }
+@media (min-width: 768px) { .clone-cena { flex-basis: 200px; } }
+
 .clone-passos { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
-.clone-passos li { position: relative; display: flex; gap: 12px; align-items: flex-start; padding: 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
-.clone-passo-num { position: absolute; top: 10px; right: 14px; color: oklch(.76 .16 300 / .35); font-size: 28px; font-weight: 800; line-height: 1; }
-.clone-passo-icone { flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 12px; background: oklch(.5 .21 295 / .2); color: var(--roxo-claro); }
+.clone-passos li { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
+.clone-passo-icone { position: relative; flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px; background: oklch(.5 .21 295 / .2); color: var(--roxo-claro); }
 .clone-passo-icone svg { width: 22px; height: 22px; }
-.clone-passos strong, .clone-uso strong { display: block; margin-bottom: 4px; padding-right: 26px; font-size: 16px; }
-.clone-passos p, .clone-uso p { margin: 0; color: var(--muted-foreground); font-size: 14.5px; line-height: 1.5; }
+.clone-passo-icone b { position: absolute; top: -7px; right: -7px; display: grid; place-items: center; width: 21px; height: 21px; border-radius: 50%; background: var(--roxo); color: #fff; font-size: 12px; font-weight: 800; box-shadow: 0 0 0 3px var(--card); }
+.clone-passos strong { display: block; margin-bottom: 4px; font-size: 16.5px; }
+.clone-passos p { margin: 0; color: var(--muted-foreground); font-size: 14.5px; line-height: 1.5; }
+
 .clone-modulos { display: grid; gap: 14px; }
 .clone-modulo { display: flex; gap: 14px; align-items: center; padding: 10px; border-radius: 18px; background: var(--card); border: 1px solid var(--border); }
 .clone-modulo img { flex: none; width: 96px; height: auto; border-radius: 12px; }
 .clone-modulo span { display: block; color: var(--roxo-claro); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
 .clone-modulo strong { display: block; margin: 2px 0 4px; font-size: 17px; }
 .clone-modulo p { margin: 0; color: var(--muted-foreground); font-size: 14px; line-height: 1.45; }
-.clone-usos { display: grid; gap: 10px; }
-.clone-uso { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
-.clone-uso > span { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; background: oklch(.5 .21 295 / .2); color: var(--roxo-claro); }
-.clone-uso > span svg { width: 20px; height: 20px; }
+
 .clone-faq { display: grid; gap: 10px; margin: 0; }
-.clone-faq > div { padding: 14px 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
-.clone-faq dt { margin-bottom: 6px; font-weight: 700; font-size: 15.5px; }
-.clone-faq dd { margin: 0; color: var(--muted-foreground); font-size: 14.5px; line-height: 1.5; }
-.clone-fim { padding-top: 44px; text-align: center; }
-.clone-fim-frase { margin: 0 0 16px; font-size: clamp(24px, 6vw, 30px); font-weight: 700; line-height: 1.15; letter-spacing: -.01em; }
-.clone-sim-sobe { animation: none; }
-.clone-rodape { padding: 20px 16px 28px; text-align: center; color: var(--muted-foreground); font-size: 12px; opacity: .7; }
-@media (min-width: 768px) { .clone-topo { padding-top: 40px; } }
-@media (prefers-reduced-motion: reduce) { .clone-sim { animation: none; } }
-/* a caixa de parcelas que o script da Kiwify coloca acima do botão (vem branca, com letra escura e Open Sans) */
-.clone-pagina .clone-oferta .kiwify-upsell-inline { max-width: 100% !important; margin: 0 auto 14px !important; font-family: var(--font-sans) !important; }
-.clone-pagina .clone-oferta .kiwify-upsell-inline-field { margin-bottom: 0 !important; }
-.clone-pagina .clone-oferta .kiwify-upsell-inline-label { color: var(--muted-foreground) !important; font-size: 13px !important; font-weight: 600 !important; text-align: center !important; }
-.clone-pagina .clone-oferta .kiwify-upsell-inline-select { color: var(--foreground) !important; background-color: var(--card) !important; border: 1px solid oklch(.76 .16 300 / .35) !important; border-radius: 12px !important; font-family: var(--font-sans) !important; }
-.clone-pagina .clone-oferta .kiwify-upsell-inline-select option { color: #111; }
-/* /ultima-chance (downsell): faixa de aviso e o preço "de" riscado */
-.clone-ultima { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; background: oklch(.55 .17 55); color: #1a0f00; font-size: 14px; line-height: 1.35; text-align: center; }
-.clone-ultima svg { flex: none; width: 18px; height: 18px; }
+.clone-faq > div { padding: 15px 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
+.clone-faq dt { margin-bottom: 6px; font-weight: 700; font-size: 16px; }
+.clone-faq dd { margin: 0; color: var(--muted-foreground); font-size: 14.5px; line-height: 1.55; }
+
+/* fecho: resumo da oferta + botão que sobe até os botões da Kiwify */
+.clone-fim-caixa { padding: 24px 18px 20px; border-radius: 22px; background: linear-gradient(180deg, oklch(.2 .04 295), oklch(.15 .02 290)); border: 1px solid oklch(.76 .16 300 / .3); box-shadow: 0 30px 70px -30px oklch(.5 .21 295 / .6); text-align: center; }
+.clone-oferta-marca { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.clone-oferta-marca img { border-radius: 11px; }
+.clone-oferta-marca h2 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -.01em; }
+.clone-fim-frase { margin: 14px auto 0; max-width: 400px; color: var(--foreground); font-size: clamp(23px, 6vw, 28px); font-weight: 700; line-height: 1.15; letter-spacing: -.01em; text-wrap: balance; }
+.clone-oferta-lista { display: grid; gap: 9px; margin: 18px auto; padding: 0; max-width: 360px; list-style: none; text-align: left; }
+.clone-oferta-lista li { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.4; }
+.clone-oferta-lista svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: var(--roxo-claro); }
+.clone-preco { display: flex; flex-direction: column; align-items: center; margin-bottom: 16px; padding-top: 16px; border-top: 1px solid oklch(1 0 0 / .08); }
+.clone-preco strong { font-size: 46px; line-height: 1; font-weight: 800; letter-spacing: -.02em; }
+.clone-preco span { margin-top: 6px; color: var(--muted-foreground); font-size: 14px; }
 .clone-preco-de { margin-bottom: 6px; color: var(--muted-foreground); font-size: 16px; }
-/* moldura do vídeo de vendas do clone, vazia até o vídeo chegar (mesmo formato 9:16 do player da página principal) */
-.clone-moldura { display: grid; place-items: center; background: radial-gradient(80% 60% at 50% 40%, oklch(.5 .21 295 / .28), transparent 70%), linear-gradient(180deg, oklch(.17 .03 295), oklch(.11 .01 290)); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .6); }
-.clone-moldura-play { display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; background: oklch(.5 .21 295 / .9); border: 2px solid rgba(255,255,255,.6); color: #fff; }
-.clone-moldura-play svg { width: 32px; height: 32px; margin-left: 4px; fill: currentColor; }
+.clone-sim-sobe { animation: none; }
+.clone-garantia { margin: 12px auto 0; max-width: 300px; color: var(--muted-foreground); font-size: 13px; line-height: 1.45; text-align: center; text-wrap: balance; }
+.clone-garantia svg { display: inline-block; width: 15px; height: 15px; margin: 0 5px 0 0; vertical-align: -3px; color: var(--roxo-claro); }
+.clone-rodape { padding: 20px 16px 28px; text-align: center; color: var(--muted-foreground); font-size: 12px; opacity: .7; }
+@media (min-width: 768px) { .clone-topo { padding-top: 26px; } }
+@media (prefers-reduced-motion: reduce) { .clone-sim { animation: none; } }
