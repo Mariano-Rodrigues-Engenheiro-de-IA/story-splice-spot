@@ -2328,9 +2328,13 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-cena-video .p2-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: transparent; }
 .clone-pagina .clone-cena-video .gallery-tag { top: auto; bottom: 10px; } /* no alto, ela tapava a ilustração */
 .clone-cena-legenda { margin: 10px 2px 0; }
-.clone-cena-legenda strong { display: block; margin-bottom: 3px; font-size: 14.5px; }
-.clone-cena-legenda span { display: block; color: oklch(.82 .02 290); font-family: var(--font-editorial); font-style: italic; font-size: 16px; line-height: 1.25; }
-@media (min-width: 768px) { .clone-cena { flex-basis: 200px; } }
+.clone-cena-legenda strong { display: block; margin-bottom: 3px; color: var(--foreground); font-size: 14.5px; line-height: 1.3; }
+.clone-cena-legenda span { display: block; color: var(--muted-foreground); font-size: 13.5px; line-height: 1.3; }
+/* YouTube e aulas: deitados, inteiros (sem cortar para 9:16) */
+.clone-cena.deitado { flex-basis: 272px; }
+.clone-cena.deitado .clone-cena-video { aspect-ratio: 16 / 9; }
+.clone-galeria .p2-esteira + .p2-esteira { margin-top: 6px; }
+@media (min-width: 768px) { .clone-cena { flex-basis: 200px; } .clone-cena.deitado { flex-basis: 360px; } }
 
 .clone-passos { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
 .clone-passos li { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }

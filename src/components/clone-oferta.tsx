@@ -56,35 +56,45 @@ export function BotoesKiwify({ codigo, downsellUrl = '', textoSim, textoNao, eve
   </div>;
 }
 
-/* Cenas do criativo 13 (aprovado em 2/11/2026), feito inteiro pelo clone: ele só escreveu o texto.
-   Cada cena vai do começo ao fim de uma frase; a frase entre aspas é o texto que ele escreveu para o clone falar. */
-const cenas = [
-  { src: '/videos/clone/lugar.mp4', titulo: 'Mapa de satélite', texto: 'Se eu falo de um lugar, aparece o lugar, visto do satélite.' },
-  { src: '/videos/clone/cenario.mp4', titulo: 'Troca de cenário', texto: 'Você pode escolher o cenário que quiser.' },
-  { src: '/videos/clone/corpo.mp4', titulo: 'Corpo em 3D', texto: 'Se eu falo do corpo, ela mostra o corpo por dentro.' },
-  { src: '/videos/clone/historia.mp4', titulo: 'História em cenas', texto: 'Quer contar uma história? Ela ganha cenas.' },
-  { src: '/videos/clone/ideia.mp4', titulo: 'Objeto em 3D', texto: 'Se eu falo de uma ideia, ela vira um objeto na minha frente.' },
-  { src: '/videos/clone/figuras.mp4', titulo: 'Animação e gráfico', texto: 'Quer uma animação, um gráfico, uma figura? É só falar.' },
-  { src: '/videos/clone/ilustra.mp4', titulo: 'Abertura de anúncio', texto: 'Agora a inteligência artificial ilustra o que você está falando.' },
+/* Vídeos diferentes que o clone já gravou (um trecho curto de cada, sem som). Aqui não importa a edição de cada um,
+   e sim a quantidade e a variedade: anúncios em pé, YouTube e as aulas deitados (sem cortar para 9:16, que cortava
+   legenda e painéis). Fontes: criativos 13, 09 e 10; youtube/01-capcut-morreu; aulas 1 e 2 do Modo Clone; aula 3 =
+   o vídeo do clone gerado (a edição ainda não estava pronta em 13/11). Na aula 2, o trecho de 2:36 a 5:12 é ele de
+   verdade: o recorte daqui é de antes disso. */
+type VideoClone = { src: string; tipo: string; titulo: string; duracao: string };
+const anuncios: VideoClone[] = [
+  { src: '/videos/clone/anuncio-ilustra.mp4', tipo: 'Anúncio', titulo: 'A IA ilustra o que você fala', duracao: '1 min' },
+  { src: '/videos/clone/anuncio-profissoes.mp4', tipo: 'Anúncio', titulo: 'Psicólogo, fisio e arquiteto', duracao: '1 min 20 s' },
+  { src: '/videos/clone/anuncio-descoberta.mp4', tipo: 'Anúncio', titulo: 'A IA que você já usa edita vídeo', duracao: '40 s' },
+];
+const longos: VideoClone[] = [
+  { src: '/videos/clone/youtube-capcut.mp4', tipo: 'YouTube', titulo: 'O CapCut morreu?', duracao: '8 min' },
+  { src: '/videos/clone/aula-1.mp4', tipo: 'Aula', titulo: 'Aula 1 do Modo Clone', duracao: '3 min' },
+  { src: '/videos/clone/aula-2.mp4', tipo: 'Aula', titulo: 'Aula 2 do Modo Clone', duracao: '8 min' },
+  { src: '/videos/clone/aula-3.mp4', tipo: 'Aula', titulo: 'Aula 3 do Modo Clone', duracao: '10 min' },
 ];
 
-/** A prova: cenas de um anúncio que o clone gravou, na mesma esteira da galeria da página principal. */
+function CartaoClone({ v, deitado, copia, ativo, perto }: { v: VideoClone; deitado?: boolean; copia: boolean; ativo: boolean; perto: boolean }) {
+  return <li className={`clone-cena${deitado ? ' deitado' : ''}`} aria-hidden={copia || undefined}>
+    {/* a legenda fica embaixo do vídeo, não por cima: a boca do clone falando é a prova */}
+    <div className="clone-cena-video" style={{ backgroundImage: `url(${v.src.replace(/\.mp4$/, '.webp')})` }}>
+      <VideoVivo src={v.src} ativo={ativo} perto={perto} label={`${v.tipo}: ${v.titulo}`} />
+      <span className="gallery-tag">{v.tipo}</span>
+    </div>
+    <p className="clone-cena-legenda"><strong>{v.titulo}</strong><span>{v.tipo} de {v.duracao}</span></p>
+  </li>;
+}
+
+/** A prova: vários vídeos que o clone já gravou, em duas esteiras (anúncios em pé; YouTube e aulas deitados). */
 export function GaleriaClone() {
   return <section className="clone-secao clone-galeria" aria-labelledby="clone-galeria-titulo">
     <div className="clone-secao-topo">
       <span className="clone-rotulo">Veja o clone em ação</span>
-      <h2 id="clone-galeria-titulo">Nenhuma dessas cenas <em>foi gravada por mim.</em></h2>
-      <p>Eu só escrevi o texto. Quem fala é o meu clone, com o meu rosto e a minha voz. O Modo Editor fez o resto.</p>
+      <h2 id="clone-galeria-titulo">O meu clone já gravou <em>tudo isso.</em></h2>
+      <p>Anúncios, aulas e vídeo para o YouTube. Eu só escrevi o texto, e ele falou com o meu rosto e a minha voz.</p>
     </div>
-    <Esteira itens={cenas} velocidade={60} rotulo="Cenas gravadas pelo clone" render={(c, i, { copia, ativo, perto }) =>
-      <li key={i} className="clone-cena" aria-hidden={copia || undefined}>
-        {/* a legenda fica embaixo do vídeo, não por cima: a boca do clone falando é a prova */}
-        <div className="clone-cena-video" style={{ backgroundImage: `url(${c.src.replace(/\.mp4$/, '.webp')})` }}>
-          <VideoVivo src={c.src} ativo={ativo} perto={perto} label={c.titulo} />
-          <span className="gallery-tag">Clone</span>
-        </div>
-        <p className="clone-cena-legenda"><strong>{c.titulo}</strong><span>“{c.texto}”</span></p>
-      </li>} />
+    <Esteira itens={anuncios} velocidade={45} rotulo="Anúncios gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} {...e} />} />
+    <Esteira itens={longos} velocidade={45} reverso rotulo="Aulas e vídeo do YouTube gravados pelo clone" render={(v, i, e) => <CartaoClone key={i} v={v} deitado {...e} />} />
   </section>;
 }
 
