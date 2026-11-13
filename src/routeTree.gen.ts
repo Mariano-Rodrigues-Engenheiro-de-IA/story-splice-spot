@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as ProRouteImport } from './routes/pro'
 import { Route as Pro2RouteImport } from './routes/pro2'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ObrigadoRoute = ObrigadoRouteImport.update({
+  id: '/obrigado',
+  path: '/obrigado',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProRoute = ProRouteImport.update({
@@ -31,30 +37,34 @@ const Pro2Route = Pro2RouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pro' | '/pro2'
+  fullPaths: '/' | '/obrigado' | '/pro' | '/pro2'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pro' | '/pro2'
-  id: '__root__' | '/' | '/pro' | '/pro2'
+  to: '/' | '/obrigado' | '/pro' | '/pro2'
+  id: '__root__' | '/' | '/obrigado' | '/pro' | '/pro2'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ObrigadoRoute: typeof ObrigadoRoute
   ProRoute: typeof ProRoute
   Pro2Route: typeof Pro2Route
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/obrigado': {
+      id: '/obrigado'
+      path: '/obrigado'
+      fullPath: '/obrigado'
+      preLoaderRoute: typeof ObrigadoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pro': {
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ObrigadoRoute: ObrigadoRoute,
   ProRoute: ProRoute,
   Pro2Route: Pro2Route,
 }

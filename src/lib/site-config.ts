@@ -45,6 +45,16 @@ export const siteConfig = {
   precoDe: 97,
   /** Preço depois do lançamento (o preço da oferta gira dele até `price`). 0 = sem preço de depois. */
   priceAfterLaunch: 197,
+  /** Página de obrigado (/obrigado): a Kiwify manda para cá depois da compra aprovada do Modo Editor, e ela oferece o Modo Clone.
+   *  `aceitarId`: o id do botão que a Kiwify gera (Produtos → Modo Editor → Configurações → "Página de obrigado e upsell" →
+   *  gerador de upsell → Copiar código HTML), algo como 'kiwify-upsell-trigger-XFQ6I7P'. Vazio = o botão ainda não compra.
+   *  `vsl`: o vídeo de vendas do clone, quando for gravado (em public/videos). Vazio = aparece a capa do Modo Clone. */
+  clone: {
+    price: 37,
+    aceitarId: '' as string,
+    vsl: '' as string,
+    vslPoster: '' as string,
+  },
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
   pixel: {
     id: '1455677936481047' as string,
