@@ -55,7 +55,7 @@ export const siteConfig = {
    *  Preços decididos por ele em 13/11/2026: upsell R$ 97 e downsell R$ 67. O código antigo sIdHoBB era de uma oferta de R$ 47 sem downsell. */
   clone: {
     upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '' as string, vslPoster: '' as string },
-    downsell: { price: 67, kiwifyCodigo: '' as string, vsl: '' as string, vslPoster: '' as string },
+    downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, vsl: '' as string, vslPoster: '' as string },
     downsellUrl: '/ultima-chance',
   },
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
