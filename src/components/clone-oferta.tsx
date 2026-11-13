@@ -345,7 +345,7 @@ export function Duvidas() {
 }
 
 /** "Pergunte ao clone" (ideia das páginas da Tavus e da D-ID): a pessoa toca numa dúvida e o próprio clone responde em vídeo.
- *  Os vídeos são gerados antes (roteiros em modo-clone-kiwify/PERGUNTE-AO-CLONE.txt); o som liga no próprio toque. */
+ *  As respostas são frases que o clone já falou na aula 2 (ver siteConfig.clone.perguntas); o som liga no próprio toque. */
 function PergunteAoClone({ itens }: { itens: { pergunta: string; video: string }[] }) {
   const video = useRef<HTMLVideoElement>(null);
   const [atual, setAtual] = useState<number | null>(null);
@@ -355,6 +355,7 @@ function PergunteAoClone({ itens }: { itens: { pergunta: string; video: string }
     v.src = itens[i]!.video;
     v.muted = false;
     void v.play().catch(() => undefined);
+    v.parentElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); // a resposta fica à vista
     setAtual(i);
     eventoProprio('Clone_Pergunta', { pergunta: itens[i]!.pergunta });
   };

@@ -58,13 +58,13 @@ export const siteConfig = {
     downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, vsl: '' as string, vslPoster: '' as string },
     downsellUrl: '/ultima-chance',
     /** "Pergunte ao clone" na /obrigado: cada dúvida respondida pelo próprio clone em vídeo 9:16 (public/videos/clone, com a
-     *  capa .webp ao lado). Vídeo vazio = a pergunta não aparece; nenhuma com vídeo = a página mostra as dúvidas em texto.
-     *  Os roteiros para gerar estão em modo-clone-kiwify/PERGUNTE-AO-CLONE.txt. */
+     *  capa .webp ao lado). Sem gastar crédito (decisão dele, 13/11): são frases que o clone já falou na aula 2, recortadas do
+     *  bruto D:/aula2clone/bruto/aula2.mp4 (pagar 23,39-28,14 s; tempo 90,08-94,13 s; voz 138,78-143,58 s), conferidas por
+     *  transcrição. Vídeo vazio = a pergunta não aparece; nenhuma com vídeo = a página mostra as dúvidas em texto. */
     perguntas: [
-      { pergunta: 'Preciso de câmera boa?', video: '' },
-      { pergunta: 'Fica com a minha voz?', video: '' },
-      { pergunta: 'Preciso pagar a ferramenta?', video: '' },
-      { pergunta: 'Quanto tempo eu tenho que gravar?', video: '' },
+      { pergunta: 'Preciso pagar a ferramenta do clone?', video: '/videos/clone/pergunta-pagar.mp4' },
+      { pergunta: 'Quanto tempo eu tenho que gravar?', video: '/videos/clone/pergunta-tempo.mp4' },
+      { pergunta: 'Fica com a minha voz?', video: '/videos/clone/pergunta-voz.mp4' },
     ] as { pergunta: string; video: string }[],
   },
   /** Pixel da Meta. id vazio = pixel desligado. Mapa dos eventos em src/lib/pixel.ts. */
