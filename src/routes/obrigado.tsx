@@ -16,15 +16,14 @@ export const Route = createFileRoute('/obrigado')({
   component: Obrigado,
 });
 
-const SCRIPT_KIWIFY = 'https://kiwify-snippets.netlify.app/upsell/upsell.min.js';
-const ID_RECUSAR = 'kiwify-upsell-cancel-trigger';
+const SCRIPT_KIWIFY = 'https://snippets.kiwify.com/upsell-v2/upsell.min.js';
 const brl = (v: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: v % 1 ? 2 : 0 }).format(v);
 
-/** O script da Kiwify vai no fim da página, depois que os botões existem. */
+/** O script da Kiwify vai no fim da página, depois que os botões existem (ele procura os ids na hora em que carrega). */
 function useScriptKiwify() {
   useEffect(() => {
-    if (!siteConfig.clone.aceitarId) {
-      console.warn('[obrigado] siteConfig.clone.aceitarId vazio: o botão de aceitar ainda não compra. Gere o código na Kiwify.');
+    if (!siteConfig.clone.kiwifyCodigo) {
+      console.warn('[obrigado] siteConfig.clone.kiwifyCodigo vazio: o botão de aceitar ainda não compra. Gere o código na Kiwify.');
     }
     if (document.querySelector(`script[src="${SCRIPT_KIWIFY}"]`)) return;
     const s = document.createElement('script');
@@ -59,7 +58,7 @@ const perguntas = [
 
 function Obrigado() {
   useScriptKiwify();
-  const { price, aceitarId, vsl, vslPoster } = siteConfig.clone;
+  const { price, kiwifyCodigo: k, vsl, vslPoster } = siteConfig.clone;
 
   return <div className="page geral clone-pagina">
     <div className="clone-aprovado" role="status"><CircleCheck aria-hidden="true" /><span><b>Compra aprovada!</b> O acesso ao Modo Editor chega no seu e-mail.</span></div>
@@ -78,15 +77,20 @@ function Obrigado() {
         <div className="clone-oferta-marca"><img src="/img/clone/icone.webp" width={44} height={44} alt="" /><h2 id="clone-oferta-titulo">Modo Clone</h2></div>
         <p className="clone-oferta-desc">Um mini curso direto ao ponto: em 3 aulas, você cria o seu clone e gera o seu primeiro vídeo com ele.</p>
         <div className="clone-preco"><strong>{brl(price)}</strong><span>pagamento único</span></div>
-        <button
-          type="button"
-          id={aceitarId || undefined}
-          className="clone-sim"
-          onClick={() => { eventoProprio('Upsell_Clone_Sim'); if (!aceitarId) console.warn('[obrigado] botão sem o id da Kiwify'); }}
-        >
-          Sim, quero o Modo Clone
-        </button>
-        <a id={ID_RECUSAR} href="#" className="clone-nao" onClick={() => eventoProprio('Upsell_Clone_Nao')}>Não, obrigado. Quero ir para o meu acesso.</a>
+        {/* o bloco do upsell da Kiwify: a caixa com o código, o botão de aceitar e o de recusar (ids do código gerado) */}
+        <div id={k ? `kiwify-upsell-${k}` : undefined} data-upsell-url="" data-downsell-url="" className="clone-kiwify">
+          <button
+            type="button"
+            id={k ? `kiwify-upsell-trigger-${k}` : undefined}
+            className="clone-sim"
+            onClick={() => { eventoProprio('Upsell_Clone_Sim'); if (!k) console.warn('[obrigado] botão sem o código da Kiwify'); }}
+          >
+            Sim, quero o Modo Clone
+          </button>
+          <button type="button" id={k ? `kiwify-upsell-cancel-trigger-${k}` : undefined} className="clone-nao" onClick={() => eventoProprio('Upsell_Clone_Nao')}>
+            Não, obrigado. Quero ir para o meu acesso.
+          </button>
+        </div>
         <ul className="clone-oferta-lista">
           <li><Check aria-hidden="true" />3 aulas, tela por tela</li>
           <li><Check aria-hidden="true" />Começa no plano grátis da ferramenta, sem cartão</li>
