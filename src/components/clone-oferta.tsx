@@ -29,47 +29,82 @@ export function useScriptKiwify(codigo: string, pagina: string) {
   }, [codigo, pagina]);
 }
 
-/** Faixa do topo: a compra do Modo Editor já foi aprovada, e em que passo do pedido a pessoa está. */
+/** Topo: aviso para não fechar, compra aprovada e passo do pedido. Barra em 3 partes com a etapa 1 concluída em verde
+ *  (regra da ClickBank: o progresso tem de mostrar que a compra já terminou). Vidro escuro, nada de faixa amarela. */
 export function Progresso({ passo }: { passo: 2 | 3 }) {
-  // faixa de contraste no topo (como no pós-compra real da Molise, 13/11): fechar ou atualizar perde a compra em 1 clique
   return <>
     <div className="clone-alerta" role="alert"><TriangleAlert aria-hidden="true" /><b>Não feche nem atualize esta página</b></div>
     <div className="clone-progresso" role="status">
       <p><CircleCheck aria-hidden="true" /><b>Compra aprovada</b><span>Passo {passo} de 3</span></p>
-      <div className="clone-progresso-barra" aria-hidden="true"><i style={{ width: passo === 2 ? '66%' : '90%' }} /></div>
+      <div className="clone-progresso-barra" aria-hidden="true">
+        {[1, 2, 3].map(n => <i key={n} className={n < passo ? 'feito' : n === passo ? 'agora' : undefined} />)}
+      </div>
     </div>
   </>;
 }
 
-/** O vídeo de vendas, no mesmo player da página principal. Sem vídeo de vendas ainda: um vídeo de verdade do clone
- *  (os 15 primeiros segundos do criativo 13, feito pelo clone) tocando sem som, com botão de ouvir. Nada de play que
- *  não faz nada (13/11: a moldura vazia com play confundia quem acabou de comprar). */
+/** Sem vídeo de vendas ainda: um vídeo de verdade do clone (os 15 primeiros segundos do criativo 13) tocando sem som.
+ *  Nada de play que não faz nada (13/11: a moldura vazia confundia quem acabou de comprar). */
+export const VIDEO_TOPO = '/videos/clone/topo-clone.mp4';
+/** Cópia de 180x320, já desfocada no ffmpeg, para o fundo (como o modo ambiente do YouTube: imagem minúscula esticada,
+ *  sem filtro de desfoque ao vivo, leve no iPhone). */
+export const FUNDO_TOPO = '/videos/clone/topo-fundo.mp4';
+
+/** Fundo da 1ª dobra: o mesmo vídeo, desfocado e escurecido em camadas, cobrindo a largura toda (pedido dele, 14/11).
+ *  Acompanha o vídeo da frente: a cada segundo, corrige se os dois se distanciarem mais de 0,3 s. */
+export function FundoDesfocado({ src, aoVivo = false }: { src: string; aoVivo?: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      const fundo = ref.current;
+      const frente = document.querySelector<HTMLVideoElement>('.clone-dobra .clone-video video');
+      if (!fundo || !frente || frente.paused) return;
+      if (fundo.paused) void fundo.play().catch(() => undefined);
+      if (Math.abs(fundo.currentTime - frente.currentTime) > .3) fundo.currentTime = frente.currentTime;
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, []);
+  return <div className={`clone-fundo${aoVivo ? ' ao-vivo' : ''}`} aria-hidden="true">
+    <video ref={ref} src={src} poster={src.replace(/\.mp4$/, '.webp')} muted loop playsInline autoPlay preload="auto" tabIndex={-1} />
+  </div>;
+}
+
 export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
   if (vsl) return <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>;
   return <VideoDoClone />;
 }
 
+/** O vídeo da frente: toca sem som; uma seta fina leva até a pílula de vidro "Toque para ouvir" no alto do vídeo (longe do
+ *  rosto e da legenda). Tocar em qualquer parte do vídeo também liga o som e volta ao começo. Depois, seta e pílula somem
+ *  e fica só um botãozinho de vidro no canto para tirar o som. */
 function VideoDoClone() {
   const video = useRef<HTMLVideoElement>(null);
   const [som, setSom] = useState(false);
   useEffect(() => { void video.current?.play().catch(() => undefined); }, []);
-  const ouvir = () => {
+  const ligar = () => {
     const v = video.current;
-    if (!v) return;
-    if (som) { v.muted = true; setSom(false); return; }
+    if (!v || som) return;
     v.currentTime = 0;
     v.muted = false;
     void v.play().catch(() => { v.muted = true; setSom(false); });
     setSom(true);
     eventoProprio('Clone_TopoOuvir');
   };
-  return <div className="clone-video clone-topo-video">
-    <video ref={video} src="/videos/clone/topo-clone.mp4" poster="/videos/clone/topo-clone.webp" muted loop playsInline autoPlay aria-label="Anúncio gravado pelo meu clone" />
-    <span className="clone-topo-selo">Gravado pelo meu clone</span>
-    <button type="button" className={`clone-lado-ouvir${som ? ' ligado' : ''}`} onClick={ouvir} aria-pressed={som}>
-      {som ? <><Volume2 aria-hidden="true" />Ouvindo</> : <><VolumeX aria-hidden="true" />Ouvir o clone</>}
-    </button>
-  </div>;
+  const desligar = () => { const v = video.current; if (v) v.muted = true; setSom(false); };
+  return <>
+    <svg className={`clone-seta${som ? ' some' : ''}`} viewBox="0 0 40 46" fill="none" aria-hidden="true">
+      <path d="M8 4 C 26 8, 32 20, 22 40" pathLength={100} /><path d="M14 33 L22 41 L29 32" pathLength={100} />
+    </svg>
+    <div className={`clone-video clone-topo-video${som ? ' com-som' : ''}`} onClick={som ? undefined : ligar}>
+      <video ref={video} src={VIDEO_TOPO} poster="/videos/clone/topo-clone.webp" muted loop playsInline autoPlay aria-label="Recado em vídeo, gravado pelo meu clone" />
+      {som
+        ? <button type="button" className="clone-som-canto" onClick={e => { e.stopPropagation(); desligar(); }} aria-label="Tirar o som"><Volume2 aria-hidden="true" /></button>
+        : <button type="button" className="clone-som" onClick={e => { e.stopPropagation(); ligar(); }}>
+            <VolumeX aria-hidden="true" />Toque para ouvir<span className="clone-eq" aria-hidden="true"><i /><i /><i /></span>
+          </button>}
+      <span className="clone-topo-selo">Gravado pelo meu clone</span>
+    </div>
+  </>;
 }
 
 /** O botão de aceitar e o de recusar, dentro da caixa que o script da Kiwify lê. */
