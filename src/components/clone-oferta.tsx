@@ -46,29 +46,6 @@ export function Progresso({ passo }: { passo: 2 | 3 }) {
 /** Sem vídeo de vendas ainda: um vídeo de verdade do clone (os 15 primeiros segundos do criativo 13) tocando sem som.
  *  Nada de play que não faz nada (13/11: a moldura vazia confundia quem acabou de comprar). */
 export const VIDEO_TOPO = '/videos/clone/topo-clone.mp4';
-/** Cópia de 180x320, já desfocada no ffmpeg, para o fundo (como o modo ambiente do YouTube: imagem minúscula esticada,
- *  sem filtro de desfoque ao vivo, leve no iPhone). */
-export const FUNDO_TOPO = '/videos/clone/topo-fundo.mp4';
-
-/** Fundo da 1ª dobra: o mesmo vídeo, desfocado e escurecido em camadas, cobrindo a largura toda (pedido dele, 14/11).
- *  Acompanha o vídeo da frente: a cada segundo, corrige se os dois se distanciarem mais de 0,3 s. */
-export function FundoDesfocado({ src, aoVivo = false }: { src: string; aoVivo?: boolean }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      const fundo = ref.current;
-      const frente = document.querySelector<HTMLVideoElement>('.clone-dobra .clone-video video');
-      if (!fundo || !frente || frente.paused) return;
-      if (fundo.paused) void fundo.play().catch(() => undefined);
-      if (Math.abs(fundo.currentTime - frente.currentTime) > .3) fundo.currentTime = frente.currentTime;
-    }, 1000);
-    return () => window.clearInterval(id);
-  }, []);
-  return <div className={`clone-fundo${aoVivo ? ' ao-vivo' : ''}`} aria-hidden="true">
-    <video ref={ref} src={src} poster={src.replace(/\.mp4$/, '.webp')} muted loop playsInline autoPlay preload="auto" tabIndex={-1} />
-  </div>;
-}
-
 export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
   if (vsl) return <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>;
   return <VideoDoClone />;
@@ -107,20 +84,25 @@ function VideoDoClone() {
   </>;
 }
 
-/** Revela o resto da página quando o recado chega em `segundos` (pedido dele, 14/11). Plano B: se em `maximo` segundos de
- *  página o vídeo não estiver tocando, revela assim mesmo; e, tocando, nunca espera mais que `segundos` + 40. Quem já viu
- *  (recarregou a página) vê tudo de cara. */
+/** Revela o resto da página depois de `segundos` de recado ASSISTIDO (pedido dele, 14/11: pelo menos 30 s sem preço; conta
+ *  o tempo tocando, porque o vídeo provisório tem 15 s e repete). Plano B: se o vídeo não estiver tocando (sem autoplay,
+ *  modo pouca energia), revela com `maximo` segundos de página; e nunca passa de `segundos` + 40 s de página. Quem já viu
+ *  (recarregou) vê tudo de cara. */
 export function useRevelarDepoisDoRecado(segundos: number, maximo: number) {
   const [revelado, setRevelado] = useState(segundos <= 0);
   useEffect(() => {
     if (segundos <= 0) return;
     try { if (sessionStorage.getItem('clone-revelado') === '1') { setRevelado(true); return; } } catch { /* sem armazenamento: segue */ }
     const inicio = performance.now();
+    let antes = inicio, assistido = 0;
     const id = window.setInterval(() => {
+      const agora = performance.now();
       const v = document.querySelector<HTMLVideoElement>('.clone-dobra .clone-video video');
-      const tempo = (performance.now() - inicio) / 1000;
-      const tocando = !!v && !v.paused && v.currentTime > .3;
-      const como = v && v.currentTime >= segundos ? 'recado' : !tocando && tempo >= maximo ? 'sem-video' : tempo >= segundos + 40 ? 'teto' : '';
+      const tocando = !!v && !v.paused && !v.ended && v.readyState > 2;
+      if (tocando) assistido += (agora - antes) / 1000;
+      antes = agora;
+      const pagina = (agora - inicio) / 1000;
+      const como = assistido >= segundos ? 'recado' : !tocando && assistido < 1 && pagina >= maximo ? 'sem-video' : pagina >= segundos + 40 ? 'teto' : '';
       if (!como) return;
       window.clearInterval(id);
       setRevelado(true);

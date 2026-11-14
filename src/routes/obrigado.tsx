@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@/lib/site-config';
-import { BotoesKiwify, Duvidas, EuEClone, Fecho, FUNDO_TOPO, FundoDesfocado, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useRevelarDepoisDoRecado, useScriptKiwify } from '@/components/clone-oferta';
+import { BotoesKiwify, Duvidas, EuEClone, Fecho, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useRevelarDepoisDoRecado, useScriptKiwify } from '@/components/clone-oferta';
 
 /* /obrigado: a página de obrigado do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify).
    A Kiwify manda para cá depois da compra aprovada. No "não", o script da Kiwify leva para o downsell (/ultima-chance).
@@ -21,10 +21,9 @@ function Obrigado() {
   const revelado = useRevelarDepoisDoRecado(revelarEm, revelarMaximo);
 
   return <div className="page geral clone-pagina">
-    {/* 1ª dobra (pedido dele, 14/11): o fundo é o próprio vídeo, desfocado e tocando; por cima, o aviso, a compra aprovada,
-        o título em 2 linhas numa fonte só, o vídeo e o "não"; o "Sim" e o resto aparecem depois do recado */}
+    {/* 1ª dobra (pedido dele, 14/11): o aviso, a compra aprovada, o título em 2 linhas numa fonte só, o vídeo e o "não";
+        o "Sim" e o resto aparecem depois de 30 s de recado. O fundo de vídeo desfocado saiu ("borrão", reprovado). */}
     <header className="clone-dobra">
-      <FundoDesfocado src={vsl || FUNDO_TOPO} aoVivo={!!vsl} />
       <Progresso passo={2} />
       <section className="clone-topo clone-col-dobra" id="oferta" aria-labelledby="clone-titulo">
         <h1 id="clone-titulo" className="clone-recado"><span>Espere!</span> O seu produto já está liberado.</h1>
