@@ -265,13 +265,28 @@ const etapas = [{ c: 2, r: 2 }, { c: 3, r: 3 }, { c: 4, r: 4 }];
 
 export function UmaGravacao() {
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.45);
+  // 13/11: com a foto parada no começo, parecia travado. Agora a gravação real toca uns 2,6 s e só então se divide nos
+  // quadros: a sequência (CSS) só começa quando o vídeo de fato começou a tocar; sem autoplay (modo pouca energia), já começa.
+  const video = useRef<HTMLVideoElement>(null);
+  const [roda, setRoda] = useState(false);
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    if (!naTela) { setRoda(false); v.pause(); v.currentTime = 0; return; }
+    let pausa = 0;
+    const comecou = () => { setRoda(true); pausa = window.setTimeout(() => v.pause(), 3600); }; // depois de coberto, para
+    v.currentTime = 0;
+    v.addEventListener('playing', comecou, { once: true });
+    void v.play().catch(() => { v.removeEventListener('playing', comecou); setRoda(true); });
+    return () => { v.removeEventListener('playing', comecou); window.clearTimeout(pausa); };
+  }, [naTela]);
   return <section className="clone-secao clone-mult" aria-labelledby="clone-mult-titulo">
     <div className="clone-secao-topo">
       <h2 id="clone-mult-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Uma gravação.</span> <span className="clone-t-forte">Vídeos para sempre.</span></h2>
       <p>Você grava uma vez para criar o clone. Depois, cada vídeo novo é só um texto novo.</p>
     </div>
-    <div className={`clone-mult-palco${naTela ? ' roda' : ''}`} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 4, 9 e 16 vídeos do clone">
-      <div className="clone-mult-camada base"><img src="/videos/clone/gravacao-real.webp" alt="" width={540} height={960} loading="lazy" /></div>
+    <div className={`clone-mult-palco${roda ? ' roda' : ''}`} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 4, 9 e 16 vídeos do clone">
+      <div className="clone-mult-camada base"><video ref={video} src="/videos/clone/eu-real.mp4" poster="/videos/clone/eu-real.webp" muted playsInline preload="none" /></div>
       {etapas.map((e, k) => <div key={k} className="clone-mult-camada" style={{ gridTemplateColumns: `repeat(${e.c}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${e.r}, minmax(0, 1fr))`, '--k': k } as React.CSSProperties}>
         {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={capas[i]} alt="" width={288} height={512} loading="lazy" />)}
       </div>)}
