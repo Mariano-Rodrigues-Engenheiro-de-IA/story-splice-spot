@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@/lib/site-config';
-import { BotoesKiwify, Custo, Duvidas, EuEClone, Fecho, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useScriptKiwify } from '@/components/clone-oferta';
+import { BotoesKiwify, Duvidas, EuEClone, Fecho, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useScriptKiwify } from '@/components/clone-oferta';
 
 /* /obrigado: a página de obrigado do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify).
    A Kiwify manda para cá depois da compra aprovada. No "não", o script da Kiwify leva para o downsell (/ultima-chance).
@@ -23,7 +23,8 @@ function Obrigado() {
 
     <main className="clone-col">
       <section className="clone-topo" id="oferta" aria-labelledby="clone-titulo">
-        <p className="clone-espera"><b>Espere!</b> Seu pedido ainda não está completo</p>
+        {/* 13/11: "seu pedido ainda não está completo" desmentia o "Compra aprovada"; agora confirma e dá o motivo para ficar */}
+        <p className="clone-liberado"><b>Espere!</b> Seu Modo Editor já está liberado. Antes de acessar, veja isto:</p>
         <h1 id="clone-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Agora, o seu clone</span> <span className="clone-t-forte">grava por você.</span></h1>
         <p className="clone-sub">Você escreve o texto. Ele fala com o seu rosto e a sua voz.</p>
         <MidiaClone vsl={vsl} poster={vslPoster} />
@@ -33,14 +34,13 @@ function Obrigado() {
       </section>
 
       {/* página rica e diferente da principal (pedido dele, 13/11), com ideias de fora: lado a lado real x clone, roteiro que
-          vira fala (HeyGen), anatomia (Tavus), 1 gravação que vira muitos vídeos (Codrops), recibo do custo (lacuna do mercado) */}
+          vira fala (HeyGen), anatomia (Tavus), 1 gravação que vira muitos vídeos (Codrops) */}
       <GaleriaClone />
       <EuEClone />
       <VoceEscreve />
       <PorDentro />
       <UmaGravacao />
       <Modulos />
-      <Custo />
       <Duvidas />
       <Fecho preco={price} frase={<>Grave uma vez. <em>Depois, é só escrever.</em></>} textoBotao={`Quero o Modo Clone por ${brl(price)}`} />
     </main>

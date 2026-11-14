@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, CircleCheck, PenLine, Play, RotateCcw, ShieldCheck, Sparkles, Volume2, VolumeX } from 'lucide-react';
+import { ArrowUp, Check, CircleCheck, PenLine, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
 import { VslPlayer } from '@/components/vsl-player';
 import { Esteira, VideoVivo } from '@/components/pro2';
 import { eventoProprio } from '@/lib/pixel';
@@ -31,17 +31,45 @@ export function useScriptKiwify(codigo: string, pagina: string) {
 
 /** Faixa do topo: a compra do Modo Editor já foi aprovada, e em que passo do pedido a pessoa está. */
 export function Progresso({ passo }: { passo: 2 | 3 }) {
-  return <div className="clone-progresso" role="status">
-    <p><CircleCheck aria-hidden="true" /><b>Compra aprovada</b><span>Passo {passo} de 3</span></p>
-    <div className="clone-progresso-barra" aria-hidden="true"><i style={{ width: passo === 2 ? '66%' : '90%' }} /></div>
-  </div>;
+  // faixa de contraste no topo (como no pós-compra real da Molise, 13/11): fechar ou atualizar perde a compra em 1 clique
+  return <>
+    <div className="clone-alerta" role="alert"><TriangleAlert aria-hidden="true" /><b>Não feche nem atualize esta página</b></div>
+    <div className="clone-progresso" role="status">
+      <p><CircleCheck aria-hidden="true" /><b>Compra aprovada</b><span>Passo {passo} de 3</span></p>
+      <div className="clone-progresso-barra" aria-hidden="true"><i style={{ width: passo === 2 ? '66%' : '90%' }} /></div>
+    </div>
+  </>;
 }
 
-/** O vídeo de vendas, no mesmo player da página principal. Sem vídeo ainda: só a moldura, esperando o arquivo. */
+/** O vídeo de vendas, no mesmo player da página principal. Sem vídeo de vendas ainda: um vídeo de verdade do clone
+ *  (os 15 primeiros segundos do criativo 13, feito pelo clone) tocando sem som, com botão de ouvir. Nada de play que
+ *  não faz nada (13/11: a moldura vazia com play confundia quem acabou de comprar). */
 export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
-  return vsl
-    ? <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>
-    : <div className="clone-video clone-moldura" aria-label="Vídeo de apresentação do Modo Clone"><span className="clone-moldura-play" aria-hidden="true"><Play /></span></div>;
+  if (vsl) return <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>;
+  return <VideoDoClone />;
+}
+
+function VideoDoClone() {
+  const video = useRef<HTMLVideoElement>(null);
+  const [som, setSom] = useState(false);
+  useEffect(() => { void video.current?.play().catch(() => undefined); }, []);
+  const ouvir = () => {
+    const v = video.current;
+    if (!v) return;
+    if (som) { v.muted = true; setSom(false); return; }
+    v.currentTime = 0;
+    v.muted = false;
+    void v.play().catch(() => { v.muted = true; setSom(false); });
+    setSom(true);
+    eventoProprio('Clone_TopoOuvir');
+  };
+  return <div className="clone-video clone-topo-video">
+    <video ref={video} src="/videos/clone/topo-clone.mp4" poster="/videos/clone/topo-clone.webp" muted loop playsInline autoPlay aria-label="Anúncio gravado pelo meu clone" />
+    <span className="clone-topo-selo">Gravado pelo meu clone</span>
+    <button type="button" className={`clone-lado-ouvir${som ? ' ligado' : ''}`} onClick={ouvir} aria-pressed={som}>
+      {som ? <><Volume2 aria-hidden="true" />Ouvindo</> : <><VolumeX aria-hidden="true" />Ouvir o clone</>}
+    </button>
+  </div>;
 }
 
 /** O botão de aceitar e o de recusar, dentro da caixa que o script da Kiwify lê. */
@@ -299,36 +327,10 @@ export function UmaGravacao() {
   </section>;
 }
 
-/* ───────── Quanto custa cada vídeo: recibo honesto (ninguém no mercado mostra o número) ─────────
-   Fontes: página de preços da ferramenta lida em 13/11/2026 (grátis: 3 vídeos/mês, até 1 min, marca d'água, 1 avatar;
-   plano de entrada US$ 29/mês ou US$ 24/mês no anual, 600 créditos, sem marca, até 30 min) e créditos medidos nos vídeos dele
-   (modo rápido: 64,8 s = 22 créditos, ~20/min; modo mais realista: aula 2 = 264 em 5:30, 48/min). 600/20 = 30 min; 600/48 = 12 min. */
-export function Custo() {
-  return <section className="clone-secao clone-custo" aria-labelledby="clone-custo-titulo">
-    <div className="clone-secao-topo">
-      <h2 id="clone-custo-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Quanto custa</span> <span className="clone-t-forte">cada vídeo</span></h2>
-      <p>O curso é pagamento único. A ferramenta do clone é à parte, e começa no grátis. Sem letra miúda:</p>
-    </div>
-    <div className="clone-recibo">
-      <p className="clone-recibo-cab">Recibo do clone</p>
-      <dl>
-        <div><dt>Para começar</dt><dd>US$ 0</dd></div>
-        <p className="clone-recibo-obs">Plano grátis, sem cartão: 3 vídeos por mês, até 1 minuto, com marca d’água. Já cria o seu clone.</p>
-        <div><dt>Plano de entrada</dt><dd>US$ 29<small>/mês</small></dd></div>
-        <p className="clone-recibo-obs">600 créditos por mês, sem marca d’água, vídeos de até 30 minutos. No anual, sai US$ 24 por mês.</p>
-        <div><dt>1 minuto de vídeo</dt><dd>~20 créditos</dd></div>
-        <p className="clone-recibo-obs">No modo rápido. No modo mais realista, ~48 créditos.</p>
-      </dl>
-      <div className="clone-recibo-total"><span>Sai por volta de</span><strong>US$ 1</strong><span>por minuto de vídeo</span></div>
-      <p className="clone-recibo-pe">600 créditos rendem ~30 min por mês no modo rápido, ou ~12 min no mais realista. Preços da ferramenta em 13/11/2026; créditos medidos nos meus vídeos. Podem mudar.</p>
-    </div>
-  </section>;
-}
-
 const modulos = [
-  { capa: '/img/clone/modulo-01.webp', numero: '01', titulo: 'Comece aqui', texto: 'O que é um clone, as três partes dele (aparência, movimento e voz) e o que você vai precisar.' },
-  { capa: '/img/clone/modulo-02.webp', numero: '02', titulo: 'Criando o seu avatar', texto: 'Tela por tela: a conta, a sua foto, a gravação do seu movimento e a sua voz clonada.' },
-  { capa: '/img/clone/modulo-03.webp', numero: '03', titulo: 'Criando o vídeo', texto: 'Do texto ao vídeo pronto: a voz em português, a pronúncia certa, o teste de 10 segundos e o download para editar.' },
+  { capa: '/img/clone/modulo-01.webp', numero: '01', titulo: 'Comece aqui', texto: 'O que Ã© um clone, as trÃªs partes dele (aparÃªncia, movimento e voz) e o que vocÃª vai precisar.' },
+  { capa: '/img/clone/modulo-02.webp', numero: '02', titulo: 'Criando o seu avatar', texto: 'Tela por tela: a conta, a sua foto, a gravaÃ§Ã£o do seu movimento e a sua voz clonada.' },
+  { capa: '/img/clone/modulo-03.webp', numero: '03', titulo: 'Criando o vÃ­deo', texto: 'Do texto ao vÃ­deo pronto: a voz em portuguÃªs, a pronÃºncia certa, o teste de 10 segundos e o download para editar.' },
 ];
 
 /** As 3 aulas. Cada capa aparece "sendo gerada", com uma linha roxa varrendo de cima para baixo, quando entra na tela. */

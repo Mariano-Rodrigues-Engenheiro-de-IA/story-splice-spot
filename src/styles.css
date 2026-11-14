@@ -2266,6 +2266,10 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-pagina { --roxo: oklch(.5 .21 295); --roxo-claro: oklch(.76 .16 300); --ambar: oklch(.8 .15 75); min-height: 100vh; overflow-x: clip; background: radial-gradient(120% 50% at 50% 0%, oklch(.5 .21 295 / .22), transparent 60%), var(--background); }
 .clone-col { width: min(560px, 100%); margin: 0 auto; padding: 0 16px 40px; }
 
+/* faixa de aviso, largura inteira, em cor de contraste (amarelo/laranja do contador) */
+.clone-alerta { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 9px 16px; background: linear-gradient(90deg, #ffd23f, #ff9f1c); color: #2a1600; font-size: 12.5px; letter-spacing: .03em; line-height: 1.25; text-align: center; text-transform: uppercase; }
+.clone-alerta svg { flex: none; width: 17px; height: 17px; }
+.clone-alerta b { font-weight: 800; }
 /* faixa do topo: compra aprovada + passo do pedido */
 .clone-progresso { width: min(560px, 100%); margin: 0 auto; padding: 12px 16px 0; }
 .clone-progresso p { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 0 8px; font-size: 13.5px; line-height: 1.2; }
@@ -2280,15 +2284,22 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-topo { padding: 16px 0 0; text-align: center; scroll-margin-top: 8px; }
 .clone-espera { display: inline-block; margin: 0 0 12px; padding: 6px 13px; border-radius: 99px; background: oklch(.5 .21 295 / .18); border: 1px solid oklch(.76 .16 300 / .4); color: var(--roxo-claro); font-size: 13.5px; font-weight: 600; letter-spacing: .01em; }
 .clone-espera b { color: #fff; font-weight: 800; }
+.clone-liberado { margin: 0 auto 10px; max-width: 340px; color: oklch(.9 .01 290); font-size: 15px; font-weight: 500; line-height: 1.4; text-wrap: balance; }
+.clone-liberado b { color: #ffd23f; font-weight: 800; }
 .clone-espera-ultima { background: oklch(.8 .15 75 / .12); border-color: oklch(.8 .15 75 / .45); color: var(--ambar); }
 .clone-topo h1 { margin: 0 auto 8px; max-width: 520px; font-size: clamp(27px, 7.6vw, 40px); line-height: 1.08; letter-spacing: -.02em; font-weight: 700; text-wrap: balance; }
 .clone-topo h1 em, .clone-secao h2 em, .clone-fim-frase em { color: var(--roxo-claro); }
 .clone-sub { margin: 0 auto 16px; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.45; text-wrap: balance; }
 .clone-sub s { color: oklch(.7 .02 286); }
-.clone-video { position: relative; width: clamp(180px, calc((100svh - 334px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
+.clone-video { position: relative; width: clamp(170px, calc((100svh - 372px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
 /* /ultima-chance: título maior (preço riscado + preço novo), então o vídeo desconta mais altura para o botão continuar à vista */
 .clone-downsell .clone-topo h1 { font-size: clamp(25px, 6.8vw, 38px); }
-.clone-downsell .clone-video { width: clamp(200px, calc((100svh - 350px) * .5625), 340px); }
+.clone-downsell .clone-video { width: clamp(170px, calc((100svh - 390px) * .5625), 340px); }
+/* vídeo do clone no topo, enquanto o vídeo de vendas não chega */
+.clone-topo-video { background: oklch(.16 .006 286) url(/videos/clone/topo-clone.webp) center / cover; }
+.clone-topo-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.clone-topo-selo { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); padding: 5px 11px; border-radius: 99px; background: var(--roxo); color: #fff; font-size: 12px; font-weight: 800; letter-spacing: .02em; white-space: nowrap; }
+.clone-lado-ouvir.ligado { border-color: transparent; background: var(--roxo); }
 /* moldura do vídeo de vendas do clone, vazia até o vídeo chegar (mesmo formato 9:16 do player da página principal) */
 .clone-moldura { display: grid; place-items: center; background: radial-gradient(80% 60% at 50% 40%, oklch(.5 .21 295 / .28), transparent 70%), linear-gradient(180deg, oklch(.17 .03 295), oklch(.11 .01 290)); }
 .clone-moldura-play { display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; background: oklch(.5 .21 295 / .9); border: 2px solid rgba(255,255,255,.6); color: #fff; }
@@ -2421,20 +2432,6 @@ html:has(.geral) { scroll-padding-top: 0; }
 @keyframes clone-conta { 0% { opacity: 0; transform: scale(.55); } 10% { opacity: 1; transform: scale(1.1); } 18% { transform: scale(1); } 94% { opacity: 1; } 100% { opacity: 0; transform: scale(1); } }
 @keyframes clone-pop { 0% { opacity: 0; transform: scale(.55); } 60% { opacity: 1; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes clone-aparece { from { opacity: 0; } to { opacity: 1; } }
-
-/* quanto custa cada vídeo: recibo de papel, com a borda de baixo picotada */
-.clone-recibo { max-width: 360px; margin: 0 auto; padding: 22px 20px 30px; border-radius: 6px 6px 0 0; background: #f3efe6; color: #1b1724; font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; transform: rotate(-1.2deg); filter: drop-shadow(0 26px 34px rgba(0, 0, 0, .55)); -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 16px 100%; mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 16px 100%; }
-.clone-recibo-cab { margin: 0 0 14px; color: #1b1724 !important; padding-bottom: 12px; border-bottom: 2px dashed #b9b2a3; font-size: 13px; font-weight: 800; letter-spacing: .18em; text-align: center; text-transform: uppercase; }
-.clone-recibo dl { margin: 0; }
-.clone-recibo dl > div { display: flex; align-items: baseline; gap: 8px; margin-top: 12px; font-size: 15px; font-weight: 700; }
-.clone-recibo dl > div::after { content: ""; order: 1; flex: 1; border-bottom: 2px dotted #b9b2a3; transform: translateY(-4px); }
-.clone-recibo dt { order: 0; }
-.clone-recibo dd { order: 2; margin: 0; white-space: nowrap; }
-.clone-recibo dd small { font-size: 12px; font-weight: 600; }
-.clone-recibo-obs { margin: 4px 0 0; color: #5d566a; font-size: 12.5px; line-height: 1.45; }
-.clone-recibo-total { display: flex; flex-direction: column; align-items: center; margin-top: 18px; padding-top: 14px; border-top: 2px dashed #b9b2a3; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
-.clone-recibo-total strong { margin: 2px 0; color: #5b21b6; font-family: var(--font-sans); font-size: 46px; font-weight: 800; letter-spacing: -.02em; line-height: 1.05; text-transform: none; }
-.clone-recibo-pe { margin: 14px 0 0; color: #6f687b; font-size: 11px; line-height: 1.45; text-align: center; }
 
 /* pergunte ao clone (só aparece quando os vídeos das respostas existirem) */
 .clone-pergunte-palco { display: grid; gap: 14px; max-width: 460px; margin: 0 auto; }
