@@ -23,10 +23,13 @@ function Obrigado() {
 
     <main className="clone-col">
       <section className="clone-topo" id="oferta" aria-labelledby="clone-titulo">
-        {/* 13/11: "seu pedido ainda não está completo" desmentia o "Compra aprovada"; agora confirma e dá o motivo para ficar */}
-        <p className="clone-liberado"><b>Espere!</b> Seu Modo Editor já está liberado. Antes de acessar, veja isto:</p>
-        <h1 id="clone-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Agora, o seu clone</span> <span className="clone-t-forte">grava por você.</span></h1>
-        <p className="clone-sub">Você escreve o texto. Ele fala com o seu rosto e a sua voz.</p>
+        {/* 13/11: ele tirou o título do produto e o subtítulo. O título agora é o próprio "Espere!", grande: confirma a compra
+            e manda ver o recado (como o pós-compra real da Molise: "Espera! Seu Clone já tá liberado. Antes de abrir, assista") */}
+        <h1 id="clone-titulo" className="clone-espere">
+          <span className="clone-espere-1">Espere!</span>
+          <span className="clone-espere-2">O seu produto já está liberado.</span>
+          <span className="clone-espere-3">Antes de acessar, veja este recado.</span>
+        </h1>
         <MidiaClone vsl={vsl} poster={vslPoster} />
         <BotoesKiwify codigo={kiwifyCodigo} downsellUrl={siteConfig.clone.downsellUrl} evento="Upsell_Clone"
           textoSim={<>Sim, quero o Modo Clone por {brl(price)}</>}
