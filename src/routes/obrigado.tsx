@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { siteConfig } from '@/lib/site-config';
-import { BotoesKiwify, Duvidas, EuEClone, Fecho, FUNDO_TOPO, FundoDesfocado, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useScriptKiwify } from '@/components/clone-oferta';
+import { BotoesKiwify, Duvidas, EuEClone, Fecho, FUNDO_TOPO, FundoDesfocado, GaleriaClone, MidiaClone, Modulos, PorDentro, Progresso, UmaGravacao, VoceEscreve, brl, useRevelarDepoisDoRecado, useScriptKiwify } from '@/components/clone-oferta';
 
 /* /obrigado: a página de obrigado do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify).
    A Kiwify manda para cá depois da compra aprovada. No "não", o script da Kiwify leva para o downsell (/ultima-chance).
@@ -15,12 +15,14 @@ export const Route = createFileRoute('/obrigado')({
 });
 
 function Obrigado() {
-  const { price, kiwifyCodigo, vsl, vslPoster } = siteConfig.clone.upsell;
+  const { price, kiwifyCodigo, vsl, vslPoster, revelarEm, revelarMaximo } = siteConfig.clone.upsell;
   useScriptKiwify(kiwifyCodigo, 'obrigado');
+  // o Sim, as parcelas e o resto da página só aparecem depois do recado (o "não" fica sempre à vista)
+  const revelado = useRevelarDepoisDoRecado(revelarEm, revelarMaximo);
 
   return <div className="page geral clone-pagina">
     {/* 1ª dobra (pedido dele, 14/11): o fundo é o próprio vídeo, desfocado e tocando; por cima, o aviso, a compra aprovada,
-        o título em 2 linhas numa fonte só, uma setinha até o botão de som, o vídeo e o "Sim" */}
+        o título em 2 linhas numa fonte só, o vídeo e o "não"; o "Sim" e o resto aparecem depois do recado */}
     <header className="clone-dobra">
       <FundoDesfocado src={vsl || FUNDO_TOPO} aoVivo={!!vsl} />
       <Progresso passo={2} />
@@ -28,13 +30,14 @@ function Obrigado() {
         <h1 id="clone-titulo" className="clone-recado"><span>Espere!</span> O seu produto já está liberado.</h1>
         <p className="clone-recado-sub">Antes de acessar, veja este recado.</p>
         <MidiaClone vsl={vsl} poster={vslPoster} />
-        <BotoesKiwify codigo={kiwifyCodigo} downsellUrl={siteConfig.clone.downsellUrl} evento="Upsell_Clone"
+        <BotoesKiwify codigo={kiwifyCodigo} downsellUrl={siteConfig.clone.downsellUrl} evento="Upsell_Clone" esperando={!revelado}
           textoSim={<>Sim, quero o Modo Clone por {brl(price)}</>}
-          textoNao="Não, obrigado. Prefiro continuar gravando todos os meus vídeos." />
+          textoNao={revelado ? 'Não, obrigado. Prefiro continuar gravando todos os meus vídeos.' : 'Não, obrigado. Quero pular este recado.'} />
       </section>
     </header>
 
-    <main className="clone-col">
+    {revelado && <>
+    <main className="clone-col clone-revelado">
       {/* página rica e diferente da principal (pedido dele, 13/11), com ideias de fora: lado a lado real x clone, roteiro que
           vira fala (HeyGen), anatomia (Tavus), 1 gravação que vira muitos vídeos (Codrops) */}
       <GaleriaClone />
@@ -48,5 +51,6 @@ function Obrigado() {
     </main>
 
     <footer className="clone-rodape">Modo Editor · Modo Clone</footer>
+    </>}
   </div>;
 }

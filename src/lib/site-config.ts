@@ -54,7 +54,12 @@ export const siteConfig = {
    *  `vsl`: o vídeo de vendas (em public/videos), quando for gravado. Vazio = aparece a capa do Modo Clone.
    *  Preços decididos por ele em 13/11/2026: upsell R$ 97 e downsell R$ 67. O código antigo sIdHoBB era de uma oferta de R$ 47 sem downsell. */
   clone: {
-    upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '' as string, vslPoster: '' as string },
+    /** `revelarEm`: em que segundo do recado (o vídeo do topo) aparecem o Sim, as parcelas e o resto da página (pedido
+     *  dele, 14/11, como o pós-compra da Molise). Com o vídeo provisório do clone (15 s), é o fim dele; quando o recado de
+     *  verdade for gravado, troque pelo segundo em que ele fala da oferta. `revelarMaximo`: plano B, em segundos de página:
+     *  se o vídeo não estiver tocando (sem som e sem autoplay, modo pouca energia), mostra tudo mesmo assim. O "não" fica
+     *  à vista desde o começo. 0 em `revelarEm` = mostra tudo de cara. */
+    upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '' as string, vslPoster: '' as string, revelarEm: 14, revelarMaximo: 20 },
     downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, vsl: '' as string, vslPoster: '' as string },
     downsellUrl: '/ultima-chance',
     /** "Pergunte ao clone" na /obrigado: cada dúvida respondida pelo próprio clone em vídeo 9:16 (public/videos/clone, com a

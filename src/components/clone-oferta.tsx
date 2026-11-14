@@ -107,10 +107,36 @@ function VideoDoClone() {
   </>;
 }
 
+/** Revela o resto da página quando o recado chega em `segundos` (pedido dele, 14/11). Plano B: se em `maximo` segundos de
+ *  página o vídeo não estiver tocando, revela assim mesmo; e, tocando, nunca espera mais que `segundos` + 40. Quem já viu
+ *  (recarregou a página) vê tudo de cara. */
+export function useRevelarDepoisDoRecado(segundos: number, maximo: number) {
+  const [revelado, setRevelado] = useState(segundos <= 0);
+  useEffect(() => {
+    if (segundos <= 0) return;
+    try { if (sessionStorage.getItem('clone-revelado') === '1') { setRevelado(true); return; } } catch { /* sem armazenamento: segue */ }
+    const inicio = performance.now();
+    const id = window.setInterval(() => {
+      const v = document.querySelector<HTMLVideoElement>('.clone-dobra .clone-video video');
+      const tempo = (performance.now() - inicio) / 1000;
+      const tocando = !!v && !v.paused && v.currentTime > .3;
+      const como = v && v.currentTime >= segundos ? 'recado' : !tocando && tempo >= maximo ? 'sem-video' : tempo >= segundos + 40 ? 'teto' : '';
+      if (!como) return;
+      window.clearInterval(id);
+      setRevelado(true);
+      try { sessionStorage.setItem('clone-revelado', '1'); } catch { /* ok */ }
+      eventoProprio('Upsell_Revelou', { como });
+    }, 400);
+    return () => window.clearInterval(id);
+  }, [segundos, maximo]);
+  return revelado;
+}
+
 /** O botão de aceitar e o de recusar, dentro da caixa que o script da Kiwify lê. */
-export function BotoesKiwify({ codigo, downsellUrl = '', textoSim, textoNao, evento }: { codigo: string; downsellUrl?: string; textoSim: React.ReactNode; textoNao: string; evento: string }) {
+export function BotoesKiwify({ codigo, downsellUrl = '', textoSim, textoNao, evento, esperando = false }: { codigo: string; downsellUrl?: string; textoSim: React.ReactNode; textoNao: string; evento: string; esperando?: boolean }) {
   const k = codigo;
-  return <div id={k ? `kiwify-upsell-${k}` : undefined} data-upsell-url="" data-downsell-url={downsellUrl} className="clone-kiwify">
+  // `esperando`: o Sim e as parcelas ficam escondidos por CSS (continuam no DOM, para o script da Kiwify ligar o clique)
+  return <div id={k ? `kiwify-upsell-${k}` : undefined} data-upsell-url="" data-downsell-url={downsellUrl} className={`clone-kiwify${esperando ? ' esperando' : ''}`}>
     <button type="button" id={k ? `kiwify-upsell-trigger-${k}` : undefined} className="clone-sim" onClick={() => eventoProprio(`${evento}_Sim`)}>
       {textoSim}
     </button>
