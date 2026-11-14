@@ -2406,14 +2406,20 @@ html:has(.geral) { scroll-padding-top: 0; }
 @keyframes clone-recua { to { transform: scale(.9); filter: brightness(.55); } }
 .clone-mult-palco.roda .clone-mult-camada:not(.base) { animation: clone-divide .55s cubic-bezier(.2, .8, .2, 1) forwards; animation-delay: calc(2.6s + var(--k) * 1.1s); }
 @keyframes clone-divide { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: none; } }
-.clone-mult-conta { position: absolute; left: 0; right: 0; bottom: 14px; display: grid; justify-items: center; pointer-events: none; }
-.clone-mult-conta span { grid-area: 1 / 1; padding: 7px 14px; border: 1px solid oklch(.76 .16 300 / .5); border-radius: 99px; background: rgba(12, 10, 22, .82); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: #fff; font-size: 14.5px; font-weight: 800; white-space: nowrap; opacity: 0; }
+.clone-mult-conta { position: absolute; inset: 0; display: grid; place-items: center; padding-top: 50%; pointer-events: none; }
+/* sombra escura atrás do número quando a grade entra, para ler em cima dos 16 quadros */
+.clone-mult-conta::before { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 30% at 50% 74%, rgba(8, 6, 16, .78), transparent 75%); opacity: 0; }
+.clone-mult-palco.roda .clone-mult-conta::before { animation: clone-aparece .4s ease 2.6s forwards; }
+.clone-mult-conta span { position: relative; grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; font-family: "Anton", var(--font-sans); line-height: .88; text-transform: uppercase; opacity: 0; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .7)); }
+.clone-mult-conta b { color: #ffd23f; font-size: 104px; font-weight: 400; letter-spacing: -.01em; text-shadow: 0 4px 0 #c2410c; }
+.clone-mult-conta i { margin-top: 4px; color: #ff9f1c; font-size: 36px; font-style: normal; letter-spacing: .05em; text-shadow: 0 3px 0 #7c2d12; }
 .clone-mult-conta span.base { opacity: 1; }
-.clone-mult-palco.roda .clone-mult-conta span.base { animation: clone-some .01s linear 2.6s forwards; }
+.clone-mult-palco.roda .clone-mult-conta span.base { animation: clone-some .2s linear 2.6s forwards; }
 .clone-mult-palco.roda .clone-mult-conta span:not(.base) { animation: clone-conta 1.1s linear forwards; animation-delay: calc(2.6s + var(--k) * 1.1s); }
-.clone-mult-palco.roda .clone-mult-conta span:last-child { animation: clone-aparece .3s ease forwards; animation-delay: calc(2.6s + var(--k) * 1.1s); }
+.clone-mult-palco.roda .clone-mult-conta span:last-child { animation: clone-pop .5s ease forwards; animation-delay: calc(2.6s + var(--k) * 1.1s); }
 @keyframes clone-some { to { opacity: 0; } }
-@keyframes clone-conta { 0%, 96% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes clone-conta { 0% { opacity: 0; transform: scale(.55); } 10% { opacity: 1; transform: scale(1.1); } 18% { transform: scale(1); } 94% { opacity: 1; } 100% { opacity: 0; transform: scale(1); } }
+@keyframes clone-pop { 0% { opacity: 0; transform: scale(.55); } 60% { opacity: 1; transform: scale(1.1); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes clone-aparece { from { opacity: 0; } to { opacity: 1; } }
 
 /* quanto custa cada vídeo: recibo de papel, com a borda de baixo picotada */

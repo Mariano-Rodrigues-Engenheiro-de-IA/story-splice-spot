@@ -291,8 +291,9 @@ export function UmaGravacao() {
         {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={capas[i]} alt="" width={288} height={512} loading="lazy" />)}
       </div>)}
       <div className="clone-mult-conta" aria-hidden="true">
-        <span className="base">1 gravação sua</span>
-        {etapas.map((e, k) => <span key={k} style={{ '--k': k } as React.CSSProperties}>{e.c * e.r} vídeos{k === etapas.length - 1 ? '…' : ''}</span>)}
+        {/* 13/11: ele pediu as frases maiores, em cor viva e no meio, com tipografia diferente (Anton) */}
+        <span className="base"><b>1</b><i>gravação</i></span>
+        {etapas.map((e, k) => <span key={k} style={{ '--k': k } as React.CSSProperties}><b>{e.c * e.r}</b><i>vídeos</i></span>)}
       </div>
     </div>
   </section>;
