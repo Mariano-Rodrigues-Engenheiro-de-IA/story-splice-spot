@@ -351,49 +351,45 @@ export function PorDentro() {
   </section>;
 }
 
-/* ───────── Uma gravação, vídeos para sempre: 1 quadro dele de verdade se divide em 4, 9 e 16 vídeos do clone ─────────
-   Sequência em CSS puro (camadas com atraso), ligada quando a seção aparece: etapas em JS travaram no iPhone dele.
-   13/11: ele achou o quadro de 16 "bugado". Eram capas de vídeo deitado cortadas em tiras (letra e tela pela metade) e
-   etapas 2x1 e 4x2 que esticavam o quadro. Agora a grade é sempre n x n (cada quadradinho continua 9:16) e as 16 capas
-   (videos/clone/grade) são quadros em pé com o rosto do clone, cada uma de um vídeo diferente (criativos 13, 09 e 10,
-   YouTube, aulas 1, 2 e 3). */
-const capas = Array.from({ length: 16 }, (_, i) => `/videos/clone/grade/g${String(i + 1).padStart(2, '0')}.webp`);
-const etapas = [{ c: 2, r: 2 }, { c: 3, r: 3 }, { c: 4, r: 4 }];
+/* ───────── Uma gravação, vídeos para sempre: a gravação real se divide em 4, 9 e 16 vídeos do clone ─────────
+   14/11: a versão com capas em código travava na troca no iPhone dele (2 vezes). Agora é UM vídeo pronto
+   (videos/clone/uma-gravacao.mp4, 10 s, montado no ffmpeg: gravação real até 2,6 s, depois trocas suaves para 4 (2,6 s),
+   9 (3,7 s) e 16 (4,8 s) quadradinhos, cada um um vídeo diferente do clone mexendo). O celular só toca o vídeo; o contador
+   por cima acompanha o tempo do vídeo (só troca um atributo). Toca uma vez quando aparece e para no quadro de 16. */
+const TROCAS_GRAVACAO = [2.6, 3.7, 4.8];
+const CONTADOR = [{ n: '1', t: 'gravação' }, { n: '4', t: 'vídeos' }, { n: '9', t: 'vídeos' }, { n: '16', t: 'vídeos' }];
 
 export function UmaGravacao() {
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.45);
   const perto = usePertoClone(caixa);
-  // 13/11: com a foto parada no começo, parecia travado. Agora a gravação real toca uns 2,6 s e só então se divide nos
-  // quadros: a sequência (CSS) só começa quando o vídeo de fato começou a tocar; sem autoplay (modo pouca energia), já começa.
   const video = useRef<HTMLVideoElement>(null);
-  const [roda, setRoda] = useState(false);
+  const [etapa, setEtapa] = useState(0);
   useEffect(() => {
     const v = video.current;
     if (!v) return;
-    if (!naTela) { setRoda(false); v.pause(); v.currentTime = 0; return; }
-    let pausa = 0;
-    // 14/11: "travou antes de chegar no tamanho certo" = capas ainda carregando quando a camada entrava. Só começa com todas prontas.
-    const prontas = () => Promise.all([...(caixa.current?.querySelectorAll('img') ?? [])].map(i => i.decode().catch(() => undefined)));
-    const comecou = () => { void prontas().then(() => setRoda(true)); pausa = window.setTimeout(() => v.pause(), 4200); }; // depois de coberto, para
+    if (!naTela) { v.pause(); v.currentTime = 0; setEtapa(0); return; }
     v.currentTime = 0;
-    v.addEventListener('playing', comecou, { once: true });
-    void v.play().catch(() => { v.removeEventListener('playing', comecou); setRoda(true); });
-    return () => { v.removeEventListener('playing', comecou); window.clearTimeout(pausa); };
+    void v.play().catch(() => { v.currentTime = 9.5; setEtapa(3); }); // sem autoplay: mostra o quadro final, de 16
+    // o número troca no meio de cada troca do vídeo (0,2 s depois do início): quadro a quadro onde dá (requestVideoFrameCallback),
+    // senão pelo timeupdate
+    const acompanha = () => { const t = v.currentTime; setEtapa(TROCAS_GRAVACAO.filter(x => t >= x + .2).length); };
+    let id = 0, vivo = true;
+    const quadro = () => { if (!vivo) return; acompanha(); id = v.requestVideoFrameCallback(quadro); };
+    const quadroAQuadro = typeof HTMLVideoElement.prototype.requestVideoFrameCallback === 'function';
+    if (quadroAQuadro) id = v.requestVideoFrameCallback(quadro);
+    else v.addEventListener('timeupdate', acompanha);
+    return () => { vivo = false; if (quadroAQuadro) v.cancelVideoFrameCallback(id); v.removeEventListener('timeupdate', acompanha); };
   }, [naTela]);
   return <section className="clone-secao clone-mult" aria-labelledby="clone-mult-titulo">
     <div className="clone-secao-topo">
       <h2 id="clone-mult-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Uma gravação.</span> <span className="clone-t-forte">Vídeos para sempre.</span></h2>
       <p>Você grava uma vez para criar o clone. Depois, cada vídeo novo é só um texto novo.</p>
     </div>
-    <div className={`clone-mult-palco${roda ? ' roda' : ''}`} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 4, 9 e 16 vídeos do clone">
-      <div className="clone-mult-camada base"><video ref={video} src="/videos/clone/eu-real.mp4" poster="/videos/clone/eu-real.webp" muted playsInline preload={perto ? 'auto' : 'none'} /></div>
-      {etapas.map((e, k) => <div key={k} className="clone-mult-camada" style={{ gridTemplateColumns: `repeat(${e.c}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${e.r}, minmax(0, 1fr))`, '--k': k } as React.CSSProperties}>
-        {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={perto ? capas[i] : undefined} alt="" width={288} height={512} decoding="async" />)}
-      </div>)}
+    <div className="clone-mult-palco" data-etapa={etapa} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 4, 9 e 16 vídeos do clone">
+      <video ref={video} src="/videos/clone/uma-gravacao.mp4" poster="/videos/clone/uma-gravacao.webp" muted playsInline preload={perto ? 'auto' : 'none'} />
       <div className="clone-mult-conta" aria-hidden="true">
-        {/* 13/11: ele pediu as frases maiores, em cor viva e no meio, com tipografia diferente; depois, número e palavra na mesma linha, em Bricolage Grotesque */}
-        <span className="base"><b>1</b><i>gravação</i></span>
-        {etapas.map((e, k) => <span key={k} style={{ '--k': k } as React.CSSProperties}><b>{e.c * e.r}</b><i>vídeos</i></span>)}
+        {/* 13/11: frases grandes, em cor viva, no meio, número e palavra na mesma linha, em Bricolage Grotesque */}
+        {CONTADOR.map((c, k) => <span key={k} className={k === etapa ? 'on' : undefined}><b>{c.n}</b><i>{c.t}</i></span>)}
       </div>
     </div>
   </section>;
