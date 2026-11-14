@@ -126,12 +126,25 @@ export function useRevelarDepoisDoRecado(segundos: number, maximo: number) {
 /** O botão de aceitar e o de recusar, dentro da caixa que o script da Kiwify lê. */
 export function BotoesKiwify({ codigo, downsellUrl = '', textoSim, textoNao, evento, esperando = false }: { codigo: string; downsellUrl?: string; textoSim: React.ReactNode; textoNao: string; evento: string; esperando?: boolean }) {
   const k = codigo;
+  // ATENÇÃO (14/11): os botões NÃO podem ter onClick do React. O script da Kiwify liga a compra de 1 clique pondo
+  // `botao.onclick = ...`, e o React, ao redesenhar um botão com onClick (aqui, quando o resto da página aparece aos 30 s),
+  // troca esse `onclick` por uma função vazia: o Sim e o Não paravam de funcionar. O evento do pixel vai por addEventListener.
+  const caixa = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const sim = caixa.current?.querySelector('.clone-sim');
+    const nao = caixa.current?.querySelector('.clone-nao');
+    const aoSim = () => eventoProprio(`${evento}_Sim`);
+    const aoNao = () => eventoProprio(`${evento}_Nao`);
+    sim?.addEventListener('click', aoSim);
+    nao?.addEventListener('click', aoNao);
+    return () => { sim?.removeEventListener('click', aoSim); nao?.removeEventListener('click', aoNao); };
+  }, [evento]);
   // `esperando`: o Sim e as parcelas ficam escondidos por CSS (continuam no DOM, para o script da Kiwify ligar o clique)
-  return <div id={k ? `kiwify-upsell-${k}` : undefined} data-upsell-url="" data-downsell-url={downsellUrl} className={`clone-kiwify${esperando ? ' esperando' : ''}`}>
-    <button type="button" id={k ? `kiwify-upsell-trigger-${k}` : undefined} className="clone-sim" onClick={() => eventoProprio(`${evento}_Sim`)}>
+  return <div ref={caixa} id={k ? `kiwify-upsell-${k}` : undefined} data-upsell-url="" data-downsell-url={downsellUrl} className={`clone-kiwify${esperando ? ' esperando' : ''}`}>
+    <button type="button" id={k ? `kiwify-upsell-trigger-${k}` : undefined} className="clone-sim">
       {textoSim}
     </button>
-    <button type="button" id={k ? `kiwify-upsell-cancel-trigger-${k}` : undefined} className="clone-nao" onClick={() => eventoProprio(`${evento}_Nao`)}>
+    <button type="button" id={k ? `kiwify-upsell-cancel-trigger-${k}` : undefined} className="clone-nao">
       {textoNao}
     </button>
   </div>;
