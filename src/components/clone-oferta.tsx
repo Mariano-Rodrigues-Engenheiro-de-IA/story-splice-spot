@@ -254,10 +254,14 @@ export function PorDentro() {
   </section>;
 }
 
-/* ───────── Uma gravação, vídeos para sempre: 1 quadro dele de verdade se divide em 2, 4, 8 e 16 vídeos do clone ─────────
-   Sequência em CSS puro (camadas com atraso), ligada quando a seção aparece: etapas em JS travaram no iPhone dele. */
-const capas = ['eu-clone', 'anuncio-ilustra', 'youtube-capcut', 'anuncio-profissoes', 'aula-1', 'escreve', 'anuncio-descoberta', 'aula-2', 'anatomia', 'aula-3'].map(n => `/videos/clone/${n}.webp`);
-const etapas = [{ c: 2, r: 1 }, { c: 2, r: 2 }, { c: 4, r: 2 }, { c: 4, r: 4 }];
+/* ───────── Uma gravação, vídeos para sempre: 1 quadro dele de verdade se divide em 4, 9 e 16 vídeos do clone ─────────
+   Sequência em CSS puro (camadas com atraso), ligada quando a seção aparece: etapas em JS travaram no iPhone dele.
+   13/11: ele achou o quadro de 16 "bugado". Eram capas de vídeo deitado cortadas em tiras (letra e tela pela metade) e
+   etapas 2x1 e 4x2 que esticavam o quadro. Agora a grade é sempre n x n (cada quadradinho continua 9:16) e as 16 capas
+   (videos/clone/grade) são quadros em pé com o rosto do clone, cada uma de um vídeo diferente (criativos 13, 09 e 10,
+   YouTube, aulas 1, 2 e 3). */
+const capas = Array.from({ length: 16 }, (_, i) => `/videos/clone/grade/g${String(i + 1).padStart(2, '0')}.webp`);
+const etapas = [{ c: 2, r: 2 }, { c: 3, r: 3 }, { c: 4, r: 4 }];
 
 export function UmaGravacao() {
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.45);
@@ -266,10 +270,10 @@ export function UmaGravacao() {
       <h2 id="clone-mult-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Uma gravação.</span> <span className="clone-t-forte">Vídeos para sempre.</span></h2>
       <p>Você grava uma vez para criar o clone. Depois, cada vídeo novo é só um texto novo.</p>
     </div>
-    <div className={`clone-mult-palco${naTela ? ' roda' : ''}`} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 2, 4, 8 e 16 vídeos do clone">
+    <div className={`clone-mult-palco${naTela ? ' roda' : ''}`} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 4, 9 e 16 vídeos do clone">
       <div className="clone-mult-camada base"><img src="/videos/clone/gravacao-real.webp" alt="" width={540} height={960} loading="lazy" /></div>
-      {etapas.map((e, k) => <div key={k} className="clone-mult-camada" style={{ gridTemplateColumns: `repeat(${e.c}, 1fr)`, gridTemplateRows: `repeat(${e.r}, 1fr)`, '--k': k } as React.CSSProperties}>
-        {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={capas[(i + k * 3) % capas.length]} alt="" loading="lazy" />)}
+      {etapas.map((e, k) => <div key={k} className="clone-mult-camada" style={{ gridTemplateColumns: `repeat(${e.c}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${e.r}, minmax(0, 1fr))`, '--k': k } as React.CSSProperties}>
+        {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={capas[i]} alt="" width={288} height={512} loading="lazy" />)}
       </div>)}
       <div className="clone-mult-conta" aria-hidden="true">
         <span className="base">1 gravação sua</span>

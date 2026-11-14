@@ -2400,7 +2400,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-mult-palco { position: relative; width: min(100%, 290px); aspect-ratio: 9 / 16; margin: 0 auto; overflow: hidden; border-radius: 22px; border: 1px solid oklch(.76 .16 300 / .3); background: oklch(.12 .01 290); }
 .clone-mult-camada { position: absolute; inset: 0; display: grid; gap: 3px; background: oklch(.12 .01 290); opacity: 0; }
 .clone-mult-camada.base { display: block; opacity: 1; }
-.clone-mult-camada img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; }
+.clone-mult-camada img { display: block; width: 100%; height: 100%; min-width: 0; min-height: 0; object-fit: cover; }
 .clone-mult-palco.roda .clone-mult-camada:not(.base) { animation: clone-divide .55s cubic-bezier(.2, .8, .2, 1) forwards; animation-delay: calc(1.2s + var(--k) * 1.1s); }
 @keyframes clone-divide { from { opacity: 0; transform: scale(1.08); } to { opacity: 1; transform: none; } }
 .clone-mult-conta { position: absolute; left: 0; right: 0; bottom: 14px; display: grid; justify-items: center; pointer-events: none; }
@@ -2446,7 +2446,7 @@ html:has(.geral) { scroll-padding-top: 0; }
   .clone-dentro-pino { opacity: 1; transform: none; transition: none; }
   .clone-dentro-varre { display: none; }
   .clone-mult-camada:not(.base) { animation: none !important; }
-  .clone-mult-camada:nth-child(5) { opacity: 1; }
+  .clone-mult-camada:nth-child(4) { opacity: 1; }
   .clone-mult-conta span { opacity: 0 !important; animation: none !important; }
   .clone-mult-conta span:last-child { opacity: 1 !important; }
   .clone-modulo-capa img { clip-path: none !important; transition: none !important; }
