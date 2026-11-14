@@ -74,8 +74,9 @@ export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
   return <VideoDoClone />;
 }
 
-/** O vídeo da frente: toca sem som; uma seta fina leva até a pílula de vidro "Toque para ouvir" no alto do vídeo (longe do
- *  rosto e da legenda). Tocar em qualquer parte do vídeo também liga o som e volta ao começo. Depois, seta e pílula somem
+/** O vídeo da frente: toca sem som; uma seta leva até o aviso de vidro "Toque para ouvir" no centro do vídeo (padrão do
+ *  VTurb e da Molise; no Vidalytics, o aviso no centro venceu o teste A/B). Tocar em qualquer parte do vídeo também liga o
+ *  som e volta ao começo. Depois, seta e pílula somem
  *  e fica só um botãozinho de vidro no canto para tirar o som. */
 function VideoDoClone() {
   const video = useRef<HTMLVideoElement>(null);
@@ -92,15 +93,17 @@ function VideoDoClone() {
   };
   const desligar = () => { const v = video.current; if (v) v.muted = true; setSom(false); };
   return <>
-    <svg className={`clone-seta${som ? ' some' : ''}`} viewBox="0 0 40 46" fill="none" aria-hidden="true">
-      <path d="M8 4 C 26 8, 32 20, 22 40" pathLength={100} /><path d="M14 33 L22 41 L29 32" pathLength={100} />
+    <svg className={`clone-seta${som ? ' some' : ''}`} viewBox="0 0 64 72" fill="none" aria-hidden="true">
+      <path d="M10 6 C 40 6, 56 26, 38 62" pathLength={100} /><path d="M24 54 L37 64 L46 49" pathLength={100} />
     </svg>
     <div className={`clone-video clone-topo-video${som ? ' com-som' : ''}`} onClick={som ? undefined : ligar}>
       <video ref={video} src={VIDEO_TOPO} poster="/videos/clone/topo-clone.webp" muted loop playsInline autoPlay aria-label="Recado em vídeo, gravado pelo meu clone" />
       {som
         ? <button type="button" className="clone-som-canto" onClick={e => { e.stopPropagation(); desligar(); }} aria-label="Tirar o som"><Volume2 aria-hidden="true" /></button>
         : <button type="button" className="clone-som" onClick={e => { e.stopPropagation(); ligar(); }}>
-            <VolumeX aria-hidden="true" />Toque para ouvir<span className="clone-eq" aria-hidden="true"><i /><i /><i /></span>
+            <small>Seu recado já começou</small>
+            <span className="clone-som-ic" aria-hidden="true"><VolumeX /></span>
+            <b>Toque para ouvir</b>
           </button>}
       <span className="clone-topo-selo">Gravado pelo meu clone</span>
     </div>

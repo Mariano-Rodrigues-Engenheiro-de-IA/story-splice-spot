@@ -2303,27 +2303,29 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-topo h1.clone-recado { margin: 4px auto 0; max-width: 350px; color: rgba(255, 255, 255, .95); font-size: clamp(27px, 7.4vw, 38px); font-weight: 800; line-height: 1.12; letter-spacing: -.02em; text-shadow: 0 2px 20px rgba(0, 0, 0, .45); text-wrap: balance; }
 .clone-recado span { color: #c4b5fd; }
 .clone-recado-sub { margin: 8px auto 0; color: rgba(255, 255, 255, .78); font-size: 18px; font-weight: 500; line-height: 1.35; text-shadow: 0 1px 12px rgba(0, 0, 0, .5); }
-/* seta fina lilás do subtítulo até a pílula de som: desenha uma vez e depois balança */
-.clone-seta { display: block; width: 30px; height: 34px; margin: 4px auto 6px; overflow: visible; stroke: #c4b5fd; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; transition: opacity .3s ease; }
-.clone-seta path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: clone-seta-desenha .9s ease .4s forwards; }
-.clone-seta path + path { animation-delay: 1.1s; }
-.clone-seta { animation: clone-seta-balanca 1.6s ease-in-out 1.6s infinite; }
+/* seta lilás desenhada à mão, do subtítulo para dentro do vídeo: desenha uma vez e depois balança */
+.clone-seta { display: block; width: 46px; height: 52px; margin: 0 auto 2px; overflow: visible; transform: translateX(14px); stroke: #c4b5fd; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(196, 181, 253, .55)); transition: opacity .3s ease; animation: clone-seta-balanca 1.6s ease-in-out 1.7s infinite; }
+.clone-seta path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: clone-seta-desenha .8s ease-out .4s forwards; }
+.clone-seta path + path { animation-delay: 1.15s; animation-duration: .35s; }
 @keyframes clone-seta-desenha { to { stroke-dashoffset: 0; } }
-@keyframes clone-seta-balanca { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@keyframes clone-seta-balanca { 0%, 100% { transform: translate(14px, 0); } 50% { transform: translate(14px, 5px); } }
 .clone-seta.some { opacity: 0; }
 .clone-topo-video { cursor: pointer; border-color: rgba(255, 255, 255, .14); box-shadow: 0 24px 60px rgba(0, 0, 0, .55); }
 .clone-topo-video { container-type: inline-size; }
-/* vídeo estreito (celular pequeno): a pílula encolhe e perde o equalizador, para não ser cortada */
-@container (max-width: 230px) { .clone-topo-video .clone-som { gap: 5px; height: 34px; padding: 0 10px; font-size: 13px; } .clone-topo-video .clone-som svg { width: 15px; height: 15px; } .clone-topo-video .clone-som .clone-eq { display: none; } }
-/* pílula de vidro no alto do vídeo: longe do rosto e da legenda; halo que respira e barrinhas de equalizador */
-.clone-som { position: absolute; top: 14px; left: 50%; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid rgba(255, 255, 255, .22); border-radius: 99px; background: rgba(17, 10, 30, .45); -webkit-backdrop-filter: blur(20px) saturate(1.6); backdrop-filter: blur(20px) saturate(1.6); color: #fff; font: inherit; font-size: 15px; font-weight: 600; white-space: nowrap; cursor: pointer; transform: translateX(-50%); animation: clone-halo 2.4s ease-in-out infinite; -webkit-tap-highlight-color: transparent; }
-.clone-som svg { flex: none; width: 18px; height: 18px; }
-@keyframes clone-halo { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 181, 253, .0), 0 8px 24px rgba(0, 0, 0, .35); } 50% { box-shadow: 0 0 0 7px rgba(196, 181, 253, .22), 0 8px 24px rgba(0, 0, 0, .35); } }
-.clone-eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 13px; }
-.clone-eq i { width: 3px; height: 100%; border-radius: 2px; background: #c4b5fd; transform-origin: bottom; animation: clone-eq .9s ease-in-out infinite; }
-.clone-eq i:nth-child(2) { animation-delay: .25s; }
-.clone-eq i:nth-child(3) { animation-delay: .5s; }
-@keyframes clone-eq { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+/* enquanto está sem som, o vídeo escurece um pouco para o aviso aparecer (sem desfocar: o clone mexendo é a prova) */
+.clone-topo-video::after { content: ""; position: absolute; inset: 0; background: rgba(8, 6, 16, .28); pointer-events: none; transition: opacity .3s ease; }
+.clone-topo-video.com-som::after { opacity: 0; }
+/* o selo do clone só aparece depois do som ligado (antes, o aviso ocupa a parte de baixo) */
+.clone-topo-video:not(.com-som) .clone-topo-selo { opacity: 0; }
+/* aviso de som no centro do vídeo, em vidro (o padrão do VTurb/Molise, sem a caixa sólida) */
+.clone-som { position: absolute; top: 76%; left: 50%; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; width: min(88%, 230px); padding: 16px 14px 15px; border: 1px solid rgba(255, 255, 255, .22); border-radius: 20px; background: rgba(17, 10, 30, .5); -webkit-backdrop-filter: blur(18px) saturate(1.6); backdrop-filter: blur(18px) saturate(1.6); color: #fff; font: inherit; cursor: pointer; transform: translate(-50%, -50%); box-shadow: 0 16px 40px rgba(0, 0, 0, .45); -webkit-tap-highlight-color: transparent; }
+.clone-som small { color: rgba(255, 255, 255, .78); font-size: 13px; font-weight: 500; line-height: 1.2; }
+.clone-som b { font-size: 17px; font-weight: 700; line-height: 1.15; }
+.clone-som-ic { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #9b37f2, #7a12d4); animation: clone-halo 2s ease-in-out infinite; }
+.clone-som-ic svg { width: 24px; height: 24px; }
+@keyframes clone-halo { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 181, 253, .45); } 60% { box-shadow: 0 0 0 12px rgba(196, 181, 253, 0); } }
+/* vídeo estreito (celular pequeno): o aviso encolhe junto */
+@container (max-width: 230px) { .clone-topo-video .clone-som { gap: 6px; padding: 12px 10px; } .clone-topo-video .clone-som small { font-size: 11.5px; } .clone-topo-video .clone-som b { font-size: 15px; } .clone-topo-video .clone-som-ic { width: 42px; height: 42px; } }
 .clone-som-canto { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid rgba(255, 255, 255, .22); border-radius: 50%; background: rgba(17, 10, 30, .45); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); color: #fff; cursor: pointer; }
 .clone-som-canto svg { width: 17px; height: 17px; }
 .clone-liberado { margin: 0 auto 10px; max-width: 340px; color: oklch(.9 .01 290); font-size: 15px; font-weight: 500; line-height: 1.4; text-wrap: balance; }
