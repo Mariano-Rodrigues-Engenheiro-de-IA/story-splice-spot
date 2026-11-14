@@ -7,7 +7,7 @@ import { Clip } from '@/components/clip';
 import { VslPlayer } from '@/components/vsl-player';
 import { NumberTicker } from '@/components/number-ticker';
 import { Creator, ForWho, ModeSwitch, WhatYouGet, useReveal } from '@/components/landing-extras';
-import { ComoFunciona, EditorIA, Esteira, Faixas, IATrabalhando, LinhaAjustada, LinhaDoPreco, ProvaSocial, QualIA2, VideoVivo } from '@/components/pro2';
+import { ComoFunciona, EditorIA, Esteira, Faixas, IATrabalhando, LinhaAjustada, LinhaDoPreco, Mudou, ProvaSocial, QualIA2, VideoVivo } from '@/components/pro2';
 import { siteConfig } from '@/lib/site-config';
 import { LogoChatGPT, LogoClaude } from '@/components/marcas-ia';
 import { Odometro } from '@/components/odometro';
@@ -15,17 +15,27 @@ import { cliqueComprar, evento, eventoProprio, linkCheckout } from '@/lib/pixel'
 
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
-    { title: 'Modo Editor — Deixe a IA editando. Vá viver.' },
-    { name: 'description', content: 'Solte o Modo Editor no ChatGPT ou Claude e transforme sua gravação em um vídeo pronto para postar. R$ 67, pagamento único e 7 dias de garantia.' },
-    { property: 'og:title', content: 'Modo Editor — Deixe a IA editando. Vá viver.' },
-    { property: 'og:description', content: 'Seu próximo vídeo pronto enquanto você vive. Conheça o Modo Editor: R$ 67, pagamento único.' },
+    { title: 'Modo Editor — A produção de conteúdo mudou de vez.' },
+    { name: 'description', content: 'Agora a IA edita o seu vídeo como um profissional: mostra na tela o que você explica, monta o antes e depois e troca o fundo por um estúdio. R$ 67, pagamento único e 7 dias de garantia.' },
+    { property: 'og:title', content: 'A produção de conteúdo mudou de vez.' },
+    { property: 'og:description', content: 'A IA edita o seu vídeo como um profissional. Conheça o Modo Editor: R$ 67, pagamento único.' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
   ] }),
   component: Index,
 });
 
-const words = ['treinar.', 'almoçar.', 'passear.', 'dormir.', 'viver.'];
+/* 14/11: a página geral conta a narrativa única dos anúncios ("a produção de conteúdo mudou"); cada criativo fala com
+   uma profissão e todos caem aqui ("para quem a carapuça servir"). Sai o "Deixe a IA editando. Vá almoçar.". */
+const mudou = {
+  titulo: ['O que mudou na', 'produção de conteúdo.'] as [string, string],
+  sub: 'O que antes pedia editor, designer 3D e estúdio, agora a IA faz com o que você grava.',
+  pares: [
+    { antes: 'Falar parado para a câmera, só com legenda.', agora: 'O que você explica aparece na tela: o órgão em 3D, o mapa, o passo a passo.' },
+    { antes: 'Pagar um editor e esperar dias pelo vídeo.', agora: 'A IA edita no tempo da sua fala, e você pede os ajustes em português.' },
+    { antes: 'Gravar do jeito que dá, no fundo que tem.', agora: 'O fundo vira estúdio, com título, trilha e efeitos no ritmo certo.' },
+  ],
+};
 const brlCents = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 const purchaseHref = siteConfig.checkoutUrl || '#preco';
 
@@ -148,6 +158,7 @@ function Comparison() {
  *  alternando cenário de um cartão para o outro. */
 const galleryCopy: [string, string, string, string][] = [
   ['Ilustração do que você fala', 'mostra na tela o que eu estou explicando', '/videos/galeria/ilustracao.mp4', 'Ilustração'],
+  ['Antes e depois com as regiões', 'monta o antes e depois e marca as regiões tratadas', '/videos/estetica/antes-depois-facial.mp4', 'Antes e depois'],
   ['Título atrás de você', 'põe um título grande atrás de mim', '/videos/galeria/titulo.mp4', 'Frase grande'],
   ['Dente em 3D', 'mostra em 3D o que acontece no dente', '/videos/cenas/dente.mp4', '3D'],
   ['Coluna em 3D', 'mostra em 3D o que acontece na coluna', '/videos/galeria/esqueleto.mp4', 'Anatomia 3D'],
@@ -323,16 +334,13 @@ function Index() {
   useReveal();
   usePausaForaDaTela();
   useSempreNoTopo();
-  const [word, setWord] = useState(0);
   const [progress, setProgress] = useState(0);
   const [sound, setSound] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const timer = reduced ? undefined : window.setInterval(() => setWord(current => (current + 1) % words.length), 2200);
     const scroll = () => { const height = document.documentElement.scrollHeight - window.innerHeight; setProgress(height > 0 ? window.scrollY / height : 0); };
     window.addEventListener('scroll', scroll, { passive: true }); scroll();
-    return () => { if (timer) window.clearInterval(timer); window.removeEventListener('scroll', scroll); };
+    return () => window.removeEventListener('scroll', scroll);
   }, []);
   function enableSound() {
     const video = videoRef.current;
@@ -353,15 +361,16 @@ function Index() {
           {/* primeira tela: título, frase e vídeo, sem botão de compra (a ideia é a pessoa assistir e rolar, não pular para o preço);
               o bloco ocupa a altura da tela e o vídeo cresce até onde cabe */}
           <div className="hero-dobra">
-          <h1 id="hero-title">Deixe a IA editando.<br />Vá <em key={word}>{words[word]}</em></h1>
+          <h1 id="hero-title" className="hero-mudou"><span>A produção de conteúdo</span><em>mudou de vez.</em></h1>
           {/* colada no vídeo: quem assiste olha para cima e já lê onde aquilo funciona */}
           <p className="hero-funciona"><span className="hf-linha">Funciona no <b><LogoChatGPT /> ChatGPT</b> e no <b><LogoClaude /> Claude</b></span></p>
           <div className="hero-video">
             {siteConfig.videos.vsl ? <VslPlayer src={siteConfig.videos.vsl} poster={siteConfig.videos.vslPoster || undefined} /> : siteConfig.videos.hero ? <><video ref={videoRef} src={siteConfig.videos.hero} autoPlay muted loop playsInline /><Button variant="secondary" size="sm" className="sound-button" onClick={enableSound}><Volume2 />{sound ? 'Som ligado' : 'Toque para ouvir'}</Button></> : <Clip opts={{ impact: 'PRONTO SEM VOCÊ' }} label="Prévia de um vídeo editado pelo Modo Editor" />}
           </div>
           </div>
-          <p className="hero-copy">Instale o Modo Editor no seu ChatGPT ou Claude, mande a gravação e diga o que quer. Na volta, o vídeo está cortado, legendado, com efeitos e pronto pra postar.</p>
+          <p className="hero-copy">Agora a IA edita o seu vídeo como um profissional: mostra na tela o que você explica, monta o antes e depois e troca o fundo por um estúdio. Você grava, ela devolve pronto.</p>
         </section>
+        <Mudou {...mudou} />
         <section className="section container" id="galeria">
           <div className="section-heading reveal galeria-topo"><h2>Vídeos editados com o <em className="seta-ancora">Modo Editor<SetaCurva /></em></h2></div><CutucaVideo />
           <Esteira itens={gallery} velocidade={78} rotulo="Exemplos de vídeos feitos com o Modo Editor" render={([title, request, src, etiqueta], i, { copia, ativo, perto }) => <li key={i} className="gallery-card" aria-hidden={copia || undefined} style={{ backgroundImage: `url(${src.replace(/\.mp4$/, '.webp')})` }}><VideoVivo src={src} ativo={ativo} perto={perto} label={title} /><span className="gallery-tag">{etiqueta}</span><div className="gallery-caption"><strong>{title}</strong><p className="gallery-request">“{request}”</p></div></li>} />
@@ -384,7 +393,7 @@ function Index() {
         <WhatYouGet suporte />
         <Offer />
         <section className="section container faq" id="duvidas"><div className="faq-intro reveal"><h2>Perguntas que<br /><em>chegam no direct.</em></h2><p>O que vale saber antes de comprar.</p></div><Accordion type="single" collapsible className="faq-list">{faqItems.map(([question, answer], i) => <AccordionItem key={question} value={`question-${i}`}><AccordionTrigger>{question}</AccordionTrigger><AccordionContent className="faq-answer">{answer}</AccordionContent></AccordionItem>)}</Accordion></section>
-        <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>Seu próximo vídeo pode<br />ficar pronto <em>enquanto você vive.</em></h2><PurchaseButton label={`Quero o Modo Editor · R$ ${siteConfig.price}`} destino="checkout" /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
+        <section className="lamp"><div className="lamp-light" aria-hidden="true"><span className="lamp-cone left" /><span className="lamp-cone right" /><span className="lamp-glow" /><span className="lamp-line" /></div><div className="lamp-content"><h2>O conteúdo novo<br /><em>começa hoje.</em></h2><PurchaseButton label={`Quero o Modo Editor · R$ ${siteConfig.price}`} destino="checkout" /><p className="purchase-note">Pagamento único · 7 dias de garantia</p></div></section>
       </main>
     </div>
     <footer className="footer"><div className="container"><Brand /><p>ChatGPT é uma marca da OpenAI e Claude, da Anthropic. Este produto é independente e não tem vínculo com nenhuma das duas.</p><nav className="footer-links" aria-label="Links legais"><a href={siteConfig.legal.termsUrl}>Termos de uso</a>·<a href={siteConfig.legal.privacyUrl}>Política de privacidade</a>·<a href={siteConfig.legal.supportUrl}>Suporte</a></nav><p className="copyright">© 2026 Modo Editor</p></div></footer>

@@ -2530,15 +2530,15 @@ html:has(.geral) { scroll-padding-top: 0; }
 @media (prefers-reduced-motion: reduce) { .clone-sim { animation: none; } }
 
 /* ───────── página de nicho (14/11: /estetica): "o conteúdo mudou", quanto custa hoje, regras do conselho ───────── */
-.pro2 .p2-mudou-lista { list-style: none; margin: 26px auto 0; padding: 0; display: grid; gap: 14px; max-width: 1000px; }
-.pro2 .p2-mudou-par { display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); box-shadow: var(--inner-glow), 0 12px 32px -20px oklch(.23 .035 262 / .3); }
-.pro2 .p2-mudou-par span { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.pro2 .p2-mudou-antes span { background: var(--surface); color: var(--muted-foreground); }
-.pro2 .p2-mudou-antes p { margin: 8px 0 0; color: var(--muted-foreground); font-size: 15px; line-height: 1.45; text-decoration: line-through; text-decoration-color: oklch(.47 .025 262 / .4); }
-.pro2 .p2-mudou-agora span { background: var(--ready); color: #fff; }
-.pro2 .p2-mudou-agora p { margin: 8px 0 0; color: var(--foreground); font-size: 17px; font-weight: 600; line-height: 1.4; }
-.pro2 .p2-mudou-seta { width: 20px; height: 20px; margin-left: 8px; color: var(--ready); }
-@media (min-width: 900px) { .pro2 .p2-mudou-lista { grid-template-columns: repeat(3, 1fr); } }
+:is(.pro2, .geral) .p2-mudou-lista { list-style: none; margin: 26px auto 0; padding: 0; display: grid; gap: 14px; max-width: 1000px; }
+:is(.pro2, .geral) .p2-mudou-par { display: flex; flex-direction: column; gap: 10px; padding: 18px 18px 20px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); box-shadow: var(--inner-glow), 0 12px 32px -20px oklch(.23 .035 262 / .3); }
+:is(.pro2, .geral) .p2-mudou-par span { display: inline-block; padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+:is(.pro2, .geral) .p2-mudou-antes span { background: var(--surface); color: var(--muted-foreground); }
+:is(.pro2, .geral) .p2-mudou-antes p { margin: 8px 0 0; color: var(--muted-foreground); font-size: 15px; line-height: 1.45; text-decoration: line-through; text-decoration-color: oklch(.47 .025 262 / .4); }
+:is(.pro2, .geral) .p2-mudou-agora span { background: var(--ready); color: #fff; }
+:is(.pro2, .geral) .p2-mudou-agora p { margin: 8px 0 0; color: var(--foreground); font-size: 17px; font-weight: 600; line-height: 1.4; }
+:is(.pro2, .geral) .p2-mudou-seta { width: 20px; height: 20px; margin-left: 8px; color: var(--ready); }
+@media (min-width: 900px) { :is(.pro2, .geral) .p2-mudou-lista { grid-template-columns: repeat(3, 1fr); } }
 
 .pro2 .p2-custo-lista { list-style: none; display: grid; gap: 10px; max-width: 660px; margin: 24px auto 0; padding: 0; }
 .pro2 .p2-custo-lista li { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 14px 16px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); }
@@ -2556,3 +2556,13 @@ html:has(.geral) { scroll-padding-top: 0; }
 .pro2 .p2-regra-icone { flex-shrink: 0; width: 34px; height: 34px; color: var(--ready); }
 .pro2 .p2-regra-caixa h2 { margin: 0 0 8px; font-size: clamp(22px, 5.6vw, 30px); line-height: 1.15; }
 .pro2 .p2-regra-caixa p { margin: 0; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.55; }
+
+/* 14/11: página escura com a narrativa do conteúdo novo. Título fixo em 2 linhas (sem a palavra que trocava);
+   cada linha cabe sem quebrar no celular, com a altura parecida com a do título antigo (o vídeo da dobra não encolhe). */
+.geral .hero h1.hero-mudou { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.geral .hero h1.hero-mudou > span { white-space: nowrap; font-size: clamp(24px, 7.3vw, 52px); line-height: 1.1; }
+.geral .hero h1.hero-mudou > em { display: block; width: auto; white-space: nowrap; text-align: center; animation: none; font-size: clamp(30px, 9vw, 60px); line-height: 1.05; }
+/* "o que mudou" no escuro: o "Agora" no roxo dos destaques da página, com texto branco */
+.geral .p2-mudou-agora span { background: oklch(.5 .21 295); color: #fff; }
+.geral .p2-mudou-seta { color: oklch(.76 .16 300); }
+.geral .p2-mudou-par { box-shadow: var(--inner-glow); }
