@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { ArrowUp, Box, Check, ChevronDown, ChevronRight, Download, Film, Fingerprint, FolderClosed, Loader2, Mic, Music, PanelLeft, Play, Plus, Search, Shapes, SlidersHorizontal, Sparkles, SquarePen, Type } from 'lucide-react';
+import { ArrowDown, ArrowUp, Box, Check, ChevronDown, ChevronRight, Download, Film, Fingerprint, FolderClosed, Loader2, Mic, Music, PanelLeft, Play, Plus, Search, Shapes, ShieldCheck, SlidersHorizontal, Sparkles, SquarePen, Type } from 'lucide-react';
 import { LogoChatGPT, LogoClaude, LogoWhatsApp } from '@/components/marcas-ia';
 import { siteConfig } from '@/lib/site-config';
 import { eventoProprio } from '@/lib/pixel';
@@ -376,7 +376,8 @@ export function Segure() {
 
 /* ───────────── Estilos de conteúdo (esteira que roda sem parar; dedo em cima para) ───────────── */
 
-const saidas: { src: string; titulo: string; profissao: string; emoji: string; real?: string }[] = [
+type Estilo = { src: string; titulo: string; profissao: string; emoji: string; real?: string };
+const saidas: Estilo[] = [
   { src: '/videos/karina-estria.mp4', titulo: 'A pele em 3D', profissao: 'Esteticista', emoji: '💆‍♀️', real: 'Aluna real' },
   { src: '/videos/pro2/fisio-coluna.mp4', titulo: 'A coluna em 3D', profissao: 'Fisioterapeuta', emoji: '🦴' },
   { src: '/videos/cenas/dente.mp4', titulo: 'O dente por dentro', profissao: 'Dentista', emoji: '🦷' },
@@ -405,8 +406,11 @@ function CartaoEstilo({ src, titulo, profissao, emoji, real, copia, ativo, perto
   );
 }
 
-/** `titulo`/`sub`/`depois`: a página geral usa a mesma esteira com outro título e o "básico vem junto" embaixo. */
-export function Saidas({ titulo, sub, depois }: { titulo?: React.ReactNode; sub?: React.ReactNode; depois?: React.ReactNode } = {}) {
+/** `titulo`/`sub`/`depois`: a página geral usa a mesma esteira com outro título e o "básico vem junto" embaixo.
+ *  `itens`: a página de um nicho (ex.: /estetica) troca a lista pelos estilos do nicho. */
+export function Saidas({ titulo, sub, depois, itens = saidas }: { titulo?: React.ReactNode; sub?: React.ReactNode; depois?: React.ReactNode; itens?: Estilo[] } = {}) {
+  /** quantos cartões tem uma volta da esteira */
+  const base = itens.length;
   const [secao, naTela] = useNaTela<HTMLElement>('200px 0px');
   const fila = useRef<HTMLOListElement>(null);
   const posicao = useRef(0);
@@ -422,7 +426,7 @@ export function Saidas({ titulo, sub, depois }: { titulo?: React.ReactNode; sub?
     const andar = (agora: number) => {
       const dt = Math.min(64, agora - antes); antes = agora;
       const itens = el.children as HTMLCollectionOf<HTMLElement>;
-      const volta = (itens[saidas.length]?.offsetLeft ?? 0) - (itens[0]?.offsetLeft ?? 0);
+      const volta = (itens[base]?.offsetLeft ?? 0) - (itens[0]?.offsetLeft ?? 0);
       if (!parado.current && !menosMovimento() && volta > 0) {
         posicao.current += (VELOCIDADE * dt) / 1000;
         if (posicao.current >= volta) posicao.current -= volta;
@@ -440,10 +444,10 @@ export function Saidas({ titulo, sub, depois }: { titulo?: React.ReactNode; sub?
     };
     quadro = requestAnimationFrame(andar);
     return () => cancelAnimationFrame(quadro);
-  }, [naTela]);
+  }, [naTela, base]);
   const segurar = () => { parado.current = true; setParadoTela(true); };
   const soltar = () => { parado.current = false; setParadoTela(false); };
-  const lista = Array.from({ length: VOLTAS }, () => saidas).flat();
+  const lista = Array.from({ length: VOLTAS }, () => itens).flat();
   return (
     <section className="section p2-saidas" id="exemplos" ref={secao}>
       <div className="container section-heading reveal">
@@ -455,7 +459,7 @@ export function Saidas({ titulo, sub, depois }: { titulo?: React.ReactNode; sub?
         <ol className="p2-esteira-fila" ref={fila}>
           {lista.map((s, i) => {
             const perto = visiveis.some(v => Math.abs(v - i) <= 1);
-            return <CartaoEstilo key={i} {...s} copia={i >= saidas.length} ativo={naTela && visiveis.includes(i)} perto={naTela && perto} />;
+            return <CartaoEstilo key={i} {...s} copia={i >= base} ativo={naTela && visiveis.includes(i)} perto={naTela && perto} />;
           })}
         </ol>
       </div>
@@ -945,6 +949,52 @@ export function IATrabalhando() {
             </MacBook>
           </div>
         </div>
+      </div>
+    </section>
+  );
+}
+
+/* ───────────── Página de um nicho (14/11: /estetica): "o conteúdo mudou", quanto custa hoje, regras do conselho ───────────── */
+
+/** O jeito antigo e o jeito novo, só com exemplos do nicho: confirma o que o anúncio disse ("a forma de postar mudou"). */
+export function Mudou({ titulo, sub, pares }: { titulo: [string, string]; sub: string; pares: { antes: string; agora: string }[] }) {
+  return (
+    <section className="section container p2-mudou" id="mudou">
+      <div className="section-heading reveal"><h2>{titulo[0]} <em>{titulo[1]}</em></h2><p>{sub}</p></div>
+      <ol className="p2-mudou-lista">
+        {pares.map(p => (
+          <li key={p.agora} className="p2-mudou-par reveal">
+            <div className="p2-mudou-antes"><span>Antes</span><p>{p.antes}</p></div>
+            <ArrowDown className="p2-mudou-seta" aria-hidden="true" />
+            <div className="p2-mudou-agora"><span>Agora</span><p>{p.agora}</p></div>
+          </li>
+        ))}
+      </ol>
+    </section>
+  );
+}
+
+/** Quanto custa ter esse conteúdo hoje: a âncora logo antes da oferta. */
+export function CustoHoje({ titulo, itens, nota, preco }: { titulo: [string, string]; itens: { o: string; preco: string }[]; nota: string; preco: number }) {
+  return (
+    <section className="section container p2-custo" id="quanto-custa">
+      <div className="section-heading reveal"><h2>{titulo[0]} <em>{titulo[1]}</em></h2></div>
+      <ul className="p2-custo-lista reveal">
+        {itens.map(i => <li key={i.o}><span>{i.o}</span><strong>{i.preco}</strong></li>)}
+        <li className="p2-custo-nosso"><span>Modo Editor</span><strong>R$ {preco}, pagamento único, com o material da sua clínica e sem limite de vídeos</strong></li>
+      </ul>
+      <p className="p2-custo-nota reveal">{nota}</p>
+    </section>
+  );
+}
+
+/** O que o conselho da profissão exige e como o Modo Editor respeita. */
+export function RegraConselho({ titulo, texto }: { titulo: [string, string]; texto: string }) {
+  return (
+    <section className="section container p2-regra" id="regras">
+      <div className="p2-regra-caixa reveal">
+        <ShieldCheck className="p2-regra-icone" aria-hidden="true" />
+        <div><h2>{titulo[0]} <em>{titulo[1]}</em></h2><p>{texto}</p></div>
       </div>
     </section>
   );

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EsteticaRouteImport } from './routes/estetica'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as ProRouteImport } from './routes/pro'
 import { Route as Pro2RouteImport } from './routes/pro2'
@@ -18,6 +19,11 @@ import { Route as UltimaChanceRouteImport } from './routes/ultima-chance'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EsteticaRoute = EsteticaRouteImport.update({
+  id: '/estetica',
+  path: '/estetica',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ObrigadoRoute = ObrigadoRouteImport.update({
@@ -43,6 +49,7 @@ const UltimaChanceRoute = UltimaChanceRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/estetica': typeof EsteticaRoute
   '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/estetica': typeof EsteticaRoute
   '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/estetica': typeof EsteticaRoute
   '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
@@ -65,14 +74,23 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
+  fullPaths:
+    '/' | '/estetica' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
-  id: '__root__' | '/' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
+  to: '/' | '/estetica' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
+  id:
+    | '__root__'
+    | '/'
+    | '/estetica'
+    | '/obrigado'
+    | '/pro'
+    | '/pro2'
+    | '/ultima-chance'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EsteticaRoute: typeof EsteticaRoute
   ObrigadoRoute: typeof ObrigadoRoute
   ProRoute: typeof ProRoute
   Pro2Route: typeof Pro2Route
@@ -86,6 +104,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estetica': {
+      id: '/estetica'
+      path: '/estetica'
+      fullPath: '/estetica'
+      preLoaderRoute: typeof EsteticaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/obrigado': {
@@ -121,6 +146,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EsteticaRoute: EsteticaRoute,
   ObrigadoRoute: ObrigadoRoute,
   ProRoute: ProRoute,
   Pro2Route: Pro2Route,

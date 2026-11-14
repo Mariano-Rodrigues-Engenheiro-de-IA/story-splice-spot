@@ -28,6 +28,20 @@ export type Nicho = {
   regra: string;
   /** /pro2: a última palavra do título troca sozinha ("enquanto você trabalha. / atende. / almoça."…) */
   verbos?: string[];
+  /* ── Página própria do nicho (14/11: /estetica, depois /dentista, /corretor…). Narrativa única do "conteúdo 2.0":
+     o anúncio diz que a forma de postar conteúdo daquele nicho mudou; a página confirma com os exemplos do nicho. ── */
+  /** dúvidas a mais do nicho, logo depois da `duvida` */
+  duvidasExtras?: [string, string][];
+  /** "o conteúdo mudou": pares do jeito antigo e do jeito novo, só com exemplos do nicho */
+  mudou?: { titulo: [string, string]; sub: string; pares: { antes: string; agora: string }[] };
+  /** estilos da esteira de exemplos (só vídeos reais) e o título dela */
+  estilos?: { titulo: [string, string]; itens: { src: string; titulo: string; profissao: string; emoji: string; real?: string }[] };
+  /** quanto custa ter esse conteúdo hoje (âncora antes da oferta) */
+  custo?: { titulo: [string, string]; itens: { o: string; preco: string }[]; nota: string };
+  /** título do bloco das regras do conselho (o texto é `regra`) */
+  regraTitulo?: [string, string];
+  /** título do fim da página */
+  fim?: [string, string];
 };
 
 export const nichoPadrao: Nicho = {
@@ -114,12 +128,46 @@ export const nichos: Nicho[] = [
   },
   {
     slug: 'estetica',
-    selo: 'Pra clínicas de estética e harmonização',
-    titulo: ['A IA edita seus vídeos', 'de antes e depois.'],
-    frase: 'Você grava na clínica e manda as fotos. A IA corta, legenda e monta o antes e depois com a região em destaque. Sem editor, sem programa de edição.',
+    selo: 'Para clínicas de estética e harmonização',
+    // 14/11: o anúncio diz "a forma de postar conteúdo na sua clínica mudou de uma vez por todas"; o título confirma
+    // em duas linhas curtas (o selo de cima já diz estética e harmonização) e a frase vira a oportunidade para quem chegou
+    titulo: ['O conteúdo de clínica', 'mudou de vez.'],
+    frase: 'A sua clínica já pode postar o novo: antes e depois com as regiões marcadas, o procedimento por dentro em 3D e a sala com cara de estúdio. Você grava, e a IA devolve o vídeo pronto, sem editor e sem agência.',
     publico: 'Clínicas de estética',
     galeriaPrimeiro: 'Explicação em 3D',
-    duvida: ['Serve pra clínica de estética?', 'Serve. Você manda a gravação e as fotos de antes e depois, e pede como quer na tela. A IA monta a comparação, destaca a região e devolve pronto.'],
+    duvida: ['Serve para a minha clínica?', 'Serve para clínica de estética, harmonização e estética corporal. Você grava explicando ou manda as fotos do antes e depois, escolhe o estilo e a IA monta o vídeo pronto, com as regiões marcadas e sem mexer na foto.'],
+    duvidasExtras: [['Posso postar antes e depois?', 'Pode, quando o seu conselho permite e o paciente assinou o termo. O Modo Editor não altera a foto: ele só coloca as marcações e os textos por cima. Nada de promessa de resultado.']],
+    mudou: {
+      titulo: ['O que mudou no', 'conteúdo de clínica.'],
+      sub: 'O que antes pedia editor, designer 3D e estúdio, agora a IA faz com o que você grava na clínica.',
+      pares: [
+        { antes: 'A foto de antes e depois parada no feed.', agora: 'O antes e depois vira vídeo: as regiões tratadas aparecem uma a uma até a revelação.' },
+        { antes: 'Explicar o procedimento falando parado para a câmera.', agora: 'Enquanto você explica, a pele, o colágeno ou a gordura aparecem por dentro, em 3D.' },
+        { antes: 'Gravar na sala de atendimento do jeito que dá.', agora: 'A sala ganha cara de estúdio, com legenda, título e trilha no tempo da sua fala.' },
+      ],
+    },
+    estilos: {
+      titulo: ['Estilos de vídeo para', 'a sua clínica.'],
+      itens: [
+        { src: '/videos/estetica/antes-depois-facial.mp4', titulo: 'Antes e depois com as regiões', profissao: 'Harmonização', emoji: '✨' },
+        { src: '/videos/karina-estria.mp4', titulo: 'A pele por dentro, em 3D', profissao: 'Estética corporal', emoji: '💆‍♀️', real: 'Aluna real' },
+        { src: '/videos/galeria/cenario.mp4', titulo: 'A sala com cara de estúdio', profissao: 'Qualquer vídeo', emoji: '🎬' },
+        { src: '/videos/cenas/titulo.mp4', titulo: 'O título atrás de você', profissao: 'Qualquer vídeo', emoji: '🎬' },
+        { src: '/videos/cenas/legenda.mp4', titulo: 'A legenda que acompanha', profissao: 'Qualquer vídeo', emoji: '🎬' },
+      ],
+    },
+    custo: {
+      titulo: ['Quanto custa ter esse conteúdo', 'hoje.'],
+      itens: [
+        { o: 'App de antes e depois por assinatura', preco: 'R$ 197 por mês, 12 vídeos' },
+        { o: 'Social media', preco: 'de R$ 500 a R$ 2.500 por mês' },
+        { o: 'Editor de Reels', preco: 'de R$ 300 a R$ 700 por vídeo' },
+        { o: 'Pack de Reels prontos', preco: 'R$ 47 a R$ 197, modelos que não são da sua clínica' },
+      ],
+      nota: 'O Modo Editor roda no plano da sua IA, a partir de US$ 20 por mês, pago direto para a OpenAI ou a Anthropic.',
+    },
+    regraTitulo: ['Dentro das regras', 'do seu conselho.'],
+    fim: ['O conteúdo da sua clínica pode mudar hoje.', 'A decisão é sua.'],
     nome: 'Estética',
     ideias: [
       { pergunta: 'Antes e depois do seu procedimento', fala: 'você comenta o resultado', tela: 'as duas fotos lado a lado, região em destaque, sem mexer na imagem' },
@@ -127,7 +175,7 @@ export const nichos: Nicho[] = [
       { pergunta: 'O que é bioestimulador?', fala: 'você explica o que ele faz na pele', tela: 'a pele em camadas ilustrada ao seu lado' },
       { pergunta: 'Cuidados nas primeiras 48 horas', fala: 'você lista os cuidados', tela: 'a lista acende item por item' },
     ],
-    regra: 'Antes e depois só com autorização por escrito, sem promessa de resultado; seu nome e registro na tela. O Modo Editor já edita assim.',
+    regra: 'Antes e depois só da sua clínica, com o termo assinado pelo paciente. A foto entra sem nenhuma alteração: o Modo Editor só coloca as marcações por cima, como o CFM exige. Nada de promessa de resultado, e o seu nome e registro na tela.',
   },
   {
     slug: 'arquiteto',
