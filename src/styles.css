@@ -2410,9 +2410,9 @@ html:has(.geral) { scroll-padding-top: 0; }
 /* sombra escura atrás do número quando a grade entra, para ler em cima dos 16 quadros */
 .clone-mult-conta::before { content: ""; position: absolute; inset: 0; background: radial-gradient(70% 30% at 50% 74%, rgba(8, 6, 16, .78), transparent 75%); opacity: 0; }
 .clone-mult-palco.roda .clone-mult-conta::before { animation: clone-aparece .4s ease 2.6s forwards; }
-.clone-mult-conta span { position: relative; grid-area: 1 / 1; display: flex; flex-direction: column; align-items: center; font-family: "Anton", var(--font-sans); line-height: .88; text-transform: uppercase; opacity: 0; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .7)); }
-.clone-mult-conta b { color: #ffd23f; font-size: 104px; font-weight: 400; letter-spacing: -.01em; text-shadow: 0 4px 0 #c2410c; }
-.clone-mult-conta i { margin-top: 4px; color: #ff9f1c; font-size: 36px; font-style: normal; letter-spacing: .05em; text-shadow: 0 3px 0 #7c2d12; }
+.clone-mult-conta span { position: relative; grid-area: 1 / 1; display: flex; align-items: baseline; gap: 10px; font-family: "Bricolage Grotesque", var(--font-sans); font-weight: 800; line-height: 1; letter-spacing: -.03em; text-transform: uppercase; white-space: nowrap; opacity: 0; filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .7)); }
+.clone-mult-conta b { color: #ffd23f; font-size: 64px; font-weight: 800; text-shadow: 0 4px 0 #c2410c; }
+.clone-mult-conta i { color: #ff9f1c; font-size: 38px; font-style: normal; text-shadow: 0 3px 0 #7c2d12; }
 .clone-mult-conta span.base { opacity: 1; }
 .clone-mult-palco.roda .clone-mult-conta span.base { animation: clone-some .2s linear 2.6s forwards; }
 .clone-mult-palco.roda .clone-mult-conta span:not(.base) { animation: clone-conta 1.1s linear forwards; animation-delay: calc(2.6s + var(--k) * 1.1s); }

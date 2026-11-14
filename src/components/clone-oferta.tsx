@@ -291,7 +291,7 @@ export function UmaGravacao() {
         {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={capas[i]} alt="" width={288} height={512} loading="lazy" />)}
       </div>)}
       <div className="clone-mult-conta" aria-hidden="true">
-        {/* 13/11: ele pediu as frases maiores, em cor viva e no meio, com tipografia diferente (Anton) */}
+        {/* 13/11: ele pediu as frases maiores, em cor viva e no meio, com tipografia diferente; depois, número e palavra na mesma linha, em Bricolage Grotesque */}
         <span className="base"><b>1</b><i>gravação</i></span>
         {etapas.map((e, k) => <span key={k} style={{ '--k': k } as React.CSSProperties}><b>{e.c * e.r}</b><i>vídeos</i></span>)}
       </div>
