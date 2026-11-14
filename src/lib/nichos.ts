@@ -167,7 +167,8 @@ export const nichos: Nicho[] = [
       nota: 'O Modo Editor roda no plano da sua IA, a partir de US$ 20 por mês, pago direto para a OpenAI ou a Anthropic.',
     },
     regraTitulo: ['Dentro das regras', 'do seu conselho.'],
-    fim: ['O conteúdo da sua clínica pode mudar hoje.', 'A decisão é sua.'],
+    // a linha de cima do fim não quebra (nowrap): no máximo ~33 caracteres, como "Seu próximo vídeo pode sair hoje."
+    fim: ['O conteúdo novo começa hoje.', 'A decisão é sua.'],
     nome: 'Estética',
     ideias: [
       { pergunta: 'Antes e depois do seu procedimento', fala: 'você comenta o resultado', tela: 'as duas fotos lado a lado, região em destaque, sem mexer na imagem' },
