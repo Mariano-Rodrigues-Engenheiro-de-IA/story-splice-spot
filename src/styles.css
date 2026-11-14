@@ -2303,12 +2303,13 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-topo h1.clone-recado { margin: 4px auto 0; max-width: 350px; color: rgba(255, 255, 255, .95); font-size: clamp(27px, 7.4vw, 38px); font-weight: 800; line-height: 1.12; letter-spacing: -.02em; text-shadow: 0 2px 20px rgba(0, 0, 0, .45); text-wrap: balance; }
 .clone-recado span { color: #c4b5fd; }
 .clone-recado-sub { margin: 8px auto 0; color: rgba(255, 255, 255, .78); font-size: 18px; font-weight: 500; line-height: 1.35; text-shadow: 0 1px 12px rgba(0, 0, 0, .5); }
-/* seta lilás desenhada à mão, do subtítulo para dentro do vídeo: desenha uma vez e depois balança */
-.clone-seta { display: block; width: 46px; height: 52px; margin: 0 auto 2px; overflow: visible; transform: translateX(14px); stroke: #c4b5fd; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(196, 181, 253, .55)); transition: opacity .3s ease; animation: clone-seta-balanca 1.6s ease-in-out 1.7s infinite; }
-.clone-seta path { stroke-dasharray: 100; stroke-dashoffset: 100; animation: clone-seta-desenha .8s ease-out .4s forwards; }
-.clone-seta path + path { animation-delay: 1.15s; animation-duration: .35s; }
-@keyframes clone-seta-desenha { to { stroke-dashoffset: 0; } }
-@keyframes clone-seta-balanca { 0%, 100% { transform: translate(14px, 0); } 50% { transform: translate(14px, 5px); } }
+/* seta reta (14/11): haste lilás, um brilho branco descendo pela haste e a ponta cheia pulsando; some quando liga o som */
+.clone-seta { display: block; width: 28px; height: 56px; margin: 0 auto 4px; overflow: visible; filter: drop-shadow(0 0 8px rgba(196, 181, 253, .6)); transition: opacity .3s ease; }
+.clone-seta .haste { stroke: rgba(196, 181, 253, .45); stroke-width: 4; stroke-linecap: round; }
+.clone-seta .brilho { stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 22 100; stroke-dashoffset: 22; animation: clone-seta-brilho 1.3s cubic-bezier(.4, 0, .6, 1) infinite; }
+.clone-seta .ponta { fill: #c4b5fd; transform-box: fill-box; transform-origin: 50% 0; animation: clone-seta-ponta 1.3s ease-in-out infinite; }
+@keyframes clone-seta-brilho { from { stroke-dashoffset: 22; } to { stroke-dashoffset: -100; } }
+@keyframes clone-seta-ponta { 0%, 55% { transform: translateY(0); fill: #c4b5fd; } 75% { transform: translateY(3px); fill: #fff; } 100% { transform: translateY(0); fill: #c4b5fd; } }
 .clone-seta.some { opacity: 0; }
 .clone-topo-video { cursor: pointer; border-color: rgba(255, 255, 255, .14); box-shadow: 0 24px 60px rgba(0, 0, 0, .55); }
 .clone-topo-video { container-type: inline-size; }
