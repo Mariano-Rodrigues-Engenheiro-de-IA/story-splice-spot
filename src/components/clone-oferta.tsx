@@ -74,7 +74,7 @@ export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
   return <VideoDoClone />;
 }
 
-/** O vídeo da frente: toca sem som; uma seta leva até o aviso de vidro "Toque para ouvir" no centro do vídeo (padrão do
+/** O vídeo da frente: toca sem som, com o aviso de vidro "Toque para ouvir" no centro do vídeo (padrão do
  *  VTurb e da Molise; no Vidalytics, o aviso no centro venceu o teste A/B). Tocar em qualquer parte do vídeo também liga o
  *  som e volta ao começo. Depois, seta e pílula somem
  *  e fica só um botãozinho de vidro no canto para tirar o som. */
@@ -93,12 +93,6 @@ function VideoDoClone() {
   };
   const desligar = () => { const v = video.current; if (v) v.muted = true; setSom(false); };
   return <>
-    {/* seta reta (pedido dele, 14/11): haste lilás com um brilho que desce sem parar e ponta cheia pulsando */}
-    <svg className={`clone-seta${som ? ' some' : ''}`} viewBox="0 0 28 56" aria-hidden="true">
-      <line className="haste" x1="14" y1="2" x2="14" y2="40" />
-      <line className="brilho" x1="14" y1="2" x2="14" y2="40" pathLength={100} />
-      <path className="ponta" d="M3 36 L14 54 L25 36 Z" />
-    </svg>
     <div className={`clone-video clone-topo-video${som ? ' com-som' : ''}`} onClick={som ? undefined : ligar}>
       <video ref={video} src={VIDEO_TOPO} poster="/videos/clone/topo-clone.webp" muted loop playsInline autoPlay aria-label="Recado em vídeo, gravado pelo meu clone" />
       {som

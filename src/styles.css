@@ -2302,15 +2302,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-col-dobra { width: min(560px, 100%); margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 30px; }
 .clone-topo h1.clone-recado { margin: 4px auto 0; max-width: 350px; color: rgba(255, 255, 255, .95); font-size: clamp(27px, 7.4vw, 38px); font-weight: 800; line-height: 1.12; letter-spacing: -.02em; text-shadow: 0 2px 20px rgba(0, 0, 0, .45); text-wrap: balance; }
 .clone-recado span { color: #c4b5fd; }
-.clone-recado-sub { margin: 8px auto 0; color: rgba(255, 255, 255, .78); font-size: 18px; font-weight: 500; line-height: 1.35; text-shadow: 0 1px 12px rgba(0, 0, 0, .5); }
-/* seta reta (14/11): haste lilás, um brilho branco descendo pela haste e a ponta cheia pulsando; some quando liga o som */
-.clone-seta { display: block; width: 28px; height: 56px; margin: 0 auto 4px; overflow: visible; filter: drop-shadow(0 0 8px rgba(196, 181, 253, .6)); transition: opacity .3s ease; }
-.clone-seta .haste { stroke: rgba(196, 181, 253, .45); stroke-width: 4; stroke-linecap: round; }
-.clone-seta .brilho { stroke: #fff; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 22 100; stroke-dashoffset: 22; animation: clone-seta-brilho 1.3s cubic-bezier(.4, 0, .6, 1) infinite; }
-.clone-seta .ponta { fill: #c4b5fd; transform-box: fill-box; transform-origin: 50% 0; animation: clone-seta-ponta 1.3s ease-in-out infinite; }
-@keyframes clone-seta-brilho { from { stroke-dashoffset: 22; } to { stroke-dashoffset: -100; } }
-@keyframes clone-seta-ponta { 0%, 55% { transform: translateY(0); fill: #c4b5fd; } 75% { transform: translateY(3px); fill: #fff; } 100% { transform: translateY(0); fill: #c4b5fd; } }
-.clone-seta.some { opacity: 0; }
+.clone-recado-sub { margin: 8px auto 16px; color: rgba(255, 255, 255, .78); font-size: 18px; font-weight: 500; line-height: 1.35; text-shadow: 0 1px 12px rgba(0, 0, 0, .5); }
 .clone-topo-video { cursor: pointer; border-color: rgba(255, 255, 255, .14); box-shadow: 0 24px 60px rgba(0, 0, 0, .55); }
 .clone-topo-video { container-type: inline-size; }
 /* enquanto está sem som, o vídeo escurece um pouco para o aviso aparecer (sem desfocar: o clone mexendo é a prova) */
@@ -2336,11 +2328,10 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-topo h1 em, .clone-secao h2 em, .clone-fim-frase em { color: var(--roxo-claro); }
 .clone-sub { margin: 0 auto 16px; max-width: 420px; color: var(--muted-foreground); font-size: 15.5px; line-height: 1.45; text-wrap: balance; }
 .clone-sub s { color: oklch(.7 .02 286); }
-.clone-video { position: relative; width: clamp(170px, calc((100svh - 352px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
+.clone-video { position: relative; width: clamp(170px, calc((100svh - 316px) * .5625), 340px); aspect-ratio: 9 / 16; margin: 0 auto; border-radius: 22px; overflow: hidden; border: 1px solid oklch(.76 .16 300 / .28); box-shadow: 0 30px 80px -30px oklch(.5 .21 295 / .7); }
 /* /ultima-chance: título maior (preço riscado + preço novo), então o vídeo desconta mais altura para o botão continuar à vista */
 .clone-downsell .clone-topo h1 { font-size: clamp(25px, 6.8vw, 38px); }
 .clone-downsell .clone-video { width: clamp(170px, calc((100svh - 390px) * .5625), 340px); }
-.clone-downsell .clone-seta { display: none; } /* na última chance o título é maior: sem a seta, o Sim cabe na 1ª dobra */
 /* vídeo do clone no topo, enquanto o vídeo de vendas não chega */
 .clone-topo-video { background: oklch(.16 .006 286) url(/videos/clone/topo-clone.webp) center / cover; }
 .clone-topo-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
