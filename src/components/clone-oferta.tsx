@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, CircleCheck, PenLine, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
+import { ArrowUp, Check, CircleCheck, PenLine, Play, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
 import { VslPlayer } from '@/components/vsl-player';
 import { Esteira, VideoVivo } from '@/components/pro2';
 import { eventoProprio } from '@/lib/pixel';
@@ -58,6 +58,7 @@ export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
 function VideoDoClone() {
   const video = useRef<HTMLVideoElement>(null);
   const [som, setSom] = useState(false);
+  const [pausado, setPausado] = useState(false);
   useEffect(() => { void video.current?.play().catch(() => undefined); }, []);
   const ligar = () => {
     const v = video.current;
@@ -66,12 +67,20 @@ function VideoDoClone() {
     v.muted = false;
     void v.play().catch(() => { v.muted = true; setSom(false); });
     setSom(true);
+    setPausado(false);
     eventoProprio('Clone_TopoOuvir');
   };
   const desligar = () => { const v = video.current; if (v) v.muted = true; setSom(false); };
+  // 14/11: dá para pausar. Com som ligado, tocar no vídeo pausa; tocar de novo continua de onde parou.
+  const pausarOuContinuar = () => {
+    const v = video.current;
+    if (!v) return;
+    if (v.paused) { void v.play().catch(() => undefined); setPausado(false); } else { v.pause(); setPausado(true); }
+  };
   return <>
-    <div className={`clone-video clone-topo-video${som ? ' com-som' : ''}`} onClick={som ? undefined : ligar}>
+    <div className={`clone-video clone-topo-video${som ? ' com-som' : ''}`} onClick={som ? pausarOuContinuar : ligar}>
       <video ref={video} src={VIDEO_TOPO} poster="/videos/clone/topo-clone.webp" muted loop playsInline autoPlay aria-label="Recado em vídeo, gravado pelo meu clone" />
+      {som && pausado && <button type="button" className="clone-pausa" onClick={e => { e.stopPropagation(); pausarOuContinuar(); }} aria-label="Continuar o vídeo"><Play aria-hidden="true" /></button>}
       {som
         ? <button type="button" className="clone-som-canto" onClick={e => { e.stopPropagation(); desligar(); }} aria-label="Tirar o som"><Volume2 aria-hidden="true" /></button>
         : <button type="button" className="clone-som" onClick={e => { e.stopPropagation(); ligar(); }}>

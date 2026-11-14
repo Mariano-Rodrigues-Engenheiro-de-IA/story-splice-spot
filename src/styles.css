@@ -2263,7 +2263,8 @@ html:has(.geral) { scroll-padding-top: 0; }
 
 /* ── /obrigado e /ultima-chance: pós-compra do Modo Editor, que oferece o Modo Clone (upsell de 1 clique da Kiwify) ──
    Primeira dobra igual à da página principal: o vídeo cresce com a altura da tela e o botão fica logo abaixo dele. */
-.clone-pagina { --roxo: oklch(.5 .21 295); --roxo-claro: oklch(.76 .16 300); --ambar: oklch(.8 .15 75); min-height: 100vh; overflow-x: clip; background: radial-gradient(120% 50% at 50% 0%, oklch(.5 .21 295 / .22), transparent 60%), var(--background); }
+/* o brilho do topo tem altura FIXA: em % ele esticava quando o resto da página aparecia e o fundo ficava roxo (14/11) */
+.clone-pagina { --roxo: oklch(.5 .21 295); --roxo-claro: oklch(.76 .16 300); --ambar: oklch(.8 .15 75); min-height: 100vh; overflow-x: clip; background: radial-gradient(120% 450px at 50% 0%, oklch(.5 .21 295 / .22), transparent 60%) no-repeat, var(--background); }
 .clone-col { width: min(560px, 100%); margin: 0 auto; padding: 0 16px 40px; }
 
 /* faixa de aviso, largura inteira, em cor de contraste (amarelo/laranja do contador) */
@@ -2290,8 +2291,6 @@ html:has(.geral) { scroll-padding-top: 0; }
    Referências medidas: modo ambiente do YouTube (cópia minúscula esticada), Mindvalley (escurecimento em camadas),
    Apple TV (escala de branco e vidro), Molise/VTurb ("Espera!" dentro do título, mesmo tamanho). */
 .clone-dobra { position: relative; isolation: isolate; }
-/* fundo limpo (o vídeo desfocado de fundo foi reprovado, 14/11): o roxo escuro da página e um brilho suave atrás do vídeo */
-.clone-dobra::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(80% 45% at 50% 62%, rgba(124, 58, 237, .22), transparent 70%); pointer-events: none; }
 .clone-col-dobra { width: min(560px, 100%); margin: 0 auto; padding-right: 16px; padding-left: 16px; padding-bottom: 30px; }
 /* sempre 2 linhas (pedido dele): a fonte acompanha a largura da tela e a caixa é larga o bastante no computador */
 .clone-topo h1.clone-recado { margin: 4px auto 0; max-width: 440px; color: rgba(255, 255, 255, .95); font-size: min(7.4vw, 36px); font-weight: 800; line-height: 1.12; letter-spacing: -.02em; text-shadow: 0 2px 20px rgba(0, 0, 0, .45); text-wrap: balance; }
@@ -2313,6 +2312,8 @@ html:has(.geral) { scroll-padding-top: 0; }
 @keyframes clone-halo { 0%, 100% { box-shadow: 0 0 0 0 rgba(196, 181, 253, .45); } 60% { box-shadow: 0 0 0 12px rgba(196, 181, 253, 0); } }
 /* vídeo estreito (celular pequeno): o aviso encolhe junto */
 @container (max-width: 230px) { .clone-topo-video .clone-som { gap: 6px; padding: 12px 10px; } .clone-topo-video .clone-som small { font-size: 11.5px; } .clone-topo-video .clone-som b { font-size: 15px; } .clone-topo-video .clone-som-ic { width: 42px; height: 42px; } }
+.clone-pausa { position: absolute; top: 50%; left: 50%; z-index: 1; display: grid; place-items: center; width: 64px; height: 64px; border: 1px solid rgba(255, 255, 255, .25); border-radius: 50%; background: rgba(17, 10, 30, .55); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: #fff; cursor: pointer; transform: translate(-50%, -50%); }
+.clone-pausa svg { width: 28px; height: 28px; margin-left: 3px; fill: currentColor; }
 .clone-som-canto { position: absolute; top: 12px; right: 12px; display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid rgba(255, 255, 255, .22); border-radius: 50%; background: rgba(17, 10, 30, .45); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); color: #fff; cursor: pointer; }
 .clone-som-canto svg { width: 17px; height: 17px; }
 .clone-liberado { margin: 0 auto 10px; max-width: 340px; color: oklch(.9 .01 290); font-size: 15px; font-weight: 500; line-height: 1.4; text-wrap: balance; }
@@ -2351,7 +2352,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 @keyframes clone-surge { from { opacity: 0; } to { opacity: 1; } }
 /* o script da Kiwify pinta os botões dele com !important (azul, 8px, Open Sans): aqui o roxo da página volta, com seletor mais forte */
 .clone-pagina .clone-kiwify[data-upsell-url] { display: flex !important; flex-direction: column !important; padding: 0 !important; --kiwify-upsell-accept-bg: oklch(.5 .21 295); --kiwify-upsell-accept-color: #fff; --kiwify-upsell-decline-color: var(--muted-foreground); --kiwify-upsell-font: var(--font-sans); --kiwify-upsell-width: 100%; }
-.clone-pagina .clone-kiwify [id^=kiwify-upsell-trigger] { order: 1; max-width: 100% !important; min-height: 58px !important; padding: 14px 16px !important; border-radius: 14px !important; font-family: var(--font-sans) !important; font-size: 17px !important; font-weight: 700 !important; line-height: 1.2 !important; box-shadow: 0 14px 40px -12px oklch(.5 .21 295 / .8) !important; }
+.clone-pagina .clone-kiwify [id^=kiwify-upsell-trigger] { order: 1; align-self: center; max-width: 336px !important; min-height: 58px !important; margin-right: auto !important; margin-left: auto !important; padding: 14px 16px !important; border-radius: 14px !important; font-family: var(--font-sans) !important; font-size: 17px !important; font-weight: 700 !important; line-height: 1.2 !important; box-shadow: 0 6px 16px rgba(0, 0, 0, .35) !important; }
 .clone-pagina .clone-kiwify [id^=kiwify-upsell-cancel-trigger] { order: 3; max-width: 100% !important; margin-top: 12px !important; font-family: var(--font-sans) !important; font-size: 14px !important; font-weight: 400 !important; line-height: 1.4 !important; color: var(--muted-foreground) !important; text-decoration: underline !important; text-underline-offset: 3px; }
 /* a caixa de parcelas que o script da Kiwify coloca acima do botão (vem branca, com letra escura e Open Sans): vai para baixo dele,
    para o botão ficar colado no vídeo */
