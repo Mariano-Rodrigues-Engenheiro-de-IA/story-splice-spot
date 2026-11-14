@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, CircleCheck, PenLine, Play, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
+import { ArrowUp, Check, ChevronsDown, CircleCheck, MessageCircleQuestionMark, PenLine, Play, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
 import { VslPlayer } from '@/components/vsl-player';
 import { Esteira, VideoVivo } from '@/components/pro2';
 import { eventoProprio } from '@/lib/pixel';
@@ -195,6 +195,20 @@ function useNaTelaClone<T extends HTMLElement>(limiar = 0.35) {
   return [ref, na] as const;
 }
 
+/** Fica true quando o elemento chega perto da tela (700 px antes): os vídeos começam a carregar antes de aparecer, para
+ *  já tocarem sem demora quando a pessoa chega neles (14/11: "os vídeos demoram um pouquinho a começar"). */
+function usePertoClone<T extends HTMLElement>(ref: React.RefObject<T | null>, margem = '700px 0px') {
+  const [perto, setPerto] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || perto) return;
+    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) { setPerto(true); io.disconnect(); } }, { rootMargin: margem });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [ref, margem, perto]);
+  return perto;
+}
+
 /* ───────── Eu e o meu clone (pedido dele, 13/11): os dois em 9:16, lado a lado, falando; toque para ouvir cada um ─────────
    Eu: a gravação real da DICA da aula 2 (Desktop/MATERIAL PARA AULA 2 - MODO CLONE/DICA.mp4, 187,9 s + 8,1 s: "se eu colocar
    aqui lado a lado com o clone, ele fica fazendo as mesmas expressões que eu"). Clone: o bruto do clone da aula 2
@@ -206,6 +220,7 @@ const ladoALado = [
 
 export function EuEClone() {
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.3);
+  const perto = usePertoClone(caixa);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const [som, setSom] = useState<number | null>(null);
   useEffect(() => {
@@ -232,7 +247,7 @@ export function EuEClone() {
     <div className="clone-lado-par" ref={caixa}>
       {ladoALado.map((l, i) => <figure key={l.classe} className={`clone-lado-item ${l.classe}${som === i ? ' ouvindo' : ''}`}>
         <div className="clone-lado-video">
-          <video ref={el => { videos.current[i] = el; }} src={l.src} poster={l.src.replace(/\.mp4$/, '.webp')} muted loop playsInline preload="none" aria-label={l.quem} />
+          <video ref={el => { videos.current[i] = el; }} src={l.src} poster={l.src.replace(/\.mp4$/, '.webp')} muted loop playsInline preload={perto ? 'auto' : 'none'} aria-label={l.quem} />
           <span className="clone-lado-quem">{l.quem}</span>
           <button type="button" className="clone-lado-ouvir" onClick={() => ouvir(i)} aria-pressed={som === i}>
             {som === i ? <><Volume2 aria-hidden="true" />Ouvindo</> : <><VolumeX aria-hidden="true" />Ouvir</>}
@@ -253,6 +268,7 @@ const temposRoteiro = [0.32, 0.44, 0.72, 0.92, 1.12, 1.48, 1.64, 1.8, 1.96, 2.92
 export function VoceEscreve() {
   const palavras = roteiro.split(' ');
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.4);
+  const perto = usePertoClone(caixa);
   const [digitou, setDigitou] = useState(false);
   const [estado, setEstado] = useState<'espera' | 'falando' | 'fim'>('espera');
   const video = useRef<HTMLVideoElement>(null);
@@ -293,7 +309,7 @@ export function VoceEscreve() {
         <p>{palavras.map((p, i) => <span key={i} ref={el => { spans.current[i] = el; }} style={{ '--i': i } as React.CSSProperties}>{p} </span>)}<b className="clone-cursor" aria-hidden="true" /></p>
       </div>
       <div className="clone-escreve-video">
-        <video ref={video} src="/videos/clone/escreve.mp4" poster="/videos/clone/escreve.webp" playsInline preload="none"
+        <video ref={video} src="/videos/clone/escreve.mp4" poster="/videos/clone/escreve.webp" playsInline preload={perto ? 'auto' : 'none'}
           onEnded={() => { cancelAnimationFrame(quadro.current); setEstado('fim'); marcar(temposRoteiro.length); }} aria-label="O clone falando o texto do roteiro" />
         {estado !== 'falando' && <button type="button" className="clone-gerar" onClick={gerar}>
           {estado === 'fim' ? <><RotateCcw aria-hidden="true" />Gerar de novo</> : <><Sparkles aria-hidden="true" />Gerar o vídeo</>}
@@ -316,6 +332,7 @@ const partes = [
 
 export function PorDentro() {
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.35);
+  const perto = usePertoClone(caixa);
   const video = useRef<HTMLVideoElement>(null);
   useEffect(() => { const v = video.current; if (!v) return; if (naTela) void v.play().catch(() => undefined); else v.pause(); }, [naTela]);
   return <section className="clone-secao clone-dentro" aria-labelledby="clone-dentro-titulo">
@@ -324,7 +341,7 @@ export function PorDentro() {
       <p>Não é uma foto com a boca mexendo. Cada parte vem de você.</p>
     </div>
     <div className={`clone-dentro-palco${naTela ? ' ligado' : ''}`} ref={caixa}>
-      <video ref={video} src="/videos/clone/anatomia.mp4" poster="/videos/clone/anatomia.webp" muted loop playsInline preload="none" aria-hidden="true" />
+      <video ref={video} src="/videos/clone/anatomia.mp4" poster="/videos/clone/anatomia.webp" muted loop playsInline preload={perto ? 'auto' : 'none'} aria-hidden="true" />
       <span className="clone-dentro-varre" aria-hidden="true" />
       {partes.map((p, i) => <span key={p.nome} className={`clone-dentro-pino ${p.lado}`} style={{ top: `${p.y}%`, '--i': i } as React.CSSProperties} aria-hidden="true"><i />{p.nome}</span>)}
     </div>
@@ -345,6 +362,7 @@ const etapas = [{ c: 2, r: 2 }, { c: 3, r: 3 }, { c: 4, r: 4 }];
 
 export function UmaGravacao() {
   const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.45);
+  const perto = usePertoClone(caixa);
   // 13/11: com a foto parada no começo, parecia travado. Agora a gravação real toca uns 2,6 s e só então se divide nos
   // quadros: a sequência (CSS) só começa quando o vídeo de fato começou a tocar; sem autoplay (modo pouca energia), já começa.
   const video = useRef<HTMLVideoElement>(null);
@@ -354,7 +372,9 @@ export function UmaGravacao() {
     if (!v) return;
     if (!naTela) { setRoda(false); v.pause(); v.currentTime = 0; return; }
     let pausa = 0;
-    const comecou = () => { setRoda(true); pausa = window.setTimeout(() => v.pause(), 3600); }; // depois de coberto, para
+    // 14/11: "travou antes de chegar no tamanho certo" = capas ainda carregando quando a camada entrava. Só começa com todas prontas.
+    const prontas = () => Promise.all([...(caixa.current?.querySelectorAll('img') ?? [])].map(i => i.decode().catch(() => undefined)));
+    const comecou = () => { void prontas().then(() => setRoda(true)); pausa = window.setTimeout(() => v.pause(), 4200); }; // depois de coberto, para
     v.currentTime = 0;
     v.addEventListener('playing', comecou, { once: true });
     void v.play().catch(() => { v.removeEventListener('playing', comecou); setRoda(true); });
@@ -366,9 +386,9 @@ export function UmaGravacao() {
       <p>Você grava uma vez para criar o clone. Depois, cada vídeo novo é só um texto novo.</p>
     </div>
     <div className={`clone-mult-palco${roda ? ' roda' : ''}`} ref={caixa} role="img" aria-label="Uma gravação de verdade que vira 4, 9 e 16 vídeos do clone">
-      <div className="clone-mult-camada base"><video ref={video} src="/videos/clone/eu-real.mp4" poster="/videos/clone/eu-real.webp" muted playsInline preload="none" /></div>
+      <div className="clone-mult-camada base"><video ref={video} src="/videos/clone/eu-real.mp4" poster="/videos/clone/eu-real.webp" muted playsInline preload={perto ? 'auto' : 'none'} /></div>
       {etapas.map((e, k) => <div key={k} className="clone-mult-camada" style={{ gridTemplateColumns: `repeat(${e.c}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${e.r}, minmax(0, 1fr))`, '--k': k } as React.CSSProperties}>
-        {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={capas[i]} alt="" width={288} height={512} loading="lazy" />)}
+        {Array.from({ length: e.c * e.r }, (_, i) => <img key={i} src={perto ? capas[i] : undefined} alt="" width={288} height={512} decoding="async" />)}
       </div>)}
       <div className="clone-mult-conta" aria-hidden="true">
         {/* 13/11: ele pediu as frases maiores, em cor viva e no meio, com tipografia diferente; depois, número e palavra na mesma linha, em Bricolage Grotesque */}
@@ -420,14 +440,27 @@ export function Duvidas() {
 
 /** "Pergunte ao clone" (ideia das páginas da Tavus e da D-ID): a pessoa toca numa dúvida e o próprio clone responde em vídeo.
  *  As respostas são frases que o clone já falou na aula 2 (ver siteConfig.clone.perguntas); o som liga no próprio toque. */
+const ESPERA_PERGUNTA = '/videos/clone/pergunte-espera.mp4';
+
 function PergunteAoClone({ itens }: { itens: { pergunta: string; video: string }[] }) {
+  // 14/11: a imagem parada parecia travada (boca torta). Enquanto espera, o clone fica mexendo, sem som, em loop
+  // (bruto do clone da aula 2, 40 s + 6 s, começando com a boca natural); a resposta entra no lugar com som.
+  const [caixa, naTela] = useNaTelaClone<HTMLDivElement>(0.3);
+  const perto = usePertoClone(caixa);
   const video = useRef<HTMLVideoElement>(null);
   const [atual, setAtual] = useState<number | null>(null);
+  useEffect(() => { const v = video.current; if (!v) return; if (naTela) void v.play().catch(() => undefined); else v.pause(); }, [naTela]);
+  const esperar = () => {
+    const v = video.current;
+    if (!v) return;
+    v.muted = true; v.loop = true; v.src = ESPERA_PERGUNTA;
+    void v.play().catch(() => undefined);
+    setAtual(null);
+  };
   const perguntar = (i: number) => {
     const v = video.current;
     if (!v) return;
-    v.src = itens[i]!.video;
-    v.muted = false;
+    v.loop = false; v.src = itens[i]!.video; v.muted = false;
     void v.play().catch(() => undefined);
     v.parentElement?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); // a resposta fica à vista
     setAtual(i);
@@ -436,15 +469,22 @@ function PergunteAoClone({ itens }: { itens: { pergunta: string; video: string }
   return <section className="clone-secao clone-pergunte" aria-labelledby="clone-pergunte-titulo">
     <div className="clone-secao-topo">
       <h2 id="clone-pergunte-titulo" className="clone-titulo-grande"><span className="clone-t-fina">Ficou com dúvida?</span> <span className="clone-t-forte">Pergunte ao clone</span></h2>
-      <p>Toque numa pergunta. Quem responde é o meu clone.</p>
+      <p>Quem responde é o meu clone, com som.</p>
     </div>
-    <div className="clone-pergunte-palco">
+    <div className={`clone-pergunte-palco${atual === null ? ' esperando' : ''}`} ref={caixa}>
       <div className="clone-pergunte-video">
-        <video ref={video} poster={itens[0]!.video.replace(/\.mp4$/, '.webp')} playsInline preload="none" onEnded={() => setAtual(null)} aria-label="O clone respondendo" />
-        {atual === null && <span className="clone-pergunte-espera">Escolha uma pergunta</span>}
+        <video ref={video} src={ESPERA_PERGUNTA} poster="/videos/clone/pergunte-espera.webp" muted loop playsInline preload={perto ? 'auto' : 'none'}
+          onEnded={esperar} aria-label="O clone respondendo" />
+        {atual !== null && <span className="clone-pergunte-legenda">{itens[atual]!.pergunta}</span>}
       </div>
+      {/* indicação para tocar (14/11: "senão ele não vai saber que tem que clicar") */}
+      <p className="clone-pergunte-dica" aria-hidden="true"><ChevronsDown />Toque numa pergunta</p>
       <ul className="clone-pergunte-lista">
-        {itens.map((q, i) => <li key={q.pergunta}><button type="button" className={atual === i ? 'ativa' : undefined} onClick={() => perguntar(i)}>{q.pergunta}</button></li>)}
+        {itens.map((q, i) => <li key={q.pergunta} style={{ '--i': i } as React.CSSProperties}>
+          <button type="button" className={atual === i ? 'ativa' : undefined} onClick={() => perguntar(i)}>
+            <MessageCircleQuestionMark aria-hidden="true" /><span>{q.pergunta}</span><b>{atual === i ? 'Respondendo' : 'Perguntar'}</b>
+          </button>
+        </li>)}
       </ul>
     </div>
   </section>;
