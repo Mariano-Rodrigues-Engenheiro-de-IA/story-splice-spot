@@ -380,9 +380,9 @@ export function UmaGravacao() {
 }
 
 const modulos = [
-  { capa: '/img/clone/modulo-01.webp', numero: '01', titulo: 'Comece aqui', texto: 'O que Ã© um clone, as trÃªs partes dele (aparÃªncia, movimento e voz) e o que vocÃª vai precisar.' },
-  { capa: '/img/clone/modulo-02.webp', numero: '02', titulo: 'Criando o seu avatar', texto: 'Tela por tela: a conta, a sua foto, a gravaÃ§Ã£o do seu movimento e a sua voz clonada.' },
-  { capa: '/img/clone/modulo-03.webp', numero: '03', titulo: 'Criando o vÃ­deo', texto: 'Do texto ao vÃ­deo pronto: a voz em portuguÃªs, a pronÃºncia certa, o teste de 10 segundos e o download para editar.' },
+  { capa: '/img/clone/modulo-01.webp', numero: '01', titulo: 'Comece aqui', texto: 'O que é um clone, as três partes dele (aparência, movimento e voz) e o que você vai precisar.' },
+  { capa: '/img/clone/modulo-02.webp', numero: '02', titulo: 'Criando o seu avatar', texto: 'Tela por tela: a conta, a sua foto, a gravação do seu movimento e a sua voz clonada.' },
+  { capa: '/img/clone/modulo-03.webp', numero: '03', titulo: 'Criando o vídeo', texto: 'Do texto ao vídeo pronto: a voz em português, a pronúncia certa, o teste de 10 segundos e o download para editar.' },
 ];
 
 /** As 3 aulas. Cada capa aparece "sendo gerada", com uma linha roxa varrendo de cima para baixo, quando entra na tela. */
