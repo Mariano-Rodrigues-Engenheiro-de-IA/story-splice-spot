@@ -13,8 +13,8 @@ import { eventoProprio } from '@/lib/pixel';
 export const Route = createFileRoute('/links')({
   head: () => ({ meta: [
     { title: 'Mariano Rodrigues — Modo Editor e Modo Clone' },
-    { name: 'description', content: 'A nova produção de conteúdo com IA: a IA edita os seus vídeos e o seu clone grava por você. Escolha por onde começar.' },
-    { property: 'og:title', content: 'Mariano Rodrigues — a nova produção de conteúdo com IA' },
+    { name: 'description', content: 'A nova era da produção de conteúdo com IA: a IA edita os seus vídeos e o seu clone grava por você. Escolha por onde começar.' },
+    { property: 'og:title', content: 'Mariano Rodrigues — a nova era da produção de conteúdo com IA' },
     { property: 'og:description', content: 'Modo Editor: a IA edita os seus vídeos. Modo Clone: o seu clone grava por você.' },
     { property: 'og:type', content: 'website' },
   ] }),
@@ -79,7 +79,7 @@ function Links() {
         <header className="bio-topo">
           <img className="bio-foto" src="/img/bio/perfil.webp" alt={siteConfig.creator.name} width={88} height={88} />
           <p className="bio-nome">{siteConfig.creator.name}</p>
-          <h1>A nova produção de conteúdo <em>com IA.</em></h1>
+          <h1>A nova era da produção de conteúdo <em>com IA.</em></h1>
           <p className="bio-sub">A IA edita os seus vídeos e o seu clone grava por você. Escolha por onde começar.</p>
         </header>
         <div className="bio-lista">{produtos.map(p => <Cartao key={p.id} p={p} href={hrefs[p.id] ?? p.destino} />)}</div>
