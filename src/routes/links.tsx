@@ -9,7 +9,9 @@ import { eventoProprio } from '@/lib/pixel';
    As UTMs de quem chegou passam adiante; sem UTM, o clique leva utm_source=instagram e utm_medium=bio.
    16/11 (pedido dele, visto no celular): cada cartão = vídeo rodando + a capa quadrada do produto (sem texto explicando;
    a capa já diz o nome), e vídeos diferentes: o do Editor é uma montagem de edições reais (3D, anatomia, antes e depois),
-   o do Clone é um vídeo feito pelo clone. A foto do topo é a mesma do outro perfil dele (blazer, rosto e ombros). */
+   o do Clone é um vídeo feito pelo clone. A foto do topo é a mesma do outro perfil dele (blazer, rosto e ombros).
+   Capas v2 (16/11): MacBook realista com um programa de edição aberto (Editor) e dois bonecos, original e clone (Clone),
+   em camadas: o fundo fica parado e os objetos flutuam como o MacBook da página preta. */
 export const Route = createFileRoute('/links')({
   head: () => ({ meta: [
     { title: 'Mariano Rodrigues — Modo Editor e Modo Clone' },
@@ -25,14 +27,16 @@ type Produto = {
   id: 'editor' | 'clone';
   destino: string;
   nome: string;
-  capa: string;
+  /** a capa em camadas: o fundo parado (pedestal, nome e selo) e os objetos 3D por cima, flutuando (CSS) */
+  fundo: string;
+  camadas: string[];
   botao: string;
   video: string;
 };
 
 const produtos: Produto[] = [
-  { id: 'editor', destino: '/', nome: 'Modo Editor', capa: '/img/bio/capa-editor.webp', botao: 'Conhecer o Modo Editor', video: '/videos/bio/editor.mp4' },
-  { id: 'clone', destino: '/clone', nome: 'Modo Clone', capa: '/img/bio/capa-clone.webp', botao: 'Conhecer o Modo Clone', video: '/videos/clone/topo-clone.mp4' },
+  { id: 'editor', destino: '/', nome: 'Modo Editor', fundo: '/img/bio/editor-fundo.jpg', camadas: ['/img/bio/editor-camada1.webp'], botao: 'Conhecer o Modo Editor', video: '/videos/bio/editor.mp4' },
+  { id: 'clone', destino: '/clone', nome: 'Modo Clone', fundo: '/img/bio/clone-fundo.jpg', camadas: ['/img/bio/clone-camada1.webp', '/img/bio/clone-camada2.webp'], botao: 'Conhecer o Modo Clone', video: '/videos/clone/topo-clone.mp4' },
 ];
 
 /** Leva as UTMs de quem chegou para a página do produto; sem UTM, marca que veio da bio. */
@@ -62,7 +66,10 @@ function Cartao({ p, href }: { p: Produto; href: string }) {
   return (
     <a className={`bio-cartao bio-${p.id}`} href={href} onClick={() => eventoProprio('Bio_Clique', { produto: p.nome }, false)}>
       <div className="bio-tela"><VideoCartao src={p.video} /></div>
-      <img className="bio-capa" src={p.capa} alt={p.nome} width={640} height={640} />
+      <div className="bio-capa" role="img" aria-label={p.nome}>
+        <img src={p.fundo} alt="" width={1000} height={1000} />
+        {p.camadas.map((c, i) => <img key={c} className={`bio-flutua bio-flutua-${i + 1}`} src={c} alt="" width={1000} height={1000} />)}
+      </div>
       <span className="bio-botao">{p.botao} <ArrowRight aria-hidden="true" /></span>
     </a>
   );
