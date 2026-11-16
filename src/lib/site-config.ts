@@ -83,6 +83,9 @@ export const siteConfig = {
     id: '1455677936481047' as string,
     /** true = dispara InitiateCheckout no clique do botão (aí desligue esse evento na Kiwify para não contar duas vezes). */
     initiateCheckoutNoBotao: false as boolean,
+    /** Pixel do TikTok "Modo Editor" (16/11/2026, conta Mariano Rodrigues_adv). Vazio = não carrega. O mesmo pixel vai
+     *  nos produtos da Kiwify, que disparam InitiateCheckout e CompletePayment no checkout. */
+    tiktokId: 'DBTKQBRC77U7CBT64J30' as string,
   },
   /** Parcela de 12x no cartão da página geral (R$ 67), lida no checkout da Kiwify em 11/11/2026 ("12x de R$ 6,93", parcelamento com acréscimo). 0 = some a linha. */
   installmentValue: 6.93,
