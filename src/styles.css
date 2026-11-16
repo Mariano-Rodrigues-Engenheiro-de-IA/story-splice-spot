@@ -2592,6 +2592,19 @@ html:has(.geral) { scroll-padding-top: 0; }
 .bio-tela video { width: 100%; height: 100%; object-fit: cover; }
 .bio-botao { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 2px; padding: 13px 14px; border-radius: 12px; background: linear-gradient(120deg, oklch(.58 .23 300), oklch(.48 .22 290)); color: #fff; font-size: 14.5px; font-weight: 700; box-shadow: 0 10px 26px -10px oklch(.5 .21 295 / .9); }
 .bio-botao svg { width: 16px; height: 16px; }
+/* 16/11: "o botão tá muito morto" — pulsa (cresce e solta um anel de luz roxa) e um brilho passa por cima; o do Clone
+   pulsa defasado para os dois não baterem juntos. Só CSS (no iPhone, animação em JS travava). */
+.bio-botao { position: relative; overflow: hidden; animation: bio-pulsa 1.8s ease-in-out infinite; }
+.bio-clone .bio-botao { animation-delay: .9s; }
+.bio-botao::after { content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 45%; background: linear-gradient(100deg, transparent, oklch(1 0 0 / .38), transparent); transform: skewX(-18deg); animation: bio-brilho 3.6s ease-in-out infinite; pointer-events: none; }
+.bio-clone .bio-botao::after { animation-delay: 1.8s; }
+@keyframes bio-pulsa {
+  0% { scale: 1; box-shadow: 0 10px 26px -10px oklch(.5 .21 295 / .9), 0 0 0 0 oklch(.7 .2 300 / .7); }
+  35% { scale: 1.045; }
+  70%, 100% { scale: 1; box-shadow: 0 10px 26px -10px oklch(.5 .21 295 / .9), 0 0 0 16px oklch(.7 .2 300 / 0); }
+}
+@keyframes bio-brilho { 0%, 55% { left: -60%; } 85%, 100% { left: 130%; } }
+@media (prefers-reduced-motion: reduce) { .bio-botao, .bio-botao::after { animation: none; } }
 .bio-duvida { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 22px auto 0; width: fit-content; padding: 10px 16px; border: 1px solid oklch(1 0 0 / .14); border-radius: 99px; color: rgba(255, 255, 255, .82); font-size: 14px; font-weight: 600; }
 .bio-duvida svg { width: 16px; height: 16px; }
 .bio-rodape { margin: 18px 0 0; text-align: center; color: rgba(255, 255, 255, .4); font-size: 12px; }
