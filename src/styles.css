@@ -2566,3 +2566,50 @@ html:has(.geral) { scroll-padding-top: 0; }
 .geral .p2-mudou-agora span { background: oklch(.5 .21 295); color: #fff; }
 .geral .p2-mudou-seta { color: oklch(.76 .16 300); }
 .geral .p2-mudou-par { box-shadow: var(--inner-glow); }
+
+/* ───────── /links (16/11): link da bio, catálogo dos dois produtos. Escuro, roxo da marca, grade fina de fundo ───────── */
+.bio { min-height: 100svh; background:
+  radial-gradient(120% 60% at 50% -10%, oklch(.42 .2 295 / .55), transparent 60%),
+  radial-gradient(80% 40% at 100% 100%, oklch(.42 .2 295 / .18), transparent 70%),
+  linear-gradient(oklch(1 0 0 / .035) 1px, transparent 1px) 0 0 / 28px 28px,
+  linear-gradient(90deg, oklch(1 0 0 / .035) 1px, transparent 1px) 0 0 / 28px 28px,
+  oklch(.11 .012 290); color: #fff; }
+.bio-coluna { width: min(100%, 980px); margin: 0 auto; padding: 34px 16px 28px; }
+.bio-topo { text-align: center; }
+.bio-foto { display: block; width: 88px; height: 88px; margin: 0 auto; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 3px oklch(.11 .012 290), 0 0 0 5px oklch(.7 .18 300), 0 12px 40px oklch(.5 .21 295 / .55); }
+.bio-nome { margin: 12px 0 0; color: rgba(255, 255, 255, .72); font-size: 14px; font-weight: 600; letter-spacing: .02em; }
+.bio-topo h1 { margin: 10px auto 0; max-width: 560px; font-size: clamp(28px, 7.4vw, 44px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; text-wrap: balance; }
+.bio-topo h1 em { color: oklch(.78 .15 300); }
+.bio-sub { margin: 12px auto 0; max-width: 460px; color: rgba(255, 255, 255, .72); font-size: 16px; line-height: 1.45; text-wrap: balance; }
+.bio-lista { display: grid; gap: 16px; margin-top: 26px; }
+@media (min-width: 820px) { .bio-lista { grid-template-columns: 1fr 1fr; gap: 20px; } }
+.bio-cartao { position: relative; display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 14px; padding: 12px; border: 1px solid oklch(1 0 0 / .1); border-radius: 22px; background: linear-gradient(160deg, oklch(1 0 0 / .07), oklch(1 0 0 / .02)); box-shadow: inset 0 1px 0 oklch(1 0 0 / .08), 0 20px 50px -24px oklch(.5 .21 295 / .6); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); transition: transform .2s ease, border-color .2s ease; -webkit-tap-highlight-color: transparent; }
+.bio-cartao:active { transform: scale(.985); }
+@media (hover: hover) { .bio-cartao:hover { transform: translateY(-2px); border-color: oklch(.7 .18 300 / .55); } }
+@media (min-width: 820px) { .bio-cartao { grid-template-columns: 1fr; padding: 14px; } }
+.bio-tela { position: relative; aspect-ratio: 9 / 16; overflow: hidden; border-radius: 14px; background: #000; }
+@media (min-width: 820px) { .bio-tela { aspect-ratio: 4 / 5; } }
+.bio-tela video { width: 100%; height: 100%; object-fit: cover; }
+.bio-selo { position: absolute; top: 8px; left: 8px; padding: 4px 8px; border-radius: 99px; background: oklch(.11 .012 290 / .78); border: 1px solid oklch(.7 .18 300 / .5); color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+.bio-texto { display: flex; flex-direction: column; min-width: 0; padding: 4px 4px 2px 0; }
+.bio-texto h2 { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -.01em; }
+.bio-clone .bio-texto h2::after { content: "Novo"; margin-left: 8px; padding: 2px 7px; border-radius: 99px; background: oklch(.62 .22 300); color: #fff; font-size: 11px; font-weight: 700; vertical-align: 3px; }
+.bio-promessa { margin: 4px 0 0; color: rgba(255, 255, 255, .88); font-size: 15px; font-weight: 600; line-height: 1.3; }
+.bio-promessa em { color: oklch(.78 .15 300); }
+.bio-texto ul { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 5px; }
+.bio-texto li { display: flex; gap: 6px; align-items: flex-start; color: rgba(255, 255, 255, .7); font-size: 13.5px; line-height: 1.35; }
+.bio-texto li svg { flex-shrink: 0; width: 15px; height: 15px; margin-top: 2px; color: oklch(.78 .15 300); }
+.bio-botao { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 2px; padding: 13px 14px; border-radius: 12px; background: linear-gradient(120deg, oklch(.58 .23 300), oklch(.48 .22 290)); color: #fff; font-size: 14.5px; font-weight: 700; box-shadow: 0 10px 26px -10px oklch(.5 .21 295 / .9); }
+.bio-botao svg { width: 16px; height: 16px; }
+.bio-duvida { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 22px auto 0; width: fit-content; padding: 10px 16px; border: 1px solid oklch(1 0 0 / .14); border-radius: 99px; color: rgba(255, 255, 255, .82); font-size: 14px; font-weight: 600; }
+.bio-duvida svg { width: 16px; height: 16px; }
+.bio-rodape { margin: 18px 0 0; text-align: center; color: rgba(255, 255, 255, .4); font-size: 12px; }
+@media (max-width: 360px) { .bio-cartao { grid-template-columns: 96px minmax(0, 1fr); } .bio-texto li { font-size: 13px; } }
+
+/* ───────── /clone (16/11): página de vendas do Modo Clone (a /obrigado sem o pós-compra, com oferta e checkout) ───────── */
+.clone-vendas-marca { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0; padding: 16px 16px 0; color: rgba(255, 255, 255, .86); font-size: 15px; font-weight: 700; letter-spacing: .01em; }
+.clone-vendas-marca img { border-radius: 8px; }
+.clone-vendas .clone-topo { padding-top: 14px; }
+.clone-vendas .clone-topo .clone-titulo-grande { margin: 0 auto; }
+.clone-vendas .clone-recado-sub { margin: 10px auto 16px; }
+.clone-vendas-cta { display: flex; align-items: center; justify-content: center; max-width: 336px; margin: 18px auto 0; text-decoration: none; }

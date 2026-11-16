@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CloneRouteImport } from './routes/clone'
 import { Route as EsteticaRouteImport } from './routes/estetica'
+import { Route as LinksRouteImport } from './routes/links'
 import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as ProRouteImport } from './routes/pro'
 import { Route as Pro2RouteImport } from './routes/pro2'
@@ -21,9 +23,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CloneRoute = CloneRouteImport.update({
+  id: '/clone',
+  path: '/clone',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EsteticaRoute = EsteticaRouteImport.update({
   id: '/estetica',
   path: '/estetica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LinksRoute = LinksRouteImport.update({
+  id: '/links',
+  path: '/links',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ObrigadoRoute = ObrigadoRouteImport.update({
@@ -49,7 +61,9 @@ const UltimaChanceRoute = UltimaChanceRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/clone': typeof CloneRoute
   '/estetica': typeof EsteticaRoute
+  '/links': typeof LinksRoute
   '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
@@ -57,7 +71,9 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/clone': typeof CloneRoute
   '/estetica': typeof EsteticaRoute
+  '/links': typeof LinksRoute
   '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
@@ -66,7 +82,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/clone': typeof CloneRoute
   '/estetica': typeof EsteticaRoute
+  '/links': typeof LinksRoute
   '/obrigado': typeof ObrigadoRoute
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
@@ -75,13 +93,30 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/estetica' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
+    | '/'
+    | '/clone'
+    | '/estetica'
+    | '/links'
+    | '/obrigado'
+    | '/pro'
+    | '/pro2'
+    | '/ultima-chance'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/estetica' | '/obrigado' | '/pro' | '/pro2' | '/ultima-chance'
+  to:
+    | '/'
+    | '/clone'
+    | '/estetica'
+    | '/links'
+    | '/obrigado'
+    | '/pro'
+    | '/pro2'
+    | '/ultima-chance'
   id:
     | '__root__'
     | '/'
+    | '/clone'
     | '/estetica'
+    | '/links'
     | '/obrigado'
     | '/pro'
     | '/pro2'
@@ -90,7 +125,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CloneRoute: typeof CloneRoute
   EsteticaRoute: typeof EsteticaRoute
+  LinksRoute: typeof LinksRoute
   ObrigadoRoute: typeof ObrigadoRoute
   ProRoute: typeof ProRoute
   Pro2Route: typeof Pro2Route
@@ -106,11 +143,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/clone': {
+      id: '/clone'
+      path: '/clone'
+      fullPath: '/clone'
+      preLoaderRoute: typeof CloneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/estetica': {
       id: '/estetica'
       path: '/estetica'
       fullPath: '/estetica'
       preLoaderRoute: typeof EsteticaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/links': {
+      id: '/links'
+      path: '/links'
+      fullPath: '/links'
+      preLoaderRoute: typeof LinksRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/obrigado': {
@@ -146,7 +197,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CloneRoute: CloneRoute,
   EsteticaRoute: EsteticaRoute,
+  LinksRoute: LinksRoute,
   ObrigadoRoute: ObrigadoRoute,
   ProRoute: ProRoute,
   Pro2Route: Pro2Route,

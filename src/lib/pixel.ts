@@ -26,7 +26,10 @@ let iniciado = false;
 const disparados = new Set<string>();
 /** A /pro vende a oferta de R$ 97; a página geral, a de R$ 67. O valor enviado ao pixel segue a página. */
 const naPro = () => typeof window !== 'undefined' && window.location.pathname.startsWith('/pro');
-const PRODUTO = () => ({ content_name: 'Modo Editor', content_type: 'product', content_ids: ['modo-editor'], value: naPro() ? siteConfig.pro.price : siteConfig.price, currency: 'BRL' });
+const naClone = () => typeof window !== 'undefined' && window.location.pathname.startsWith('/clone');
+const PRODUTO = () => naClone()
+  ? ({ content_name: 'Modo Clone', content_type: 'product', content_ids: ['modo-clone'], value: siteConfig.clone.vendas.price, currency: 'BRL' })
+  : ({ content_name: 'Modo Editor', content_type: 'product', content_ids: ['modo-editor'], value: naPro() ? siteConfig.pro.price : siteConfig.price, currency: 'BRL' });
 
 /** Carrega o pixel e dispara PageView + ViewContent. Chamar uma vez, no navegador. */
 export function iniciarPixel() {

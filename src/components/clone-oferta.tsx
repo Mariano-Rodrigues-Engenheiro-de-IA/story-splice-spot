@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowUp, Check, ChevronsDown, CircleCheck, MessageCircleQuestionMark, PenLine, Play, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
+import { ArrowRight, ArrowUp, Check, ChevronsDown, CircleCheck, MessageCircleQuestionMark, PenLine, Play, RotateCcw, ShieldCheck, Sparkles, TriangleAlert, Volume2, VolumeX } from 'lucide-react';
 import { VslPlayer } from '@/components/vsl-player';
 import { Esteira, VideoVivo } from '@/components/pro2';
 import { eventoProprio } from '@/lib/pixel';
@@ -46,16 +46,16 @@ export function Progresso({ passo }: { passo: 2 | 3 }) {
 /** Sem vídeo de vendas ainda: um vídeo de verdade do clone (os 15 primeiros segundos do criativo 13) tocando sem som.
  *  Nada de play que não faz nada (13/11: a moldura vazia confundia quem acabou de comprar). */
 export const VIDEO_TOPO = '/videos/clone/topo-clone.mp4';
-export function MidiaClone({ vsl, poster }: { vsl: string; poster: string }) {
+export function MidiaClone({ vsl, poster, aviso }: { vsl: string; poster: string; aviso?: string }) {
   if (vsl) return <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>;
-  return <VideoDoClone />;
+  return <VideoDoClone aviso={aviso} />;
 }
 
 /** O vídeo da frente: toca sem som, com o aviso de vidro "Toque para ouvir" no centro do vídeo (padrão do
  *  VTurb e da Molise; no Vidalytics, o aviso no centro venceu o teste A/B). Tocar em qualquer parte do vídeo também liga o
  *  som e volta ao começo. Depois, seta e pílula somem
  *  e fica só um botãozinho de vidro no canto para tirar o som. */
-function VideoDoClone() {
+function VideoDoClone({ aviso = 'Seu recado já começou' }: { aviso?: string | undefined }) {
   const video = useRef<HTMLVideoElement>(null);
   const [som, setSom] = useState(false);
   const [pausado, setPausado] = useState(false);
@@ -84,7 +84,7 @@ function VideoDoClone() {
       {som
         ? <button type="button" className="clone-som-canto" onClick={e => { e.stopPropagation(); desligar(); }} aria-label="Tirar o som"><Volume2 aria-hidden="true" /></button>
         : <button type="button" className="clone-som" onClick={e => { e.stopPropagation(); ligar(); }}>
-            <small>Seu recado já começou</small>
+            <small>{aviso}</small>
             <span className="clone-som-ic" aria-hidden="true"><VolumeX /></span>
             <b>Toque para ouvir</b>
           </button>}
@@ -500,21 +500,22 @@ function PergunteAoClone({ itens }: { itens: { pergunta: string; video: string }
 }
 
 /** Fecho: o resumo da oferta com a garantia, e um botão que sobe até os botões da Kiwify, no topo. */
-export function Fecho({ preco, precoDe = 0, frase, textoBotao }: { preco: number; precoDe?: number; frase: React.ReactNode; textoBotao: string }) {
-  return <section className="clone-secao clone-fim" aria-labelledby="clone-fim-titulo">
+const itensFecho = ['3 aulas, tela por tela', 'Começa no plano grátis da ferramenta, sem cartão', 'Feito para usar junto com o Modo Editor'];
+/** `href`/`aoClicar`/`itens`/`parcela`/`id`: a página de vendas (/clone) usa o mesmo cartão como oferta, com o checkout. */
+export function Fecho({ preco, precoDe = 0, frase, textoBotao, href = '#oferta', aoClicar, itens = itensFecho, parcela = 0, id }: { preco: number; precoDe?: number; frase: React.ReactNode; textoBotao: string; href?: string; aoClicar?: (a: HTMLAnchorElement) => void; itens?: string[]; parcela?: number; id?: string }) {
+  const sobe = href.startsWith('#');
+  return <section className="clone-secao clone-fim" id={id} aria-labelledby="clone-fim-titulo">
     <div className="clone-fim-caixa">
       <div className="clone-oferta-marca"><img src="/img/clone/icone.webp" width={44} height={44} alt="" /><h2 id="clone-fim-titulo">Modo Clone</h2></div>
       <p className="clone-fim-frase">{frase}</p>
       <ul className="clone-oferta-lista">
-        <li><Check aria-hidden="true" />3 aulas, tela por tela</li>
-        <li><Check aria-hidden="true" />Começa no plano grátis da ferramenta, sem cartão</li>
-        <li><Check aria-hidden="true" />Feito para usar junto com o Modo Editor</li>
+        {itens.map(i => <li key={i}><Check aria-hidden="true" />{i}</li>)}
       </ul>
       <div className="clone-preco">
         {precoDe > preco && <s className="clone-preco-de">de {brl(precoDe)}</s>}
-        <strong>{brl(preco)}</strong><span>pagamento único, sem mensalidade</span>
+        <strong>{brl(preco)}</strong><span>{parcela > 0 ? <>ou 12x de {brl(parcela)} no cartão · </> : null}pagamento único, sem mensalidade</span>
       </div>
-      <a href="#oferta" className="clone-sim clone-sim-sobe">{textoBotao} <ArrowUp aria-hidden="true" /></a>
+      <a href={href} className={`clone-sim${sobe ? ' clone-sim-sobe' : ''}`} target={!sobe && href.includes('whatsapp') ? '_blank' : undefined} rel={!sobe ? 'noopener noreferrer' : undefined} onClick={e => aoClicar?.(e.currentTarget)}>{textoBotao} {sobe ? <ArrowUp aria-hidden="true" /> : <ArrowRight aria-hidden="true" />}</a>
       <p className="clone-garantia"><ShieldCheck aria-hidden="true" />7 dias de garantia. Se não gostar, você pede o reembolso.</p>
     </div>
   </section>;
