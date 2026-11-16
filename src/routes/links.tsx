@@ -1,12 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Check, MessageCircle } from 'lucide-react';
+import { ArrowRight, MessageCircle } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
 import { eventoProprio } from '@/lib/pixel';
 
 /* /links (16/11/2026): o link da bio do Instagram @mariano_creator. Um catálogo com os dois produtos, para quem chega
    pelo perfil escolher por onde começar: Modo Editor (página preta, /) e Modo Clone (página de vendas, /clone).
-   As UTMs de quem chegou passam adiante; sem UTM, o clique leva utm_source=instagram e utm_medium=bio. */
+   As UTMs de quem chegou passam adiante; sem UTM, o clique leva utm_source=instagram e utm_medium=bio.
+   16/11 (pedido dele, visto no celular): cada cartão = vídeo rodando + a capa quadrada do produto (sem texto explicando;
+   a capa já diz o nome), e vídeos diferentes: o do Editor é uma montagem de edições reais (3D, anatomia, antes e depois),
+   o do Clone é um vídeo feito pelo clone. A foto do topo é a mesma do outro perfil dele (blazer, rosto e ombros). */
 export const Route = createFileRoute('/links')({
   head: () => ({ meta: [
     { title: 'Mariano Rodrigues — Modo Editor e Modo Clone' },
@@ -21,27 +24,15 @@ export const Route = createFileRoute('/links')({
 type Produto = {
   id: 'editor' | 'clone';
   destino: string;
-  selo: string;
   nome: string;
-  promessa: [string, string];
-  itens: string[];
+  capa: string;
   botao: string;
   video: string;
 };
 
 const produtos: Produto[] = [
-  {
-    id: 'editor', destino: '/', selo: 'Edição com IA', nome: 'Modo Editor',
-    promessa: ['A IA edita os seus vídeos', 'como um profissional.'],
-    itens: ['Corta, legenda e põe na tela o que você explica', '3D, troca de fundo e antes e depois', 'Pagamento único, vídeos sem limite'],
-    botao: 'Conhecer o Modo Editor', video: '/videos/galeria/ilustracao.mp4',
-  },
-  {
-    id: 'clone', destino: '/clone', selo: 'Clone com IA', nome: 'Modo Clone',
-    promessa: ['O seu clone grava', 'os vídeos por você.'],
-    itens: ['Com o seu rosto e a sua voz', 'Você grava uma vez, depois é só escrever', 'Do zero ao primeiro vídeo, tela por tela'],
-    botao: 'Conhecer o Modo Clone', video: '/videos/clone/topo-clone.mp4',
-  },
+  { id: 'editor', destino: '/', nome: 'Modo Editor', capa: '/img/bio/capa-editor.webp', botao: 'Conhecer o Modo Editor', video: '/videos/bio/editor.mp4' },
+  { id: 'clone', destino: '/clone', nome: 'Modo Clone', capa: '/img/bio/capa-clone.webp', botao: 'Conhecer o Modo Clone', video: '/videos/clone/topo-clone.mp4' },
 ];
 
 /** Leva as UTMs de quem chegou para a página do produto; sem UTM, marca que veio da bio. */
@@ -70,12 +61,8 @@ function VideoCartao({ src }: { src: string }) {
 function Cartao({ p, href }: { p: Produto; href: string }) {
   return (
     <a className={`bio-cartao bio-${p.id}`} href={href} onClick={() => eventoProprio('Bio_Clique', { produto: p.nome }, false)}>
-      <div className="bio-tela"><VideoCartao src={p.video} /><span className="bio-selo">{p.selo}</span></div>
-      <div className="bio-texto">
-        <h2>{p.nome}</h2>
-        <p className="bio-promessa">{p.promessa[0]} <em>{p.promessa[1]}</em></p>
-        <ul>{p.itens.map(i => <li key={i}><Check aria-hidden="true" />{i}</li>)}</ul>
-      </div>
+      <div className="bio-tela"><VideoCartao src={p.video} /></div>
+      <img className="bio-capa" src={p.capa} alt={p.nome} width={640} height={640} />
       <span className="bio-botao">{p.botao} <ArrowRight aria-hidden="true" /></span>
     </a>
   );
@@ -90,7 +77,7 @@ function Links() {
     <div className="bio">
       <main className="bio-coluna">
         <header className="bio-topo">
-          <img className="bio-foto" src={siteConfig.creator.photo} alt={siteConfig.creator.name} width={88} height={88} />
+          <img className="bio-foto" src="/img/bio/perfil.webp" alt={siteConfig.creator.name} width={88} height={88} />
           <p className="bio-nome">{siteConfig.creator.name}</p>
           <h1>A nova produção de conteúdo <em>com IA.</em></h1>
           <p className="bio-sub">A IA edita os seus vídeos e o seu clone grava por você. Escolha por onde começar.</p>
