@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, MessageCircle } from 'lucide-react';
 import { siteConfig } from '@/lib/site-config';
 import { eventoProprio } from '@/lib/pixel';
@@ -10,8 +10,9 @@ import { eventoProprio } from '@/lib/pixel';
    16/11 (pedido dele, visto no celular): cada cartão = vídeo rodando + a capa quadrada do produto (sem texto explicando;
    a capa já diz o nome), e vídeos diferentes: o do Editor é uma montagem de edições reais (3D, anatomia, antes e depois),
    o do Clone é um vídeo feito pelo clone. A foto do topo é a mesma do outro perfil dele (blazer, rosto e ombros).
-   Capas v2 (16/11): MacBook realista com um programa de edição aberto (Editor) e dois bonecos, original e clone (Clone),
-   em camadas: o fundo fica parado e os objetos flutuam como o MacBook da página preta. */
+   v3 (16/11): as capas 3D e os vídeos saíram (vídeo de 116 px ninguém vê; objeto flutuando "não ficou legal"). Cada
+   cartão é a ARTE dele em 4:5 ocupando a largura toda (feita por ele num gerador de imagem, com os nossos prompts) e o
+   botão embaixo, só com o brilho passando (sem pulsar). */
 export const Route = createFileRoute('/links')({
   head: () => ({ meta: [
     { title: 'Mariano Rodrigues — Modo Editor e Modo Clone' },
@@ -27,16 +28,14 @@ type Produto = {
   id: 'editor' | 'clone';
   destino: string;
   nome: string;
-  /** a capa em camadas: o fundo parado (pedestal, nome e selo) e os objetos 3D por cima, flutuando (CSS) */
-  fundo: string;
-  camadas: string[];
+  /** a arte do produto, 4:5 (1080x1350) */
+  arte: string;
   botao: string;
-  video: string;
 };
 
 const produtos: Produto[] = [
-  { id: 'editor', destino: '/', nome: 'Modo Editor', fundo: '/img/bio/editor-fundo.jpg', camadas: ['/img/bio/editor-camada1.webp'], botao: 'Conhecer o Modo Editor', video: '/videos/bio/editor.mp4' },
-  { id: 'clone', destino: '/clone', nome: 'Modo Clone', fundo: '/img/bio/clone-fundo.jpg', camadas: ['/img/bio/clone-camada1.webp', '/img/bio/clone-camada2.webp'], botao: 'Conhecer o Modo Clone', video: '/videos/clone/topo-clone.mp4' },
+  { id: 'editor', destino: '/', nome: 'Modo Editor: você grava, a IA edita', arte: '/img/bio/arte-editor.webp', botao: 'Conhecer o Modo Editor' },
+  { id: 'clone', destino: '/clone', nome: 'Modo Clone: você escreve, o clone fala', arte: '/img/bio/arte-clone.webp', botao: 'Conhecer o Modo Clone' },
 ];
 
 /** Leva as UTMs de quem chegou para a página do produto; sem UTM, marca que veio da bio. */
@@ -49,27 +48,10 @@ function comUtm(destino: string) {
   return url.pathname + url.search;
 }
 
-/** Vídeo mudo em loop que só toca enquanto o cartão está na tela (no celular, um vídeo por vez). */
-function VideoCartao({ src }: { src: string }) {
-  const ref = useRef<HTMLVideoElement>(null);
-  useEffect(() => {
-    const v = ref.current;
-    if (!v || typeof IntersectionObserver === 'undefined') return;
-    const io = new IntersectionObserver(([e]) => { if (e?.isIntersecting) void v.play().catch(() => undefined); else v.pause(); }, { threshold: 0.35 });
-    io.observe(v);
-    return () => io.disconnect();
-  }, []);
-  return <video ref={ref} src={src} poster={src.replace(/\.mp4$/, '.webp')} muted loop playsInline preload="metadata" aria-hidden="true" />;
-}
-
 function Cartao({ p, href }: { p: Produto; href: string }) {
   return (
     <a className={`bio-cartao bio-${p.id}`} href={href} onClick={() => eventoProprio('Bio_Clique', { produto: p.nome }, false)}>
-      <div className="bio-tela"><VideoCartao src={p.video} /></div>
-      <div className="bio-capa" role="img" aria-label={p.nome}>
-        <img src={p.fundo} alt="" width={1000} height={1000} />
-        {p.camadas.map((c, i) => <img key={c} className={`bio-flutua bio-flutua-${i + 1}`} src={c} alt="" width={1000} height={1000} />)}
-      </div>
+      <img className="bio-arte" src={p.arte} alt={p.nome} width={1080} height={1350} />
       <span className="bio-botao">{p.botao} <ArrowRight aria-hidden="true" /></span>
     </a>
   );
