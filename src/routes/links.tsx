@@ -34,7 +34,7 @@ type Produto = {
 };
 
 const produtos: Produto[] = [
-  { id: 'editor', destino: '/', nome: 'Modo Editor: você grava, a IA edita', arte: '/img/bio/arte-editor.webp', botao: 'Conhecer o Modo Editor' },
+  { id: 'editor', destino: '/', nome: 'Modo Editor: você grava, a IA edita', arte: '/img/bio/arte-editor-v2.webp', botao: 'Conhecer o Modo Editor' },
   { id: 'clone', destino: '/clone', nome: 'Modo Clone: você escreve, o clone fala', arte: '/img/bio/arte-clone.webp', botao: 'Conhecer o Modo Clone' },
 ];
 
