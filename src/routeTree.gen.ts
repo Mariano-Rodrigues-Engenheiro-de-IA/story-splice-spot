@@ -17,6 +17,8 @@ import { Route as ObrigadoRouteImport } from './routes/obrigado'
 import { Route as ProRouteImport } from './routes/pro'
 import { Route as Pro2RouteImport } from './routes/pro2'
 import { Route as UltimaChanceRouteImport } from './routes/ultima-chance'
+import { Route as CatalogoIndexRouteImport } from './routes/catalogo.index'
+import { Route as CatalogoNumeroRouteImport } from './routes/catalogo.$numero'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,6 +60,16 @@ const UltimaChanceRoute = UltimaChanceRouteImport.update({
   path: '/ultima-chance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogoIndexRoute = CatalogoIndexRouteImport.update({
+  id: '/catalogo/',
+  path: '/catalogo/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogoNumeroRoute = CatalogoNumeroRouteImport.update({
+  id: '/catalogo/$numero',
+  path: '/catalogo/$numero',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +80,8 @@ export interface FileRoutesByFullPath {
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
   '/ultima-chance': typeof UltimaChanceRoute
+  '/catalogo/$numero': typeof CatalogoNumeroRoute
+  '/catalogo/': typeof CatalogoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +92,8 @@ export interface FileRoutesByTo {
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
   '/ultima-chance': typeof UltimaChanceRoute
+  '/catalogo/$numero': typeof CatalogoNumeroRoute
+  '/catalogo': typeof CatalogoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +105,8 @@ export interface FileRoutesById {
   '/pro': typeof ProRoute
   '/pro2': typeof Pro2Route
   '/ultima-chance': typeof UltimaChanceRoute
+  '/catalogo/$numero': typeof CatalogoNumeroRoute
+  '/catalogo/': typeof CatalogoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +119,8 @@ export interface FileRouteTypes {
     | '/pro'
     | '/pro2'
     | '/ultima-chance'
+    | '/catalogo/$numero'
+    | '/catalogo/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +131,8 @@ export interface FileRouteTypes {
     | '/pro'
     | '/pro2'
     | '/ultima-chance'
+    | '/catalogo/$numero'
+    | '/catalogo'
   id:
     | '__root__'
     | '/'
@@ -121,6 +143,8 @@ export interface FileRouteTypes {
     | '/pro'
     | '/pro2'
     | '/ultima-chance'
+    | '/catalogo/$numero'
+    | '/catalogo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +156,8 @@ export interface RootRouteChildren {
   ProRoute: typeof ProRoute
   Pro2Route: typeof Pro2Route
   UltimaChanceRoute: typeof UltimaChanceRoute
+  CatalogoNumeroRoute: typeof CatalogoNumeroRoute
+  CatalogoIndexRoute: typeof CatalogoIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +218,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UltimaChanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/catalogo/': {
+      id: '/catalogo/'
+      path: '/catalogo'
+      fullPath: '/catalogo/'
+      preLoaderRoute: typeof CatalogoIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogo/$numero': {
+      id: '/catalogo/$numero'
+      path: '/catalogo/$numero'
+      fullPath: '/catalogo/$numero'
+      preLoaderRoute: typeof CatalogoNumeroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +244,8 @@ const rootRouteChildren: RootRouteChildren = {
   ProRoute: ProRoute,
   Pro2Route: Pro2Route,
   UltimaChanceRoute: UltimaChanceRoute,
+  CatalogoNumeroRoute: CatalogoNumeroRoute,
+  CatalogoIndexRoute: CatalogoIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
