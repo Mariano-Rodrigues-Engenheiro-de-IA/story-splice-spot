@@ -63,7 +63,9 @@ export const siteConfig = {
        revelarEm 30 = o combinado dele (14/11): o Sim e o resto aparecem com uns 30 s de recado. Eu tinha posto 131 (o ponto do
        preço) sem perguntar, e ele assistiu quase até o fim sem ver o botão: NÃO mudar sem o ok dele. */
     upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '/videos/clone/recado.mp4' as string, vslPoster: '/videos/clone/recado.webp' as string, revelarEm: 30, revelarMaximo: 30 },
-    downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, vsl: '' as string, vslPoster: '' as string },
+    /* /ultima-chance SEM vídeo (decisão dele, 16/11): oferta só com texto e a capa. installmentValue = a parcela que a Kiwify
+       mostra para esta oferta (12x R$ 6,93, conferida em 13/11). */
+    downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, installmentValue: 6.93 },
     downsellUrl: '/ultima-chance',
     /** /clone (16/11): a página de vendas do Modo Clone, vendido sozinho (link da bio do @mariano_creator e anúncios).
      *  `checkoutUrl`: o link de checkout normal do produto Modo Clone na Kiwify (pay.kiwify.com.br/...). Vazio = o botão
