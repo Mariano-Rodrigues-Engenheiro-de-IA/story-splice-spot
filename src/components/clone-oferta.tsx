@@ -47,7 +47,9 @@ export function Progresso({ passo }: { passo: 2 | 3 }) {
  *  Nada de play que não faz nada (13/11: a moldura vazia confundia quem acabou de comprar). */
 export const VIDEO_TOPO = '/videos/clone/topo-clone.mp4';
 export function MidiaClone({ vsl, poster, aviso }: { vsl: string; poster: string; aviso?: string }) {
-  if (vsl) return <div className="clone-video"><VslPlayer src={vsl} poster={poster || undefined} /></div>;
+  // o recado de verdade (16/11): o player do vídeo de vendas, com o ponto onde parou guardado só para este vídeo e o
+  // cartão de som no visual desta página (sem desfocar o vídeo, embaixo, para o rosto e a legenda do clone aparecerem)
+  if (vsl) return <div className="clone-video clone-vsl"><VslPlayer src={vsl} poster={poster || undefined} chave={`vsl-posicao:${vsl}`} aviso={[aviso ?? 'Seu recado já começou', 'Toque para ouvir']} /></div>;
   return <VideoDoClone aviso={aviso} />;
 }
 
@@ -96,22 +98,26 @@ function VideoDoClone({ aviso = 'Seu recado já começou' }: { aviso?: string | 
 /** Revela o resto da página depois de `segundos` de recado ASSISTIDO (pedido dele, 14/11: pelo menos 30 s sem preço; conta
  *  o tempo tocando, porque o vídeo provisório tem 15 s e repete). Plano B: se o vídeo não estiver tocando (sem autoplay,
  *  modo pouca energia), revela com `maximo` segundos de página; e nunca passa de `segundos` + 40 s de página. Quem já viu
- *  (recarregou) vê tudo de cara. */
-export function useRevelarDepoisDoRecado(segundos: number, maximo: number) {
+ *  (recarregou) vê tudo de cara.
+ *  `peloTempoDoVideo` (o recado de verdade, 16/11): revela quando o VÍDEO chega em `segundos` (o ponto em que o clone fala
+ *  o preço). Contar tempo tocando adiantaria o botão: o vídeo começa mudo e volta ao zero quando a pessoa liga o som. */
+export function useRevelarDepoisDoRecado(segundos: number, maximo: number, peloTempoDoVideo = false) {
   const [revelado, setRevelado] = useState(segundos <= 0);
   useEffect(() => {
     if (segundos <= 0) return;
     try { if (sessionStorage.getItem('clone-revelado') === '1') { setRevelado(true); return; } } catch { /* sem armazenamento: segue */ }
     const inicio = performance.now();
-    let antes = inicio, assistido = 0;
+    let antes = inicio, assistido = 0, ponto = 0;
     const id = window.setInterval(() => {
       const agora = performance.now();
       const v = document.querySelector<HTMLVideoElement>('.clone-dobra .clone-video video');
       const tocando = !!v && !v.paused && !v.ended && v.readyState > 2;
       if (tocando) assistido += (agora - antes) / 1000;
+      if (v && v.readyState >= 1) ponto = Math.max(ponto, v.currentTime);
       antes = agora;
       const pagina = (agora - inicio) / 1000;
-      const como = assistido >= segundos ? 'recado' : !tocando && assistido < 1 && pagina >= maximo ? 'sem-video' : pagina >= segundos + 40 ? 'teto' : '';
+      const visto = peloTempoDoVideo ? ponto : assistido;
+      const como = visto >= segundos ? 'recado' : !tocando && assistido < 1 && pagina >= maximo ? 'sem-video' : pagina >= segundos + (peloTempoDoVideo ? 90 : 40) ? 'teto' : '';
       if (!como) return;
       window.clearInterval(id);
       setRevelado(true);
@@ -119,7 +125,7 @@ export function useRevelarDepoisDoRecado(segundos: number, maximo: number) {
       eventoProprio('Upsell_Revelou', { como });
     }, 400);
     return () => window.clearInterval(id);
-  }, [segundos, maximo]);
+  }, [segundos, maximo, peloTempoDoVideo]);
   return revelado;
 }
 

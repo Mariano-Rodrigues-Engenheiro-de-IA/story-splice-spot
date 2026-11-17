@@ -10,16 +10,16 @@ const CHAVE = 'vsl-posicao';
 /** Progresso exibido: anda rápido no começo e desacelera (a pessoa não vê quanto falta). */
 const progressoVisivel = (x: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 2.2);
 
-function lerPosicao(): number {
+function lerPosicao(chave = CHAVE): number {
   try {
-    return Number(window.localStorage.getItem(CHAVE)) || 0;
+    return Number(window.localStorage.getItem(chave)) || 0;
   } catch {
     return 0;
   }
 }
-function gravarPosicao(t: number) {
+function gravarPosicao(t: number, chave = CHAVE) {
   try {
-    window.localStorage.setItem(CHAVE, String(Math.floor(t)));
+    window.localStorage.setItem(chave, String(Math.floor(t)));
   } catch {
     /* navegador sem armazenamento: só não retoma */
   }
@@ -33,7 +33,10 @@ function videoNaTela(el: HTMLElement): boolean {
   return visivel >= r.height * 0.5;
 }
 
-export function VslPlayer({ src, poster }: { src: string; poster?: string | undefined }) {
+/** `chave`: onde fica guardado o ponto em que a pessoa parou. Cada vídeo precisa da sua: com a mesma chave, quem viu o
+ *  vídeo de vendas da página principal chegava na /obrigado com "Você já começou a assistir este vídeo".
+ *  `aviso`: os textos do cartão de som (o padrão é o da página principal). */
+export function VslPlayer({ src, poster, chave = CHAVE, aviso = ['Seu vídeo já começou', 'Clique para ouvir'] }: { src: string; poster?: string | undefined; chave?: string; aviso?: [string, string] }) {
   const ref = useRef<HTMLVideoElement>(null);
   const caixa = useRef<HTMLDivElement>(null);
   const [fase, setFase] = useState<Fase>('mudo');
@@ -47,7 +50,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
     const v = ref.current;
     if (!v) return;
     // só oferece retomar se a posição salva cabe no vídeo atual (uma versão antiga do vídeo podia ser mais longa)
-    const confere = () => { const p = lerPosicao(); if (p > 8 && (!v.duration || p < v.duration - 5)) setFase(f => (f === 'mudo' ? 'retomar' : f)); else if (p > 8) gravarPosicao(0); };
+    const confere = () => { const p = lerPosicao(chave); if (p > 8 && (!v.duration || p < v.duration - 5)) setFase(f => (f === 'mudo' ? 'retomar' : f)); else if (p > 8) gravarPosicao(0, chave); };
     if (v.readyState >= 1) confere(); else v.addEventListener('loadedmetadata', confere, { once: true });
     const tempo = () => {
       if (!v.duration) return;
@@ -57,13 +60,13 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
         for (const m of [25, 50, 75]) if (x >= m / 100) eventoProprio(`VSL_${m}`); // retenção (com som)
         if (Math.abs(v.currentTime - salva.current) > 2) {
           salva.current = v.currentTime;
-          gravarPosicao(v.currentTime);
+          gravarPosicao(v.currentTime, chave);
         }
       }
     };
     const fim = () => {
       if (v.muted) return;
-      gravarPosicao(0);
+      gravarPosicao(0, chave);
       eventoProprio('VSL_Concluiu');
       setFase('fim');
     };
@@ -73,7 +76,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
       v.removeEventListener('timeupdate', tempo);
       v.removeEventListener('ended', fim);
     };
-  }, []);
+  }, [chave]);
 
   const tocarComSom = (de: number) => {
     const v = ref.current;
@@ -115,7 +118,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
       const f = faseAtual.current;
       if (f !== 'mudo' && f !== 'retomar') return;
       if (!videoNaTela(c)) return; // rolou para baixo: não liga o som com a pessoa longe do vídeo
-      const de = f === 'retomar' ? Math.max(0, lerPosicao() - 2) : 0;
+      const de = f === 'retomar' ? Math.max(0, lerPosicao(chave) - 2) : 0;
       somAtivado.current = true;
       v.loop = false;
       v.muted = false;
@@ -146,7 +149,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
     document.addEventListener('pointerup', tocou, opcoes);
     document.addEventListener('keydown', tocou, opcoes);
     return desligar;
-  }, []);
+  }, [chave]);
 
   const cliqueNoVideo = () => {
     const v = ref.current;
@@ -171,9 +174,9 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
 
       {fase === 'mudo' && (
         <button type="button" className="vsl-som" onClick={() => tocarComSom(0)} aria-label="Ativar o som do vídeo">
-          <span className="vsl-som-topo">Seu vídeo já começou</span>
+          <span className="vsl-som-topo">{aviso[0]}</span>
           <span className="vsl-som-icone"><VolumeX /></span>
-          <span className="vsl-som-acao">Clique para ouvir</span>
+          <span className="vsl-som-acao">{aviso[1]}</span>
         </button>
       )}
 
@@ -187,7 +190,7 @@ export function VslPlayer({ src, poster }: { src: string; poster?: string | unde
       {fase === 'retomar' && (
         <div className="vsl-retomar">
           <p>Você já começou a assistir este vídeo</p>
-          <button type="button" onClick={() => tocarComSom(Math.max(0, lerPosicao() - 2))}><Play />Continuar de onde parei</button>
+          <button type="button" onClick={() => tocarComSom(Math.max(0, lerPosicao(chave) - 2))}><Play />Continuar de onde parei</button>
           <button type="button" className="vsl-retomar-inicio" onClick={() => tocarComSom(0)}><RotateCcw />Assistir do início</button>
         </div>
       )}

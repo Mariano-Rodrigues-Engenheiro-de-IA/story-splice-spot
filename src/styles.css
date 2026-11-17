@@ -2608,3 +2608,15 @@ html:has(.geral) { scroll-padding-top: 0; }
 .clone-vendas .clone-topo .clone-titulo-grande { margin: 0 auto; }
 .clone-vendas .clone-recado-sub { margin: 10px auto 16px; }
 .clone-vendas-cta { display: flex; align-items: center; justify-content: center; max-width: 336px; margin: 18px auto 0; text-decoration: none; }
+
+/* 16/11: o recado de verdade (/obrigado) no player do vídeo de vendas, com o MESMO visual do vídeo provisório (pedido dele,
+   14/11): sem som, o vídeo fica desfocado e um pouco escuro, com o aviso roxo sólido no centro; com som, fica nítido. */
+.clone-vsl { container-type: inline-size; }
+.clone-vsl .vsl video { transition: filter .35s ease, transform .35s ease; }
+.clone-vsl .vsl[data-som="nao"] video { filter: blur(9px) brightness(.72); transform: scale(1.1); }
+.clone-vsl .vsl-som { inset: auto; top: 55%; left: 50%; z-index: 1; margin: 0; width: min(88%, 230px); height: auto; gap: 8px; padding: 16px 14px 15px; border: 1px solid rgba(255, 255, 255, .28); border-radius: 20px; background: linear-gradient(160deg, #9b37f2, #6d10c4); transform: translate(-50%, -50%); box-shadow: 0 18px 44px rgba(0, 0, 0, .55); animation: none; -webkit-tap-highlight-color: transparent; }
+.clone-vsl .vsl-som-topo { color: rgba(255, 255, 255, .88); font-size: 13px; font-weight: 500; line-height: 1.2; }
+.clone-vsl .vsl-som-icone { width: 52px; height: 52px; border-radius: 50%; background: #fff; color: #7a12d4; animation: clone-halo 2s ease-in-out infinite; }
+.clone-vsl .vsl-som-icone svg { width: 24px; height: 24px; stroke-width: 2; }
+.clone-vsl .vsl-som-acao { font-size: 17px; font-weight: 700; line-height: 1.15; }
+@container (max-width: 230px) { .clone-vsl .vsl-som { gap: 6px; padding: 12px 10px; } .clone-vsl .vsl-som-topo { font-size: 11.5px; } .clone-vsl .vsl-som-acao { font-size: 15px; } .clone-vsl .vsl-som-icone { width: 42px; height: 42px; } }
