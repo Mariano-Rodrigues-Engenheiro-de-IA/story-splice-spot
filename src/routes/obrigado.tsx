@@ -18,12 +18,11 @@ function Obrigado() {
   const { price, kiwifyCodigo, vsl, vslPoster, revelarEm, revelarMaximo } = siteConfig.clone.upsell;
   useScriptKiwify(kiwifyCodigo, 'obrigado');
   // o Sim, as parcelas e o resto da página só aparecem depois do recado (o "não" fica sempre à vista)
-  // com o recado de verdade, aparecem quando o vídeo chega no preço (revelarEm)
-  const revelado = useRevelarDepoisDoRecado(revelarEm, revelarMaximo, !!vsl);
+  const revelado = useRevelarDepoisDoRecado(revelarEm, revelarMaximo);
 
   return <div className="page geral clone-pagina">
     {/* 1ª dobra (pedido dele, 14/11): o aviso, a compra aprovada, o título em 2 linhas numa fonte só, o vídeo e o "não";
-        o "Sim" e o resto aparecem quando o clone fala o preço (16/11, revelarEm). O fundo de vídeo desfocado saiu ("borrão", reprovado). */}
+        o "Sim" e o resto aparecem depois de 30 s de recado (revelarEm). O fundo de vídeo desfocado saiu ("borrão", reprovado). */}
     <header className="clone-dobra">
       <Progresso passo={2} />
       <section className="clone-topo clone-col-dobra" id="oferta" aria-labelledby="clone-titulo">

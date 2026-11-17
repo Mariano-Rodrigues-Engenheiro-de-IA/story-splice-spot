@@ -60,9 +60,9 @@ export const siteConfig = {
      *  se o vídeo não estiver tocando (sem som e sem autoplay, modo pouca energia), mostra tudo mesmo assim. O "não" fica
      *  à vista desde o começo. 0 em `revelarEm` = mostra tudo de cara. */
     /* 16/11: o recado de verdade (2:58, falado pelo clone, editado; master em modo-clone-kiwify/recado-upsell/final).
-       revelarEm 131 = 2:11, quando o clone diz "Aqui, nesta página, o Modo Clone sai por R$ 97" (o R$ 97 é falado em 2:13,5
-       e o cartão do preço entra em 2:13,7); ele pede o toque no botão em 2:41. Agora conta o ponto do VÍDEO, não o tempo tocando. */
-    upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '/videos/clone/recado.mp4' as string, vslPoster: '/videos/clone/recado.webp' as string, revelarEm: 131, revelarMaximo: 30 },
+       revelarEm 30 = o combinado dele (14/11): o Sim e o resto aparecem com uns 30 s de recado. Eu tinha posto 131 (o ponto do
+       preço) sem perguntar, e ele assistiu quase até o fim sem ver o botão: NÃO mudar sem o ok dele. */
+    upsell: { price: 97, kiwifyCodigo: 'sIdHoBB' as string, vsl: '/videos/clone/recado.mp4' as string, vslPoster: '/videos/clone/recado.webp' as string, revelarEm: 30, revelarMaximo: 30 },
     downsell: { price: 67, kiwifyCodigo: '88iQ0d2' as string, vsl: '' as string, vslPoster: '' as string },
     downsellUrl: '/ultima-chance',
     /** /clone (16/11): a página de vendas do Modo Clone, vendido sozinho (link da bio do @mariano_creator e anúncios).

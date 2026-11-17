@@ -99,9 +99,9 @@ function VideoDoClone({ aviso = 'Seu recado já começou' }: { aviso?: string | 
  *  o tempo tocando, porque o vídeo provisório tem 15 s e repete). Plano B: se o vídeo não estiver tocando (sem autoplay,
  *  modo pouca energia), revela com `maximo` segundos de página; e nunca passa de `segundos` + 40 s de página. Quem já viu
  *  (recarregou) vê tudo de cara.
- *  `peloTempoDoVideo` (o recado de verdade, 16/11): revela quando o VÍDEO chega em `segundos` (o ponto em que o clone fala
- *  o preço). Contar tempo tocando adiantaria o botão: o vídeo começa mudo e volta ao zero quando a pessoa liga o som. */
-export function useRevelarDepoisDoRecado(segundos: number, maximo: number, peloTempoDoVideo = false) {
+ *  16/11 (recado de verdade): vale o que chegar primeiro, o tempo tocando ou o ponto do vídeo (a pessoa pode pular para
+ *  frente ao "continuar de onde parei"), para o botão nunca ficar escondido. */
+export function useRevelarDepoisDoRecado(segundos: number, maximo: number) {
   const [revelado, setRevelado] = useState(segundos <= 0);
   useEffect(() => {
     if (segundos <= 0) return;
@@ -116,8 +116,8 @@ export function useRevelarDepoisDoRecado(segundos: number, maximo: number, peloT
       if (v && v.readyState >= 1) ponto = Math.max(ponto, v.currentTime);
       antes = agora;
       const pagina = (agora - inicio) / 1000;
-      const visto = peloTempoDoVideo ? ponto : assistido;
-      const como = visto >= segundos ? 'recado' : !tocando && assistido < 1 && pagina >= maximo ? 'sem-video' : pagina >= segundos + (peloTempoDoVideo ? 90 : 40) ? 'teto' : '';
+      const visto = Math.max(ponto, assistido);
+      const como = visto >= segundos ? 'recado' : !tocando && assistido < 1 && pagina >= maximo ? 'sem-video' : pagina >= segundos + 40 ? 'teto' : '';
       if (!como) return;
       window.clearInterval(id);
       setRevelado(true);
@@ -125,7 +125,7 @@ export function useRevelarDepoisDoRecado(segundos: number, maximo: number, peloT
       eventoProprio('Upsell_Revelou', { como });
     }, 400);
     return () => window.clearInterval(id);
-  }, [segundos, maximo, peloTempoDoVideo]);
+  }, [segundos, maximo]);
   return revelado;
 }
 
