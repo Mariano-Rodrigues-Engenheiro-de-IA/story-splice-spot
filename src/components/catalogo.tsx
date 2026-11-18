@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { Check, Copy, Layers, Maximize2, Play, Plus, Search, X } from 'lucide-react';
+import { Check, Copy, Layers, Maximize2, Plus, Search, X } from 'lucide-react';
 import { arquivosEstilo, estilos, gruposEstilo, montarPrompt, type Estilo, type GrupoEstilo, type Variante } from '@/lib/estilos';
 import { eventoProprio } from '@/lib/pixel';
 
@@ -187,9 +187,10 @@ export function Catalogo({ abrir }: { abrir?: string }) {
     <div className="cl">
       <header className="cl-barra">
         <div className="cl-marca">
-          {/* a logo do Modo Editor (a mesma da página de vendas e do favicon) */}
-          <span className="brand-icon cl-logo" aria-hidden="true"><Play /><span className="brand-dot" /></span>
-          <div><strong>Modo Editor</strong><span>Catálogo de Estilos</span></div>
+          {/* a logo oficial do Modo Editor (marca/modo-editor-logo-transparente-para-fundo-escuro.png, recortada) */}
+          <img className="cl-logo" src="/img/marca/modo-editor-logo.webp" width={342} height={72} alt="Modo Editor" />
+          <span className="cl-marca-sep" aria-hidden="true" />
+          <span className="cl-marca-nome">Catálogo de Estilos</span>
         </div>
       </header>
 

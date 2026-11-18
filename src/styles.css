@@ -2647,11 +2647,9 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl p { color: var(--cl-mudo); }
 .cl-barra { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 58px; padding: 0 16px; border-bottom: 1px solid var(--cl-borda); background: oklch(.13 .008 285 / .82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .cl-marca { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.cl-logo.brand-icon { flex: none; width: 30px; height: 30px; border-radius: 9px; color: #fff; }
-.cl-logo.brand-icon svg { width: 14px; height: 14px; }
-.cl-logo .brand-dot { border-color: var(--cl-fundo); }
-.cl-marca strong { display: block; font-size: 14px; font-weight: 700; line-height: 1.15; }
-.cl-marca span { display: block; color: var(--cl-mudo); font-size: 12px; line-height: 1.2; white-space: nowrap; }
+.cl-logo { display: block; flex: none; width: auto; height: 26px; }
+.cl-marca-sep { flex: none; width: 1px; height: 22px; background: var(--cl-borda); }
+.cl-marca-nome { overflow: hidden; color: var(--cl-mudo); font-size: 13.5px; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; }
 .cl-corpo { width: min(100%, 1120px); margin: 0 auto; padding: 20px 16px 40px; }
 .cl-titulo { display: flex; align-items: center; gap: 10px; }
 .cl-titulo h1 { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
