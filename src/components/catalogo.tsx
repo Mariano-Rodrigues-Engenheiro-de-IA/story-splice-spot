@@ -42,16 +42,29 @@ function VideoLoop({ src, poster }: { src: string; poster: string }) {
   return <video ref={ref} className="cl-loop" src={src} poster={poster} muted playsInline loop preload="none" aria-hidden="true" />;
 }
 
-/** Trava a rolagem da página e fecha com Esc enquanto uma janela está aberta. */
-function useJanela(aberta: boolean, fechar: () => void) {
+/** Enquanto uma janela (exemplo ou prompt) está aberta: trava a rolagem, fecha com Esc e fecha com o VOLTAR do
+    celular (uma entrada no histórico por janela aberta), em vez de sair do catálogo. */
+function useJanelaAberta(aberta: boolean, fecharTudo: () => void) {
+  const fechar = useRef(fecharTudo);
+  fechar.current = fecharTudo;
   useEffect(() => {
     if (!aberta) return;
     const antes = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    const tecla = (ev: KeyboardEvent) => { if (ev.key === 'Escape') fechar(); };
+    let peloVoltar = false;
+    window.history.pushState({ ...window.history.state, clJanela: true }, '');
+    const voltar = () => { peloVoltar = true; fechar.current(); };
+    const tecla = (ev: KeyboardEvent) => { if (ev.key === 'Escape') fechar.current(); };
+    window.addEventListener('popstate', voltar);
     window.addEventListener('keydown', tecla);
-    return () => { document.body.style.overflow = antes; window.removeEventListener('keydown', tecla); };
-  }, [aberta, fechar]);
+    return () => {
+      document.body.style.overflow = antes;
+      window.removeEventListener('popstate', voltar);
+      window.removeEventListener('keydown', tecla);
+      // fechou pelo X, pelo fundo ou pelo Esc: tira a entrada que a janela pôs no histórico
+      if (!peloVoltar && window.history.state?.clJanela) window.history.back();
+    };
+  }, [aberta]);
 }
 
 function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void }) {
@@ -75,12 +88,11 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
 }
 
 function Visualizador({ e, fechar, usar }: { e: Estilo; fechar: () => void; usar: () => void }) {
-  useJanela(true, fechar);
   const a = arquivosEstilo(e.id);
   return (
     <div className="cl-fundo cl-fundo-escuro" onClick={fechar}>
       <div className="cl-visor" role="dialog" aria-modal="true" aria-label={e.nome} onClick={ev => ev.stopPropagation()}>
-        <button type="button" className="cl-fechar" onClick={fechar} aria-label="Fechar"><X /></button>
+        <button type="button" className="cl-fechar" onClick={fechar} aria-label="Fechar" autoFocus><X /></button>
         <video className="cl-visor-video" src={a.som} poster={a.capa} controls autoPlay playsInline />
         <div className="cl-visor-pe">
           <h2>{e.nome}</h2>
@@ -92,7 +104,6 @@ function Visualizador({ e, fechar, usar }: { e: Estilo; fechar: () => void; usar
 }
 
 function FolhaPrompt({ e, disponiveis, fechar, linkCompra }: { e: Estilo; disponiveis: Estilo[]; fechar: () => void; linkCompra: string }) {
-  useJanela(true, fechar);
   const [variante, setVariante] = useState<Variante | undefined>(e.variantes?.[0]);
   const [extras, setExtras] = useState<string[]>([]);
   const [copiado, setCopiado] = useState(false);
@@ -119,7 +130,7 @@ function FolhaPrompt({ e, disponiveis, fechar, linkCompra }: { e: Estilo; dispon
         <div className="cl-alca" aria-hidden="true" />
         <div className="cl-folha-cabeca">
           <div><span className="cl-rotulo">Usar estilo</span><h2 id="cl-folha-titulo">{e.nome}</h2></div>
-          <button type="button" className="cl-fechar cl-fechar-claro" onClick={fechar} aria-label="Fechar"><X /></button>
+          <button type="button" className="cl-fechar cl-fechar-claro" onClick={fechar} aria-label="Fechar" autoFocus><X /></button>
         </div>
 
         {e.variantes ? (
@@ -182,6 +193,7 @@ export function Catalogo({ abrir }: { abrir?: string }) {
   const mostrados = lista.filter(e => (grupo === 'todos' || e.grupo === grupo) && (!termo || e.nome.toLowerCase().includes(termo)));
   const ver = (e: Estilo) => { setVendo(e); eventoProprio('Catalogo_Ver', { estilo: e.id }, false); };
   const usar = (e: Estilo) => { setVendo(null); setUsando(e); eventoProprio('Catalogo_Usar', { estilo: e.id }, false); };
+  useJanelaAberta(!!(vendo || usando), () => { setVendo(null); setUsando(null); });
 
   return (
     <div className="cl">
