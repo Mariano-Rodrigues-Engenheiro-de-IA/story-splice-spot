@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { Check, Clapperboard, Copy, Layers, Maximize2, Plus, Search, X } from 'lucide-react';
+import { Check, Copy, Layers, Maximize2, Play, Plus, Search, X } from 'lucide-react';
 import { arquivosEstilo, estilos, gruposEstilo, montarPrompt, type Estilo, type GrupoEstilo, type Variante } from '@/lib/estilos';
 import { eventoProprio } from '@/lib/pixel';
 
@@ -187,10 +187,10 @@ export function Catalogo({ abrir }: { abrir?: string }) {
     <div className="cl">
       <header className="cl-barra">
         <div className="cl-marca">
-          <span className="cl-logo" aria-hidden="true"><Clapperboard /></span>
+          {/* a logo do Modo Editor (a mesma da página de vendas e do favicon) */}
+          <span className="brand-icon cl-logo" aria-hidden="true"><Play /><span className="brand-dot" /></span>
           <div><strong>Modo Editor</strong><span>Catálogo de Estilos</span></div>
         </div>
-        <a className="cl-pegar" href={linkCompra} onClick={() => eventoProprio('Catalogo_Comprar', { estilo: 'barra' }, false)}>Pegar o Modo Editor</a>
       </header>
 
       <main className="cl-corpo">
