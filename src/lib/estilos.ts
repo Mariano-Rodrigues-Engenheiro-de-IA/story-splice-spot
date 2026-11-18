@@ -75,7 +75,9 @@ export const estilos: Estilo[] = [
     grupo: 'voce',
     instrucao: 'edição limpa e profissional: cortes nas pausas e nos erros, legenda discreta, luz, cor e som ajustados de leve e, só de vez em quando, um elemento simples na tela. Nada espalhafatoso.',
     temExemplo: true,
-    testado: false,
+    // 18/11: passou no teste em instalação limpa (rodada 3: só a ficha, sem ajuste à mão; ~2 min de processamento)
+    testado: true,
+    novo: true,
   },
   {
     id: 'dark',

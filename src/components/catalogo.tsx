@@ -193,6 +193,8 @@ export function Catalogo({ abrir }: { abrir?: string }) {
     if (e?.temExemplo) setVendo(e);
   }, [abrir, lista]);
 
+  // só mostra a aba de um grupo quando ele tem estilo liberado (sem aba "Dark" vazia)
+  const gruposVisiveis = gruposEstilo.filter(g => lista.some(e => e.grupo === g.id));
   const termo = busca.trim().toLowerCase();
   const mostrados = lista.filter(e => (grupo === 'todos' || e.grupo === grupo) && (!termo || e.nome.toLowerCase().includes(termo)));
   const ver = (e: Estilo) => { setVendo(e); eventoProprio('Catalogo_Ver', { estilo: e.id }, false); };
@@ -221,11 +223,11 @@ export function Catalogo({ abrir }: { abrir?: string }) {
             <Search aria-hidden="true" />
             <input type="search" value={busca} onChange={ev => setBusca(ev.target.value)} placeholder="Buscar estilo" aria-label="Buscar estilo" />
           </label>
-          <div className="cl-abas" role="tablist" aria-label="Tipo de estilo">
-            {[{ id: 'todos' as const, nome: 'Todos' }, ...gruposEstilo].map(g => (
+          {gruposVisiveis.length > 1 && <div className="cl-abas" role="tablist" aria-label="Tipo de estilo">
+            {[{ id: 'todos' as const, nome: 'Todos' }, ...gruposVisiveis].map(g => (
               <button key={g.id} type="button" role="tab" aria-selected={grupo === g.id} className={grupo === g.id ? 'ativo' : ''} onClick={() => setGrupo(g.id)}>{g.nome}</button>
             ))}
-          </div>
+          </div>}
         </div>
 
         {lista.length === 0 ? (
