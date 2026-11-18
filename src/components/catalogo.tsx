@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { Check, Copy, Layers, LayoutGrid, Maximize2, Plus, Search, X } from 'lucide-react';
+import { Check, Copy, Layers, Maximize2, Plus, Search, X } from 'lucide-react';
 import { arquivosEstilo, estilos, gruposEstilo, montarPrompt, type Estilo, type GrupoEstilo, type Variante } from '@/lib/estilos';
 import { eventoProprio } from '@/lib/pixel';
 
@@ -189,7 +189,7 @@ export function Catalogo({ abrir }: { abrir?: string }) {
         <div className="cl-marca">
           {/* a logo oficial do Modo Editor (marca/modo-editor-logo-transparente-para-fundo-escuro.png, recortada) */}
           <img className="cl-logo" src="/img/marca/modo-editor-logo.webp" width={342} height={72} alt="Modo Editor" />
-          <span className="cl-marca-nome"><LayoutGrid aria-hidden="true" />Catálogo de Estilos</span>
+          <span className="cl-marca-nome">Catálogo de Estilos</span>
         </div>
       </header>
 

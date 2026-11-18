@@ -2645,11 +2645,10 @@ html:has(.geral) { scroll-padding-top: 0; }
   min-height: 100svh; background: var(--cl-fundo); color: var(--cl-texto); font-family: var(--font-sans); }
 .cl h1, .cl h2, .cl h3 { color: var(--cl-texto); }
 .cl p { color: var(--cl-mudo); }
-.cl-barra { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 58px; padding: 0 16px; border-bottom: 1px solid var(--cl-borda); background: oklch(.13 .008 285 / .82); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
-.cl-marca { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.cl-logo { display: block; flex: none; width: auto; height: 26px; }
-.cl-marca-nome { display: inline-flex; align-items: center; gap: 6px; min-width: 0; padding: 6px 11px 6px 9px; border: 1px solid oklch(.62 .2 295 / .45); border-radius: 99px; background: linear-gradient(120deg, oklch(.55 .22 295 / .28), oklch(.45 .2 285 / .18)); color: oklch(.92 .06 300); font-size: 12.5px; font-weight: 700; letter-spacing: .01em; white-space: nowrap; box-shadow: inset 0 1px 0 oklch(1 0 0 / .08); }
-.cl-marca-nome svg { flex: none; width: 14px; height: 14px; color: oklch(.8 .14 300); }
+.cl-barra { display: flex; justify-content: center; padding: 18px 16px 14px; border-bottom: 1px solid var(--cl-borda); background: var(--cl-fundo); }
+.cl-marca { display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.cl-logo { display: block; width: auto; height: 30px; }
+.cl-marca-nome { color: var(--cl-mudo); font-size: 11.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; }
 .cl-corpo { width: min(100%, 1120px); margin: 0 auto; padding: 20px 16px 40px; }
 .cl-titulo { display: flex; align-items: center; gap: 10px; }
 .cl-titulo h1 { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
