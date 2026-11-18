@@ -15,6 +15,11 @@ export const Route = createFileRoute('/catalogo/')({
     { property: 'og:title', content: 'Catálogo de Estilos · Modo Editor' },
     { property: 'og:description', content: 'Escolha o estilo, copie o prompt e a IA edita o seu vídeo.' },
     { property: 'og:type', content: 'website' },
+    // a imagem que aparece quando o link é compartilhado (WhatsApp, Instagram): logo + 5 estilos
+    { property: 'og:image', content: 'https://modoeditor.zayloia.com/img/marca/catalogo-og.jpg' },
+    { property: 'og:image:width', content: '1200' },
+    { property: 'og:image:height', content: '630' },
+    { name: 'twitter:card', content: 'summary_large_image' },
   ] }),
   component: PaginaCatalogo,
 });

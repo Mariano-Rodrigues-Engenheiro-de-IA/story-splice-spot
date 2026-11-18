@@ -143,6 +143,10 @@ function FolhaPrompt({ e, disponiveis, fechar, linkCompra }: { e: Estilo; dispon
                 </button>
               ))}
             </div>
+            {/* o exemplo do tipo escolhido (quando existe), pequeno, para a pessoa ver a diferença antes de copiar */}
+            {variante?.exemplo
+              ? <video key={variante.exemplo} className="cl-variante" src={arquivosEstilo(variante.exemplo).loop} poster={arquivosEstilo(variante.exemplo).capa} muted autoPlay loop playsInline aria-label={`Exemplo: Dark ${variante.nome.toLowerCase()}`} />
+              : <p className="cl-variante-sem">Exemplo deste tipo em breve.</p>}
           </div>
         ) : outros.length > 0 && (
           <div className="cl-bloco">

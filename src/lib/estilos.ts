@@ -20,7 +20,8 @@ export const gruposEstilo: { id: GrupoEstilo; nome: string }[] = [
   { id: 'dark', nome: 'Dark' },
 ];
 
-export type Variante = { id: string; nome: string; instrucao: string };
+/** exemplo: id do vídeo curto em public/videos/catalogo/ (aparece na janela do Usar quando o tipo é escolhido) */
+export type Variante = { id: string; nome: string; instrucao: string; exemplo?: string };
 
 export type Estilo = {
   id: string;
@@ -49,7 +50,7 @@ export const estilos: Estilo[] = [
     nome: 'Imagens e vídeos',
     grupo: 'voce',
     instrucao: 'quando eu falar de algo que dá para mostrar, entra por cima um vídeo ou uma imagem real daquilo (em tela cheia ou recortado ao meu lado) e depois volta para mim. Busque em bancos gratuitos com licença de uso comercial e anote os créditos.',
-    temExemplo: false,
+    temExemplo: true,
     testado: false,
   },
   {
@@ -82,8 +83,8 @@ export const estilos: Estilo[] = [
     grupo: 'dark',
     instrucao: 'ninguém aparece, só a narração, e tudo o que é falado vira imagem na tela.',
     variantes: [
-      { id: 'imagens', nome: 'Com imagens e vídeos', instrucao: 'tudo o que é narrado aparece em imagens e vídeos, montados em colagem com movimento e com as palavras-chave na tela.' },
-      { id: 'desenho', nome: 'Em desenho', instrucao: 'tudo o que é narrado vai sendo desenhado na tela, em traço, como se alguém desenhasse a história enquanto ela é contada.' },
+      { id: 'imagens', nome: 'Com imagens e vídeos', exemplo: 'dark', instrucao: 'tudo o que é narrado aparece em imagens e vídeos, montados em colagem com movimento e com as palavras-chave na tela.' },
+      { id: 'desenho', nome: 'Em desenho', exemplo: 'dark-desenho', instrucao: 'tudo o que é narrado vai sendo desenhado na tela, em traço, como se alguém desenhasse a história enquanto ela é contada.' },
       { id: 'motion', nome: 'Com motion design', instrucao: 'tudo o que é narrado vira animação 2D: ícones, textos, gráficos e cenas simples.' },
     ],
     temExemplo: true,
