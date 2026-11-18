@@ -1,89 +1,125 @@
-/* Catálogo de Estilos do Modo Editor (17/11/2026, decisão dele): o aluno assiste, escolhe um estilo e pede à IA
-   "edita esse vídeo no estilo 01"; o Modo Editor tem uma ficha com a receita de cada número
-   (`biblioteca/catalogo-de-estilos.md` na skill). Fica aberto para todo mundo e também dentro do curso.
+/* Catálogo de Estilos do Modo Editor (17/11/2026). Biblioteca de estilos de EDIÇÃO (não de produção de vídeo):
+   a pessoa vê o exemplo, toca em "Usar", copia o prompt e manda para a IA junto com o vídeo. Os estilos são camadas
+   que se misturam (ex.: troca de fundo + motion design). O Dark tem variações.
 
-   REGRA (dele: "ele tem que funcionar"): um estilo só aparece na página depois de TESTADO numa instalação limpa, só
-   com o que o aluno recebe, editando uma gravação que não é a do exemplo. Enquanto `testado` for false, ele só aparece
-   com ?previa no endereço (para conferir antes de liberar). No teste, preencher `teste` com o que foi medido.
+   Regras dele (17/11): nome genérico (sem cor nem objeto: "Ilustração 3D", não "estúdio roxo com iPhone"), nada de
+   explicar demais na página; o texto que explica vai dentro do prompt.
 
-   Para pôr um estilo novo: copiar uma ficha abaixo com o próximo número e pôr os 3 arquivos em
-   public/videos/catalogo/ (NN-previa.mp4 = 5-6 s sem som em 360 px; NN.mp4 = exemplo com som em 720 px; NN.webp = capa). */
+   REGRA ("ele tem que funcionar"): um estilo só aparece para o público depois de TESTADO numa instalação limpa, só com
+   o que o aluno recebe, editando uma gravação que não é a do exemplo. Enquanto `testado` for false ele só aparece com
+   ?previa no endereço.
 
-export type TipoEstilo = 'falando' | 'sem-aparecer' | 'aula' | 'antes-depois' | 'anuncio';
+   Estilo novo: uma ficha abaixo + em public/videos/catalogo/ os arquivos <id>.mp4 (6-14 s sem som, 360x640),
+   <id>-som.mp4 (o mesmo com som, 720x1280) e <id>.webp (capa). A skill precisa da ficha com o mesmo nome em
+   biblioteca/estilos-catalogo/. */
 
-export const tiposEstilo: { id: TipoEstilo; nome: string }[] = [
-  { id: 'falando', nome: 'Você falando' },
-  { id: 'sem-aparecer', nome: 'Sem aparecer' },
-  { id: 'aula', nome: 'Aula e YouTube' },
-  { id: 'antes-depois', nome: 'Antes e depois' },
-  { id: 'anuncio', nome: 'Anúncio' },
+export type GrupoEstilo = 'voce' | 'dark';
+
+export const gruposEstilo: { id: GrupoEstilo; nome: string }[] = [
+  { id: 'voce', nome: 'Você aparece' },
+  { id: 'dark', nome: 'Dark' },
 ];
 
+export type Variante = { id: string; nome: string; instrucao: string };
+
 export type Estilo = {
-  /** o número que o aluno fala para a IA, com 2 dígitos */
-  numero: string;
+  id: string;
   nome: string;
-  tipo: TipoEstilo;
-  formato: '9:16' | '16:9';
-  /** uma frase: o que acontece na tela */
-  frase: string;
-  paraQuem: string;
-  voceGrava: string;
-  precisa: string;
-  /** quem aparece no exemplo */
-  feitoCom: 'voce' | 'clone';
+  grupo: GrupoEstilo;
+  /** o que a IA tem que fazer, em palavras simples (vai dentro do prompt) */
+  instrucao: string;
+  variantes?: Variante[];
+  /** false = ainda sem vídeo de exemplo */
+  temExemplo: boolean;
   testado: boolean;
-  /** o que o teste em instalação limpa mediu (aparece na ficha depois do teste) */
-  teste?: { tempo: string; observacao?: string };
   novo?: boolean;
 };
 
 export const estilos: Estilo[] = [
   {
-    numero: '01',
-    nome: 'Estúdio roxo com iPhone 3D',
-    tipo: 'falando',
-    formato: '9:16',
-    frase: 'Você num estúdio escuro de luz roxa, com frases grandes atrás da cabeça, iPhones 3D e objetos girando em volta enquanto fala.',
-    paraQuem: 'Anúncio, vídeo de vendas e Reels que precisam parar o dedo.',
-    voceGrava: 'Você falando para a câmera, em qualquer lugar. O estúdio entra no lugar do seu fundo.',
-    precisa: 'Um computador mais forte, porque tem 3D e troca de fundo.',
-    feitoCom: 'clone',
+    id: 'motion-design',
+    nome: 'Motion design',
+    grupo: 'voce',
+    instrucao: 'enquanto eu falo, aparecem na tela elementos animados em 2D ligados ao que eu digo (textos, ícones, listas, gráficos, setas, passos), nos momentos certos e sem cobrir o meu rosto.',
+    temExemplo: true,
     testado: false,
   },
   {
-    numero: '02',
-    nome: 'Você fala, a IA ilustra',
-    tipo: 'falando',
-    formato: '9:16',
-    frase: 'Cada coisa que você explica vira imagem na tela, no instante em que você fala: mapa, objeto 3D, gráfico, passo a passo.',
-    paraQuem: 'Quem explica no vídeo: saúde, professores, consultores, especialistas.',
-    voceGrava: 'Você explicando o assunto para a câmera.',
-    precisa: 'Um computador mais forte para as partes em 3D.',
-    feitoCom: 'clone',
+    id: 'imagens-e-videos',
+    nome: 'Imagens e vídeos',
+    grupo: 'voce',
+    instrucao: 'quando eu falar de algo que dá para mostrar, entra por cima um vídeo ou uma imagem real daquilo (em tela cheia ou recortado ao meu lado) e depois volta para mim. Busque em bancos gratuitos com licença de uso comercial e anote os créditos.',
+    temExemplo: false,
     testado: false,
   },
   {
-    numero: '03',
-    nome: 'Aula com painéis',
-    tipo: 'aula',
-    formato: '16:9',
-    frase: 'Aula calma: você de um lado e, do outro, painéis roxos com o passo a passo do que você está ensinando.',
-    paraQuem: 'Aulas, cursos, treinamentos e YouTube.',
-    voceGrava: 'Você dando a aula na webcam ou no celular deitado.',
-    precisa: 'Um computador comum.',
-    feitoCom: 'voce',
+    id: 'ilustracao-3d',
+    nome: 'Ilustração 3D',
+    grupo: 'voce',
+    instrucao: 'quando eu citar um objeto, um produto ou uma parte do corpo, aparece uma ilustração 3D realista dele na tela, no momento em que eu falo, sem cobrir o meu rosto.',
+    temExemplo: true,
+    testado: false,
+  },
+  {
+    id: 'troca-de-fundo',
+    nome: 'Troca de fundo',
+    grupo: 'voce',
+    instrucao: 'troque o fundo atrás de mim por um cenário bonito e realista, sem mexer na minha imagem. Se eu não disser qual cenário, me mostre 3 opções antes.',
+    temExemplo: true,
+    testado: false,
+  },
+  {
+    id: 'clean',
+    nome: 'Clean',
+    grupo: 'voce',
+    instrucao: 'edição limpa e profissional: cortes nas pausas e nos erros, legenda discreta, luz, cor e som ajustados de leve e, só de vez em quando, um elemento simples na tela. Nada espalhafatoso.',
+    temExemplo: true,
+    testado: false,
+  },
+  {
+    id: 'dark',
+    nome: 'Dark',
+    grupo: 'dark',
+    instrucao: 'ninguém aparece, só a narração, e tudo o que é falado vira imagem na tela.',
+    variantes: [
+      { id: 'imagens', nome: 'Com imagens e vídeos', instrucao: 'tudo o que é narrado aparece em imagens e vídeos, montados em colagem com movimento e com as palavras-chave na tela.' },
+      { id: 'desenho', nome: 'Em desenho', instrucao: 'tudo o que é narrado vai sendo desenhado na tela, em traço, como se alguém desenhasse a história enquanto ela é contada.' },
+      { id: 'motion', nome: 'Com motion design', instrucao: 'tudo o que é narrado vira animação 2D: ícones, textos, gráficos e cenas simples.' },
+    ],
+    temExemplo: true,
     testado: false,
   },
 ];
 
-export const arquivosEstilo = (numero: string) => ({
-  previa: `/videos/catalogo/${numero}-previa.mp4`,
-  video: `/videos/catalogo/${numero}.mp4`,
-  capa: `/videos/catalogo/${numero}.webp`,
+export const arquivosEstilo = (id: string) => ({
+  loop: `/videos/catalogo/${id}.mp4`,
+  som: `/videos/catalogo/${id}-som.mp4`,
+  capa: `/videos/catalogo/${id}.webp`,
 });
 
-/** a frase que o aluno manda para a IA junto com o vídeo */
-export const pedidoEstilo = (e: Estilo) => `Edita esse vídeo no estilo ${e.numero} do catálogo (${e.nome}).`;
+const PREVIA = 'Antes de fazer o vídeo inteiro, me mostre uma prévia de 10 segundos.';
 
-export const nomeTipo = (t: TipoEstilo) => tiposEstilo.find(x => x.id === t)?.nome ?? '';
+/** O prompt que a pessoa copia: um estilo, uma mistura de estilos ou o Dark numa variação. */
+export function montarPrompt(principal: Estilo, extras: Estilo[], variante?: Variante): string {
+  if (principal.grupo === 'dark') {
+    const v = variante ?? principal.variantes?.[0];
+    return [
+      `Faça um vídeo no estilo "Dark${v ? ` (${v.nome.toLowerCase()})` : ''}" do Catálogo de Estilos do Modo Editor, com a narração que eu vou te mandar.`,
+      `Como eu quero: ${principal.instrucao}${v ? ` ${v.instrucao.charAt(0).toUpperCase()}${v.instrucao.slice(1)}` : ''}`,
+      PREVIA,
+    ].join('\n\n');
+  }
+  if (extras.length === 0) {
+    return [
+      `Edite o vídeo que eu vou te mandar no estilo "${principal.nome}" do Catálogo de Estilos do Modo Editor.`,
+      `Como eu quero: ${principal.instrucao}`,
+      PREVIA,
+    ].join('\n\n');
+  }
+  const todos = [principal, ...extras];
+  return [
+    `Edite o vídeo que eu vou te mandar misturando estes estilos do Catálogo de Estilos do Modo Editor: ${todos.map(e => `"${e.nome}"`).join(' + ')}.`,
+    todos.map(e => `- ${e.nome}: ${e.instrucao}`).join('\n'),
+    PREVIA,
+  ].join('\n\n');
+}
