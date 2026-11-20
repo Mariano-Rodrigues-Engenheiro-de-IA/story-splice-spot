@@ -192,7 +192,6 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
             );
           })}
         </div>
-        <button type="button" className="cl-voltar cl-voltar-fim" onClick={voltar}><ArrowLeft aria-hidden="true" /> Voltar para todos os estilos</button>
       </div>
     </div>
   );

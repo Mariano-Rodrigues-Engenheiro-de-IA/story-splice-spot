@@ -2777,6 +2777,5 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-secao-hero-texto .cl-usar-grande { margin-top: 4px; }
 .cl-secao .cl-secao-hero-texto p.cl-secao-hero-nome { color: #fff; }
 .cl-secao .cl-secao-hero-texto p.cl-secao-hero-qtd { color: oklch(.86 .01 285); }
-/* 20/11: voltar fácil (botão roxo bem visível no topo e outro no fim da seção) */
+/* 20/11: voltar fácil (um botão só, roxo e bem visível no topo da seção) */
 .cl-secao-barra .cl-voltar { padding: 10px 14px; border: 1px solid oklch(.78 .13 300 / .5); background: oklch(.6 .22 295 / .22); color: #fff; font-size: 15px; font-weight: 700; }
-.cl-voltar-fim { display: flex; justify-content: center; width: 100%; max-width: 420px; margin: 26px auto 8px; padding: 13px 16px; border: 1px solid oklch(.78 .13 300 / .5); background: oklch(.6 .22 295 / .22); color: #fff; font-size: 15px; font-weight: 700; }
