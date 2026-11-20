@@ -80,6 +80,16 @@ export const estilos: Estilo[] = [
     novo: true,
   },
   {
+    id: 'motion-3d',
+    nome: 'Motion 3D',
+    grupo: 'dark',
+    instrucao: 'ninguém aparece, só a narração. Tudo o que é falado vira um objeto 3D grande e brilhante na cor da minha marca, num estúdio claro, um virando o outro no ritmo da fala e com a câmera sempre em movimento. Os objetos são criados do zero para o meu assunto e para o que o meu público precisa (me pergunte a minha profissão, o meu público, a cor da marca e o formato antes de começar).',
+    temExemplo: true,
+    // 19/11: passou no teste em instalação limpa (IA só com a skill, assunto novo: nutricionista; 27 min) e ele aprovou
+    testado: true,
+    novo: true,
+  },
+  {
     id: 'dark',
     nome: 'Dark',
     grupo: 'dark',
@@ -87,7 +97,7 @@ export const estilos: Estilo[] = [
     variantes: [
       { id: 'imagens', nome: 'Com imagens e vídeos', exemplo: 'dark', instrucao: 'tudo o que é narrado aparece em imagens e vídeos, montados em colagem com movimento e com as palavras-chave na tela.' },
       { id: 'desenho', nome: 'Em desenho', exemplo: 'dark-desenho', instrucao: 'tudo o que é narrado vai sendo desenhado na tela, em traço, como se alguém desenhasse a história enquanto ela é contada.' },
-      { id: 'motion', nome: 'Com motion design', instrucao: 'tudo o que é narrado vira animação 2D: ícones, textos, gráficos e cenas simples.' },
+      { id: 'motion', nome: 'Em motion 3D', exemplo: 'motion-3d', instrucao: 'tudo o que é narrado vira um objeto 3D grande na cor da minha marca, num estúdio claro, um virando o outro no ritmo da fala.' },
     ],
     temExemplo: true,
     testado: false,
@@ -107,7 +117,7 @@ export function montarPrompt(principal: Estilo, extras: Estilo[], variante?: Var
   if (principal.grupo === 'dark') {
     const v = variante ?? principal.variantes?.[0];
     return [
-      `Faça um vídeo no estilo "Dark${v ? ` (${v.nome.toLowerCase()})` : ''}" do Catálogo de Estilos do Modo Editor, com a narração que eu vou te mandar.`,
+      `Faça um vídeo no estilo "${principal.nome}${v ? ` (${v.nome.charAt(0).toLowerCase()}${v.nome.slice(1)})` : ''}" do Catálogo de Estilos do Modo Editor, com a narração que eu vou te mandar.`,
       `Como eu quero: ${principal.instrucao}${v ? ` ${v.instrucao.charAt(0).toUpperCase()}${v.instrucao.slice(1)}` : ''}`,
       PREVIA,
     ].join('\n\n');

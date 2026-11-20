@@ -107,7 +107,8 @@ function FolhaPrompt({ e, disponiveis, fechar, linkCompra }: { e: Estilo; dispon
   const [variante, setVariante] = useState<Variante | undefined>(e.variantes?.[0]);
   const [extras, setExtras] = useState<string[]>([]);
   const [copiado, setCopiado] = useState(false);
-  const outros = disponiveis.filter(x => x.grupo === 'voce' && x.id !== e.id);
+  // só os estilos em que a pessoa aparece se misturam (Dark e Motion 3D são só narração)
+  const outros = e.grupo === 'voce' ? disponiveis.filter(x => x.grupo === 'voce' && x.id !== e.id) : [];
   const escolhidos = outros.filter(x => extras.includes(x.id));
   const prompt = montarPrompt(e, escolhidos, variante);
 
@@ -171,7 +172,7 @@ function FolhaPrompt({ e, disponiveis, fechar, linkCompra }: { e: Estilo; dispon
         <button type="button" className={`cl-copiar ${copiado ? 'ok' : ''}`} onClick={copiar}>
           {copiado ? <><Check aria-hidden="true" /> Copiado</> : <><Copy aria-hidden="true" /> Copiar prompt</>}
         </button>
-        <p className="cl-dica">Cole na sua IA com o Modo Editor e mande o vídeo junto.</p>
+        <p className="cl-dica">{e.grupo === 'dark' ? 'Cole na sua IA com o Modo Editor e mande a narração junto (áudio ou texto).' : 'Cole na sua IA com o Modo Editor e mande o vídeo junto.'}</p>
         <p className="cl-nao-tem">Ainda não tem o Modo Editor? <a href={linkCompra} onClick={() => eventoProprio('Catalogo_Comprar', { estilo: e.id }, false)}>Conheça</a></p>
       </div>
     </div>
