@@ -2775,3 +2775,5 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-secao-hero-nome { margin: 0; color: #fff; font-size: clamp(32px, 8vw, 56px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; text-shadow: 0 4px 24px oklch(0 0 0 / .6); }
 .cl-secao-hero-qtd { margin: 0; color: oklch(.85 .01 285); font-size: 14px; font-weight: 600; }
 .cl-secao-hero-texto .cl-usar-grande { margin-top: 4px; }
+.cl-secao .cl-secao-hero-texto p.cl-secao-hero-nome { color: #fff; }
+.cl-secao .cl-secao-hero-texto p.cl-secao-hero-qtd { color: oklch(.86 .01 285); }
