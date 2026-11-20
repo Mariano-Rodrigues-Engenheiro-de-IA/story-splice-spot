@@ -43,7 +43,8 @@ export const estilos: Estilo[] = [
     grupo: 'voce',
     instrucao: 'enquanto eu falo, aparecem na tela elementos animados em 2D ligados ao que eu digo (textos, ícones, listas, gráficos, setas, passos), nos momentos certos e sem cobrir o meu rosto.',
     temExemplo: true,
-    testado: false,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
   },
   {
     id: 'imagens-e-videos',
@@ -51,7 +52,8 @@ export const estilos: Estilo[] = [
     grupo: 'voce',
     instrucao: 'quando eu falar de algo que dá para mostrar, entra por cima um vídeo ou uma imagem real daquilo (em tela cheia ou recortado ao meu lado) e depois volta para mim. Busque em bancos gratuitos com licença de uso comercial e anote os créditos.',
     temExemplo: true,
-    testado: false,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
   },
   {
     id: 'ilustracao-3d',
@@ -59,7 +61,8 @@ export const estilos: Estilo[] = [
     grupo: 'voce',
     instrucao: 'quando eu citar um objeto, um produto ou uma parte do corpo, aparece uma ilustração 3D realista dele na tela, no momento em que eu falo, sem cobrir o meu rosto.',
     temExemplo: true,
-    testado: false,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
   },
   {
     id: 'troca-de-fundo',
@@ -67,7 +70,8 @@ export const estilos: Estilo[] = [
     grupo: 'voce',
     instrucao: 'troque o fundo atrás de mim por um cenário bonito e realista, sem mexer na minha imagem. Se eu não disser qual cenário, me mostre 3 opções antes.',
     temExemplo: true,
-    testado: false,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
   },
   {
     id: 'clean',
@@ -100,7 +104,8 @@ export const estilos: Estilo[] = [
       { id: 'motion', nome: 'Em motion 3D', exemplo: 'motion-3d', instrucao: 'tudo o que é narrado vira um objeto 3D grande na cor da minha marca, num estúdio claro, um virando o outro no ritmo da fala.' },
     ],
     temExemplo: true,
-    testado: false,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
   },
 ];
 
