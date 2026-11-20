@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { Check, Copy, Layers, Maximize2, Plus, Search, X } from 'lucide-react';
-import { arquivosEstilo, estilos, gruposEstilo, montarPrompt, type Estilo, type GrupoEstilo, type Variante } from '@/lib/estilos';
+import { Check, ChevronLeft, ChevronRight, Copy, Layers, Maximize2, Plus, Search, X } from 'lucide-react';
+import { arquivosEstilo, estilos, montarPrompt, type Estilo, type Variante } from '@/lib/estilos';
 import { eventoProprio } from '@/lib/pixel';
 
 /* Catálogo de Estilos com cara de biblioteca/app (17/11/2026, pedido dele: "não é página de vendas, é catálogo,
@@ -77,6 +77,7 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
           : <span className="cl-sem"><Layers aria-hidden="true" /><span>Exemplo em breve</span></span>}
         {!e.testado && <span className="cl-teste">em teste</span>}
         {e.novo && <span className="cl-novo">Novo</span>}
+        {e.grupo === 'dark' && <span className="cl-dark">Dark</span>}
         {e.temExemplo && <span className="cl-ampliar" aria-hidden="true"><Maximize2 /></span>}
       </button>
       <div className="cl-card-pe">
@@ -88,14 +89,45 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
 }
 
 function Visualizador({ e, fechar, usar }: { e: Estilo; fechar: () => void; usar: () => void }) {
-  const a = arquivosEstilo(e.id);
+  // vários exemplos do mesmo estilo: setas, pontinhos e deslizar o dedo para o lado
+  const lista = e.exemplos?.length ? e.exemplos : [e.id];
+  const [i, setI] = useState(0);
+  const a = arquivosEstilo(lista[i] ?? e.id);
+  const ir = (d: number) => setI(k => (k + d + lista.length) % lista.length);
+  const toque = useRef<number | null>(null);
+  const varios = lista.length > 1;
   return (
     <div className="cl-fundo cl-fundo-escuro" onClick={fechar}>
       <div className="cl-visor" role="dialog" aria-modal="true" aria-label={e.nome} onClick={ev => ev.stopPropagation()}>
         <button type="button" className="cl-fechar" onClick={fechar} aria-label="Fechar" autoFocus><X /></button>
-        <video className="cl-visor-video" src={a.som} poster={a.capa} controls autoPlay playsInline />
+        <div
+          className="cl-visor-palco"
+          onTouchStart={ev => { toque.current = ev.touches[0]?.clientX ?? null; }}
+          onTouchEnd={ev => {
+            const x0 = toque.current;
+            toque.current = null;
+            const x1 = ev.changedTouches[0]?.clientX;
+            if (varios && x0 !== null && x1 !== undefined && Math.abs(x1 - x0) > 50) ir(x1 < x0 ? 1 : -1);
+          }}
+        >
+          <video key={a.som} className="cl-visor-video" src={a.som} poster={a.capa} controls autoPlay playsInline />
+          {varios && <>
+            <button type="button" className="cl-seta cl-seta-esq" onClick={() => ir(-1)} aria-label="Exemplo anterior"><ChevronLeft /></button>
+            <button type="button" className="cl-seta cl-seta-dir" onClick={() => ir(1)} aria-label="Próximo exemplo"><ChevronRight /></button>
+          </>}
+        </div>
+        {varios && (
+          <div className="cl-pontos" role="tablist" aria-label="Exemplos">
+            {lista.map((id, k) => (
+              <button key={id} type="button" role="tab" aria-selected={k === i} aria-label={`Exemplo ${k + 1} de ${lista.length}`} className={k === i ? 'ativo' : ''} onClick={() => setI(k)} />
+            ))}
+          </div>
+        )}
         <div className="cl-visor-pe">
-          <h2>{e.nome}</h2>
+          <div>
+            <h2>{e.nome}</h2>
+            {varios && <span className="cl-visor-conta">Exemplo {i + 1} de {lista.length}</span>}
+          </div>
           <button type="button" className="cl-usar cl-usar-grande" onClick={usar}>Usar este estilo</button>
         </div>
       </div>
@@ -183,7 +215,6 @@ export function Catalogo({ abrir }: { abrir?: string }) {
   const previa = usePrevia();
   const linkCompra = useLinkCompra();
   const lista = useMemo(() => estilos.filter(e => e.testado || previa), [previa]);
-  const [grupo, setGrupo] = useState<GrupoEstilo | 'todos'>('todos');
   const [busca, setBusca] = useState('');
   const [vendo, setVendo] = useState<Estilo | null>(null);
   const [usando, setUsando] = useState<Estilo | null>(null);
@@ -194,10 +225,9 @@ export function Catalogo({ abrir }: { abrir?: string }) {
     if (e?.temExemplo) setVendo(e);
   }, [abrir, lista]);
 
-  // só mostra a aba de um grupo quando ele tem estilo liberado (sem aba "Dark" vazia)
-  const gruposVisiveis = gruposEstilo.filter(g => lista.some(e => e.grupo === g.id));
   const termo = busca.trim().toLowerCase();
-  const mostrados = lista.filter(e => (grupo === 'todos' || e.grupo === grupo) && (!termo || e.nome.toLowerCase().includes(termo)));
+  // 20/11: todos os estilos lado a lado, sem abas (ainda são poucos)
+  const mostrados = lista.filter(e => !termo || e.nome.toLowerCase().includes(termo));
   const ver = (e: Estilo) => { setVendo(e); eventoProprio('Catalogo_Ver', { estilo: e.id }, false); };
   const usar = (e: Estilo) => { setVendo(null); setUsando(e); eventoProprio('Catalogo_Usar', { estilo: e.id }, false); };
   useJanelaAberta(!!(vendo || usando), () => { setVendo(null); setUsando(null); });
@@ -217,18 +247,13 @@ export function Catalogo({ abrir }: { abrir?: string }) {
           <h1>Estilos</h1>
           {lista.length > 0 && <span className="cl-conta">{lista.length}</span>}
         </div>
-        <p className="cl-sub">Escolha um estilo, toque em <b>Usar</b> e cole o prompt na sua IA com o vídeo.</p>
+        <p className="cl-sub">Escolha um estilo, toque em <b>Usar</b> e cole o prompt na sua IA com o vídeo. Nos estilos <b>Dark</b> ninguém aparece: mande a narração.</p>
 
         <div className="cl-ferramentas">
           <label className="cl-busca">
             <Search aria-hidden="true" />
             <input type="search" value={busca} onChange={ev => setBusca(ev.target.value)} placeholder="Buscar estilo" aria-label="Buscar estilo" />
           </label>
-          {gruposVisiveis.length > 1 && <div className="cl-abas" role="tablist" aria-label="Tipo de estilo">
-            {[{ id: 'todos' as const, nome: 'Todos' }, ...gruposVisiveis].map(g => (
-              <button key={g.id} type="button" role="tab" aria-selected={grupo === g.id} className={grupo === g.id ? 'ativo' : ''} onClick={() => setGrupo(g.id)}>{g.nome}</button>
-            ))}
-          </div>}
         </div>
 
         {lista.length === 0 ? (

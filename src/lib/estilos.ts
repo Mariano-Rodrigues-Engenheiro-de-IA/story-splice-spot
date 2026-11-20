@@ -34,14 +34,58 @@ export type Estilo = {
   temExemplo: boolean;
   testado: boolean;
   novo?: boolean;
+  /** exemplos vistos no visualizador, em ordem (ids em public/videos/catalogo/<id>-som.mp4 + <id>.webp). Sem isso: só o do próprio estilo */
+  exemplos?: string[];
 };
 
 export const estilos: Estilo[] = [
+  // 20/11 (pedido dele): todos lado a lado, sem abas; um cartão por estilo, sem repetir; os exemplos extras ficam no visualizador.
+  // Estilos só de narração (grupo "dark") levam a etiqueta "Dark" no cartão e não se misturam.
   {
-    id: 'motion-design',
-    nome: 'Motion design',
+    id: 'documentario',
+    nome: 'Documentário',
+    grupo: 'dark',
+    instrucao: 'ninguém aparece, só a narração. Uma mesa de investigador vista de cima, com papéis datilografados, objetos e um fio vermelho ligando tudo: a câmera passeia pela mesa sem cortar, e cada palavra importante é datilografada, circulada ou carimbada na hora em que é falada. No fim, a câmera recua e mostra a mesa inteira.',
+    temExemplo: true,
+    // 20/11: exemplo aprovado por ele (história da IA)
+    testado: true,
+    novo: true,
+  },
+  {
+    id: 'motion-3d',
+    nome: 'Motion 3D',
+    grupo: 'dark',
+    instrucao: 'ninguém aparece, só a narração. Tudo o que é falado vira um objeto 3D grande e brilhante na cor da minha marca, num estúdio claro, um virando o outro no ritmo da fala e com a câmera sempre em movimento. Os objetos são criados do zero para o meu assunto e para o que o meu público precisa (me pergunte a minha profissão, o meu público, a cor da marca e o formato antes de começar).',
+    temExemplo: true,
+    // 19/11: passou no teste em instalação limpa (IA só com a skill, assunto novo: nutricionista; 27 min) e ele aprovou
+    testado: true,
+    novo: true,
+    exemplos: ['motion-3d', 'motion-3d-c14'],
+  },
+  {
+    id: 'clean',
+    nome: 'Clean',
     grupo: 'voce',
-    instrucao: 'enquanto eu falo, aparecem na tela elementos animados em 2D ligados ao que eu digo (textos, ícones, listas, gráficos, setas, passos), nos momentos certos e sem cobrir o meu rosto.',
+    instrucao: 'edição limpa e profissional: cortes nas pausas e nos erros, legenda discreta, luz, cor e som ajustados de leve e, só de vez em quando, um elemento simples na tela. Nada espalhafatoso.',
+    temExemplo: true,
+    // 18/11: passou no teste em instalação limpa (rodada 3: só a ficha, sem ajuste à mão; ~2 min de processamento)
+    testado: true,
+  },
+  {
+    id: 'ilustracao-3d',
+    nome: 'Ilustração 3D',
+    grupo: 'voce',
+    instrucao: 'quando eu citar um objeto, um produto ou uma parte do corpo, aparece uma ilustração 3D realista dele na tela, no momento em que eu falo, sem cobrir o meu rosto.',
+    temExemplo: true,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
+    exemplos: ['ilustracao-3d', 'ilustracao-3d-c13', 'ilustracao-3d-c10'],
+  },
+  {
+    id: 'troca-de-fundo',
+    nome: 'Troca de fundo',
+    grupo: 'voce',
+    instrucao: 'troque o fundo atrás de mim por um cenário bonito e realista, sem mexer na minha imagem. Se eu não disser qual cenário, me mostre 3 opções antes.',
     temExemplo: true,
     // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
     testado: true,
@@ -56,53 +100,30 @@ export const estilos: Estilo[] = [
     testado: true,
   },
   {
-    id: 'ilustracao-3d',
-    nome: 'Ilustração 3D',
+    id: 'motion-design',
+    nome: 'Motion design',
     grupo: 'voce',
-    instrucao: 'quando eu citar um objeto, um produto ou uma parte do corpo, aparece uma ilustração 3D realista dele na tela, no momento em que eu falo, sem cobrir o meu rosto.',
+    instrucao: 'enquanto eu falo, aparecem na tela elementos animados em 2D ligados ao que eu digo (textos, ícones, listas, gráficos, setas, passos), nos momentos certos e sem cobrir o meu rosto.',
     temExemplo: true,
     // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
     testado: true,
   },
   {
-    id: 'troca-de-fundo',
-    nome: 'Troca de fundo',
-    grupo: 'voce',
-    instrucao: 'troque o fundo atrás de mim por um cenário bonito e realista, sem mexer na minha imagem. Se eu não disser qual cenário, me mostre 3 opções antes.',
-    temExemplo: true,
-    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
-    testado: true,
-  },
-  {
-    id: 'clean',
-    nome: 'Clean',
-    grupo: 'voce',
-    instrucao: 'edição limpa e profissional: cortes nas pausas e nos erros, legenda discreta, luz, cor e som ajustados de leve e, só de vez em quando, um elemento simples na tela. Nada espalhafatoso.',
-    temExemplo: true,
-    // 18/11: passou no teste em instalação limpa (rodada 3: só a ficha, sem ajuste à mão; ~2 min de processamento)
-    testado: true,
-    novo: true,
-  },
-  {
-    id: 'motion-3d',
-    nome: 'Motion 3D',
-    grupo: 'dark',
-    instrucao: 'ninguém aparece, só a narração. Tudo o que é falado vira um objeto 3D grande e brilhante na cor da minha marca, num estúdio claro, um virando o outro no ritmo da fala e com a câmera sempre em movimento. Os objetos são criados do zero para o meu assunto e para o que o meu público precisa (me pergunte a minha profissão, o meu público, a cor da marca e o formato antes de começar).',
-    temExemplo: true,
-    // 19/11: passou no teste em instalação limpa (IA só com a skill, assunto novo: nutricionista; 27 min) e ele aprovou
-    testado: true,
-    novo: true,
-  },
-  {
+    // o id continua "dark" (links de anúncio antigos: /catalogo?estilo=dark); era o tipo "com imagens e vídeos" do Dark
     id: 'dark',
-    nome: 'Dark',
+    nome: 'Colagem',
     grupo: 'dark',
-    instrucao: 'ninguém aparece, só a narração, e tudo o que é falado vira imagem na tela.',
-    variantes: [
-      { id: 'imagens', nome: 'Com imagens e vídeos', exemplo: 'dark', instrucao: 'tudo o que é narrado aparece em imagens e vídeos, montados em colagem com movimento e com as palavras-chave na tela.' },
-      { id: 'desenho', nome: 'Em desenho', exemplo: 'dark-desenho', instrucao: 'tudo o que é narrado vai sendo desenhado na tela, em traço, como se alguém desenhasse a história enquanto ela é contada.' },
-      { id: 'motion', nome: 'Em motion 3D', exemplo: 'motion-3d', instrucao: 'tudo o que é narrado vira um objeto 3D grande na cor da minha marca, num estúdio claro, um virando o outro no ritmo da fala.' },
-    ],
+    instrucao: 'ninguém aparece, só a narração. Tudo o que é narrado aparece em imagens e vídeos, montados em colagem com movimento e com as palavras-chave na tela.',
+    temExemplo: true,
+    // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
+    testado: true,
+  },
+  {
+    // era o tipo "em desenho" do Dark
+    id: 'dark-desenho',
+    nome: 'Desenho',
+    grupo: 'dark',
+    instrucao: 'ninguém aparece, só a narração. Tudo o que é narrado vai sendo desenhado na tela, em traço, como se alguém desenhasse a história enquanto ela é contada.',
     temExemplo: true,
     // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
     testado: true,

@@ -2677,6 +2677,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-teste, .cl-novo { position: absolute; top: 8px; left: 8px; padding: 3px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
 .cl-teste { background: oklch(.86 .15 85); color: oklch(.22 .05 80); }
 .cl-novo { left: auto; right: 8px; background: oklch(.83 .15 176); color: oklch(.2 .03 180); }
+.cl-dark { position: absolute; left: 8px; bottom: 8px; padding: 3px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; background: oklch(0 0 0 / .62); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .cl-ampliar { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: oklch(0 0 0 / .5); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .cl-ampliar svg { width: 15px; height: 15px; }
 .cl-card-pe { display: grid; gap: 8px; padding: 10px; }
@@ -2719,4 +2720,13 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-visor-video { display: block; width: auto; max-width: 100%; height: min(72svh, 760px); aspect-ratio: 9 / 16; border-radius: 16px; background: #000; }
 .cl-visor-pe { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; }
 .cl-visor-pe h2 { font-size: 20px; font-weight: 800; }
+.cl-visor-palco { position: relative; display: flex; justify-content: center; max-width: 100%; }
+.cl-seta { position: absolute; top: 50%; translate: 0 -50%; display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 999px; background: oklch(0 0 0 / .55); color: #fff; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.cl-seta svg { width: 22px; height: 22px; }
+.cl-seta-esq { left: 8px; }
+.cl-seta-dir { right: 8px; }
+.cl-pontos { display: flex; gap: 8px; justify-content: center; }
+.cl-pontos button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 999px; background: oklch(1 0 0 / .3); cursor: pointer; }
+.cl-pontos button.ativo { width: 22px; background: #fff; }
+.cl-visor-conta { display: block; margin-top: 2px; font-size: 12.5px; color: oklch(1 0 0 / .6); }
 .cl-usar-grande { height: 44px; padding: 0 18px; font-size: 15px; }
