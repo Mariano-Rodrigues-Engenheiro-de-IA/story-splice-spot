@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { ArrowLeft, Check, Copy, Layers, Maximize2, Play, Plus, Search, X } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Layers, Maximize2, Play, Search, X } from 'lucide-react';
 import { arquivosEstilo, estilos, montarPrompt, type Estilo, type Exemplo, type Variante } from '@/lib/estilos';
 import { eventoProprio } from '@/lib/pixel';
 
@@ -9,7 +9,7 @@ import { eventoProprio } from '@/lib/pixel';
    - cada estilo é uma SEÇÃO: o cartão mostra o melhor vídeo e quantos vídeos tem; tocar abre a seção com todos os
      vídeos lado a lado; tocar num vídeo toca com som; estilo com um vídeo só abre direto o vídeo;
    - cada vídeo tem um CÓDIGO (M3D-02...) que vai no prompt: o Modo Editor liga o código à receita exata daquele vídeo.
-   "Usar" abre a folha com o prompt para copiar (e, nos estilos em que a pessoa aparece, misturar com outros). */
+   "Usar" abre a folha com o prompt para copiar. A prévia de cada cartão toca o vídeo de exemplo INTEIRO (sem som). */
 
 /** ?previa no endereço mostra também os estilos que ainda não passaram no teste. */
 function usePrevia() {
@@ -156,7 +156,7 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
   return (
     <div className="cl-secao" role="dialog" aria-modal="true" aria-labelledby="cl-secao-titulo">
       <header className="cl-secao-barra">
-        <button type="button" className="cl-voltar" onClick={voltar} autoFocus><ArrowLeft aria-hidden="true" /> Estilos</button>
+        <button type="button" className="cl-voltar" onClick={voltar} autoFocus><ArrowLeft aria-hidden="true" /> Voltar</button>
         <div className="cl-secao-titulo">
           <h2 id="cl-secao-titulo">{e.nome}</h2>
           <span className="cl-conta">{e.exemplos.length}</span>
@@ -192,22 +192,18 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
             );
           })}
         </div>
+        <button type="button" className="cl-voltar cl-voltar-fim" onClick={voltar}><ArrowLeft aria-hidden="true" /> Voltar para todos os estilos</button>
       </div>
     </div>
   );
 }
 
-function FolhaPrompt({ e, codigo, disponiveis, fechar, linkCompra }: { e: Estilo; codigo: string; disponiveis: Estilo[]; fechar: () => void; linkCompra: string }) {
+function FolhaPrompt({ e, codigo, fechar, linkCompra }: { e: Estilo; codigo: string; fechar: () => void; linkCompra: string }) {
   const [variante, setVariante] = useState<Variante | undefined>(e.variantes?.[0]);
-  const [extras, setExtras] = useState<string[]>([]);
   const [copiado, setCopiado] = useState(false);
-  // só os estilos em que a pessoa aparece se misturam (os Dark são só narração)
-  const outros = e.grupo === 'voce' ? disponiveis.filter(x => x.grupo === 'voce' && x.id !== e.id) : [];
-  const escolhidos = outros.filter(x => extras.includes(x.id));
-  const prompt = montarPrompt(e, escolhidos, variante, codigo);
+  // 20/11 (ele): sem "Misturar com" (misturar estilos é mais uma dificuldade para a pessoa)
+  const prompt = montarPrompt(e, [], variante, codigo);
   const titulo = e.exemplos.find(x => x.codigo === codigo)?.titulo;
-
-  function alternar(id: string) { setExtras(l => l.includes(id) ? l.filter(x => x !== id) : [...l, id]); setCopiado(false); }
 
   async function copiar() {
     try { await navigator.clipboard.writeText(prompt); }
@@ -217,7 +213,7 @@ function FolhaPrompt({ e, codigo, disponiveis, fechar, linkCompra }: { e: Estilo
       try { document.execCommand('copy'); } finally { t.remove(); }
     }
     setCopiado(true);
-    eventoProprio('Catalogo_Copiar', { estilo: [e.id, ...extras].join('+'), codigo, variante: variante?.id ?? '' }, false);
+    eventoProprio('Catalogo_Copiar', { estilo: e.id, codigo, variante: variante?.id ?? '' }, false);
   }
 
   return (
@@ -244,21 +240,7 @@ function FolhaPrompt({ e, codigo, disponiveis, fechar, linkCompra }: { e: Estilo
               ))}
             </div>
           </div>
-        ) : outros.length > 0 && (
-          <div className="cl-bloco">
-            <p className="cl-rotulo">Misturar com <span>(opcional)</span></p>
-            <div className="cl-chips">
-              {outros.map(x => {
-                const on = extras.includes(x.id);
-                return (
-                  <button key={x.id} type="button" className={`cl-chip ${on ? 'ativo' : ''}`} aria-pressed={on} onClick={() => alternar(x.id)}>
-                    {on ? <Check aria-hidden="true" /> : <Plus aria-hidden="true" />}{x.nome}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+        ) : null}
 
         <div className="cl-bloco">
           <p className="cl-rotulo">Prompt</p>
@@ -356,7 +338,7 @@ export function Catalogo({ abrir }: { abrir?: string }) {
 
       {secao && <Secao e={secao} voltar={() => setSecao(null)} ver={(ex, n) => verVideo(secao, ex, n)} usar={ex => usar(secao, ex.codigo)} />}
       {vendo && <Visualizador e={vendo.e} ex={vendo.ex} {...(vendo.n ? { n: vendo.n } : {})} fechar={() => setVendo(null)} usar={() => usar(vendo.e, vendo.ex.codigo)} />}
-      {usando && <FolhaPrompt e={usando.e} codigo={usando.codigo} disponiveis={lista} fechar={() => setUsando(null)} linkCompra={linkCompra} />}
+      {usando && <FolhaPrompt e={usando.e} codigo={usando.codigo} fechar={() => setUsando(null)} linkCompra={linkCompra} />}
     </div>
   );
 }
