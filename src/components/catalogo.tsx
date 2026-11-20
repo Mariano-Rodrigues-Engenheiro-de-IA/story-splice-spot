@@ -84,23 +84,50 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
   const n = e.exemplos.length;
   return (
     <article className="cl-card">
-      <button type="button" className="cl-midia" onClick={ver} disabled={!e.temExemplo} aria-label={n > 1 ? `Ver os ${n} vídeos: ${e.nome}` : `Ver o exemplo: ${e.nome}`}>
+      <button type="button" className="cl-midia" onClick={ver} disabled={!e.temExemplo} aria-label={`Abrir o estilo ${e.nome} (${n} ${n > 1 ? 'vídeos' : 'vídeo'})`}>
         {e.temExemplo
           ? <VideoLoop src={a.loop} poster={a.capa} />
           : <span className="cl-sem"><Layers aria-hidden="true" /><span>Exemplo em breve</span></span>}
-        {!e.testado && <span className="cl-teste">em teste</span>}
-        {e.novo && <span className="cl-novo">Novo</span>}
-        {e.grupo === 'dark' && <span className="cl-dark">Dark</span>}
+        {/* o NOME do estilo, grande, em cima do vídeo */}
+        <h3 className="cl-card-titulo">{e.nome}</h3>
+        <span className="cl-etiquetas">
+          {!e.testado && <span className="cl-teste">em teste</span>}
+          {e.novo && <span className="cl-novo">Novo</span>}
+          {e.grupo === 'dark' && <span className="cl-dark">Dark</span>}
+        </span>
         {e.temExemplo && <span className="cl-ampliar" aria-hidden="true"><Maximize2 /></span>}
       </button>
       <div className="cl-card-pe">
-        <div className="cl-card-nome">
-          <h3>{e.nome}</h3>
-          {n > 1 && <span className="cl-qtd">{n} vídeos</span>}
-        </div>
+        <button type="button" className="cl-qtd" onClick={ver}>{n} {n > 1 ? 'vídeos' : 'vídeo'} <span aria-hidden="true">›</span></button>
         <button type="button" className="cl-usar" onClick={usar}>Usar</button>
       </div>
     </article>
+  );
+}
+
+/** Banner do topo (cara de área de membros): mosaico com as capas de todos os vídeos do catálogo, andando devagar. */
+function Banner({ lista }: { lista: Estilo[] }) {
+  const capas = lista.flatMap(e => e.exemplos.map(x => arquivosEstilo(x.id).capa));
+  const total = lista.reduce((n, e) => n + e.exemplos.length, 0);
+  // 3 fileiras com as capas repetidas (para o mosaico nunca ter buraco enquanto anda)
+  const fileira = (k: number) => [...capas.slice(k * 3), ...capas, ...capas.slice(0, k * 3)].slice(0, 12);
+  return (
+    <section className="cl-banner" aria-labelledby="cl-banner-titulo">
+      <div className="cl-banner-mosaico" aria-hidden="true">
+        {[0, 1, 2].map(k => (
+          <div key={k} className={`cl-banner-fileira ${k % 2 ? 'volta' : ''}`}>
+            {[...fileira(k), ...fileira(k)].map((src, i) => <img key={i} src={src} alt="" decoding="async" />)}
+          </div>
+        ))}
+      </div>
+      <div className="cl-banner-veu" aria-hidden="true" />
+      <div className="cl-banner-texto">
+        <span className="cl-banner-tag">Área de membros</span>
+        <h1 id="cl-banner-titulo">Catálogo de Estilos</h1>
+        <p>Escolha o estilo, toque em <b>Usar</b> e cole o prompt na sua IA. Ela edita o seu vídeo igual ao exemplo.</p>
+        <div className="cl-banner-dados"><span><b>{lista.length}</b> estilos</span><span><b>{total}</b> vídeos</span></div>
+      </div>
+    </section>
   );
 }
 
@@ -136,7 +163,7 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
         </div>
       </header>
       <div className="cl-corpo">
-        <p className="cl-sub">Escolha o vídeo que você quer seguir: cada um tem um <b>código</b>, e a IA faz igual ao que você escolher.</p>
+        <p className="cl-sub">{e.exemplos.length > 1 ? 'Escolha o vídeo que você quer seguir: cada um tem um ' : 'Este vídeo tem o '}<b>código</b>{e.exemplos.length > 1 ? ', e a IA faz igual ao que você escolher.' : ' que vai no prompt: a IA faz igual a ele.'} Toque no vídeo para ver com som.</p>
         <div className="cl-grade">
           {e.exemplos.map((ex, k) => {
             const a = arquivosEstilo(ex.id);
@@ -145,10 +172,10 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
                 <button type="button" className="cl-midia" onClick={() => ver(ex, k + 1)} aria-label={`Ver o vídeo ${ex.codigo}: ${ex.titulo}`}>
                   <VideoLoop src={a.loop} poster={a.capa} />
                   <span className="cl-codigo cl-codigo-canto">{ex.codigo}</span>
-                  {k === 0 && <span className="cl-novo">Destaque</span>}
+                  {k === 0 && e.exemplos.length > 1 && <span className="cl-novo">Destaque</span>}
                   <span className="cl-ampliar" aria-hidden="true"><Play /></span>
                 </button>
-                <div className="cl-card-pe">
+                <div className="cl-card-pe cl-card-pe-secao">
                   <h3>{ex.titulo}</h3>
                   <button type="button" className="cl-usar" onClick={() => usar(ex)}>Usar este</button>
                 </div>
@@ -256,19 +283,14 @@ export function Catalogo({ abrir }: { abrir?: string }) {
       if (k >= 0 && e.exemplos[k]) { setVendo({ e, ex: e.exemplos[k], ...(e.exemplos.length > 1 ? { n: k + 1 } : {}) }); return; }
     }
     const e = lista.find(x => x.id === abrir);
-    if (!e?.temExemplo || !e.exemplos[0]) return;
-    if (e.exemplos.length > 1) setSecao(e);
-    else setVendo({ e, ex: e.exemplos[0] });
+    if (e?.temExemplo) setSecao(e);
   }, [abrir, lista]);
 
   const termo = busca.trim().toLowerCase();
   // 20/11: todos os estilos lado a lado, sem abas (ainda são poucos); a busca acha pelo nome ou pelo código
   const mostrados = lista.filter(e => !termo || e.nome.toLowerCase().includes(termo) || e.exemplos.some(x => x.codigo.toLowerCase().includes(termo)));
-  const ver = (e: Estilo) => {
-    if (e.exemplos.length > 1) setSecao(e);
-    else if (e.exemplos[0]) setVendo({ e, ex: e.exemplos[0] });
-    eventoProprio('Catalogo_Ver', { estilo: e.id }, false);
-  };
+  // tocar no estilo SEMPRE abre a seção dele (todos os vídeos lado a lado), mesmo com um vídeo só
+  const ver = (e: Estilo) => { setSecao(e); eventoProprio('Catalogo_Ver', { estilo: e.id }, false); };
   const verVideo = (e: Estilo, ex: Exemplo, n: number) => { setVendo({ e, ex, n }); eventoProprio('Catalogo_Ver', { estilo: e.id, codigo: ex.codigo }, false); };
   const usar = (e: Estilo, codigo?: string) => {
     const c = codigo ?? e.exemplos[0]?.codigo ?? '';
@@ -294,12 +316,14 @@ export function Catalogo({ abrir }: { abrir?: string }) {
         </div>
       </header>
 
+      {lista.length > 0 && <Banner lista={lista} />}
+
       <main className="cl-corpo">
         <div className="cl-titulo">
-          <h1>Estilos</h1>
+          <h2 className="cl-titulo-h">Estilos</h2>
           {lista.length > 0 && <span className="cl-conta">{lista.length}</span>}
         </div>
-        <p className="cl-sub">Escolha um estilo, toque em <b>Usar</b> e cole o prompt na sua IA com o vídeo. Nos estilos <b>Dark</b> ninguém aparece: mande a narração.</p>
+        <p className="cl-sub">Toque no estilo para ver todos os vídeos dele. Nos estilos <b>Dark</b> ninguém aparece: você manda só a narração.</p>
 
         <div className="cl-ferramentas">
           <label className="cl-busca">

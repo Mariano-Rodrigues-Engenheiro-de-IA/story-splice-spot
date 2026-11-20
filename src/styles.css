@@ -2675,15 +2675,14 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-sem { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 100%; background: radial-gradient(90% 60% at 50% 40%, oklch(.42 .16 295 / .45), transparent 70%), oklch(.15 .012 285); color: var(--cl-roxo-claro); font-size: 13px; font-weight: 600; }
 .cl-sem svg { width: 28px; height: 28px; }
 .cl-teste, .cl-novo { position: absolute; top: 8px; left: 8px; padding: 3px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+.cl-etiquetas { position: absolute; left: 8px; bottom: 8px; display: flex; gap: 5px; }
+.cl-etiquetas .cl-teste, .cl-etiquetas .cl-novo, .cl-etiquetas .cl-dark { position: static; }
 .cl-teste { background: oklch(.86 .15 85); color: oklch(.22 .05 80); }
 .cl-novo { left: auto; right: 8px; background: oklch(.83 .15 176); color: oklch(.2 .03 180); }
 .cl-dark { position: absolute; left: 8px; bottom: 8px; padding: 3px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; background: oklch(0 0 0 / .62); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .cl-ampliar { position: absolute; right: 8px; bottom: 8px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; background: oklch(0 0 0 / .5); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .cl-ampliar svg { width: 15px; height: 15px; }
-.cl-card-pe { display: grid; gap: 8px; padding: 10px; }
-.cl-card-nome { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; min-width: 0; }
-.cl-card-nome h3 { min-width: 0; }
-.cl-qtd { flex: none; font-size: 12px; font-weight: 700; color: var(--cl-roxo-claro); }
+.cl-card-pe { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 8px; padding: 10px; }
 .cl-codigo { display: inline-block; padding: 1px 6px; border-radius: 5px; background: oklch(1 0 0 / .1); color: var(--cl-texto); font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; font-size: 12px; font-weight: 700; letter-spacing: .03em; }
 .cl-codigo-canto { position: absolute; left: 8px; bottom: 8px; background: oklch(0 0 0 / .62); color: #fff; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .cl-secao { position: fixed; inset: 0; z-index: 45; overflow-y: auto; background: var(--cl-fundo); color: var(--cl-texto); animation: cl-aparece .18s ease both; }
@@ -2733,3 +2732,28 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-visor-pe h2 { font-size: 20px; font-weight: 800; }
 .cl-visor-conta { display: block; margin-top: 2px; font-size: 12.5px; color: oklch(1 0 0 / .6); }
 .cl-usar-grande { height: 44px; padding: 0 18px; font-size: 15px; }
+
+/* 20/11: nome do estilo grande em cima do vídeo */
+.cl-card-titulo { position: absolute; top: 0; left: 0; right: 0; margin: 0; padding: 14px 10px 34px; background: linear-gradient(180deg, oklch(0 0 0 / .72) 0%, oklch(0 0 0 / .38) 62%, oklch(0 0 0 / 0) 100%); color: #fff; font-size: clamp(17px, 4.8vw, 23px); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; text-align: center; text-shadow: 0 2px 10px oklch(0 0 0 / .6); pointer-events: none; }
+.cl-qtd { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 30px; padding: 0; border: 0; background: none; color: var(--cl-roxo-claro); font-size: 13.5px; font-weight: 700; cursor: pointer; }
+.cl-qtd span { font-size: 17px; line-height: 1; }
+/* banner do topo: mosaico das capas andando devagar, véu escuro e o título */
+.cl-banner { position: relative; overflow: hidden; height: 300px; border-bottom: 1px solid var(--cl-borda); background: oklch(.1 .02 295); isolation: isolate; }
+@media (min-width: 760px) { .cl-banner { height: 380px; } }
+.cl-banner-mosaico { position: absolute; inset: -60px -120px; display: grid; gap: 10px; align-content: center; transform: rotate(-8deg); opacity: .9; }
+.cl-banner-fileira { display: flex; gap: 10px; width: max-content; animation: cl-desliza 60s linear infinite; }
+.cl-banner-fileira.volta { animation-direction: reverse; animation-duration: 75s; }
+.cl-banner-fileira img { width: 104px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 10px; }
+@media (min-width: 760px) { .cl-banner-fileira img { width: 128px; } }
+@keyframes cl-desliza { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .cl-banner-fileira { animation: none; } }
+.cl-banner-veu { position: absolute; inset: 0; z-index: 1; background: radial-gradient(ellipse 62% 52% at 50% 50%, oklch(.12 .04 295 / .82), oklch(.12 .04 295 / .45) 70%, oklch(.12 .04 295 / .3)), linear-gradient(180deg, oklch(.13 .008 285 / 0) 55%, oklch(.13 .008 285) 100%); }
+.cl-banner-texto { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; height: 100%; padding: 0 20px; text-align: center; }
+.cl-banner-tag { padding: 4px 11px; border: 1px solid oklch(.78 .13 300 / .45); border-radius: 99px; background: oklch(.6 .22 295 / .22); color: var(--cl-roxo-claro); font-size: 11.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+.cl-banner-texto h1 { margin: 0; color: #fff; font-size: clamp(30px, 8vw, 52px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; text-shadow: 0 4px 24px oklch(0 0 0 / .6); }
+.cl-banner-texto p { max-width: 520px; margin: 0; color: oklch(.92 .01 285); font-size: 15px; line-height: 1.45; }
+.cl-banner-dados { display: flex; gap: 8px; }
+.cl-banner-dados span { padding: 5px 11px; border-radius: 99px; background: oklch(1 0 0 / .1); color: oklch(.92 .01 285); font-size: 13px; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.cl-banner-dados b { color: #fff; }
+.cl-titulo-h { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+.cl-card-pe-secao { grid-template-columns: minmax(0, 1fr); }
