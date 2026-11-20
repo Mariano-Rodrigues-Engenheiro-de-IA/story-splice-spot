@@ -2645,10 +2645,10 @@ html:has(.geral) { scroll-padding-top: 0; }
   min-height: 100svh; background: var(--cl-fundo); color: var(--cl-texto); font-family: var(--font-sans); }
 .cl h1, .cl h2, .cl h3 { color: var(--cl-texto); }
 .cl p { color: var(--cl-mudo); }
-.cl-barra { display: flex; justify-content: center; padding: 18px 16px 14px; border-bottom: 1px solid var(--cl-borda); background: var(--cl-fundo); }
-.cl-marca { display: flex; flex-direction: column; align-items: center; gap: 7px; }
-.cl-logo { display: block; width: auto; height: 30px; }
-.cl-marca-nome { color: var(--cl-mudo); font-size: 11.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; }
+.cl-barra { position: sticky; top: 0; z-index: 40; display: flex; justify-content: flex-start; padding: 12px max(16px, calc((100% - 1120px) / 2 + 16px)); border-bottom: 1px solid var(--cl-borda); background: oklch(.13 .008 285 / .82); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.cl-marca { display: flex; flex-direction: row; align-items: center; gap: 12px; }
+.cl-logo { display: block; width: auto; height: 26px; }
+.cl-marca-nome { padding-left: 12px; border-left: 1px solid var(--cl-borda); color: var(--cl-mudo); font-size: 11.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; white-space: nowrap; }
 .cl-corpo { width: min(100%, 1120px); margin: 0 auto; padding: 20px 16px 40px; }
 .cl-titulo { display: flex; align-items: center; gap: 10px; }
 .cl-titulo h1 { font-size: 28px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
@@ -2753,3 +2753,25 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-banner-texto h1 { margin: 0; color: #fff; font-size: clamp(30px, 8vw, 52px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; text-shadow: 0 4px 24px oklch(0 0 0 / .6); }
 .cl-titulo-h { font-size: 24px; font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
 .cl-card-pe-secao { grid-template-columns: minmax(0, 1fr); }
+/* 20/11: cara de área de membros (estilo Netflix) */
+.cl-banner { height: 340px; }
+@media (min-width: 760px) { .cl-banner { height: 420px; } }
+.cl-banner-texto { align-items: stretch; justify-content: flex-end; padding: 0 16px 44px; text-align: left; }
+.cl-banner-miolo { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: min(100%, 1088px); margin: 0 auto; }
+@media (max-width: 759px) { .cl-banner-miolo { align-items: center; text-align: center; } }
+.cl-banner-texto h1 { font-size: clamp(34px, 9vw, 64px); }
+.cl-banner-veu { background: linear-gradient(90deg, oklch(.1 .03 295 / .88) 0%, oklch(.1 .03 295 / .55) 45%, oklch(.1 .03 295 / .25) 100%), linear-gradient(180deg, oklch(.13 .008 285 / 0) 45%, oklch(.13 .008 285) 100%); }
+@media (max-width: 759px) { .cl-banner-veu { background: radial-gradient(ellipse 75% 45% at 50% 72%, oklch(.1 .03 295 / .85), oklch(.1 .03 295 / .35)), linear-gradient(180deg, oklch(.13 .008 285 / 0) 45%, oklch(.13 .008 285) 100%); } }
+.cl-card { transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+@media (hover: hover) { .cl-card:hover { transform: translateY(-4px); border-color: oklch(.6 .22 295 / .55); box-shadow: 0 18px 40px oklch(0 0 0 / .45), 0 0 0 1px oklch(.6 .22 295 / .25); } }
+.cl-midia .cl-loop { transition: transform .35s ease; }
+@media (hover: hover) { .cl-card:hover .cl-loop { transform: scale(1.04); } }
+.cl-secao-hero { position: relative; overflow: hidden; height: 260px; border-bottom: 1px solid var(--cl-borda); isolation: isolate; }
+@media (min-width: 760px) { .cl-secao-hero { height: 320px; } }
+.cl-secao-hero-fundo { position: absolute; inset: -40px; z-index: -1; width: calc(100% + 80px); height: calc(100% + 80px); object-fit: cover; filter: blur(26px) brightness(.45) saturate(1.2); }
+.cl-secao-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, oklch(.13 .008 285 / 0) 40%, oklch(.13 .008 285) 100%); }
+.cl-secao-hero-texto { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 8px; width: min(100%, 1120px); height: 100%; margin: 0 auto; padding: 0 16px 26px; }
+.cl-secao-hero-texto .cl-dark { position: static; }
+.cl-secao-hero-nome { margin: 0; color: #fff; font-size: clamp(32px, 8vw, 56px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; text-shadow: 0 4px 24px oklch(0 0 0 / .6); }
+.cl-secao-hero-qtd { margin: 0; color: oklch(.85 .01 285); font-size: 14px; font-weight: 600; }
+.cl-secao-hero-texto .cl-usar-grande { margin-top: 4px; }

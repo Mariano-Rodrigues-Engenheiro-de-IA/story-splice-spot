@@ -122,8 +122,10 @@ function Banner({ lista }: { lista: Estilo[] }) {
       </div>
       <div className="cl-banner-veu" aria-hidden="true" />
       <div className="cl-banner-texto">
-        <span className="cl-banner-tag">Área de membros</span>
-        <h1 id="cl-banner-titulo">Catálogo de Estilos</h1>
+        <div className="cl-banner-miolo">
+          <span className="cl-banner-tag">Área de membros</span>
+          <h1 id="cl-banner-titulo">Catálogo de Estilos</h1>
+        </div>
       </div>
     </section>
   );
@@ -160,6 +162,15 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
           <span className="cl-conta">{e.exemplos.length}</span>
         </div>
       </header>
+      <div className="cl-secao-hero">
+        <img className="cl-secao-hero-fundo" src={arquivosEstilo(e.exemplos[0]?.id ?? e.id).capa} alt="" aria-hidden="true" />
+        <div className="cl-secao-hero-texto">
+          {e.grupo === 'dark' && <span className="cl-dark">Dark · ninguém aparece</span>}
+          <p className="cl-secao-hero-nome">{e.nome}</p>
+          <p className="cl-secao-hero-qtd">{e.exemplos.length} {e.exemplos.length > 1 ? 'vídeos' : 'vídeo'}</p>
+          <button type="button" className="cl-usar cl-usar-grande" onClick={() => e.exemplos[0] && usar(e.exemplos[0])}>Usar este estilo</button>
+        </div>
+      </div>
       <div className="cl-corpo">
         <p className="cl-sub">{e.exemplos.length > 1 ? 'Escolha o vídeo que você quer seguir: cada um tem um ' : 'Este vídeo tem o '}<b>código</b>{e.exemplos.length > 1 ? ', e a IA faz igual ao que você escolher.' : ' que vai no prompt: a IA faz igual a ele.'} Toque no vídeo para ver com som.</p>
         <div className="cl-grade">
