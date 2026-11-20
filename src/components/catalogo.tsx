@@ -98,8 +98,12 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
         {e.temExemplo && <span className="cl-ampliar" aria-hidden="true"><Maximize2 /></span>}
       </button>
       <div className="cl-card-pe">
-        <button type="button" className="cl-qtd" onClick={ver}>{n} {n > 1 ? 'vídeos' : 'vídeo'} <span aria-hidden="true">›</span></button>
-        <button type="button" className="cl-usar" onClick={usar}>Usar</button>
+        {e.temExemplo ? (
+          <>
+            <button type="button" className="cl-qtd" onClick={ver}>{n} {n > 1 ? 'vídeos' : 'vídeo'} <span aria-hidden="true">›</span></button>
+            <button type="button" className="cl-usar" onClick={usar}>Usar</button>
+          </>
+        ) : <span className="cl-em-breve">Em breve</span>}
       </div>
     </article>
   );
@@ -136,9 +140,9 @@ function Visualizador({ e, ex, n, fechar, usar }: { e: Estilo; ex: Exemplo; n?: 
   const a = arquivosEstilo(ex.id);
   return (
     <div className="cl-fundo cl-fundo-escuro" onClick={fechar}>
-      <div className="cl-visor" role="dialog" aria-modal="true" aria-label={`${e.nome}, ${ex.codigo}`} onClick={ev => ev.stopPropagation()}>
+      <div className={`cl-visor ${ex.formato === '16:9' ? 'cl-visor-h' : ''}`} role="dialog" aria-modal="true" aria-label={`${e.nome}, ${ex.codigo}`} onClick={ev => ev.stopPropagation()}>
         <button type="button" className="cl-fechar" onClick={fechar} aria-label="Fechar" autoFocus><X /></button>
-        <video key={a.som} className="cl-visor-video" src={a.som} poster={a.capa} controls autoPlay playsInline />
+        <video key={a.som} className={`cl-visor-video ${ex.formato === '16:9' ? 'cl-visor-video-h' : ''}`} src={a.som} poster={ex.formato === '16:9' ? undefined : a.capa} controls autoPlay playsInline />
         <div className="cl-visor-pe">
           <div>
             <h2>{e.nome}</h2>
@@ -180,7 +184,7 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
               <article key={ex.id} className="cl-card">
                 <button type="button" className="cl-midia" onClick={() => ver(ex, k + 1)} aria-label={`Ver o vídeo ${ex.codigo}: ${ex.titulo}`}>
                   <VideoLoop src={a.loop} poster={a.capa} />
-                  <span className="cl-codigo cl-codigo-canto">{ex.codigo}</span>
+                  <span className="cl-codigo cl-codigo-canto">{ex.codigo}{ex.formato === '16:9' ? ' · 16:9' : ''}</span>
                   {k === 0 && e.exemplos.length > 1 && <span className="cl-novo">Destaque</span>}
                   <span className="cl-ampliar" aria-hidden="true"><Play /></span>
                 </button>
@@ -280,7 +284,7 @@ export function Catalogo({ abrir }: { abrir?: string }) {
   // 20/11: todos os estilos lado a lado, sem abas (ainda são poucos); a busca acha pelo nome ou pelo código
   const mostrados = lista.filter(e => !termo || e.nome.toLowerCase().includes(termo) || e.exemplos.some(x => x.codigo.toLowerCase().includes(termo)));
   // tocar no estilo SEMPRE abre a seção dele (todos os vídeos lado a lado), mesmo com um vídeo só
-  const ver = (e: Estilo) => { setSecao(e); eventoProprio('Catalogo_Ver', { estilo: e.id }, false); };
+  const ver = (e: Estilo) => { if (!e.temExemplo) return; setSecao(e); eventoProprio('Catalogo_Ver', { estilo: e.id }, false); };
   const verVideo = (e: Estilo, ex: Exemplo, n: number) => { setVendo({ e, ex, n }); eventoProprio('Catalogo_Ver', { estilo: e.id, codigo: ex.codigo }, false); };
   const usar = (e: Estilo, codigo?: string) => {
     const c = codigo ?? e.exemplos[0]?.codigo ?? '';

@@ -2779,3 +2779,9 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-secao .cl-secao-hero-texto p.cl-secao-hero-qtd { color: oklch(.86 .01 285); }
 /* 20/11: voltar fácil (um botão só, roxo e bem visível no topo da seção) */
 .cl-secao-barra .cl-voltar { padding: 10px 14px; border: 1px solid oklch(.78 .13 300 / .5); background: oklch(.6 .22 295 / .22); color: #fff; font-size: 15px; font-weight: 700; }
+/* 20/11: exemplos horizontais (YouTube, Aula) e estilos "Em breve" */
+.cl-visor-h { width: min(100%, 980px); }
+.cl-visor-video-h { width: 100%; height: auto; max-height: 72svh; aspect-ratio: 16 / 9; }
+.cl-em-breve { grid-column: 1 / -1; display: grid; place-items: center; height: 38px; border: 1px dashed var(--cl-borda); border-radius: 10px; color: var(--cl-mudo); font-size: 14px; font-weight: 700; }
+.cl-sem { display: grid; place-items: center; align-content: center; gap: 10px; width: 100%; height: 100%; color: var(--cl-mudo); font-size: 14px; font-weight: 600; background: radial-gradient(ellipse at 50% 40%, oklch(.22 .04 295), oklch(.12 .01 285)); }
+.cl-sem svg { width: 34px; height: 34px; opacity: .6; }
