@@ -40,7 +40,8 @@ export type Estilo = {
   exemplos: Exemplo[];
 };
 
-/** Um vídeo do catálogo. O código é PERMANENTE (não reaproveite um código para outro vídeo). */
+/** Um vídeo do catálogo. O código é PERMANENTE (não reaproveite um código para outro vídeo). Cada exemplo é uma gravação
+    DIFERENTE (regra dele, 20/11): nunca dois trechos do mesmo vídeo, nem no mesmo estilo. */
 export type Exemplo = { id: string; codigo: string; titulo: string };
 
 export const estilos: Estilo[] = [
@@ -87,10 +88,10 @@ export const estilos: Estilo[] = [
     grupo: 'voce',
     instrucao: 'quando eu citar um objeto, um produto ou uma parte do corpo, aparece uma ilustração 3D realista dele na tela, no momento em que eu falo, sem cobrir o meu rosto.',
     temExemplo: true,
+    // REGRA dele (20/11): cada exemplo é um vídeo DIFERENTE (nunca dois trechos da mesma gravação)
     exemplos: [
-      { id: 'ilustracao-3d', codigo: 'I3D-01', titulo: 'Objetos 3D na fala' },
-      { id: 'ilustracao-3d-c13', codigo: 'I3D-02', titulo: 'Painel: mapa, ideia e corpo' },
-      { id: 'ilustracao-3d-c10', codigo: 'I3D-03', titulo: 'Objeto em órbita' },
+      { id: 'ilustracao-3d-c13', codigo: 'I3D-01', titulo: 'Painel: mapa, ideia e corpo' },
+      { id: 'ilustracao-3d-c10', codigo: 'I3D-02', titulo: 'Objeto em órbita' },
     ],
     // 19/11: liberado por ele para ver no ar (ainda sem o teste em instalação limpa)
     testado: true,

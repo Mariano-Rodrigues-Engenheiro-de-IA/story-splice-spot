@@ -105,10 +105,10 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
   );
 }
 
-/** Banner do topo (cara de área de membros): mosaico com as capas de todos os vídeos do catálogo, andando devagar. */
+/** Banner do topo (cara de área de membros): só visual. Mosaico com as capas dos vídeos andando devagar, a etiqueta e o título
+    (20/11, ele: banner é para ser bonito, sem informação nem instrução; a instrução fica embaixo). */
 function Banner({ lista }: { lista: Estilo[] }) {
   const capas = lista.flatMap(e => e.exemplos.map(x => arquivosEstilo(x.id).capa));
-  const total = lista.reduce((n, e) => n + e.exemplos.length, 0);
   // 3 fileiras com as capas repetidas (para o mosaico nunca ter buraco enquanto anda)
   const fileira = (k: number) => [...capas.slice(k * 3), ...capas, ...capas.slice(0, k * 3)].slice(0, 12);
   return (
@@ -124,8 +124,6 @@ function Banner({ lista }: { lista: Estilo[] }) {
       <div className="cl-banner-texto">
         <span className="cl-banner-tag">Área de membros</span>
         <h1 id="cl-banner-titulo">Catálogo de Estilos</h1>
-        <p>Escolha o estilo, toque em <b>Usar</b> e cole o prompt na sua IA. Ela edita o seu vídeo igual ao exemplo.</p>
-        <div className="cl-banner-dados"><span><b>{lista.length}</b> estilos</span><span><b>{total}</b> vídeos</span></div>
       </div>
     </section>
   );
