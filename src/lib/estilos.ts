@@ -80,8 +80,8 @@ export const estilos: Estilo[] = [
     instrucao: 'quando eu citar um objeto, um produto ou uma parte do corpo, aparece uma ilustração 3D realista dele na tela, no momento em que eu falo, sem cobrir o meu rosto.',
     temExemplo: true,
     exemplos: [
+      // 20/11: o criativo 10 (I3D-02, órbita) foi para a Troca de fundo (pedido dele); nunca o mesmo vídeo em dois estilos
       { id: 'ilustracao-3d-c09', codigo: 'I3D-03', titulo: 'Corpo humano em 3D realista' },
-      { id: 'ilustracao-3d-c10', codigo: 'I3D-02', titulo: 'Objeto em órbita' },
     ],
     testado: true,
   },
@@ -129,10 +129,13 @@ export const estilos: Estilo[] = [
     id: 'troca-de-fundo',
     nome: 'Troca de fundo',
     grupo: 'voce',
-    instrucao: 'troque o fundo atrás de mim por um cenário bonito e realista, sem mexer na minha imagem. Se eu não disser qual cenário, me mostre 3 opções antes.',
+    instrucao: 'troque o fundo atrás de mim por um cenário bonito e realista, sem mexer na minha imagem, e mostre a troca acontecendo na tela: o fundo se desfaz em quadradinhos e vira o cenário novo. Se eu não disser qual cenário, me mostre 3 opções antes.',
     temExemplo: true,
-    // o criativo 10 ficou na Ilustração 3D (nunca o mesmo vídeo em dois estilos)
-    exemplos: [{ id: 'troca-de-fundo-quarto', codigo: 'FUN-02', titulo: 'Parede branca vira quarto' }],
+    // 20/11 (ele): o exemplo tem de MOSTRAR a troca na hora (o quarto pronto, FUN-02, nem parecia troca e saiu)
+    exemplos: [
+      { id: 'troca-de-fundo-c10', codigo: 'FUN-01', titulo: 'Parede branca vira estúdio na hora' },
+      { id: 'troca-de-fundo-c13', codigo: 'FUN-03', titulo: 'Troca de cenário em um clique' },
+    ],
     testado: true,
   },
   {
