@@ -2760,6 +2760,18 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-banner-miolo { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: min(100%, 1088px); margin: 0 auto; }
 @media (max-width: 759px) { .cl-banner-miolo { align-items: center; text-align: center; } }
 .cl-banner-texto h1 { font-size: clamp(34px, 9vw, 64px); }
+/* 20/11 (ele): menos capas e maiores (só a capa de cada estilo, 2 fileiras) */
+.cl-banner-mosaico { gap: 14px; inset: -80px -140px; }
+.cl-banner-fileira { gap: 14px; animation-name: cl-desliza3; animation-duration: 70s; }
+.cl-banner-fileira.volta { animation-duration: 85s; }
+.cl-banner-fileira img { width: 150px; border-radius: 14px; box-shadow: 0 10px 30px oklch(0 0 0 / .45); }
+/* computador: uma faixa só, reta, de capas grandes (8 capas diferentes enchem a tela sem repetir nenhuma) */
+@media (min-width: 760px) {
+  .cl-banner-mosaico { inset: 0; transform: none; align-content: center; }
+  .cl-banner-fileira + .cl-banner-fileira { display: none; }
+  .cl-banner-fileira img { width: 216px; }
+}
+@keyframes cl-desliza3 { from { transform: translateX(0); } to { transform: translateX(-33.3333%); } }
 .cl-banner-veu { background: linear-gradient(90deg, oklch(.1 .03 295 / .88) 0%, oklch(.1 .03 295 / .55) 45%, oklch(.1 .03 295 / .25) 100%), linear-gradient(180deg, oklch(.13 .008 285 / 0) 45%, oklch(.13 .008 285) 100%); }
 @media (max-width: 759px) { .cl-banner-veu { background: radial-gradient(ellipse 75% 45% at 50% 72%, oklch(.1 .03 295 / .85), oklch(.1 .03 295 / .35)), linear-gradient(180deg, oklch(.13 .008 285 / 0) 45%, oklch(.13 .008 285) 100%); } }
 .cl-card { transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }

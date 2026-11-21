@@ -112,15 +112,31 @@ function Cartao({ e, ver, usar }: { e: Estilo; ver: () => void; usar: () => void
 /** Banner do topo (cara de área de membros): só visual. Mosaico com as capas dos vídeos andando devagar, a etiqueta e o título
     (20/11, ele: banner é para ser bonito, sem informação nem instrução; a instrução fica embaixo). */
 function Banner({ lista }: { lista: Estilo[] }) {
-  const capas = lista.flatMap(e => e.exemplos.map(x => arquivosEstilo(x.id).capa));
-  // 3 fileiras com as capas repetidas (para o mosaico nunca ter buraco enquanto anda)
-  const fileira = (k: number) => [...capas.slice(k * 3), ...capas, ...capas.slice(0, k * 3)].slice(0, 12);
+  // 20/11 (ele): com todos os vídeos o banner ficou cheio de capa pequena e quase só Antes e depois.
+  // Agora: só a CAPA de cada estilo (o melhor vídeo dele), sem os horizontais, embaralhadas (quem aparece e Dark
+  // alternando, nunca dois do mesmo estilo lado a lado), em 2 fileiras de capas maiores.
+  const capaDe = (e: Estilo) => e.exemplos.find(x => x.formato !== '16:9');
+  const comCapa = lista.filter(e => e.temExemplo && capaDe(e));
+  const voce = comCapa.filter(e => e.grupo !== 'dark');
+  const dark = comCapa.filter(e => e.grupo === 'dark');
+  const mistura: Estilo[] = [];
+  for (let i = 0; i < Math.max(voce.length, dark.length); i++) {
+    const v = voce[i];
+    const d = dark[i];
+    if (v) mistura.push(v);
+    if (d) mistura.push(d);
+  }
+  const capas = mistura.map(e => arquivosEstilo(capaDe(e)!.id).capa);
+  // a 2ª fileira começa no meio da lista (as duas nunca mostram a mesma capa uma em cima da outra)
+  const meio = Math.floor(capas.length / 2);
+  const fileiras = [capas, [...capas.slice(meio), ...capas.slice(0, meio)]];
   return (
     <section className="cl-banner" aria-labelledby="cl-banner-titulo">
       <div className="cl-banner-mosaico" aria-hidden="true">
-        {[0, 1, 2].map(k => (
+        {fileiras.map((f, k) => (
+          // a lista 3 vezes: a fileira anda 1/3 e volta ao começo sem buraco, em qualquer largura de tela
           <div key={k} className={`cl-banner-fileira ${k % 2 ? 'volta' : ''}`}>
-            {[...fileira(k), ...fileira(k)].map((src, i) => <img key={i} src={src} alt="" decoding="async" />)}
+            {[...f, ...f, ...f].map((src, i) => <img key={i} src={src} alt="" decoding="async" />)}
           </div>
         ))}
       </div>
