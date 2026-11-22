@@ -18,6 +18,7 @@ import { Route as ProRouteImport } from './routes/pro'
 import { Route as Pro2RouteImport } from './routes/pro2'
 import { Route as UltimaChanceRouteImport } from './routes/ultima-chance'
 import { Route as CatalogoIndexRouteImport } from './routes/catalogo.index'
+import { Route as CriarIndexRouteImport } from './routes/criar.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const CatalogoIndexRoute = CatalogoIndexRouteImport.update({
   path: '/catalogo/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CriarIndexRoute = CriarIndexRouteImport.update({
+  id: '/criar/',
+  path: '/criar/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/pro2': typeof Pro2Route
   '/ultima-chance': typeof UltimaChanceRoute
   '/catalogo/': typeof CatalogoIndexRoute
+  '/criar/': typeof CriarIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/pro2': typeof Pro2Route
   '/ultima-chance': typeof UltimaChanceRoute
   '/catalogo': typeof CatalogoIndexRoute
+  '/criar': typeof CriarIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/pro2': typeof Pro2Route
   '/ultima-chance': typeof UltimaChanceRoute
   '/catalogo/': typeof CatalogoIndexRoute
+  '/criar/': typeof CriarIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/pro2'
     | '/ultima-chance'
     | '/catalogo/'
+    | '/criar/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/pro2'
     | '/ultima-chance'
     | '/catalogo'
+    | '/criar'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/pro2'
     | '/ultima-chance'
     | '/catalogo/'
+    | '/criar/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   Pro2Route: typeof Pro2Route
   UltimaChanceRoute: typeof UltimaChanceRoute
   CatalogoIndexRoute: typeof CatalogoIndexRoute
+  CriarIndexRoute: typeof CriarIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogoIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/criar/': {
+      id: '/criar/'
+      path: '/criar'
+      fullPath: '/criar/'
+      preLoaderRoute: typeof CriarIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   Pro2Route: Pro2Route,
   UltimaChanceRoute: UltimaChanceRoute,
   CatalogoIndexRoute: CatalogoIndexRoute,
+  CriarIndexRoute: CriarIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
