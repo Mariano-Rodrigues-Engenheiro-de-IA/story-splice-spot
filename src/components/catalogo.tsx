@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useLocation } from '@tanstack/react-router';
-import { ArrowLeft, ArrowRight, Check, Copy, ExternalLink, Layers, Link2, Maximize2, Play, Search, SlidersHorizontal, X } from 'lucide-react';
+import { ArrowLeft, Check, Copy, Layers, Maximize2, Play, Search, X } from 'lucide-react';
 import { arquivosEstilo, estilos, montarPrompt, type Estilo, type Exemplo, type Variante } from '@/lib/estilos';
-import { PROMPT_REFERENCIA } from '@/lib/gerador';
-import { copiarTexto, Gerador } from '@/components/gerador';
 import { eventoProprio } from '@/lib/pixel';
 
 /* Catálogo de Estilos com cara de biblioteca/app (17/11/2026, pedido dele: "não é página de vendas, é catálogo,
@@ -219,8 +217,7 @@ function Secao({ e, voltar, ver, usar }: { e: Estilo; voltar: () => void; ver: (
   );
 }
 
-/** O caminho RÁPIDO (modo preguiçoso): o pedido curto do estilo, pronto para copiar. "Detalhar" abre o Gerador em camadas. */
-function FolhaPrompt({ e, codigo, fechar, linkCompra, detalhar }: { e: Estilo; codigo: string; fechar: () => void; linkCompra: string; detalhar: () => void }) {
+function FolhaPrompt({ e, codigo, fechar, linkCompra }: { e: Estilo; codigo: string; fechar: () => void; linkCompra: string }) {
   const [variante, setVariante] = useState<Variante | undefined>(e.variantes?.[0]);
   const [copiado, setCopiado] = useState(false);
   // 20/11 (ele): sem "Misturar com" (misturar estilos é mais uma dificuldade para a pessoa)
@@ -228,7 +225,12 @@ function FolhaPrompt({ e, codigo, fechar, linkCompra, detalhar }: { e: Estilo; c
   const titulo = e.exemplos.find(x => x.codigo === codigo)?.titulo;
 
   async function copiar() {
-    await copiarTexto(prompt);
+    try { await navigator.clipboard.writeText(prompt); }
+    catch {
+      const t = document.createElement('textarea');
+      t.value = prompt; document.body.appendChild(t); t.select();
+      try { document.execCommand('copy'); } finally { t.remove(); }
+    }
     setCopiado(true);
     eventoProprio('Catalogo_Copiar', { estilo: e.id, codigo, variante: variante?.id ?? '' }, false);
   }
@@ -266,49 +268,8 @@ function FolhaPrompt({ e, codigo, fechar, linkCompra, detalhar }: { e: Estilo; c
         <button type="button" className={`cl-copiar ${copiado ? 'ok' : ''}`} onClick={copiar}>
           {copiado ? <><Check aria-hidden="true" /> Copiado</> : <><Copy aria-hidden="true" /> Copiar prompt</>}
         </button>
-        <p className="cl-dica">{e.grupo === 'dark' ? 'Cole na sua IA com o Modo Editor e mande a narração junto (áudio ou texto).' : 'Cole na sua IA com o Modo Editor e mande o vídeo junto. Se quiser, mande também um áudio explicando o que você quer.'}</p>
-        <button type="button" className="gp-detalhar" onClick={detalhar}>
-          <SlidersHorizontal aria-hidden="true" />
-          <span><b>Quer detalhar?</b> Monte camada por camada: legenda, cores, o que aparece na tela, gancho e som.</span>
-          <ArrowRight aria-hidden="true" />
-        </button>
+        <p className="cl-dica">{e.grupo === 'dark' ? 'Cole na sua IA com o Modo Editor e mande a narração junto (áudio ou texto).' : 'Cole na sua IA com o Modo Editor e mande o vídeo junto.'}</p>
         <p className="cl-nao-tem">Ainda não tem o Modo Editor? <a href={linkCompra} onClick={() => eventoProprio('Catalogo_Comprar', { estilo: e.id }, false)}>Conheça</a></p>
-      </div>
-    </div>
-  );
-}
-
-/** "Tenho uma referência": o prompt para a IA analisar um vídeo de fora e editar no mesmo estilo. */
-function FolhaReferencia({ fechar }: { fechar: () => void }) {
-  const [copiado, setCopiado] = useState(false);
-  async function copiar() {
-    await copiarTexto(PROMPT_REFERENCIA);
-    setCopiado(true);
-    eventoProprio('Catalogo_Referencia_Copiar', {}, false);
-  }
-  return (
-    <div className="cl-fundo" onClick={fechar}>
-      <div className="cl-folha" role="dialog" aria-modal="true" aria-labelledby="cl-ref-titulo" onClick={ev => ev.stopPropagation()}>
-        <div className="cl-alca" aria-hidden="true" />
-        <div className="cl-folha-cabeca">
-          <div>
-            <span className="cl-rotulo">Caminho rápido</span>
-            <h2 id="cl-ref-titulo">Tenho uma referência</h2>
-          </div>
-          <button type="button" className="cl-fechar cl-fechar-claro" onClick={fechar} aria-label="Fechar" autoFocus><X /></button>
-        </div>
-        <div className="cl-bloco">
-          <p className="cl-rotulo">Prompt</p>
-          <div className="cl-prompt">{PROMPT_REFERENCIA}</div>
-        </div>
-        <button type="button" className={`cl-copiar ${copiado ? 'ok' : ''}`} onClick={copiar}>
-          {copiado ? <><Check aria-hidden="true" /> Copiado</> : <><Copy aria-hidden="true" /> Copiar prompt</>}
-        </button>
-        <p className="cl-dica">Cole na sua IA com o Modo Editor e mande junto o seu vídeo e a referência (o arquivo ou o link).</p>
-        <div className="gp-links">
-          <a href="https://www.sortfeed.com/" target="_blank" rel="noopener noreferrer"><ExternalLink aria-hidden="true" /> Achou no Instagram? Baixe com o Sort Feed (grátis)</a>
-          <a href="https://prompt-motion.com/" target="_blank" rel="noopener noreferrer"><ExternalLink aria-hidden="true" /> Motions prontos: Prompt Motion (grátis)</a>
-        </div>
       </div>
     </div>
   );
@@ -322,9 +283,6 @@ export function Catalogo({ abrir }: { abrir?: string }) {
   const [secao, setSecao] = useState<Estilo | null>(null);
   const [vendo, setVendo] = useState<{ e: Estilo; ex: Exemplo; n?: number } | null>(null);
   const [usando, setUsando] = useState<{ e: Estilo; codigo: string } | null>(null);
-  // o Gerador em camadas (caminho detalhado) e a folha "Tenho uma referência"
-  const [gerando, setGerando] = useState<{ estilo?: string; codigo?: string } | null>(null);
-  const [referencia, setReferencia] = useState(false);
 
   // link de anúncio direto: /catalogo?estilo=motion-3d (a seção ou o vídeo) ou /catalogo?estilo=M3D-02 (aquele vídeo)
   useEffect(() => {
@@ -350,18 +308,10 @@ export function Catalogo({ abrir }: { abrir?: string }) {
     setUsando({ e, codigo: c });
     eventoProprio('Catalogo_Usar', { estilo: e.id, codigo: c }, false);
   };
-  // "Detalhar" troca a folha do prompt pelo Gerador (a mesma camada: o voltar volta para o catálogo ou para a seção)
-  const detalhar = (estilo?: string, codigo?: string) => {
-    setUsando(null);
-    setVendo(null);
-    setGerando({ ...(estilo ? { estilo } : {}), ...(codigo ? { codigo } : {}) });
-  };
-  // camadas abertas: seção > vídeo > prompt > gerador; o voltar fecha a de cima
-  const camadas = (secao ? 1 : 0) + (vendo ? 1 : 0) + (usando ? 1 : 0) + (gerando ? 1 : 0) + (referencia ? 1 : 0);
+  // camadas abertas: seção > vídeo > prompt; o voltar fecha a de cima
+  const camadas = (secao ? 1 : 0) + (vendo ? 1 : 0) + (usando ? 1 : 0);
   useCamadas(camadas, () => {
-    if (referencia) setReferencia(false);
-    else if (gerando) setGerando(null);
-    else if (usando) setUsando(null);
+    if (usando) setUsando(null);
     else if (vendo) setVendo(null);
     else setSecao(null);
   });
@@ -385,20 +335,6 @@ export function Catalogo({ abrir }: { abrir?: string }) {
         </div>
         <p className="cl-sub">Toque no estilo para ver todos os vídeos dele. Nos estilos <b>Dark</b> ninguém aparece: você manda só a narração.</p>
 
-        {/* os dois caminhos além do "Usar" (21/11): o pedido detalhado em camadas e o prompt para uma referência de fora */}
-        <div className="gp-atalhos">
-          <button type="button" className="gp-atalho gp-atalho-forte" onClick={() => detalhar()}>
-            <SlidersHorizontal aria-hidden="true" />
-            <span><b>Pedido detalhado</b><small>Monte camada por camada: estilo, legenda, cores, elementos, gancho e som.</small></span>
-            <ArrowRight aria-hidden="true" />
-          </button>
-          <button type="button" className="gp-atalho" onClick={() => { setReferencia(true); eventoProprio('Catalogo_Referencia', {}, false); }}>
-            <Link2 aria-hidden="true" />
-            <span><b>Tenho uma referência</b><small>Viu um vídeo que quer igual? Copie o prompt e mande junto.</small></span>
-            <ArrowRight aria-hidden="true" />
-          </button>
-        </div>
-
         <div className="cl-ferramentas">
           <label className="cl-busca">
             <Search aria-hidden="true" />
@@ -416,14 +352,12 @@ export function Catalogo({ abrir }: { abrir?: string }) {
           </div>
         )}
 
-        <p className="cl-ref">Não achou o estilo? <button type="button" className="gp-link" onClick={() => setReferencia(true)}>Mande um vídeo de referência</button> junto com o seu, e a IA edita no mesmo estilo.</p>
+        <p className="cl-ref">Não achou o estilo? Mande para a IA um vídeo de referência junto com o seu, e ela edita no mesmo estilo.</p>
       </main>
 
       {secao && <Secao e={secao} voltar={() => setSecao(null)} ver={(ex, n) => verVideo(secao, ex, n)} usar={ex => usar(secao, ex.codigo)} />}
       {vendo && <Visualizador e={vendo.e} ex={vendo.ex} {...(vendo.n ? { n: vendo.n } : {})} fechar={() => setVendo(null)} usar={() => usar(vendo.e, vendo.ex.codigo)} />}
-      {usando && <FolhaPrompt e={usando.e} codigo={usando.codigo} fechar={() => setUsando(null)} linkCompra={linkCompra} detalhar={() => detalhar(usando.e.id, usando.codigo)} />}
-      {gerando && <Gerador inicial={gerando} fechar={() => setGerando(null)} linkCompra={linkCompra} />}
-      {referencia && <FolhaReferencia fechar={() => setReferencia(false)} />}
+      {usando && <FolhaPrompt e={usando.e} codigo={usando.codigo} fechar={() => setUsando(null)} linkCompra={linkCompra} />}
     </div>
   );
 }
