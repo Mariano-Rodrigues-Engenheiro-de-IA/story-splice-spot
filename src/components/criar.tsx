@@ -1,42 +1,55 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
-import { ArrowLeft, ArrowRight, AudioLines, Check, Copy, ExternalLink, Link2, Pause, Play, Sparkles, Volume2, VolumeX, X } from 'lucide-react';
-import { CATEGORIAS_MOTION, EFEITOS, ESTILOS_VIDEO, FORMATOS, LEGENDAS, MOTIONS, PROMPT_REFERENCIA, TIPOS, TRECHO_DESTAQUES, TRECHO_PALAVRAS, TRILHAS, agendaMotions, audioEfeitos, audioTrilha, exemploEstilo, exemploFormato, montarPedidoZero, videoBase, videoMotion, type Escolhas } from '@/lib/criar';
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type RefObject } from 'react';
+import { ArrowLeft, ArrowRight, AudioLines, Check, Copy, ExternalLink, Link2, Play, Sparkles, Volume2, VolumeX, X } from 'lucide-react';
+import {
+  CAMERAS, DURACAO, EFEITOS, ESTILOS, FORMATOS, FRASES, GRUPOS_SFX, LEGENDAS, PROMPT_REFERENCIA, SFX, TRECHO_DESTAQUES, TRECHO_PALAVRAS, TRILHAS, VOZ,
+  agendaMotions, audioSfx, audioTrilha, efeito, escalaCamera, exemploFormato, imgEfeito, montarPedidoZero, videoBase, videoMotion,
+  type Escolhas, type EstiloFx,
+} from '@/lib/criar';
 import { LegendaModelo } from '@/components/legendas-modelos';
+import { EfeitoModelo } from '@/components/efeitos-modelos';
+import { mesa } from '@/lib/mesa-som';
 import { eventoProprio } from '@/lib/pixel';
 
-/* "Criar meu vídeo" (21/11/2026, desenho dele): separado do catálogo. Porta 1 = "Tenho uma referência" (prompt);
+/* "Criar meu vídeo" (21-22/11/2026, desenho dele): separado do catálogo. Porta 1 = "Tenho uma referência" (prompt);
    porta 2 = "Criar do zero": o trecho cru de 10 s dele vai sendo construído camada por camada (formato -> legenda ->
-   motions -> som), sempre à vista. Toda opção tem exemplo de verdade. Dados e códigos em src/lib/criar.ts. */
+   câmera -> estilo do efeito -> efeitos -> som), sempre à vista. TODO clique muda o vídeo na hora: o estilo clicado
+   entra no vídeo, o efeito marcado aparece sozinho e depois junto com os outros, a trilha troca no mesmo instante e
+   cada efeito sonoro toca no toque. Dados e códigos em src/lib/criar.ts. */
 
 const PASSOS = [
   { id: 'formato', nome: 'Formato' },
-  { id: 'estilo', nome: 'Estilo' },
   { id: 'legenda', nome: 'Legenda' },
-  { id: 'tipos', nome: 'Tipo de efeito' },
-  { id: 'motions', nome: 'Efeitos' },
+  { id: 'camera', nome: 'Câmera' },
+  { id: 'estilo', nome: 'Estilo do efeito' },
+  { id: 'efeitos', nome: 'Efeitos' },
   { id: 'som', nome: 'Som' },
   { id: 'pedido', nome: 'Pedido' },
 ] as const;
+type IdPasso = (typeof PASSOS)[number]['id'];
 const ULTIMO = PASSOS.length - 1;
-const CHAVE = 'me-criar-v1';
-const PADRAO: Escolhas = { formato: 'FMT-02', estilo: 'motion-design', legenda: 'LEG-01', cor: '#8B5CF6', tipos: [], motions: [], trilha: 'SOM-00', efeitos: 'EFE-01' };
+const CHAVE = 'me-criar-v2';
+const PADRAO: Escolhas = { formato: 'FMT-02', legenda: 'LEG-01', cor: '#8B5CF6', camera: 'CAM-00', estilos: [], motions: [], corFx: '#8B5CF6', trilha: 'SOM-00', sfx: [] };
 /** a altura da legenda no palco, pelo formato (na skill ela acha o queixo sozinha) */
 const ALTURA_LEG: Record<string, number> = { cheia: 0.7, cartao: 0.86, dividida: 0.84, narracao: 0.72 };
-const DURACAO = 10.3;
+const COR = /^#[0-9a-f]{6}$/i;
+/** onde fica o rosto dentro do recorte de cada formato: o zoom da câmera gira em volta dele (como o camera.py) */
+const ROSTO: Record<string, string> = { cheia: '47% 42%', cartao: '47% 19%', dividida: '47% 32%' };
 
 function ler(): Escolhas {
   try {
     const s = window.localStorage.getItem(CHAVE);
     const v = s ? (JSON.parse(s) as Partial<Escolhas>) : {};
+    const lista = (x: unknown, ok: (c: string) => boolean) => (Array.isArray(x) ? (x as unknown[]).filter((c): c is string => typeof c === 'string' && ok(c)) : []);
     return {
       formato: FORMATOS.some(f => f.codigo === v.formato) ? v.formato! : PADRAO.formato,
       legenda: LEGENDAS.some(l => l.codigo === v.legenda) ? v.legenda! : PADRAO.legenda,
-      cor: /^#[0-9a-f]{6}$/i.test(v.cor ?? '') ? v.cor! : PADRAO.cor,
-      estilo: ESTILOS_VIDEO.some(x => x.id === v.estilo) ? v.estilo! : PADRAO.estilo,
-      tipos: Array.isArray(v.tipos) ? v.tipos.filter(c => (CATEGORIAS_MOTION as readonly string[]).includes(c)) : [],
-      motions: Array.isArray(v.motions) ? v.motions.filter(c => MOTIONS.some(m => m.codigo === c)) : [],
+      cor: COR.test(v.cor ?? '') ? v.cor! : PADRAO.cor,
+      camera: CAMERAS.some(c => c.codigo === v.camera) ? v.camera! : PADRAO.camera,
+      estilos: lista(v.estilos, c => ESTILOS.some(x => x.id === c)),
+      motions: lista(v.motions, c => !!efeito(c)),
+      corFx: COR.test(v.corFx ?? '') ? v.corFx! : PADRAO.corFx,
       trilha: TRILHAS.some(x => x.codigo === v.trilha) ? v.trilha! : PADRAO.trilha,
-      efeitos: EFEITOS.some(x => x.codigo === v.efeitos) ? v.efeitos! : PADRAO.efeitos,
+      sfx: lista(v.sfx, c => SFX.some(x => x.id === c)),
     };
   } catch { return PADRAO; }
 }
@@ -82,6 +95,33 @@ function useTelas(n: number, fecharTopo: () => void) {
   }, [n]);
 }
 
+/** Relógio dos exemplos: todos andam juntos (o mesmo ponto da fala), em volta dos 10,3 s do trecho. Parado (num quadro
+    com tudo na tela) enquanto o cartão está fora da tela, para a página não pesar. */
+const T0 = typeof performance === 'undefined' ? 0 : performance.now();
+function useRelogio(ativo = true, fps = 20, parado = 8.6) {
+  const [t, setT] = useState(parado);
+  useEffect(() => {
+    if (!ativo) return;
+    const tic = () => setT(((performance.now() - T0) / 1000) % DURACAO);
+    tic();
+    const id = window.setInterval(tic, 1000 / fps);
+    return () => window.clearInterval(id);
+  }, [ativo, fps]);
+  return ativo ? t : parado;
+}
+function useVisivel<T extends Element>(): [RefObject<T | null>, boolean] {
+  const ref = useRef<T | null>(null);
+  const [vis, setVis] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([x]) => setVis(!!x?.isIntersecting), { rootMargin: '120px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return [ref, vis];
+}
+
 /** Vídeo curto sem som que só toca enquanto está na tela (os exemplos dos cartões). */
 function VideoLoop({ src, poster }: { src: string; poster: string }) {
   const ref = useRef<HTMLVideoElement>(null);
@@ -96,51 +136,76 @@ function VideoLoop({ src, poster }: { src: string; poster: string }) {
   return <video ref={ref} className="cz-loop" src={src} poster={poster} muted playsInline loop preload="none" aria-hidden="true" />;
 }
 
-/** O vídeo da pessoa sendo construído: o formato muda o lugar dela, os motions escolhidos entram na zona de cima um
-    depois do outro (cada um no momento em que tem algo na tela), a legenda é desenhada ao vivo por cima (o mesmo motor
-    da skill) e o som vem em camadas (voz + efeitos e a trilha), tudo no mesmo tempo do vídeo. */
-function Palco({ e, som, setSom }: { e: Escolhas; som: boolean; setSom: (v: boolean) => void }) {
+/** Os efeitos ao vivo (FX) de uma lista, um depois do outro no tempo t, com uma passagem suave entre eles. Os efeitos
+    em vídeo (PEC) da mesma lista são desenhados por quem chama (precisam seguir o tempo do vídeo). */
+function CenaFx({ cods, t, cor }: { cods: string[]; t: number; cor: string }) {
+  const chave = cods.join();
+  const ag = useMemo(() => agendaMotions(cods), [chave]); // eslint-disable-line react-hooks/exhaustive-deps
+  const i = ag.findIndex(s => t >= s.ini && t < s.fim);
+  const seg = ag[i];
+  if (!seg) return null;
+  const ant = i > 0 ? ag[i - 1] : undefined;
+  const k = Math.min(1, (t - seg.ini) / 0.25);
+  const ao = (c: string, op: number) => (efeito(c)?.video ? null : (
+    <div key={c} className="cz-fx" style={{ opacity: op }}><EfeitoModelo codigo={c} t={t} cor={cor} img={imgEfeito} /></div>
+  ));
+  return <>{ant && k < 1 && ao(ant.c, 1 - k)}{ao(seg.c, ant ? k : 1)}</>;
+}
+
+/** O vídeo da pessoa sendo construído: o formato muda o lugar dela, a câmera dá o zoom, os efeitos entram na zona de
+    cima um depois do outro (cada um no momento em que tem algo na tela), a legenda é desenhada ao vivo por cima (o
+    mesmo motor da skill) e o som sai da mesa de som (voz + trilha + efeitos sonoros), tudo no tempo do vídeo. */
+function Palco({ e, mostrar, rotulo, reinicio, som, alternarSom }: { e: Escolhas; mostrar: string[]; rotulo: string; reinicio: number; som: boolean; alternarSom: () => void }) {
   const f = FORMATOS.find(x => x.codigo === e.formato) ?? FORMATOS[0]!;
   const narr = f.id === 'narracao';
   const { video, capa } = videoBase(narr);
   const ref = useRef<HTMLVideoElement>(null);
   const zonas = useRef<Record<string, HTMLVideoElement | null>>({});
-  const efe = useRef<HTMLAudioElement>(null);
-  const tri = useRef<HTMLAudioElement>(null);
-  const somRef = useRef(som);
-  somRef.current = som;
   const tempo = useRef(0);
   const [t, setT] = useState(0);
-  const agenda = useMemo(() => (f.id === 'cheia' ? [] : agendaMotions(e.motions)), [e.motions, f.id]);
-  const naAgenda = [...new Set(agenda.map(s => s.c))];
+  const st = useRef({ som, trilha: audioTrilha(e.trilha), sfx: e.sfx, ultimo: -1 });
+  st.current.som = som;
+  st.current.trilha = audioTrilha(e.trilha);
+  st.current.sfx = e.sfx;
+  const chave = mostrar.join();
+  const agenda = useMemo(() => (f.id === 'cheia' ? [] : agendaMotions(mostrar)), [chave, f.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const videosNaAgenda = [...new Set(agenda.map(s => s.c))].filter(c => efeito(c)?.video);
   const agora = agenda.find(s => t >= s.ini && t < s.fim)?.c ?? '';
-  const trilha = audioTrilha(e.trilha);
-  // tudo segue o vídeo: a legenda quadro a quadro; os motions e o som corrigem quando escorregam
+  useEffect(() => { mesa.preparar([VOZ]); }, []);
+  // tudo segue o vídeo: legenda, efeitos e câmera quadro a quadro; os efeitos em vídeo e o som corrigem quando escorregam
   useEffect(() => {
     let id = 0;
-    const alinhar = (m: HTMLMediaElement | null, tocar: boolean) => {
-      const v = ref.current;
-      if (!m || !v || m.readyState < 1) return;
-      if (Math.abs(m.currentTime - v.currentTime) > 0.15) m.currentTime = v.currentTime;
-      if (tocar && !v.paused && m.paused) m.play().catch(() => {});
-      if (!tocar && !m.paused) m.pause();
-    };
-    let ultimo = 0;
+    let ultimoQuadro = 0;
     const segue = () => {
-      ultimo = performance.now();
+      ultimoQuadro = performance.now();
       const v = ref.current;
-      if (v) {
-        setT(v.currentTime);
-        for (const z of Object.values(zonas.current)) alinhar(z, true);
-        alinhar(efe.current, somRef.current);
-        alinhar(tri.current, somRef.current);
+      if (!v) return;
+      const tv = v.currentTime;
+      setT(tv);
+      for (const z of Object.values(zonas.current)) {
+        if (!z || z.readyState < 1) continue;
+        if (Math.abs(z.currentTime - tv) > 0.15) z.currentTime = tv;
+        if (!v.paused && z.paused) z.play().catch(() => {});
       }
+      const s = st.current;
+      mesa.quadro(tv, s.som && !v.paused, VOZ, s.trilha);
+      // efeitos sonoros: no começo de cada pedaço da fala, revezando os escolhidos
+      const a = s.ultimo;
+      s.ultimo = tv;
+      if (!s.som || !s.sfx.length || a < 0 || v.paused) return;
+      const dur = v.duration || DURACAO;
+      const volta = tv < a;
+      const dt = volta ? dur - a + tv : tv - a;
+      if (dt <= 0 || dt > 0.5) return;
+      FRASES.forEach((x, k) => {
+        if (volta ? x > a || x <= tv : x > a && x <= tv) mesa.tocar(audioSfx(s.sfx[k % s.sfx.length]!), true);
+      });
     };
     const passo = () => { segue(); id = requestAnimationFrame(passo); };
     id = requestAnimationFrame(passo);
     // reserva: quando o navegador congela o quadro a quadro (aba em segundo plano, economia de bateria), segue a 15 qps
-    const reserva = window.setInterval(() => { if (performance.now() - ultimo > 120) segue(); }, 66);
-    return () => { cancelAnimationFrame(id); window.clearInterval(reserva); };
+    const reserva = window.setInterval(() => { if (performance.now() - ultimoQuadro > 120) segue(); }, 66);
+    return () => { cancelAnimationFrame(id); window.clearInterval(reserva); mesa.silenciar(); };
   }, []);
   // trocar para o formato "só narração" troca o vídeo: continua do mesmo ponto da fala
   useEffect(() => {
@@ -153,30 +218,35 @@ function Palco({ e, som, setSom }: { e: Escolhas; som: boolean; setSom: (v: bool
     v.addEventListener('loadedmetadata', seguir, { once: true });
     return () => v.removeEventListener('loadedmetadata', seguir);
   }, [video]);
-  // o som liga no toque (o navegador só deixa tocar depois de um toque da pessoa)
+  // um clique novo (estilo ou efeito) recomeça o trecho: a pessoa vê a camada nova desde o começo da fala
   useEffect(() => {
-    for (const m of [efe.current, tri.current]) {
-      if (!m) continue;
-      if (som) { m.currentTime = ref.current?.currentTime ?? 0; m.play().catch(() => {}); } else m.pause();
-    }
-  }, [som, e.efeitos, trilha]);
+    const v = ref.current;
+    if (!reinicio || !v) return;
+    v.currentTime = 0;
+    st.current.ultimo = 0;
+    v.play().catch(() => {});
+  }, [reinicio]);
+  const escala = narr ? 1 : escalaCamera(e.camera, t);
+  const nomeAgora = agora ? `${agora} · ${efeito(agora)?.nome ?? ''}` : '';
   return (
     <div className={`cz-palco cz-f-${f.id}`}>
-      {f.id !== 'cheia' && (naAgenda.length ? (
+      {f.id !== 'cheia' && (agenda.length ? (
         <div className="cz-zona cz-zona-motion">
-          {naAgenda.map(c => (
+          {videosNaAgenda.map(c => (
             <video key={c} ref={el => { zonas.current[c] = el; }} src={videoMotion(c).video} muted loop playsInline autoPlay style={{ opacity: c === agora ? 1 : 0 }} />
           ))}
+          <CenaFx cods={mostrar} t={t} cor={e.corFx} />
         </div>
       ) : (
         <div className="cz-zona">
           <Sparkles aria-hidden="true" />
-          <span>Os motions entram aqui</span>
+          <span>Os efeitos entram aqui</span>
         </div>
       ))}
       <div className="cz-pessoa">
-        {/* o vídeo é sempre mudo: a voz vem na camada de efeitos (voz + efeitos), para tudo sair sincronizado */}
+        {/* o vídeo é sempre mudo: a voz sai da mesa de som, junto com a trilha e os efeitos, no mesmo tempo */}
         <video ref={ref} key={video} src={video} poster={narr ? undefined : capa} autoPlay muted loop playsInline
+          style={{ transform: `scale(${escala})`, transformOrigin: ROSTO[f.id] ?? '47% 42%' }}
           onTimeUpdate={ev => { tempo.current = ev.currentTarget.currentTime; }} />
       </div>
       {e.legenda !== 'LEG-00' && (
@@ -184,37 +254,12 @@ function Palco({ e, som, setSom }: { e: Escolhas; som: boolean; setSom: (v: bool
           <LegendaModelo palavras={TRECHO_PALAVRAS} t={t} estilo={e.legenda} cor={e.cor} y={ALTURA_LEG[f.id] ?? 0.7} destaques={TRECHO_DESTAQUES} />
         </div>
       )}
-      <audio ref={efe} key={e.efeitos} src={audioEfeitos(e.efeitos)} loop preload="auto" />
-      {trilha && <audio ref={tri} key={trilha} src={trilha} loop preload="auto" />}
-      {agora && <span className="cz-agora">{agora}</span>}
-      <button type="button" className="cz-som" onClick={() => { setSom(!som); eventoProprio('Criar_Som', {}, true); }} aria-pressed={som}>
+      {(rotulo || nomeAgora) && <span className="cz-agora">{rotulo ? `Prévia: ${rotulo}` : nomeAgora}</span>}
+      <button type="button" className={`cz-som ${som ? 'ligado' : ''}`} onClick={alternarSom} aria-pressed={som}>
         {som ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />} {som ? 'Com som' : 'Ouvir'}
       </button>
     </div>
   );
-}
-
-/** Um som para escolher (trilha ou pacote de efeitos): tocar escolhe e liga o som no vídeo ao lado. */
-function CartaoSom({ x, ativo, tocando, escolher }: { x: { codigo: string; nome: string; desc: string }; ativo: boolean; tocando: boolean; escolher: () => void }) {
-  return (
-    <button type="button" className={`cz-som-cartao ${ativo ? 'ativo' : ''}`} aria-pressed={ativo} onClick={escolher}>
-      <span className="cz-som-icone">{ativo && tocando ? <AudioLines aria-hidden="true" /> : ativo ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}</span>
-      <span className="cz-som-texto"><b>{x.nome}</b><small>{x.desc}</small></span>
-      <span className="cz-som-cod">{x.codigo}</span>
-    </button>
-  );
-}
-
-
-/** Relógio dos cartões de legenda (todos andam juntos, 20 quadros por segundo, em volta dos 10,3 s do trecho). */
-function useRelogio(fps = 20) {
-  const [t, setT] = useState(0);
-  useEffect(() => {
-    const t0 = performance.now();
-    const id = window.setInterval(() => setT(((performance.now() - t0) / 1000) % DURACAO), 1000 / fps);
-    return () => window.clearInterval(id);
-  }, [fps]);
-  return t;
 }
 
 const hslHex = (h: number, s = 0.86, l = 0.6) => {
@@ -225,30 +270,30 @@ const hslHex = (h: number, s = 0.86, l = 0.6) => {
 };
 const AMOSTRAS = ['#8B5CF6', '#3CE6C8', '#FFD84D', '#FF8A3D', '#EF4444', '#EC4899', '#3B82F6', '#22C55E', '#FFFFFF'];
 
-/** A cor da legenda: a faixa com todas as cores (arrasta para um lado e para o outro) e algumas cores prontas. */
-function CorDaLegenda({ cor, mudar }: { cor: string; mudar: (c: string) => void }) {
+/** Uma cor: a faixa com todas as cores (arrasta para um lado e para o outro) e algumas cores prontas. */
+function EscolhaCor({ rotulo, cor, mudar, amostras = AMOSTRAS }: { rotulo: string; cor: string; mudar: (c: string) => void; amostras?: string[] }) {
   const [h, setH] = useState(275);
   return (
     <div className="cz-cor">
-      <div className="cz-cor-topo"><span className="cl-rotulo">Cor da legenda</span><span className="cz-cor-atual"><i style={{ background: cor }} />{cor.toUpperCase()}</span></div>
-      <input type="range" min={0} max={359} value={h} className="cz-cor-faixa" aria-label="Cor da legenda: arraste para escolher"
+      <div className="cz-cor-topo"><span className="cl-rotulo">{rotulo}</span><span className="cz-cor-atual"><i style={{ background: cor }} />{cor.toUpperCase()}</span></div>
+      <input type="range" min={0} max={359} value={h} className="cz-cor-faixa" aria-label={`${rotulo}: arraste para escolher`}
         onChange={ev => { const v = Number(ev.target.value); setH(v); mudar(hslHex(v)); }} style={{ '--cor': cor } as CSSProperties} />
       <div className="cz-cor-amostras">
-        {AMOSTRAS.map(c => <button key={c} type="button" style={{ background: c }} aria-label={`Cor ${c}`} aria-pressed={cor.toLowerCase() === c.toLowerCase()} onClick={() => mudar(c)} />)}
+        {amostras.map(c => <button key={c} type="button" style={{ background: c }} aria-label={`Cor ${c}`} aria-pressed={cor.toLowerCase() === c.toLowerCase()} onClick={() => mudar(c)} />)}
       </div>
     </div>
   );
 }
 
 /** As 30 legendas, cada uma desenhada ao vivo na cor escolhida, por cima de um quadro do trecho. */
-function GradeLegendas({ e, escolher }: { e: Escolhas; escolher: (k: keyof Escolhas, v: string) => void }) {
+function GradeLegendas({ e, escolher }: { e: Escolhas; escolher: (v: string) => void }) {
   const t = useRelogio();
   return (
     <div className="cz-grade">
       {LEGENDAS.map(x => {
         const ativo = e.legenda === x.codigo;
         return (
-          <button key={x.codigo} type="button" className={`cz-cartao ${ativo ? 'ativo' : ''}`} aria-pressed={ativo} onClick={() => escolher('legenda', x.codigo)}>
+          <button key={x.codigo} type="button" className={`cz-cartao ${ativo ? 'ativo' : ''}`} aria-pressed={ativo} onClick={() => escolher(x.codigo)}>
             <span className="cz-midia">
               <img className="cz-loop" src="/videos/criar/base.webp" alt="" loading="lazy" decoding="async" />
               {x.codigo !== 'LEG-00' && <span className="cz-leg-camada"><LegendaModelo palavras={TRECHO_PALAVRAS} t={t} estilo={x.codigo} cor={e.cor} y={0.7} destaques={TRECHO_DESTAQUES} /></span>}
@@ -261,6 +306,46 @@ function GradeLegendas({ e, escolher }: { e: Escolhas; escolher: (k: keyof Escol
         );
       })}
     </div>
+  );
+}
+
+/** Um cartão de câmera: o quadro do trecho com o zoom daquele jeito, ao vivo. */
+function CartaoCamera({ c, ativo, escolher }: { c: (typeof CAMERAS)[number]; ativo: boolean; escolher: () => void }) {
+  const [ref, vis] = useVisivel<HTMLButtonElement>();
+  const t = useRelogio(vis, 30);
+  return (
+    <button ref={ref} type="button" className={`cz-cartao ${ativo ? 'ativo' : ''}`} aria-pressed={ativo} onClick={escolher}>
+      <span className="cz-midia">
+        <img className="cz-loop" src="/videos/criar/base.webp" alt="" loading="lazy" decoding="async" style={{ transform: `scale(${escalaCamera(c.codigo, t)})`, transformOrigin: '47% 42%' }} />
+      </span>
+      <span className="cz-cartao-nome">{c.nome}</span>
+      <small>{c.desc}</small>
+      <span className="cz-codigo">{c.codigo}</span>
+      {ativo && <span className="cz-marca"><Check aria-hidden="true" /></span>}
+    </button>
+  );
+}
+
+/** Exemplo de um estilo ou de um efeito: ao vivo (FX, na cor escolhida) ou o vídeo renderizado pela skill (PEC). */
+function Exemplo({ cods, cor }: { cods: string[]; cor: string }) {
+  const [ref, vis] = useVisivel<HTMLSpanElement>();
+  const t = useRelogio(vis);
+  const primeiro = cods[0] ?? '';
+  return (
+    <span ref={ref} className="cz-midia cz-midia-q">
+      {efeito(primeiro)?.video ? <VideoLoop src={videoMotion(primeiro).video} poster={videoMotion(primeiro).capa} /> : <CenaFx cods={cods} t={t} cor={cor} />}
+    </span>
+  );
+}
+
+/** Um som para escolher: tocar escolhe e já toca (a trilha no vídeo ao lado; o efeito sonoro na hora). */
+function CartaoSom({ codigo, nome, desc, ativo, tocando, escolher, multi }: { codigo: string; nome: string; desc: string; ativo: boolean; tocando: boolean; escolher: () => void; multi?: boolean }) {
+  return (
+    <button type="button" className={`cz-som-cartao ${ativo ? 'ativo' : ''}`} aria-pressed={ativo} onClick={escolher}>
+      <span className="cz-som-icone">{tocando ? <AudioLines aria-hidden="true" /> : <Play aria-hidden="true" />}</span>
+      <span className="cz-som-texto"><b>{nome}</b><small>{desc}</small></span>
+      {multi ? <span className={`cz-som-marca ${ativo ? 'ativo' : ''}`} aria-hidden="true">{ativo && <Check />}</span> : <span className="cz-som-cod">{codigo}</span>}
+    </button>
   );
 }
 
@@ -297,23 +382,81 @@ function FolhaReferencia({ fechar }: { fechar: () => void }) {
   );
 }
 
+type Foco = { cods: string[]; rotulo: string; ate: number | null };
+
 function CriarDoZero({ sair }: { sair: () => void }) {
   const [e, setE] = useState<Escolhas>(ler);
   const [passo, setPasso] = useState(0);
   const [som, setSom] = useState(false);
-  const [cat, setCat] = useState('Escolhidos');
-  const alternaMotion = (c: string) => setE(x => ({ ...x, motions: x.motions.includes(c) ? x.motions.filter(y => y !== c) : [...x.motions, c] }));
-  const alternaTipo = (c: string) => setE(x => ({ ...x, tipos: x.tipos.includes(c) ? x.tipos.filter(y => y !== c) : [...x.tipos, c] }));
+  const [foco, setFoco] = useState<Foco | null>(null);
+  const [reinicio, setReinicio] = useState(0);
+  const [aviso, setAviso] = useState('');
+  const [filtro, setFiltro] = useState<string>(() => 'marcados');
+  const [tocou, setTocou] = useState('');
   const [copiado, setCopiado] = useState(false);
   const topo = useRef<HTMLDivElement>(null);
+  const id: IdPasso = PASSOS[passo]!.id;
   useEffect(() => { gravar(e); setCopiado(false); }, [e]);
-  useEffect(() => { topo.current?.scrollIntoView({ block: 'start' }); }, [passo]);
+  useEffect(() => { topo.current?.scrollIntoView({ block: 'start' }); setFoco(null); setAviso(''); }, [passo]);
+  // o efeito clicado aparece sozinho por uma volta do trecho; depois entra junto com os outros
+  useEffect(() => {
+    if (!foco?.ate) return;
+    const k = window.setTimeout(() => setFoco(null), Math.max(0, foco.ate - performance.now()));
+    return () => window.clearTimeout(k);
+  }, [foco]);
+  useEffect(() => { if (id === 'som') mesa.preparar([...TRILHAS.map(x => audioTrilha(x.codigo)), ...SFX.map(x => audioSfx(x.id))]); }, [id]);
+  useEffect(() => { if (!tocou) return; const k = window.setTimeout(() => setTocou(''), 900); return () => window.clearTimeout(k); }, [tocou]);
 
   const f = FORMATOS.find(x => x.codigo === e.formato) ?? FORMATOS[0]!;
   const l = LEGENDAS.find(x => x.codigo === e.legenda) ?? LEGENDAS[0]!;
+  const cam = CAMERAS.find(x => x.codigo === e.camera) ?? CAMERAS[0]!;
+  const tr = TRILHAS.find(x => x.codigo === e.trilha) ?? TRILHAS[0]!;
   const narr = f.id === 'narracao';
   const pedido = montarPedidoZero(e);
-  const escolher = (k: keyof Escolhas, v: string) => { setE(x => ({ ...x, [k]: v })); eventoProprio('Criar_Escolha', { [k]: v }, false); };
+  const demoDosEstilos = (ids: string[]) => ids.flatMap(i => ESTILOS.find(s => s.id === i)?.demo.slice(0, 2) ?? []).slice(0, 8);
+  const montagem = e.motions.length ? e.motions : demoDosEstilos(e.estilos);
+  const mostrar = foco?.cods ?? montagem;
+
+  const escolher = (k: 'formato' | 'legenda' | 'camera' | 'trilha', v: string) => { setE(x => ({ ...x, [k]: v })); eventoProprio('Criar_Escolha', { [k]: v }, false); };
+  const verAgora = (cods: string[], rotulo: string, umaVolta: boolean) => {
+    setFoco({ cods, rotulo, ate: umaVolta ? performance.now() + DURACAO * 1000 + 300 : null });
+    setReinicio(r => r + 1);
+    if (f.id === 'cheia') {
+      setE(x => ({ ...x, formato: 'FMT-02' }));
+      setAviso('Em tela cheia só entra a legenda. Para os efeitos aparecerem, o seu vídeo passou para "Você no cartão" (dá para voltar no passo Formato).');
+    }
+  };
+  const clicaEstilo = (s: EstiloFx) => {
+    const marcado = e.estilos.includes(s.id);
+    setE(x => ({ ...x, estilos: marcado ? x.estilos.filter(y => y !== s.id) : [...x.estilos, s.id] }));
+    eventoProprio('Criar_Estilo', { estilo: s.id }, false);
+    if (marcado) { setFoco(null); return; }
+    const meus = e.motions.filter(c => efeito(c)?.estilo === s.id);
+    verAgora(meus.length ? meus : s.demo, s.nome, false);
+  };
+  const clicaEfeito = (c: string) => {
+    const marcado = e.motions.includes(c);
+    const est = efeito(c)?.estilo ?? '';
+    setE(x => ({
+      ...x,
+      motions: marcado ? x.motions.filter(y => y !== c) : [...x.motions, c],
+      estilos: marcado || !est || x.estilos.includes(est) ? x.estilos : [...x.estilos, est],
+    }));
+    if (marcado) { setFoco(null); return; }
+    verAgora([c], `${c} · ${efeito(c)?.nome ?? ''}`, true);
+  };
+  const ligarSom = () => { mesa.ligar(); setSom(true); };
+  const alternarSom = () => {
+    if (som) { setSom(false); mesa.silenciar(); } else ligarSom();
+    eventoProprio('Criar_Som', {}, true);
+  };
+  const clicaTrilha = (codigo: string) => { ligarSom(); escolher('trilha', codigo); };
+  const clicaSfx = (sid: string) => {
+    mesa.ligar();
+    mesa.tocar(audioSfx(sid));
+    setTocou(sid);
+    setE(x => ({ ...x, sfx: x.sfx.includes(sid) ? x.sfx.filter(y => y !== sid) : [...x.sfx, sid] }));
+  };
 
   async function copiar() {
     await copiarTexto(pedido);
@@ -321,30 +464,36 @@ function CriarDoZero({ sair }: { sair: () => void }) {
     eventoProprio('Criar_Copiar', { formato: e.formato, legenda: e.legenda }, false);
   }
 
+  const filtroAtivo = filtro === 'marcados' && !e.estilos.length ? 'todos' : filtro;
+  const lista = EFEITOS.filter(x => (filtroAtivo === 'todos' ? true : filtroAtivo === 'marcados' ? e.estilos.includes(x.estilo) : x.estilo === filtroAtivo));
+  const nomesEstilos = e.estilos.map(i => ESTILOS.find(s => s.id === i)?.nome).filter(Boolean).join(', ');
+
   return (
     <div className="cz-criar" ref={topo}>
       <nav className="cz-passos" aria-label="Camadas do vídeo">
         {PASSOS.map((s, k) => (
           <button key={s.id} type="button" className={`cz-passo ${k === passo ? 'agora' : ''} ${k < passo ? 'feito' : ''}`} aria-current={k === passo ? 'step' : undefined} onClick={() => setPasso(k)}>
-            <span className="cz-passo-n">{k < passo ? <Check aria-hidden="true" /> : k + 1}</span>{s.nome}{'breve' in s && <em>em produção</em>}
+            <span className="cz-passo-n">{k < passo ? <Check aria-hidden="true" /> : k + 1}</span>{s.nome}
           </button>
         ))}
       </nav>
 
       <div className="cz-miolo">
         <aside className="cz-lado" aria-label="O seu vídeo">
-          <Palco e={e} som={som} setSom={setSom} />
+          <Palco e={e} mostrar={mostrar} rotulo={foco?.rotulo ?? ''} reinicio={reinicio} som={som} alternarSom={alternarSom} />
           <ul className="cz-resumo">
             <li><span>Formato</span><b>{f.nome}</b></li>
-            <li><span>Estilo</span><b>{ESTILOS_VIDEO.find(x => x.id === e.estilo)?.nome ?? ''}</b></li>
             <li><span>Legenda</span><b>{e.legenda !== 'LEG-00' && <i className="cz-ponto" style={{ background: e.cor }} />}{l.nome}</b></li>
-            <li><span>Efeitos</span><b>{e.motions.length ? `${e.motions.length} escolhido${e.motions.length > 1 ? 's' : ''}` : 'nenhum'}</b></li>
-            <li><span>Som</span><b>{TRILHAS.find(x => x.codigo === e.trilha)?.nome ?? ''} · {EFEITOS.find(x => x.codigo === e.efeitos)?.nome ?? ''}</b></li>
+            <li><span>Câmera</span><b>{cam.nome}</b></li>
+            <li><span>Efeitos</span><b>{e.motions.length ? <><i className="cz-ponto" style={{ background: e.corFx }} />{`${e.motions.length} escolhido${e.motions.length > 1 ? 's' : ''}`}</> : nomesEstilos || 'nenhum'}</b></li>
+            <li><span>Som</span><b>{tr.nome}{e.sfx.length ? ` · ${e.sfx.length} efeito${e.sfx.length > 1 ? 's' : ''}` : ''}</b></li>
           </ul>
         </aside>
 
         <section className="cz-opcoes">
-          {passo === 0 && (
+          {aviso && <p className="cz-aviso" role="status">{aviso}</p>}
+
+          {id === 'formato' && (
             <>
               <h2 className="cz-h">Como o vídeo é montado?</h2>
               <p className="cz-sub">Cada formato com um vídeo meu de exemplo. O seu vídeo, ao lado, já muda de lugar.</p>
@@ -366,51 +515,39 @@ function CriarDoZero({ sair }: { sair: () => void }) {
             </>
           )}
 
-          {passo === 1 && (
+          {id === 'legenda' && (
             <>
-              <h2 className="cz-h">Qual o estilo do vídeo?</h2>
-              <p className="cz-sub">Cada estilo com um vídeo meu de exemplo. Ele dá o jeito do vídeo; nas próximas camadas você escolhe a legenda e os efeitos.</p>
+              <h2 className="cz-h">Qual legenda?</h2>
+              <p className="cz-sub">30 estilos diferentes, todos na cor que você escolher. A IA faz exatamente esta legenda no seu vídeo.</p>
+              <EscolhaCor rotulo="Cor da legenda" cor={e.cor} mudar={c => setE(x => ({ ...x, cor: c }))} />
+              <GradeLegendas e={e} escolher={v => escolher('legenda', v)} />
+            </>
+          )}
+
+          {id === 'camera' && (
+            <>
+              <h2 className="cz-h">Como a câmera se mexe?</h2>
+              <p className="cz-sub">O zoom sempre em volta do seu rosto, sem cortar a cabeça. Toque e veja no seu vídeo, ao lado.</p>
               <div className="cz-grade">
-                {ESTILOS_VIDEO.map(x => {
-                  const a = exemploEstilo(x.id);
-                  const ativo = e.estilo === x.id;
-                  return (
-                    <button key={x.id} type="button" className={`cz-cartao ${ativo ? 'ativo' : ''}`} aria-pressed={ativo} onClick={() => escolher('estilo', x.id)}>
-                      <span className="cz-midia"><VideoLoop src={a.loop} poster={a.capa} /></span>
-                      <span className="cz-cartao-nome">{x.nome}</span>
-                      <small>{x.dark ? 'Dark: você não aparece' : 'Você aparece'}</small>
-                      <span className="cz-codigo">{x.codigo}</span>
-                      {ativo && <span className="cz-marca"><Check aria-hidden="true" /></span>}
-                    </button>
-                  );
-                })}
+                {CAMERAS.map(c => <CartaoCamera key={c.codigo} c={c} ativo={e.camera === c.codigo} escolher={() => escolher('camera', c.codigo)} />)}
               </div>
             </>
           )}
 
-          {passo === 2 && (
+          {id === 'estilo' && (
             <>
-              <h2 className="cz-h">Qual legenda?</h2>
-              <p className="cz-sub">30 estilos diferentes, todos na cor que você escolher. A IA faz exatamente esta legenda no seu vídeo.</p>
-              <CorDaLegenda cor={e.cor} mudar={c => setE(x => ({ ...x, cor: c }))} />
-              <GradeLegendas e={e} escolher={escolher} />
-            </>
-          )}
-
-          {passo === 3 && (
-            <>
-              <h2 className="cz-h">Que tipo de efeito?</h2>
-              <p className="cz-sub">Marque quantos tipos quiser. Cada um com um exemplo na sua fala. Na próxima camada você escolhe os efeitos de cada tipo.</p>
+              <h2 className="cz-h">Qual o estilo dos efeitos?</h2>
+              <p className="cz-sub">Toque num estilo e ele entra no seu vídeo, ao lado. Pode marcar quantos quiser e misturar. Cada estilo tem o seu fundo, a sua letra e o seu jeito de mexer.</p>
+              <EscolhaCor rotulo="Cor dos efeitos" cor={e.corFx} mudar={c => setE(x => ({ ...x, corFx: c }))} />
               <div className="cz-grade">
-                {TIPOS.map(x => {
-                  const v = videoMotion(x.exemplo);
-                  const marcado = e.tipos.includes(x.cat);
+                {ESTILOS.map(s => {
+                  const marcado = e.estilos.includes(s.id);
                   return (
-                    <button key={x.cat} type="button" className={`cz-cartao ${marcado ? 'ativo' : ''}`} aria-pressed={marcado} onClick={() => alternaTipo(x.cat)}>
-                      <span className="cz-midia cz-midia-q"><VideoLoop src={v.video} poster={v.capa} /></span>
-                      <span className="cz-cartao-nome">{x.nome}</span>
-                      <small>{x.desc}</small>
-                      <span className="cz-codigo">{MOTIONS.filter(m => m.cat === x.cat).length} efeitos</span>
+                    <button key={s.id} type="button" className={`cz-cartao ${marcado ? 'ativo' : ''}`} aria-pressed={marcado} onClick={() => clicaEstilo(s)}>
+                      <Exemplo cods={s.demo} cor={e.corFx} />
+                      <span className="cz-cartao-nome">{s.nome}</span>
+                      <small>{s.desc}</small>
+                      <span className="cz-codigo">{EFEITOS.filter(x => x.estilo === s.id).length} efeitos</span>
                       {marcado && <span className="cz-marca"><Check aria-hidden="true" /></span>}
                     </button>
                   );
@@ -419,27 +556,26 @@ function CriarDoZero({ sair }: { sair: () => void }) {
             </>
           )}
 
-          {passo === 4 && (
+          {id === 'efeitos' && (
             <>
               <h2 className="cz-h">Quais efeitos?</h2>
-              <p className="cz-sub">Marque quantos quiser: eles entram no seu vídeo, ao lado, um depois do outro, cada um no momento da fala.</p>
-              {f.id === 'cheia' && <p className="cz-aviso">No formato Tela cheia entra só a legenda. Para ver os efeitos no seu vídeo, escolha o formato Você no cartão, Tela dividida ou Só narração.</p>}
-              <div className="cz-filtros" role="group" aria-label="Tipo de efeito">
-                {['Escolhidos', 'Todos', ...CATEGORIAS_MOTION].map(c => (
-                  <button key={c} type="button" className={cat === c ? 'ativo' : ''} aria-pressed={cat === c} onClick={() => setCat(c)}>
-                    {c === 'Escolhidos' ? `Os tipos que você marcou${e.tipos.length ? '' : ' (todos)'}` : c}
-                  </button>
-                ))}
+              <p className="cz-sub">Marque quantos quiser: o efeito marcado aparece sozinho no seu vídeo e depois entra junto com os outros, um depois do outro, cada um no momento da fala.</p>
+              <EscolhaCor rotulo="Cor dos efeitos" cor={e.corFx} mudar={c => setE(x => ({ ...x, corFx: c }))} />
+              <div className="cz-filtros" role="group" aria-label="Estilo do efeito">
+                {[{ id: 'marcados', nome: 'Dos estilos que você marcou' }, { id: 'todos', nome: `Todos (${EFEITOS.length})` }, ...ESTILOS.map(s => ({ id: s.id, nome: s.nome }))]
+                  .filter(x => x.id !== 'marcados' || e.estilos.length)
+                  .map(x => (
+                    <button key={x.id} type="button" className={filtroAtivo === x.id ? 'ativo' : ''} aria-pressed={filtroAtivo === x.id} onClick={() => setFiltro(x.id)}>{x.nome}</button>
+                  ))}
               </div>
               <div className="cz-grade">
-                {MOTIONS.filter(m => (cat === 'Escolhidos' ? !e.tipos.length || e.tipos.includes(m.cat) : cat === 'Todos' || m.cat === cat)).map(m => {
-                  const v = videoMotion(m.codigo);
+                {lista.map(m => {
                   const marcado = e.motions.includes(m.codigo);
                   return (
-                    <button key={m.codigo} type="button" className={`cz-cartao ${marcado ? 'ativo' : ''}`} aria-pressed={marcado} onClick={() => alternaMotion(m.codigo)}>
-                      <span className="cz-midia cz-midia-q"><VideoLoop src={v.video} poster={v.capa} /></span>
+                    <button key={m.codigo} type="button" className={`cz-cartao ${marcado ? 'ativo' : ''}`} aria-pressed={marcado} onClick={() => clicaEfeito(m.codigo)}>
+                      <Exemplo cods={[m.codigo]} cor={e.corFx} />
                       <span className="cz-cartao-nome">{m.nome}</span>
-                      <small>{m.cat}</small>
+                      <small>{ESTILOS.find(s => s.id === m.estilo)?.nome}</small>
                       <span className="cz-codigo">{m.codigo}</span>
                       {marcado && <span className="cz-marca"><Check aria-hidden="true" /></span>}
                     </button>
@@ -449,23 +585,29 @@ function CriarDoZero({ sair }: { sair: () => void }) {
             </>
           )}
 
-          {passo === 5 && (
+          {id === 'som' && (
             <>
               <h2 className="cz-h">Qual som?</h2>
-              <p className="cz-sub">Toque para ouvir no seu vídeo, ao lado. A trilha fica baixinha, por baixo da sua voz, e os efeitos entram nos momentos da fala.</p>
+              <p className="cz-sub">Toque numa trilha e ela já toca no seu vídeo, ao lado, baixinha por baixo da sua voz.</p>
               <h3 className="cz-h3">Trilha</h3>
               <div className="cz-sons">
-                {TRILHAS.map(x => <CartaoSom key={x.codigo} x={x} ativo={e.trilha === x.codigo} tocando={som} escolher={() => { escolher('trilha', x.codigo); setSom(true); }} />)}
+                {TRILHAS.map(x => <CartaoSom key={x.codigo} codigo={x.codigo} nome={x.nome} desc={x.desc} ativo={e.trilha === x.codigo} tocando={som && e.trilha === x.codigo && x.codigo !== 'SOM-00'} escolher={() => clicaTrilha(x.codigo)} />)}
               </div>
-              <h3 className="cz-h3">Efeitos sonoros</h3>
-              <div className="cz-sons">
-                {EFEITOS.map(x => <CartaoSom key={x.codigo} x={x} ativo={e.efeitos === x.codigo} tocando={som} escolher={() => { escolher('efeitos', x.codigo); setSom(true); }} />)}
-              </div>
+              <h3 className="cz-h3">Efeitos sonoros <span className="cz-conta">{e.sfx.length ? `${e.sfx.length} marcado${e.sfx.length > 1 ? 's' : ''}` : 'marque quantos quiser'}</span></h3>
+              <p className="cz-sub">Toque para ouvir e marcar. No vídeo, os marcados entram no começo de cada frase, revezando{som ? '' : ' (ligue o som do vídeo para ouvir junto)'}.</p>
+              {GRUPOS_SFX.map(g => (
+                <div key={g} className="cz-grupo-som">
+                  <p className="cz-grupo-nome">{g}</p>
+                  <div className="cz-sons">
+                    {SFX.filter(x => x.grupo === g).map(x => <CartaoSom key={x.id} codigo={x.id} nome={x.nome} desc={e.sfx.includes(x.id) ? 'no seu vídeo' : 'toque para ouvir'} ativo={e.sfx.includes(x.id)} tocando={tocou === x.id} escolher={() => clicaSfx(x.id)} multi />)}
+                  </div>
+                </div>
+              ))}
+              <p className="cz-credito">Efeitos sonoros em domínio público (CC0): Kenney e Freesound.</p>
             </>
           )}
 
-
-          {passo === ULTIMO && (
+          {id === 'pedido' && (
             <>
               <h2 className="cz-h">Seu pedido</h2>
               <p className="cz-sub">Copie, cole na sua IA com o Modo Editor e mande {narr ? 'a sua narração' : 'o seu vídeo cru, sem edição,'} junto.</p>
@@ -520,7 +662,7 @@ export function Criar() {
             <button type="button" className="cz-porta-cartao cz-porta-forte" onClick={() => { setTela('criar'); eventoProprio('Criar_Porta', { porta: 'zero' }, false); }}>
               <Sparkles aria-hidden="true" />
               <b>Criar do zero</b>
-              <span>Monte camada por camada: formato, legenda, motions e som. Cada opção com exemplo, no seu vídeo.</span>
+              <span>Monte camada por camada: formato, legenda, câmera, efeitos e som. Cada clique muda o seu vídeo na hora.</span>
               <i>Começar <ArrowRight aria-hidden="true" /></i>
             </button>
           </div>

@@ -2931,3 +2931,17 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cz-resumo b { font-size: 13px; }
 @media (min-width: 980px) { .cz-resumo li { padding: 6px 10px; } .cz-resumo b { font-size: 14px; } }
 @container (max-width: 190px) { .cz-agora { display: none; } }
+
+/* /criar 22/11: efeitos ao vivo (motor efeitos-modelos.tsx), câmera e efeitos sonoros soltos */
+.cz-fx { position: absolute; inset: 0; }
+.cz-zona-motion .cz-fx { z-index: 1; }
+.cz-som.ligado { background: var(--cl-roxo); }
+.cz-conta { margin-left: 8px; color: var(--cl-mudo); font-size: 13px; font-weight: 600; }
+.cz-grupo-som { margin-top: 14px; }
+.cz-grupo-nome { color: var(--cl-mudo); font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.cz-grupo-som .cz-sons { margin-top: 8px; }
+.cz-som-marca { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 20px; height: 20px; border: 1.5px solid var(--cl-borda); border-radius: 6px; color: #fff; }
+.cz-som-marca.ativo { border-color: var(--cl-roxo); background: var(--cl-roxo); }
+.cz-som-marca svg { width: 14px; height: 14px; }
+.cz-credito { margin-top: 18px; color: var(--cl-mudo); font-size: 12px; }
+.cz-f-cartao .cz-pessoa video, .cz-f-dividida .cz-pessoa video { will-change: transform; }
