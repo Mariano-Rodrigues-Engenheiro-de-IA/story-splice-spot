@@ -2885,3 +2885,49 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cz-proximo { display: inline-flex; align-items: center; gap: 8px; height: 48px; margin-left: auto; padding: 0 18px; border: 0; border-radius: 12px; background: var(--cl-roxo); color: #fff; font-size: 15.5px; font-weight: 800; cursor: pointer; }
 .cz-anterior svg, .cz-proximo svg { width: 18px; height: 18px; }
 @media (prefers-reduced-motion: reduce) { .cz-pessoa { transition: none; } }
+
+/* /criar: legenda ao vivo (motor legendas-modelos.tsx) e a cor da legenda (22/11) */
+.cz-leg-camada { position: absolute; inset: 0; z-index: 2; container-type: inline-size; pointer-events: none; overflow: hidden; }
+.cz-midia .cz-leg-camada { border-radius: inherit; }
+.cz-ponto { display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 99px; vertical-align: 0; box-shadow: 0 0 0 1px oklch(1 0 0 / .25); }
+.cz-cor { display: grid; gap: 10px; margin-top: 16px; padding: 14px; border: 1px solid var(--cl-borda); border-radius: 16px; background: var(--cl-sup); }
+.cz-cor-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cz-cor-atual { display: inline-flex; align-items: center; gap: 8px; color: var(--cl-texto); font-family: ui-monospace, Consolas, monospace; font-size: 13px; font-weight: 700; }
+.cz-cor-atual i { width: 22px; height: 22px; border-radius: 99px; box-shadow: 0 0 0 2px oklch(1 0 0 / .2); }
+.cz-cor-faixa { -webkit-appearance: none; appearance: none; width: 100%; height: 28px; margin: 0; border-radius: 99px; background: linear-gradient(90deg, hsl(0 86% 60%), hsl(40 86% 60%), hsl(60 86% 60%), hsl(120 86% 60%), hsl(180 86% 60%), hsl(220 86% 60%), hsl(275 86% 60%), hsl(320 86% 60%), hsl(359 86% 60%)); cursor: pointer; }
+.cz-cor-faixa::-webkit-slider-thumb { -webkit-appearance: none; width: 34px; height: 34px; border: 4px solid #fff; border-radius: 99px; background: var(--cor, #8B5CF6); box-shadow: 0 2px 10px oklch(0 0 0 / .5); }
+.cz-cor-faixa::-moz-range-thumb { width: 26px; height: 26px; border: 4px solid #fff; border-radius: 99px; background: var(--cor, #8B5CF6); box-shadow: 0 2px 10px oklch(0 0 0 / .5); }
+.cz-cor-amostras { display: flex; flex-wrap: wrap; gap: 8px; }
+.cz-cor-amostras button { width: 32px; height: 32px; border: 2px solid oklch(1 0 0 / .15); border-radius: 99px; cursor: pointer; }
+.cz-cor-amostras button[aria-pressed="true"] { border-color: #fff; box-shadow: 0 0 0 2px var(--cl-roxo); }
+
+/* /criar: efeitos (motions) na zona, tipos, som (22/11) */
+.cz-zona-motion { padding: 0; overflow: hidden; border: 0; background: #110c22; }
+.cz-zona-motion video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity .22s ease; }
+.cz-f-dividida .cz-zona-motion { top: 0; right: 0; left: 0; height: 50%; border-radius: 0; }
+.cz-agora { position: absolute; top: 3cqw; left: 3cqw; z-index: 3; padding: 0.8cqw 2cqw; border-radius: 1.6cqw; background: oklch(0 0 0 / .55); color: #fff; font-family: ui-monospace, Consolas, monospace; font-size: max(10px, 4cqw); font-weight: 700; }
+.cz-midia-q { aspect-ratio: 1 / 1; background: #110c22; }
+.cz-aviso { margin-top: 12px; padding: 12px 14px; border: 1px solid oklch(.8 .15 85 / .45); border-radius: 12px; background: oklch(.8 .15 85 / .1); color: var(--cl-texto); font-size: 14px; line-height: 1.45; }
+.cz-filtros { display: flex; gap: 8px; margin-top: 14px; padding-bottom: 4px; overflow-x: auto; scrollbar-width: none; }
+.cz-filtros::-webkit-scrollbar { display: none; }
+.cz-filtros button { flex: none; height: 36px; padding: 0 14px; border: 1px solid var(--cl-borda); border-radius: 99px; background: var(--cl-sup); color: var(--cl-mudo); font-size: 13.5px; font-weight: 700; cursor: pointer; }
+.cz-filtros button.ativo { border-color: oklch(.6 .22 295 / .7); background: oklch(.6 .22 295 / .2); color: var(--cl-texto); }
+.cz-h3 { margin-top: 22px; color: var(--cl-texto); font-size: 17px; font-weight: 800; }
+.cz-sons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 10px; }
+@media (min-width: 640px) { .cz-sons { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .cz-sons { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.cz-som-cartao { position: relative; display: flex; align-items: center; gap: 10px; min-height: 64px; padding: 10px 12px; border: 1px solid var(--cl-borda); border-radius: 14px; background: var(--cl-sup); color: var(--cl-texto); text-align: left; cursor: pointer; }
+.cz-som-cartao.ativo { border-color: var(--cl-roxo); background: oklch(.6 .22 295 / .16); box-shadow: 0 0 0 1px var(--cl-roxo); }
+.cz-som-icone { flex: none; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 99px; background: var(--cl-sup2); color: var(--cl-roxo-claro); }
+.cz-som-cartao.ativo .cz-som-icone { background: var(--cl-roxo); color: #fff; }
+.cz-som-icone svg { width: 18px; height: 18px; }
+.cz-som-texto { display: flex; min-width: 0; flex-direction: column; gap: 2px; }
+.cz-som-texto b { font-size: 14.5px; font-weight: 800; }
+.cz-som-texto small { overflow: hidden; color: var(--cl-mudo); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.cz-som-cod { position: absolute; top: 6px; right: 8px; color: var(--cl-mudo); font-family: ui-monospace, Consolas, monospace; font-size: 10.5px; font-weight: 700; }
+.cz-resumo { gap: 4px; }
+.cz-resumo li { padding: 4px 9px; border-radius: 9px; }
+.cz-resumo span { font-size: 10.5px; }
+.cz-resumo b { font-size: 13px; }
+@media (min-width: 980px) { .cz-resumo li { padding: 6px 10px; } .cz-resumo b { font-size: 14px; } }
+@container (max-width: 190px) { .cz-agora { display: none; } }

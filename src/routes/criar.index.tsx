@@ -8,6 +8,9 @@ export const Route = createFileRoute('/criar/')({
     { title: 'Criar meu vídeo · Modo Editor' },
     { name: 'description', content: 'Monte o seu vídeo com o Modo Editor: com uma referência ou do zero, camada por camada.' },
     { name: 'robots', content: 'noindex' },
+  ], links: [
+    // as fontes do motor de legendas (as mesmas que vão na skill)
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Anton&family=Archivo+Black&family=Bebas+Neue&family=Playfair+Display:ital,wght@1,600&display=swap' },
   ] }),
   component: Criar,
 });
