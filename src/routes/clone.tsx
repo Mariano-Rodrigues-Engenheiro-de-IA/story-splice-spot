@@ -12,7 +12,7 @@ const IMG = 'https://modoeditor.zayloia.com/img/clone/compartilhar.jpg';
 export const Route = createFileRoute('/clone')({
   head: () => ({ meta: [
     { title: 'Modo Clone — Agora, o seu clone grava por você.' },
-    { name: 'description', content: 'Crie o seu clone com IA, com o seu rosto e a sua voz, e grave vídeos só escrevendo o texto. Do zero ao primeiro vídeo, tela por tela. R$ 97, pagamento único e 7 dias de garantia.' },
+    { name: 'description', content: 'Crie o seu clone com IA, com o seu rosto e a sua voz, e grave vídeos só escrevendo o texto. Do zero ao primeiro vídeo, tela por tela. R$ 147, pagamento único e 7 dias de garantia.' },
     { property: 'og:title', content: 'Agora, o seu clone grava por você.' },
     { property: 'og:description', content: 'Você escreve o texto. Ele fala com o seu rosto e a sua voz.' },
     { property: 'og:type', content: 'website' },

@@ -28,7 +28,7 @@ declare global {
 
 let iniciado = false;
 const disparados = new Set<string>();
-/** A /pro vende a oferta de R$ 97; a página geral, a de R$ 67. O valor enviado ao pixel segue a página. */
+/** A /pro e a página geral vendem a R$ 97 (a geral subiu de R$ 67 em 25/11). O valor enviado ao pixel segue a página. */
 const naPro = () => typeof window !== 'undefined' && window.location.pathname.startsWith('/pro');
 const naClone = () => typeof window !== 'undefined' && window.location.pathname.startsWith('/clone');
 const PRODUTO = () => naClone()

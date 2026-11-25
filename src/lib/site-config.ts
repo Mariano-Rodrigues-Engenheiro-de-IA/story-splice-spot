@@ -6,8 +6,8 @@ export type VideoTestimonial = { name: string; role: string; quote: string; vide
 export const siteConfig = {
   /** Checkout link. Empty = every purchase button scrolls to the offer. */
   checkoutUrl: 'https://pay.kiwify.com.br/hFsZJIo',
-  /** Preço da página geral (/). Tem que bater com o checkout da Kiwify acima. */
-  price: 67,
+  /** Preço da página geral (/). Tem que bater com o checkout da Kiwify acima. 25/11/2026: de R$ 67 para R$ 97 (decisão dele). */
+  price: 97,
   /** Página dos profissionais (/pro): oferta de R$ 97 do mesmo produto, com checkout próprio. O pixel é o mesmo. */
   pro: {
     price: 97,
@@ -41,8 +41,9 @@ export const siteConfig = {
     precoPorVideo: '' as string,
     mensagem: 'Oi! Quero saber como funciona a edição por vídeo feita por vocês.',
   },
-  /** Página geral (/): preço "de" riscado da Black Friday (11/11/2026); o preço gira dele até `price`. 0 = sem. */
-  precoDe: 97,
+  /** Página geral (/): preço "de" riscado da Black Friday (11/11/2026); o preço gira dele até `price`. 0 = sem.
+   *  25/11/2026: zerado na subida para R$ 97 (era "de R$ 97 por R$ 67"). */
+  precoDe: 0,
   /** Preço depois do lançamento (o preço da oferta gira dele até `price`). 0 = sem preço de depois. */
   priceAfterLaunch: 197,
   /** Pós-compra do Modo Editor (upsell e downsell do Modo Clone, com 1 clique da Kiwify).
@@ -69,10 +70,10 @@ export const siteConfig = {
     downsellUrl: '/ultima-chance',
     /** /clone (16/11): a página de vendas do Modo Clone, vendido sozinho (link da bio do @mariano_creator e anúncios).
      *  `checkoutUrl`: o link de checkout normal do produto Modo Clone na Kiwify (pay.kiwify.com.br/...). Vazio = o botão
-     *  de compra desce até a oferta. 24/11: R$ 97 e 12x de R$ 10,03, conferidos no checkout aberto (a parcela tem de ser a
+     *  de compra desce até a oferta. 25/11: R$ 147 e 12x de R$ 15,20 (conferidos no checkout aberto); aluno paga R$ 97 no pós-compra e na área de membros (a parcela tem de ser a
      *  que a Kiwify mostra). `vsl`: o vídeo de vendas falado pelo clone (roteiro em
      *  modo-clone-kiwify/ROTEIRO-VENDAS-CLONE-v1.txt); vazio = o vídeo provisório do clone. */
-    vendas: { price: 97, installmentValue: 10.03, checkoutUrl: 'https://pay.kiwify.com.br/sIdHoBB' as string, vsl: '' as string, vslPoster: '' as string },
+    vendas: { price: 147, installmentValue: 15.2, checkoutUrl: 'https://pay.kiwify.com.br/jsMRGYM' as string, vsl: '' as string, vslPoster: '' as string },
     /** "Pergunte ao clone" na /obrigado: cada dúvida respondida pelo próprio clone em vídeo 9:16 (public/videos/clone, com a
      *  capa .webp ao lado). Sem gastar crédito (decisão dele, 13/11): são frases que o clone já falou na aula 2, recortadas do
      *  bruto D:/aula2clone/bruto/aula2.mp4 (pagar 23,39-28,14 s; tempo 90,08-94,13 s; voz 138,78-143,58 s), conferidas por
@@ -92,14 +93,14 @@ export const siteConfig = {
      *  nos produtos da Kiwify, que disparam InitiateCheckout e CompletePayment no checkout. */
     tiktokId: 'DBTKQBRC77U7CBT64J30' as string,
   },
-  /** Parcela de 12x no cartão da página geral (R$ 67), lida no checkout da Kiwify em 11/11/2026 ("12x de R$ 6,93", parcelamento com acréscimo). 0 = some a linha. */
-  installmentValue: 6.93,
+  /** Parcela de 12x no cartão da página geral (R$ 97): a mesma da oferta de R$ 97 da /pro, lida no checkout da Kiwify em 25/11/2026 ("12x de R$ 10,03", parcelamento com acréscimo). 0 = some a linha. */
+  installmentValue: 10.03,
   /** ISO date when the bonus ends, e.g. '2026-11-01T23:59:00-03:00'. Empty = no countdown. */
   bonusEndsAt: '',
   videos: {
     hero: '/videos/criativo06.mp4',
     /** Vídeo de vendas (player com aviso de som e barra sem duração). Preenchido, ele substitui o vídeo do topo. */
-    vsl: '/videos/vsl.mp4' as string,
+    vsl: '/videos/vsl-97.mp4' as string,
     vslPoster: '/videos/vsl_capa.webp' as string,
     raw: '/videos/antes_mapa.mp4',
     edited: '/videos/depois_mapa.mp4',

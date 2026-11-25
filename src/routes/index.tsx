@@ -16,9 +16,9 @@ import { cliqueComprar, evento, eventoProprio, linkCheckout } from '@/lib/pixel'
 export const Route = createFileRoute('/')({
   head: () => ({ meta: [
     { title: 'Modo Editor — A produção de conteúdo mudou de vez.' },
-    { name: 'description', content: 'Agora a IA edita o seu vídeo como um profissional: mostra na tela o que você explica, monta o antes e depois e troca o fundo por um estúdio. R$ 67, pagamento único e 7 dias de garantia.' },
+    { name: 'description', content: 'Agora a IA edita o seu vídeo como um profissional: mostra na tela o que você explica, monta o antes e depois e troca o fundo por um estúdio. R$ 97, pagamento único e 7 dias de garantia.' },
     { property: 'og:title', content: 'A produção de conteúdo mudou de vez.' },
-    { property: 'og:description', content: 'A IA edita o seu vídeo como um profissional. Conheça o Modo Editor: R$ 67, pagamento único.' },
+    { property: 'og:description', content: 'A IA edita o seu vídeo como um profissional. Conheça o Modo Editor: R$ 97, pagamento único.' },
     { property: 'og:type', content: 'website' },
     { name: 'twitter:card', content: 'summary_large_image' },
   ] }),
