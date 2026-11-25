@@ -74,6 +74,18 @@ export const estilos: Estilo[] = [
     novo: true,
   },
   {
+    // 25/11 (ele): o Reels "Rolando a tela" (Google Flow + 3D). Nome dele: Claude + Google Flow (imagens e vídeos em transições
+    // rápidas). Liberado na página por pedido dele antes do kit: o Modo Editor aprende este código na versão 1.8.
+    id: 'claude-google-flow',
+    nome: 'Claude + Google Flow',
+    grupo: 'voce',
+    instrucao: 'eu falo para a câmera e, a cada frase, imagens e vídeos realistas do que eu digo entram em transições rápidas: ora eu apareço em tela cheia, ora a tela se divide, com a cena em cima e eu embaixo. A câmera entra de uma cena na outra sem corte (pelo olho, pela tela do celular, pela porta), e a palavra que eu falo vira a própria coisa. Se eu ensinar um passo a passo, cada passo abre com o número e a minha tela gravada. Me diga quais imagens faltam antes de começar (eu mando, você gera no Google Flow com a minha conta ou busca em banco gratuito).',
+    temExemplo: true,
+    exemplos: [{ id: 'claude-google-flow', codigo: 'CGF-01', titulo: 'Cada frase vira uma cena' }],
+    testado: true,
+    novo: true,
+  },
+  {
     id: 'ilustracao-3d',
     nome: 'Ilustração 3D',
     grupo: 'voce',

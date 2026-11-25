@@ -2734,7 +2734,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-usar-grande { height: 44px; padding: 0 18px; font-size: 15px; }
 
 /* 20/11: nome do estilo grande em cima do vídeo */
-.cl-card-titulo { position: absolute; top: 0; left: 0; right: 0; margin: 0; padding: 14px 10px 34px; background: linear-gradient(180deg, oklch(0 0 0 / .72) 0%, oklch(0 0 0 / .38) 62%, oklch(0 0 0 / 0) 100%); color: #fff; font-size: clamp(17px, 4.8vw, 23px); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; text-align: center; text-shadow: 0 2px 10px oklch(0 0 0 / .6); pointer-events: none; }
+.cl-card-titulo { position: absolute; top: 0; left: 0; right: 0; margin: 0; padding: 14px 10px 34px; background: linear-gradient(180deg, oklch(0 0 0 / .72) 0%, oklch(0 0 0 / .38) 62%, oklch(0 0 0 / 0) 100%); color: #fff; font-size: clamp(17px, 4.8vw, 23px); font-weight: 800; letter-spacing: -.01em; line-height: 1.1; text-align: center; text-wrap: balance; text-shadow: 0 2px 10px oklch(0 0 0 / .6); pointer-events: none; }
 .cl-qtd { display: inline-flex; align-items: center; justify-content: center; gap: 4px; height: 30px; padding: 0; border: 0; background: none; color: var(--cl-roxo-claro); font-size: 13.5px; font-weight: 700; cursor: pointer; }
 .cl-qtd span { font-size: 17px; line-height: 1; }
 /* banner do topo: mosaico das capas andando devagar, véu escuro e o título */
@@ -2784,7 +2784,7 @@ html:has(.geral) { scroll-padding-top: 0; }
 .cl-secao-hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, oklch(.13 .008 285 / 0) 40%, oklch(.13 .008 285) 100%); }
 .cl-secao-hero-texto { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 8px; width: min(100%, 1120px); height: 100%; margin: 0 auto; padding: 0 16px 26px; }
 .cl-secao-hero-texto .cl-dark { position: static; }
-.cl-secao-hero-nome { margin: 0; color: #fff; font-size: clamp(32px, 8vw, 56px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; text-shadow: 0 4px 24px oklch(0 0 0 / .6); }
+.cl-secao-hero-nome { margin: 0; color: #fff; font-size: clamp(32px, 8vw, 56px); font-weight: 800; letter-spacing: -.025em; line-height: 1.05; text-wrap: balance; text-shadow: 0 4px 24px oklch(0 0 0 / .6); }
 .cl-secao-hero-qtd { margin: 0; color: oklch(.85 .01 285); font-size: 14px; font-weight: 600; }
 .cl-secao-hero-texto .cl-usar-grande { margin-top: 4px; }
 .cl-secao .cl-secao-hero-texto p.cl-secao-hero-nome { color: #fff; }
