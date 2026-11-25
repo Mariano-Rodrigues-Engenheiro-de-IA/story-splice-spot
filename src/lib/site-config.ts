@@ -69,10 +69,10 @@ export const siteConfig = {
     downsellUrl: '/ultima-chance',
     /** /clone (16/11): a página de vendas do Modo Clone, vendido sozinho (link da bio do @mariano_creator e anúncios).
      *  `checkoutUrl`: o link de checkout normal do produto Modo Clone na Kiwify (pay.kiwify.com.br/...). Vazio = o botão
-     *  de compra abre o WhatsApp com "quero o Modo Clone". Preço provisório de R$ 97 até ele confirmar; a parcela tem
-     *  de ser a que a Kiwify mostra no checkout. `vsl`: o vídeo de vendas falado pelo clone (roteiro em
+     *  de compra desce até a oferta. 24/11: R$ 97 e 12x de R$ 10,03, conferidos no checkout aberto (a parcela tem de ser a
+     *  que a Kiwify mostra). `vsl`: o vídeo de vendas falado pelo clone (roteiro em
      *  modo-clone-kiwify/ROTEIRO-VENDAS-CLONE-v1.txt); vazio = o vídeo provisório do clone. */
-    vendas: { price: 97, installmentValue: 10.03, checkoutUrl: '' as string, vsl: '' as string, vslPoster: '' as string },
+    vendas: { price: 97, installmentValue: 10.03, checkoutUrl: 'https://pay.kiwify.com.br/sIdHoBB' as string, vsl: '' as string, vslPoster: '' as string },
     /** "Pergunte ao clone" na /obrigado: cada dúvida respondida pelo próprio clone em vídeo 9:16 (public/videos/clone, com a
      *  capa .webp ao lado). Sem gastar crédito (decisão dele, 13/11): são frases que o clone já falou na aula 2, recortadas do
      *  bruto D:/aula2clone/bruto/aula2.mp4 (pagar 23,39-28,14 s; tempo 90,08-94,13 s; voz 138,78-143,58 s), conferidas por

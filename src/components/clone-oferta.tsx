@@ -201,7 +201,7 @@ export function GaleriaClone() {
 }
 
 /** Liga quando o elemento entra na tela (e desliga quando sai). Só troca estado; a animação fica no CSS. */
-function useNaTelaClone<T extends HTMLElement>(limiar = 0.35) {
+export function useNaTelaClone<T extends HTMLElement>(limiar = 0.35) {
   const ref = useRef<T>(null);
   const [na, setNa] = useState(false);
   useEffect(() => {
@@ -216,7 +216,7 @@ function useNaTelaClone<T extends HTMLElement>(limiar = 0.35) {
 
 /** Fica true quando o elemento chega perto da tela (700 px antes): os vídeos começam a carregar antes de aparecer, para
  *  já tocarem sem demora quando a pessoa chega neles (14/11: "os vídeos demoram um pouquinho a começar"). */
-function usePertoClone<T extends HTMLElement>(ref: React.RefObject<T | null>, margem = '700px 0px') {
+export function usePertoClone<T extends HTMLElement>(ref: React.RefObject<T | null>, margem = '700px 0px') {
   const [perto, setPerto] = useState(false);
   useEffect(() => {
     const el = ref.current;
